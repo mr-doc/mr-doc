@@ -1,0 +1,43 @@
+{
+  "name": "dox-foundation",
+  "description": "Dox template generator",
+  "version": "0.1.0",
+  "homepage": "https://github.com/matt/dox-foundation",
+  "author": {
+    "name": "Matt McManus",
+    "email": "mattmcmanus@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/matt/dox-foundation.git"
+  },
+  "bugs": {
+    "url": "https://github.com/matt/dox-foundation/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/matt/dox-foundation/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "lib/dox-foundation",
+  "bin": {
+    "dox-foundation": "./bin/dox-foundation"
+  },
+  "engines": {
+    "node": ">= 0.6.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "dependencies" : {
+    "underscore": "*",
+    "dox": "*",
+    "commander": "0.5.2",
+    "jade": "*"
+  },
+  "devDependencies": {
+    "grunt": "~0.3.15"
+  },
+  "keywords": []
+}
