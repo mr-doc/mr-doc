@@ -36,6 +36,12 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 ## Release History
 * *0.0.1* - Initial release
 
+## To do
+
+* Add support for multiple files
+* Start by having source code hidden
+* Improve rendered html
+
 ## Thanks
 
 Thanks to [dox-basic](https://github.com/jepso/dox-basic) for the inspiratino and much of the original code. 
