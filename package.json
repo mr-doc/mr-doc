@@ -1,23 +1,23 @@
 {
   "name": "dox-foundation",
-  "description": "Dox template generator",
-  "version": "0.1.0",
-  "homepage": "https://github.com/matt/dox-foundation",
+  "description": "HTML output for Dox documentation generator",
+  "version": "0.0.1",
+  "homepage": "https://github.com/punkave/dox-foundation",
   "author": {
     "name": "Matt McManus",
     "email": "mattmcmanus@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/matt/dox-foundation.git"
+    "url": "git://github.com/punkave/dox-foundation.git"
   },
   "bugs": {
-    "url": "https://github.com/matt/dox-foundation/issues"
+    "url": "https://github.com/punkave/dox-foundation/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/matt/dox-foundation/blob/master/LICENSE-MIT"
+      "url": "https://github.com/punkave/dox-foundation/blob/master/LICENSE-MIT"
     }
   ],
   "main": "lib/dox-foundation",
@@ -26,9 +26,6 @@
   },
   "engines": {
     "node": ">= 0.6.0"
-  },
-  "scripts": {
-    "test": "grunt test"
   },
   "dependencies" : {
     "underscore": "*",
@@ -39,5 +36,5 @@
   "devDependencies": {
     "grunt": "~0.3.15"
   },
-  "keywords": []
+  "keywords": ["dox", "jsdox", "documentation", "docs", "dox"]
 }
