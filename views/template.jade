@@ -12,6 +12,8 @@ html
         line-height:1.4em
       }
       .comment { position:relative;margin-bottom:3em; }
+        .comment h1 {font-size:2rem}
+        .comment h2 {font-size:1.8rem}
         div.description {margin: 14px 0; padding-top: 14px; border-top:1px solid #eee; border-bottom:1px solid #eee; }
         .tags {}
           .tags .types {color:#666}
@@ -19,8 +21,10 @@ html
 
   body
     .row
-      #nav.three.columns
+      .twelve.columns
         h1.pagetitle= title
+    .row
+      #nav.three.columns
         ul.side-nav
           each comment in comments
             if !comment.ignore && !comment.isPrivate
@@ -34,7 +38,7 @@ html
             .comment
               if comment.ctx
                 .label.radius.ctx-type=comment.ctx.type
-                h3(id=comment.ctx.name)= comment.ctx.name
+                h1(id=comment.ctx.name)= comment.ctx.name
                 h5.subheader= comment.ctx.string
               .description
                 !=comment.description.full
