@@ -9,7 +9,7 @@ Install the module with: `npm install dox-foundation -g`
 
 ## Documentation
 ```
-$dox-foundation --help
+$ dox-foundation --help
 
   Usage: dox-foundation [options]
 
@@ -36,9 +36,15 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 ## Release History
 * *0.0.1* - Initial release
 
+## To Do
+
+* Add support for multiple files
+* Start by having source code hidden
+* Improve rendered html
+
 ## Thanks
 
-Thanks to [dox-basic](https://github.com/jepso/dox-basic) for the inspiratino and much of the original code. 
+Thanks to [dox-basic](https://github.com/jepso/dox-basic) for the inspiration and much of the original code. 
 
 ## License
 Copyright (c) 2012 P'unk Avenue  
