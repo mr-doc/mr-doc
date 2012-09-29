@@ -1,7 +1,7 @@
 {
   "name": "dox-foundation",
   "description": "HTML output for Dox documentation generator",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "homepage": "https://github.com/punkave/dox-foundation",
   "author": {
     "name": "Matt McManus",
@@ -27,7 +27,7 @@
   "engines": {
     "node": ">= 0.6.0"
   },
-  "dependencies" : {
+  "dependencies": {
     "underscore": "*",
     "dox": "*",
     "commander": "0.5.2",
@@ -36,5 +36,11 @@
   "devDependencies": {
     "grunt": "~0.3.15"
   },
-  "keywords": ["dox", "jsdox", "documentation", "docs", "dox"]
+  "keywords": [
+    "dox",
+    "jsdox",
+    "documentation",
+    "docs",
+    "dox"
+  ]
 }
