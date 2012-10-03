@@ -62,6 +62,8 @@ if (program.source) {
   });
 
   walker.on('end', function() {
+    var data = []
+
     try { fs.mkdirSync(target) } catch(e) {}
 
     folders.forEach(function(folder) {
@@ -69,14 +71,47 @@ if (program.source) {
     })
 
     files.forEach(function(file) {
-      var targetFile = file.replace(source, target) + '.html'
-        , content    = fs.readFileSync(file).toString()
-
       try {
-        var obj    = dox.parseComments(content, { raw: program.raw });
-        var output = formatter.parse(obj, program);
-        fs.writeFileSync(targetFile, output)
-      } catch(e) {}
+        var content = fs.readFileSync(file).toString()
+        var dataObj = {
+          sourceFile: file,
+          targetFile: file.replace(source, target) + '.html',
+          dox:        dox.parseComments(content, { raw: program.raw })
+        }
+
+        data.push(dataObj)
+      } catch(e) { console.log(e) }
+    })
+
+    var structure = data.reduce(function(structure, data) {
+      var addFragmentToHash = function(hash, fragment) {
+        var match = fragment.match(/^(.*?\/)/)
+
+        if (!!match) {
+          var key = match[1].replace('/', '')
+          hash[key] = hash[key] || {}
+          addFragmentToHash(hash[key], fragment.substr(match[1].length))
+        } else {
+          hash[fragment] = data.targetFile
+        }
+      }
+
+      var _source = data.sourceFile.replace(source, '')
+
+      if (_source.charAt(0) === '/') {
+        _source = _source.substr(1)
+      }
+
+      addFragmentToHash(structure, _source)
+
+      return structure
+    }, {})
+
+    data.forEach(function(data) {
+      var options = { title: program.title, folderStructure: structure }
+        , output  = formatter.parse(data.dox, options)
+
+      fs.writeFileSync(data.targetFile, output)
     })
   });
 } else {
@@ -93,7 +128,7 @@ if (program.source) {
       process.stdout.write(util.inspect(obj, false, Infinity, true) + '\n');
     } else {
       // Run the json to be formatted and dumped to stdout
-      var output = formatter.parse(obj, program);
+      var output = formatter.parse(obj, { title: program.title, folderStructure: null });
       process.stdout.write(output);
     }
   }).resume();
