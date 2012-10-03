@@ -15,7 +15,9 @@ program
   .version(formatter.version)
   .option('-r, --raw', 'output "raw" comments, leaving the markdown intact')
   .option('-d, --debug', 'output parsed comments for debugging')
-  .option('-t, --title <string>', 'The title for the page produced');
+  .option('-t, --title <string>', 'The title for the page produced')
+  .option('-s, --source <source>', 'The folder which should get parsed')
+  .option('-T, --target <target>', 'The folder which will contain the results. Default: <process.cwd()>/docs');
 
 // examples
 program.on('--help', function(){
@@ -27,27 +29,72 @@ program.on('--help', function(){
   console.log('    # operates over stdio');
   console.log('    $ dox-foundation < myfile.js > myfile.html');
   console.log('');
+  console.log('    # parse a whole folder');
+  console.log('    $ dox-foundation --source ./lib --target ./docs');
 });
 
 // parse argv
 
 program.parse(process.argv);
 
-// process stdin
+if (program.source) {
+  // process a folder
 
-var buf = '';
-process.stdin.setEncoding('utf8');
-process.stdin.on('data', function(chunk){ buf += chunk; });
+  var walk    = require('walk')
+    , fs      = require('fs')
+    , target  = program.target || process.cwd() + '/docs'
+    , source  = program.source
+    , files   = []
+    , folders = []
 
-process.stdin.on('end', function(){
-  // Run the buffer through Dox
-  var obj = dox.parseComments(buf, { raw: program.raw });
-  // If debug, just throw out the dox json
-  if (program.debug) {
-    process.stdout.write(util.inspect(obj, false, Infinity, true) + '\n');
-  } else {
-    // Run the json to be formatted and dumped to stdout
-    var output = formatter.parse(obj, program);
-    process.stdout.write(output);
-  }
-}).resume();
+  // Walker options
+  var walker  = walk.walk(source, { followLinks: false })
+
+  walker.on('file', function(root, stat, next) {
+    var folder = root.replace(source, '').trim()
+
+    if ((folder !== '') && (folders.indexOf(folder) === -1)) {
+      folders.push(folder)
+    }
+
+    files.push(root + '/' + stat.name)
+    next()
+  });
+
+  walker.on('end', function() {
+    try { fs.mkdirSync(target) } catch(e) {}
+
+    folders.forEach(function(folder) {
+      try { fs.mkdirSync(target + '/' + folder) } catch(e) {}
+    })
+
+    files.forEach(function(file) {
+      var targetFile = file.replace(source, target) + '.html'
+        , content    = fs.readFileSync(file).toString()
+
+      try {
+        var obj    = dox.parseComments(content, { raw: program.raw });
+        var output = formatter.parse(obj, program);
+        fs.writeFileSync(targetFile, output)
+      } catch(e) {}
+    })
+  });
+} else {
+  // process stdin
+
+  var buf = '';
+  process.stdin.setEncoding('utf8');
+  process.stdin.on('data', function(chunk){ buf += chunk; });
+  process.stdin.on('end', function(){
+    // Run the buffer through Dox
+    var obj = dox.parseComments(buf, { raw: program.raw });
+    // If debug, just throw out the dox json
+    if (program.debug) {
+      process.stdout.write(util.inspect(obj, false, Infinity, true) + '\n');
+    } else {
+      // Run the json to be formatted and dumped to stdout
+      var output = formatter.parse(obj, program);
+      process.stdout.write(output);
+    }
+  }).resume();
+}
