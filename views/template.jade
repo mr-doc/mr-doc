@@ -18,13 +18,34 @@ html
         .tags {}
           .tags .types {color:#666}
       .ctx-type { float:right; margin-top:8px }
+    style
+      #folder-structure {}
+      #folder-structure .clear {
+        clear: both;
+      }
+      #folder-structure ul {
+        list-style-type: none;
+        margin: 0px;
+        padding: 0px;
+      }
+      #folder-structure li {
+        float: left;
+        margin-right: 20px;
+      }
+      #folder-structure > ul .nested {
+        padding-left: 20px;
+        border-left: 1px solid #479;
+        padding-bottom: 14px;
+        margin-top: 20px;
+      }
 
   body
     .row
       .twelve.columns
         h1.pagetitle= title
     if folderStructure
-      != generateFolderStructure(folderStructure)
+      .row
+        #folder-structure!= generateFolderStructure(folderStructure)
     .row
       #nav.three.columns
         ul.side-nav
