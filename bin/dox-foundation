@@ -107,8 +107,23 @@ if (program.source) {
       return structure
     }, {})
 
+    var finalStructure = {}
+
+    for (var key in structure) {
+      if (structure.hasOwnProperty(key)) {
+        var value = structure[key]
+
+        if (typeof value === 'string') {
+          finalStructure['/'] = finalStructure['/'] || {}
+          finalStructure['/'][key] = value
+        } else {
+          finalStructure[key] = value
+        }
+      }
+    }
+
     data.forEach(function(data) {
-      var options = { title: program.title, folderStructure: structure }
+      var options = { title: program.title, folderStructure: finalStructure }
         , output  = formatter.parse(data.dox, options)
 
       fs.writeFileSync(data.targetFile, output)
