@@ -7,9 +7,14 @@
 var program = require('commander'),
     util = require('util'),
     dox = require('dox'),
+    _ = require('underscore'),
     formatter = require('../lib/dox-foundation');
 
-// options
+/**
+ * Options & Defaults
+ */
+
+var ignoredDirs = 'test,public,static,views,templates';
 
 program
   .version(formatter.version)
@@ -17,6 +22,7 @@ program
   .option('-d, --debug', 'output parsed comments for debugging')
   .option('-t, --title <string>', 'The title for the page produced')
   .option('-s, --source <source>', 'The folder which should get parsed')
+  .option('-i, --ignore <directories>', 'Comma seperated list of directories to ignore. Default: ' + ignoredDirs)
   .option('-T, --target <target>', 'The folder which will contain the results. Default: <process.cwd()>/docs');
 
 // examples
@@ -40,24 +46,38 @@ program.parse(process.argv);
 if (program.source) {
   // process a folder
 
-  var walk    = require('walk')
-    , fs      = require('fs')
-    , target  = program.target || process.cwd() + '/docs'
-    , source  = program.source
-    , files   = []
-    , folders = []
+  var walk    = require('walk'),
+      fs      = require('fs'),
+      target  = program.target || process.cwd() + '/docs',
+      source  = program.source,
+      files   = [],
+      folders = [],
+      ignore  = program.ignore || ignoredDirs;
+
+  // Cleanup and turn into an array the ignoredDirs
+  ignore = ignore.trim().replace(' ','').split(',');
 
   // Walker options
   var walker  = walk.walk(source, { followLinks: false })
 
   walker.on('file', function(root, stat, next) {
-    var folder = root.replace(source, '').trim()
-
-    if ((folder !== '') && (folders.indexOf(folder) === -1)) {
-      folders.push(folder)
+    
+    // Ignore iterator
+    var notInIgnored = function(d){
+      return (root.indexOf(d) === -1)
     }
 
-    files.push(root + '/' + stat.name)
+    // If the file is: a JS file and not in an ignored dir continue
+    if (stat.name.substr(-2) === 'js' && _.all(ignore, notInIgnored)) {
+      var folder = root.replace(source, '').trim()
+
+      if ((folder !== '') && (folders.indexOf(folder) === -1)) {
+        folders.push(folder)
+      }
+
+      files.push(root + '/' + stat.name)
+    }
+
     next()
   });
 

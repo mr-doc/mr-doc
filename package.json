@@ -32,7 +32,8 @@
     "dox": "*",
     "commander": "0.5.2",
     "jade": "*",
-    "walk": "~2.2.1"
+    "walk": "~2.2.1",
+    "underscore": "*"
   },
   "devDependencies": {
     "grunt": "~0.3.15"
