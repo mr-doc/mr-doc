@@ -65,6 +65,7 @@ if (program.source) {
 
     data.forEach(function(data) {
       console.log('Generating documentation for: ', data.sourceFile)
+
       var options = { title: program.title, folderStructure: structure }
         , output  = formatter.parse(data.dox, options)
 
