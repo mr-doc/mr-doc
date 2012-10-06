@@ -7,7 +7,6 @@
 var program = require('commander'),
     util = require('util'),
     dox = require('dox'),
-    _ = require('underscore'),
     formatter = require('../lib/dox-foundation');
 
 /**
@@ -46,109 +45,32 @@ program.parse(process.argv);
 if (program.source) {
   // process a folder
 
-  var walk    = require('walk'),
-      fs      = require('fs'),
+  var fs      = require('fs'),
       target  = program.target || process.cwd() + '/docs',
       source  = program.source,
-      files   = [],
-      folders = [],
       ignore  = program.ignore || ignoredDirs;
 
-  // Cleanup and turn into an array the ignoredDirs
-  ignore = ignore.trim().replace(' ','').split(',');
 
   // Walker options
-  var walker  = walk.walk(source, { followLinks: false })
+  formatter.collectFiles(source, {
+    // Cleanup and turn into an array the ignoredDirs
+    ignore: ignore.trim().replace(' ','').split(',')
+  }, function(files, folders) {
+    folders = folders.map(function(folder) { return target + '/' + folder })
 
-  walker.on('file', function(root, stat, next) {
-    
-    // Ignore iterator
-    var notInIgnored = function(d){
-      return (root.indexOf(d) === -1)
-    }
+    formatter.createFolders([target].concat(folders))
 
-    // If the file is: a JS file and not in an ignored dir continue
-    if (stat.name.substr(-2) === 'js' && _.all(ignore, notInIgnored)) {
-      var folder = root.replace(source, '').trim()
-
-      if ((folder !== '') && (folders.indexOf(folder) === -1)) {
-        folders.push(folder)
-      }
-
-      files.push(root + '/' + stat.name)
-    }
-
-    next()
-  });
-
-  walker.on('end', function() {
-    var data = []
-
-    try { fs.mkdirSync(target) } catch(e) {}
-
-    folders.forEach(function(folder) {
-      try { fs.mkdirSync(target + '/' + folder) } catch(e) {}
-    })
-
-    files.forEach(function(file) {
-      try {
-        var content = fs.readFileSync(file).toString()
-        var dataObj = {
-          sourceFile: file,
-          targetFile: file.replace(source, target) + '.html',
-          dox:        dox.parseComments(content, { raw: program.raw })
-        }
-
-        data.push(dataObj)
-      } catch(e) { console.log(e) }
-    })
-
-    var structure = data.reduce(function(structure, data) {
-      var addFragmentToHash = function(hash, fragment) {
-        var match = fragment.match(/^(.*?\/)/)
-
-        if (!!match) {
-          var key = match[1].replace('/', '')
-          hash[key] = hash[key] || {}
-          addFragmentToHash(hash[key], fragment.substr(match[1].length))
-        } else {
-          hash[fragment] = data.targetFile
-        }
-      }
-
-      var _source = data.sourceFile.replace(source, '')
-
-      if (_source.charAt(0) === '/') {
-        _source = _source.substr(1)
-      }
-
-      addFragmentToHash(structure, _source)
-
-      return structure
-    }, {})
-
-    var finalStructure = {}
-
-    for (var key in structure) {
-      if (structure.hasOwnProperty(key)) {
-        var value = structure[key]
-
-        if (typeof value === 'string') {
-          finalStructure['/'] = finalStructure['/'] || {}
-          finalStructure['/'][key] = value
-        } else {
-          finalStructure[key] = value
-        }
-      }
-    }
+    var data      = formatter.readFileContents(source, target, { raw: program.raw }, files)
+      , structure = formatter.getFolderStructure(source, data)
 
     data.forEach(function(data) {
-      var options = { title: program.title, folderStructure: finalStructure }
+      console.log('Generating documentation for: ', data.sourceFile)
+      var options = { title: program.title, folderStructure: structure }
         , output  = formatter.parse(data.dox, options)
 
       fs.writeFileSync(data.targetFile, output)
     })
-  });
+  })
 } else {
   // process stdin
 
