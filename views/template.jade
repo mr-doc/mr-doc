@@ -20,6 +20,10 @@ html
           .tags .types {color:#666}
       .ctx-type { float:right; margin-top:8px }
     style
+      h2.subtitle {
+        font-size: 20px;
+        color: #777;
+      }
       #folder-structure {}
       #folder-structure .clear {
         clear: both;
@@ -59,6 +63,8 @@ html
     .row
       .twelve.columns
         h1.pagetitle= title
+        if subTitle
+          h2.subtitle= subTitle
     if folderStructure
       .row
         #folder-structure!= generateFolderStructure(folderStructure)
