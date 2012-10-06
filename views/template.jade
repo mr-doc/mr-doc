@@ -32,12 +32,16 @@ html
       #folder-structure > ul > li ul:not(.active) {
         display: none
       }
-      #folder-structure ul.active {
+      #folder-structure > ul li a:hover {
+        background: #eee;
+      }
+      #folder-structure > ul ul.active {
         border-left: 4px solid #eee;
         padding-left: 10px;
       }
       #folder-structure li.active {
         font-weight: bold;
+        background: #FAFAFA;
       }
 
       #folder-structure > ul > li a {
@@ -209,18 +213,36 @@ html
       Prism.languages.javascript={comment:{pattern:/(^|[^\\])(\/\*[\w\W]*?\*\/|\/\/.*?(\r?\n|$))/g,lookbehind:!0},string:/("|')(\\?.)*?\1/g,regex:{pattern:/(^|[^/])\/(?!\/)(\[.+?]|\\.|[^/\r\n])+\/[gim]{0,3}(?=\s*($|[\r\n,.;})]))/g,lookbehind:!0},keyword:/\b(var|let|if|else|while|do|for|return|in|instanceof|function|new|with|typeof|try|catch|finally|null|break|continue)\b/g,"boolean":/\b(true|false)\b/g,number:/\b-?(0x)?\d*\.?\d+\b/g,operator:/[-+]{1,2}|!|=?&lt;|=?&gt;|={1,2}|(&amp;){1,2}|\|?\||\?|\*|\//g,ignore:/&(lt|gt|amp);/gi,punctuation:/[{}[\];(),.:]/g};Prism.languages.markup&&Prism.languages.insertBefore("markup","tag",{script:{pattern:/(&lt;|<)script[\w\W]*?(>|&gt;)[\w\W]*?(&lt;|<)\/script(>|&gt;)/ig,inside:{tag:{pattern:/(&lt;|<)script[\w\W]*?(>|&gt;)|(&lt;|<)\/script(>|&gt;)/ig,inside:Prism.languages.markup.tag.inside},rest:Prism.languages.javascript}}});
     script
       $(function() {
+        // container around the folder structure
         var $structure = $('#folder-structure')
+          , $superUl   = $structure.find('> ul')
 
-        $structure.find('> ul > li > ul').first().addClass('active')
+        // observe clicks on headlines aka folder names
         $structure.find('h6').click(function() {
-          var $ul = $(this).parent().find('ul').first()
+          // get the ul next to the h6
+          var $ul = $(this).siblings('ul')
 
-          if ($ul.parents('.active').length === 0) {
-            $structure.find('.active').removeClass('active')
+          console.log($ul.parents('ul.active'))
+          if ($ul.parents('ul.active').length === 0) {
+            console.log('no parents')
+            $structure.find('ul.active').removeClass('active')
           } else {
-            $ul.parents('.active').find('.active').removeClass('active')
+          console.log('parents')
+            $ul.parents('.active').find('ul.active').removeClass('active')
           }
 
           $ul.addClass('active')
         })
+
+        $structure.find('a').each(function() {
+          var $anchor = $(this)
+            , regexp  = new RegExp($anchor.attr('href') + "$")
+
+          if (document.location.href.match(regexp)) {
+            $anchor.parent().addClass('active')
+            $anchor.parents('ul').addClass('active')
+          }
+        })
+
+        $superUl.removeClass('active')
       })
