@@ -1,7 +1,7 @@
 {
   "name": "dox-foundation",
   "description": "HTML output for Dox documentation generator",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "homepage": "https://github.com/punkave/dox-foundation",
   "author": {
     "name": "Matt McManus",
@@ -38,8 +38,7 @@
     "dox": "*",
     "commander": "0.5.2",
     "jade": "*",
-    "walk": "~2.2.1",
-    "underscore": "*"
+    "walk": "~2.2.1"
   },
   "devDependencies": {
     "grunt": "~0.3.15"
