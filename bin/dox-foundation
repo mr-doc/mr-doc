@@ -63,6 +63,12 @@ if (program.source) {
     var data      = formatter.readFileContents(source, target, { raw: program.raw }, files)
       , structure = formatter.getFolderStructure(source, data)
 
+    data.push({
+      sourceFile: 'index.html',
+      targetFile: target + '/index.html',
+      dox: []
+    })
+
     data.forEach(function(data) {
       console.log('Generating documentation for: ', data.sourceFile)
 

@@ -241,11 +241,16 @@ html
         })
 
         $structure.find('a').each(function() {
-          var $anchor = $(this)
-            , regexp  = new RegExp($anchor.attr('href') + "$")
+          var $anchor     = $(this)
+            , regexp      = new RegExp($anchor.attr('href') + "$")
+            , url         = document.location.href
+            , isIndexHtml = url.match(/index\.html$/)
 
-          if (document.location.href.match(regexp)) {
-            $anchor.parent().addClass('active')
+          if (isIndexHtml || url.match(regexp)) {
+            if (!isIndexHtml) {
+              $anchor.parent().addClass('active')
+            }
+
             $anchor.parents('ul').addClass('active')
           }
         })
