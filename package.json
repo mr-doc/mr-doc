@@ -5,8 +5,14 @@
   "homepage": "https://github.com/punkave/dox-foundation",
   "author": {
     "name": "Matt McManus",
-    "email": "mattmcmanus@gmail.com"
+    "email": "mcmanus@punkave.com"
   },
+  "contributors": [
+    {
+      "name": "Sascha Depold",
+      "email": "sascha@depold.com"
+    }
+  }
   "repository": {
     "type": "git",
     "url": "git://github.com/punkave/dox-foundation.git"
