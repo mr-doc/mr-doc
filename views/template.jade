@@ -63,8 +63,6 @@ html
     .row
       .twelve.columns
         h1.pagetitle= title
-        if subTitle
-          h2.subtitle= subTitle
     if folderStructure
       .row
         #folder-structure!= generateFolderStructure(folderStructure)
