@@ -39,28 +39,26 @@ program.on('--help', function(){
 });
 
 // parse argv
-
 program.parse(process.argv);
 
+// If the program specifies a source directory
 if (program.source) {
-  // process a folder
-
+  
   var fs      = require('fs'),
-      target  = program.target || process.cwd() + '/docs',
-      source  = program.source,
+      path = require('path'),
+      target  = path.resolve(process.cwd(), program.target) || process.cwd() + '/docs',
+      source  = path.resolve(process.cwd(), program.source),
       ignore  = program.ignore || ignoredDirs;
-
 
   // Walker options
   formatter.collectFiles(source, {
+
     // Cleanup and turn into an array the ignoredDirs
     ignore: ignore.trim().replace(' ','').split(',')
-  }, function(files, folders) {
-    folders = folders.map( function(folder) { 
-      return target + '/' + folder; 
-    });
 
-    formatter.createFolders(target, [target].concat(folders));
+  }, function(files, folders) {
+    console.log(folders)
+    formatter.createFolders(target, folders);
 
     var data      = formatter.readFileContents(source, target, { raw: program.raw }, files),
         structure = formatter.getFolderStructure(source, data);
