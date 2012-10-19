@@ -33,7 +33,7 @@ $ dox-foundation --help
     $ dox-foundation < myfile.js > myfile.html
 
     # parse a whole folder
-    $ dox-foundation --source ./lib --target ./docs
+    $ dox-foundation --source lib --target docs
 ```
 
 ## Contributing
