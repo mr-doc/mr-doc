@@ -56,32 +56,34 @@ if (program.source) {
     // Cleanup and turn into an array the ignoredDirs
     ignore: ignore.trim().replace(' ','').split(',')
   }, function(files, folders) {
-    folders = folders.map(function(folder) { return target + '/' + folder })
+    folders = folders.map( function(folder) { 
+      return target + '/' + folder; 
+    });
 
-    formatter.createFolders([target].concat(folders))
+    formatter.createFolders(target, [target].concat(folders));
 
-    var data      = formatter.readFileContents(source, target, { raw: program.raw }, files)
-      , structure = formatter.getFolderStructure(source, data)
+    var data      = formatter.readFileContents(source, target, { raw: program.raw }, files),
+        structure = formatter.getFolderStructure(source, data);
 
     data.push({
       sourceFile: 'index.html',
       targetFile: target + '/index.html',
       dox: []
-    })
+    });
 
     data.forEach(function(data) {
-      console.log('Generating documentation for: ', data.sourceFile)
+      console.log('Generating documentation for: ', data.sourceFile);
 
       var options = {
             title: program.title || "Documentation",
             folderStructure: structure,
             subTitle: data.sourceFile
-          }
-        , output  = formatter.parse(data.dox, options)
+          },
+          output  = formatter.parse(data.dox, options);
 
-      fs.writeFileSync(data.targetFile, output)
-    })
-  })
+      fs.writeFileSync(data.targetFile, output);
+    });
+  });
 } else {
   // process stdin
 
