@@ -43,11 +43,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 * *0.0.1* - Initial release
 * *0.2.0* - Readable output
 * *0.3.0* - Support for folder parsing
-
-## To Do
-
-* Start by having source code hidden
-* Improve rendered html
+* *0.4.0* - Improved project navigation, major refactor of folder code
 
 ## Thanks & Contributors
 
