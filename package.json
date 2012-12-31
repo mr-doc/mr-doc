@@ -38,8 +38,8 @@
     "dox": "0.3.3",
     "commander": "0.5.2",
     "jade": "*",
-    "walk": "~2.2.1",
-    "mkdirp": "*"
+    "mkdirp": "*",
+    "findit": "~0.1.2"
   },
   "devDependencies": {
     "grunt": "~0.3.15"

@@ -43,45 +43,42 @@ program.parse(process.argv);
 
 // If the program specifies a source directory
 if (program.source) {
-  
+
   var fs      = require('fs'),
       path = require('path'),
       target  = path.resolve(process.cwd(), program.target) || process.cwd() + '/docs',
       source  = path.resolve(process.cwd(), program.source),
       ignore  = program.ignore || ignoredDirs;
 
-  // Walker options
-  formatter.collectFiles(source, {
+  // Cleanup and turn into an array the ignoredDirs
+  ignore = ignore.trim().replace(' ','').split(',');
+  
+  // Find, cleanup and validate all potential files
+  var files = formatter.collectFiles(source, ignore);
+  formatter.createTargetFolders(target, files);
 
-    // Cleanup and turn into an array the ignoredDirs
-    ignore: ignore.trim().replace(' ','').split(',')
+  // Dox all those files
+  files = formatter.doxFiles(source, target, { raw: program.raw }, files)
 
-  }, function(files, folders) {
-    console.log(folders)
-    formatter.createFolders(target, folders);
-
-    var data      = formatter.readFileContents(source, target, { raw: program.raw }, files),
-        structure = formatter.getFolderStructure(source, data);
-
-    data.push({
-      sourceFile: 'index.html',
-      targetFile: target + '/index.html',
-      dox: []
-    });
-
-    data.forEach(function(data) {
-      console.log('Generating documentation for: ', data.sourceFile);
-
-      var options = {
-            title: program.title || 'Documentation',
-            folderStructure: structure,
-            subTitle: data.sourceFile
-          },
-          output  = formatter.parse(data.dox, options);
-
-      fs.writeFileSync(data.targetFile, output);
-    });
+  files.push({
+    sourceFile: 'index.html',
+    targetFile: 'index.html',
+    dox: []
   });
+
+  var options = {
+    title: program.title || require(process.cwd() + '/package').name
+  };
+
+  // Render and save each file
+  files.forEach(function(file) {
+    options.subTitle = file.sourceFile;
+    
+    var output = formatter.parse(file, files, options);
+
+    fs.writeFileSync(target + '/' + file.targetFile, output);
+  });
+
 } else {
   // process stdin
 
