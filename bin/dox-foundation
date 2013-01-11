@@ -4,9 +4,11 @@
  * Module dependencies.
  */
 
-var program = require('commander'),
-    util = require('util'),
-    dox = require('dox'),
+var program   = require('commander'),
+    util      = require('util'),
+    fs        = require('fs'),
+    path      = require('path'),
+    dox       = require('dox'),
     formatter = require('../lib/dox-foundation');
 
 /**
@@ -22,7 +24,8 @@ program
   .option('-t, --title <string>', 'The title for the page produced')
   .option('-s, --source <source>', 'The folder which should get parsed')
   .option('-i, --ignore <directories>', 'Comma seperated list of directories to ignore. Default: ' + ignoredDirs)
-  .option('-T, --target <target>', 'The folder which will contain the results. Default: <process.cwd()>/docs');
+  .option('-T, --target <target>', 'The folder which will contain the results. Default: <process.cwd()>/docs')
+  .option('--template <jade template>', 'The jade template file to use');
 
 // examples
 program.on('--help', function(){
@@ -41,18 +44,19 @@ program.on('--help', function(){
 // parse argv
 program.parse(process.argv);
 
+if(program.template){
+  formatter.template = fs.readFileSync(program.template).toString();
+}
+
 // If the program specifies a source directory
 if (program.source) {
-
-  var fs      = require('fs'),
-      path = require('path'),
-      target  = path.resolve(process.cwd(), program.target) || process.cwd() + '/docs',
+  var target  = path.resolve(process.cwd(), program.target) || process.cwd() + '/docs',
       source  = path.resolve(process.cwd(), program.source),
       ignore  = program.ignore || ignoredDirs;
 
   // Cleanup and turn into an array the ignoredDirs
   ignore = ignore.trim().replace(' ','').split(',');
-  
+
   // Find, cleanup and validate all potential files
   var files = formatter.collectFiles(source, ignore);
   formatter.createTargetFolders(target, files);
@@ -73,7 +77,7 @@ if (program.source) {
   // Render and save each file
   files.forEach(function(file) {
     options.subTitle = file.sourceFile;
-    
+
     var output = formatter.parse(file, files, options);
 
     fs.writeFileSync(target + '/' + file.targetFile, output);
