@@ -50,7 +50,7 @@ html
                   ul
                     each method in file.methods
                       li
-                        a(href=file.target+'#'+method)= method
+                        a(href=file.target+'#'+method.name)= method.name
           
           if locals.structure
             mixin subnav(structure)
