@@ -2,7 +2,7 @@
 
 Use [dox](https://github.com/visionmedia/dox) to automatically generate beautiful html documentation.
 
-Outputted HTML is based on templates and css from [ZURB's Foundation](http://foundation.zurb.com/) and syntax highlighting is done by [Prism.js](http://prismjs.com/). 
+Outputted HTML is based on templates and css from [ZURB's Foundation](http://foundation.zurb.com/) and syntax highlighting is done by [Prism.js](http://prismjs.com/).
 
 ## Installation
 Install the module with: `npm install dox-foundation -g`
@@ -10,7 +10,7 @@ Install the module with: `npm install dox-foundation -g`
 ## Documentation
 ```
 $ dox-foundation --help
-  
+
   Usage: dox-foundation [options]
 
   Options:
@@ -23,6 +23,7 @@ $ dox-foundation --help
     -s, --source <source>       The folder which should get parsed
     -i, --ignore <directories>  Comma seperated list of directories to ignore. Default: test,public,static,views,templates
     -T, --target <target>       The folder which will contain the results. Default: <process.cwd()>/docs
+    --template <jade template>  The jade template file to use
 
   Examples:
 
@@ -49,7 +50,8 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 * Thanks to [dox-basic](https://github.com/jepso/dox-basic) for the inspiration and much of the original code.
 * [@sdepold](https://github.com/sdepold)
+* [@fgribreau](https://twitter.com/fgribreau)
 
 ## License
-Copyright (c) 2012 P'unk Avenue  
+Copyright (c) 2012 P'unk Avenue
 Licensed under the MIT license.
