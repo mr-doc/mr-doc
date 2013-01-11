@@ -57,33 +57,32 @@ html
 
       .nine.columns
         each comment in comments
-          if !comment.ignore && !comment.isPrivate
-            .comment
-              if comment.ctx
-                .label.radius.ctx-type=comment.ctx.type
-                h1(id=comment.ctx.name)= comment.ctx.name
-                h5.subheader= comment.ctx.string
-              .tags
-                ul.no-bullet
-                  each tag in comment.tags
-                    unless tag.type == 'api'
-                      li
-                        strong="@"+tag.type + ": "
-                        if tag.types
-                          span.types=' {'+tag.types + '} '
-                        if tag.name
-                          span.name=tag.name+' '
-                        if tag.description
-                          span.description=tag.description
-                        if tag.local
-                          span.local= tag.local
-              .description
-                !=comment.description.full
+          .comment
+            if comment.ctx
+              .label.radius.ctx-type=comment.ctx.type
+              h1(id=comment.ctx.name)= comment.ctx.name
+              h5.subheader= comment.ctx.string
+            .tags
+              ul.no-bullet
+                each tag in comment.tags
+                  unless tag.type == 'api'
+                    li
+                      strong="@"+tag.type + ": "
+                      if tag.types
+                        span.types=' {'+tag.types + '} '
+                      if tag.name
+                        span.name=tag.name+' '
+                      if tag.description
+                        span.description=tag.description
+                      if tag.local
+                        span.local= tag.local
+            .description
+              !=comment.description.full
 
-              if comment.code
-                pre
-                  code.language-javascript
-                    !=comment.code
+            if comment.code
+              pre
+                code.language-javascript
+                  !=comment.code
     // Foundation JS
     script(src='http://cdnjs.cloudflare.com/ajax/libs/foundation/3.2.2/javascripts/foundation.min.js')
 
@@ -112,5 +111,4 @@ html
             $("#nav").css({ "position": "static" }); //same here
           }         
         });
-
       })
