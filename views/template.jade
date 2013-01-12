@@ -41,7 +41,7 @@ html
 
       footer iframe{vertical-align:middle;}
 
-  body(data-spy="scroll", data-target=".bs-docs-sidebar")
+  body(data-spy="scroll", data-target=".scrollspy")
     div.navbar.navbar-inverse.navbar-fixed-top
       div.navbar-inner
         div.container
@@ -63,12 +63,16 @@ html
               li(class=(file.name !== currentName ? "":"active"))
                 a(href=file.targetName) #{file.name}
 
-          ul.nav.nav-list.bs-docs-sidenav.bs-docs-sidenav2.affix-top
-            each symbol in symbols
-              li
-                a(href=symbol.targetFile+'#'+symbol.name)
-                  mixin iForSymbolType(symbol)
-                  | #{symbol.name}
+          .scrollspy
+            ul.nav.nav-list.bs-docs-sidenav.affix-top
+              each symbol in symbols
+                li
+                  if name === currentName
+                    a(href='#'+symbol.name)
+                      mixin iForSymbolType(symbol) #{symbol.name}
+                  else
+                    a(href=symbol.targetFile+'#'+symbol.name)
+                      mixin iForSymbolType(symbol) #{symbol.name}
 
         .span9
           each symbol in dox
@@ -142,7 +146,7 @@ html
     script
       $(function(){
         var $window = $(window);
-        $('.bs-docs-sidenav2').affix({
+        $('.scrollspy .nav').affix({
           offset: {
             top: function () { return $window.width() <= 980 ? 480 : 400 }
           , bottom: 50
