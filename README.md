@@ -1,10 +1,10 @@
-# doxx
+# Doxx
 
 Use [dox](https://github.com/visionmedia/dox) to automatically generate beautiful html documentation. **Doxx is a total refactoring of [dox-foundation](https://github.com/punkave/dox-foundation/)**.
 
 Outputted HTML is by default based on templates and css from [Twitter Bootstrap](twitter.github.com/bootstrap/) and syntax highlighting is done by [Prism.js](http://prismjs.com/).
 
-Doxx works well is JavaScript as well as generated JavaScript from CoffeeScript
+Doxx was tested with *JavaScript* as well as generated JavaScript from *CoffeeScript*.
 
 ## Demo
 [doxx/docs/compile.js](http://fgribreau.github.com/doxx/docs/compile.js.html)
