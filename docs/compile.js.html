@@ -25,7 +25,7 @@
       }
       
       code[class*="language-"],pre[class*="language-"]{color:black;text-shadow:0 1px white;font-family:Consolas,Monaco,'Andale Mono',monospace;direction:ltr;text-align:left;white-space:pre;word-spacing:normal;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*="language-"]{padding:1em;margin:.5em 0;overflow:auto}:not(pre)>code[class*="language-"],pre[class*="language-"]{background:#f5f2f0}:not(pre)>code[class*="language-"]{padding:.1em;border-radius:.3em}.token.comment,.token.prolog,.token.doctype,.token.cdata{color:slategray}.token.punctuation{color:#999}.namespace{opacity:.7}.token.property,.token.tag,.token.boolean,.token.number{color:#905}.token.selector,.token.attr-name,.token.string{color:#690}.token.operator,.token.entity,.token.url,.language-css .token.string,.style .token.string{color:#a67f59;background:hsla(0,0%,100%,.5)}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.regex,.token.important{color:#e90}.token.important{font-weight:bold}.token.entity{cursor:help}
-      div.description {margin: 14px 0; padding-top: 14px; border-top:1px solid #eee; border-bottom:1px solid #eee; }
+      div.description {margin: 14px 0; padding-top: 14px; border-bottom:1px solid #eee; }
       .tags {}
       .ctx-type { 
         display:inline-block;
@@ -75,15 +75,31 @@
               <div class="label label-info radius ctx-type">function</div><span>compile()</span> -> <span>String</span>
             </h5>
           </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>locals</td>
+                <td>Object</td>
+                <td>local variable object</td>
+              </tr>
+            </tbody>
+          </table>
           <div class="description"><p>Compile</p>
-            <pre><code class="language-javascript">function compile(options){
-  return jade.compile(compile.tpl,{pretty:true})(options);
+            <pre><code class="language-javascript">function compile(locals){
+  return jade.compile(compile.tpl,{pretty:true})(locals);
 }</code></pre>
           </div>
           <section id="tpl">
             <h1>tpl</h1>
             <h5 class="subheader">
-              <div class="label label-success radius ctx-type">property</div><span>compile.tpl</span> -> <span>Undefined</span>
+              <div class="label label-success radius ctx-type">property</div><span>compile.tpl</span> -> <span>String</span>
             </h5>
           </section>
           <div class="description"><p>Template used to produce the documentation</p>
