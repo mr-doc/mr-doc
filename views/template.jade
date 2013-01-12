@@ -78,13 +78,16 @@ html
           each symbol in dox
             if symbol.ctx
               section(id=symbol.ctx.name)
-                  
                   h1= symbol.ctx.name
                   h5.subheader
+                  p
                     mixin labelForSymbolType(symbol)
                     span= symbol.ctx.string
-                    |  -> 
-                    span= symbol.return
+                    if symbol.type
+                      span= symbol.type
+                    if symbol.return
+                      |  -> 
+                      span= symbol.return
 
                 if symbol.hasParams
                   //- First show options

@@ -77,9 +77,10 @@
         <div class="span9">
           <section id="shouldPass">
             <h1>shouldPass</h1>
-            <h5 class="subheader">
+            <h5 class="subheader"></h5>
+            <p>
               <div class="label label-info radius ctx-type">function</div><span>shouldPass()</span> -> <span>Boolean</span>
-            </h5>
+            </p>
           </section>
           <table class="table table-bordered table-striped">
             <thead>
@@ -110,9 +111,10 @@
           </div>
           <section id="has">
             <h1>has</h1>
-            <h5 class="subheader">
+            <h5 class="subheader"></h5>
+            <p>
               <div class="label label-info radius ctx-type">function</div><span>has()</span> -> <span>Boolean</span>
-            </h5>
+            </p>
           </section>
           <table class="table table-bordered table-striped">
             <thead>
@@ -139,9 +141,10 @@
           </div>
           <section id="parse">
             <h1>parse</h1>
-            <h5 class="subheader">
+            <h5 class="subheader"></h5>
+            <p>
               <div class="label label-info radius ctx-type">function</div><span>parse()</span> -> <span>Array</span>
-            </h5>
+            </p>
           </section>
           <table class="table table-bordered table-striped">
             <thead>
@@ -204,15 +207,13 @@
       symbol.ctx = {};
     }
 
+    if(types.length === 1){
+      symbol.type = types[0].types;
+    }
 
     if(returns.length === 1){
       symbol["return"] = returns[0].types;
-    } else if(types.length === 1){
-      symbol["return"] = types[0].types;
-    } else {
-      symbol["return"] = "Undefined";
     }
-
 
     return symbol;
   });
