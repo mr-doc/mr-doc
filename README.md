@@ -4,12 +4,12 @@ Use [dox](https://github.com/visionmedia/dox) to automatically generate beautifu
 
 Outputted HTML is by default based on templates and css from [Twitter Bootstrap](twitter.github.com/bootstrap/) and syntax highlighting is done by [Prism.js](http://prismjs.com/).
 
-Doxx was tested with *JavaScript* as well as generated JavaScript from *CoffeeScript*.
+Doxx was tested with **JavaScript** as well as generated JavaScript from **CoffeeScript**.
 
 ## Demo
-[doxx/docs/compile.js](http://fgribreau.github.com/doxx/docs/compile.js.html)
-[doxx/docs/dir.js](http://fgribreau.github.com/doxx/docs/dir.js.html)
-[doxx/docs/parser.js](http://fgribreau.github.com/doxx/docs/parser.js.html)
+* [doxx/docs/compile.js](http://fgribreau.github.com/doxx/docs/compile.js.html)
+* [doxx/docs/dir.js](http://fgribreau.github.com/doxx/docs/dir.js.html)
+* [doxx/docs/parser.js](http://fgribreau.github.com/doxx/docs/parser.js.html)
 
 
 ## Usage
