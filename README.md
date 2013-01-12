@@ -1,6 +1,6 @@
 # doxx
 
-Use [dox](https://github.com/visionmedia/dox) to automatically generate beautiful html documentation. Doxx is a total refactoring of [dox-foundation](https://github.com/punkave/dox-foundation/).
+Use [dox](https://github.com/visionmedia/dox) to automatically generate beautiful html documentation. **Doxx is a total refactoring of [dox-foundation](https://github.com/punkave/dox-foundation/)**.
 
 Outputted HTML is by default based on templates and css from [Twitter Bootstrap](twitter.github.com/bootstrap/) and syntax highlighting is done by [Prism.js](http://prismjs.com/).
 
