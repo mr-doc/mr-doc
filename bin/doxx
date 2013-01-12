@@ -32,7 +32,9 @@ program
 function showHelp(){
   console.log('  Examples:\n');
   console.log('    # parse a whole folder');
-  console.log('    $ doxx --source ./lib --target ./docs');
+  console.log('    $ doxx --source ./lib --target ./docs\n');
+  console.log('    # parse a whole folder and use a specific template');
+  console.log('    $ doxx --template ./view/myowntpl.jade --source lib --target docs');
 }
 
 // examples

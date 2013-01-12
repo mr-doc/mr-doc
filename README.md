@@ -2,12 +2,50 @@
 
 Use [dox](https://github.com/visionmedia/dox) to automatically generate beautiful html documentation. Doxx is a total refactoring of [dox-foundation](https://github.com/punkave/dox-foundation/).
 
-Outputted HTML is by default based on templates and css from [ZURB's Foundation](http://foundation.zurb.com/) and syntax highlighting is done by [Prism.js](http://prismjs.com/).
+Outputted HTML is by default based on templates and css from [Twitter Bootstrap](twitter.github.com/bootstrap/) and syntax highlighting is done by [Prism.js](http://prismjs.com/).
+
+Doxx works well is JavaScript as well as generated JavaScript from CoffeeScript
+
+## Demo
+[doxx/docs/compile.js](http://fgribreau.github.com/doxx/docs/compile.js.html)
+
+## Usage
+
+JavaScript JavaDoc style
+
+```javascript
+/**
+ * Create an array of all the right files in the source dir
+ * @param  {String}   source path
+ * @param  {Object}   options
+ * @param  {Function} callback
+ * @return {Array} an array of string path
+ */
+function collectFiles(source, options, callback) {
+  ...
+}
+
+```
+
+CoffeeScript JavaDoc style
+
+```coffeescript
+###*
+ * Create an array of all the right files in the source dir
+ * @param  {String}   source path
+ * @param  {Object}   options
+ * @param  {Function} callback
+ * @return {Array} an array of string path
+###
+collectFiles = (source, options, callback) ->
+  ...
+
+```
 
 ## Installation
 Install the module with: `npm install doxx -g`
 
-## Documentation
+## CLI
 ```
 $ doxx --help
 
@@ -29,6 +67,9 @@ $ doxx --help
 
     # parse a whole folder
     $ doxx --source lib --target docs
+
+    # parse a whole folder and use a specific template
+    $ doxx --template ./view/myowntpl.jade --source lib --target docs
 ```
 
 ## Contributing
@@ -43,3 +84,4 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## License
 Copyright (c) 2013 Francois-Guillaume Ribreau
+MIT License
