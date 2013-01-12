@@ -1,49 +1,37 @@
 {
-  "name": "dox-foundation",
-  "description": "HTML output for Dox documentation generator",
-  "version": "0.4.0",
-  "homepage": "https://github.com/punkave/dox-foundation",
+  "name": "doxx",
+  "description": "Generic, template based, HTML output for Dox documentation generator",
+  "version": "0.5.0",
+  "homepage": "https://github.com/FGRibreau/doxx",
   "author": {
-    "name": "Matt McManus",
-    "email": "mcmanus@punkave.com"
+    "name": "FG Ribreau",
+    "email": "github@fgribreau.com"
   },
-  "contributors": [
-    {
-      "name": "Sascha Depold",
-      "email": "sascha@depold.com"
-    },
-    {
-      "name": "Francois-Guillaume Ribreau",
-      "email": "npm@fgribreau.com"
-    }
-  ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/punkave/dox-foundation.git"
+    "url": "git://github.com/FGRibreau/doxx.git"
   },
   "bugs": {
-    "url": "https://github.com/punkave/dox-foundation/issues"
+    "url": "https://github.com/FGRibreau/doxx/issues"
   },
-  "licenses": [
-    {
+  "licenses": [{
       "type": "MIT",
-      "url": "https://github.com/punkave/dox-foundation/blob/master/LICENSE-MIT"
-    }
-  ],
-  "main": "lib/dox-foundation",
+      "url": "https://github.com/FGRibreau/doxx/blob/master/LICENSE-MIT"
+  }],
+  "main": "lib/doxx",
   "bin": {
-    "dox-foundation": "./bin/dox-foundation"
+    "doxx": "./bin/doxx"
   },
   "engines": {
     "node": ">= 0.6.0"
   },
   "dependencies": {
-    "underscore": "*",
-    "dox": "0.3.3",
-    "commander": "0.5.2",
-    "jade": "*",
-    "mkdirp": "*",
-    "findit": "~0.1.2"
+    "dox": "~0.3.3",
+    "commander": "~0.5.2",
+    "jade": "~0.28.1",
+    "mkdirp": "~0.3.4",
+    "findit": "~0.1.2",
+    "lodash": "~1.0.0-rc.3"
   },
   "devDependencies": {
     "grunt": "~0.3.15"
@@ -51,6 +39,7 @@
   "keywords": [
     "dox",
     "jsdox",
+    "documentor",
     "documentation",
     "docs",
     "dox"

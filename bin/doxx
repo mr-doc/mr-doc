@@ -1,0 +1,89 @@
+#!/usr/bin/env node
+
+var program = require('commander'),
+    fs      = require('fs'),
+    path    = require('path'),
+    _       = require('lodash'),
+
+    dir     = require('../lib/dir'),
+    parse   = require('../lib/parser'),
+    compile = require('../lib/compile'),
+    symbols = require('../lib/symbols'),
+
+    version = require('../package').version;
+
+/**
+ * Options & Defaults
+ */
+var ignoredDirs = 'test,public,static,views,templates';
+
+program
+  .version(version)
+  // .option('-r, --raw', 'output \'raw\' comments, leaving the markdown intact')
+  .option('-d, --debug', 'output parsed comments for debugging')
+  .option('-t, --title <string>', 'The title for the page produced')
+  .option('-s, --source <source>', 'The folder which should get parsed')
+  .option('-i, --ignore <directories>', 'Comma seperated list of directories to ignore. Default: ' + ignoredDirs)
+  .option('-T, --target <target>', 'The folder which will contain the results. Default: <process.cwd()>/docs')
+  .option('--template <jade template>', 'The jade template file to use');
+
+function showHelp(){
+  console.log('  Examples:\n');
+  console.log('    # parse a whole folder');
+  console.log('    $ doxx --source ./lib --target ./docs');
+}
+
+// examples
+program.on('--help', showHelp);
+
+// parse argv
+program.parse(process.argv);
+
+if(program.template){
+  compile.tpl = fs.readFileSync(program.template).toString();
+}
+
+if (!program.source) {
+  console.error("  Error you must define a source\n");
+  return showHelp();
+}
+
+var target = path.resolve(process.cwd(), program.target) || process.cwd() + '/docs',
+    source = path.resolve(process.cwd(), program.source),
+    ignore = program.ignore || ignoredDirs;
+
+// Cleanup and turn into an array the ignoredDirs
+ignore     = ignore.trim().replace(' ','').split(',');
+
+// Find, cleanup and validate all potential files
+var files  = dir.collectFiles(source, ignore);
+
+dir.createTargetFolders(target, files);
+
+// Parse each file
+files = files.map(function(file) {
+  var dox = parse(path.join(source, file), {});
+  return {
+    name: file,
+    dox: dox,
+    symbols: symbols(dox)
+  };
+});
+
+// Compute all symboles
+var allSymbols = files.reduce(function(m, a, b){
+  m = (a.symbols || []).concat(b.symbols || []);
+  return m;
+}, []);
+
+// Render and write each file
+files.forEach(function(file){
+
+  var options = _.extend({}, file, {
+    title: program.title || require(process.cwd() + '/package').name,
+    allSymbols: allSymbols
+  });
+
+  var compiled = compile(options);
+  fs.writeFileSync(path.join(target, file.name+".html"), compiled);
+});
