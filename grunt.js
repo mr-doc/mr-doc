@@ -1,4 +1,7 @@
+"use strict";
+
 module.exports = function(grunt) {
+  grunt.loadNpmTasks('grunt-shell');
 
   // Project configuration.
   grunt.initConfig({
@@ -6,9 +9,16 @@ module.exports = function(grunt) {
     lint: {
       files: ['grunt.js', 'bin/**/*', 'lib/**/*.js']
     },
+    shell: {
+      doxx:{// --template docs/template.jade
+        command:'./bin/doxx --source lib --target docs',
+        stdout:true,
+        stderr:true
+      }
+    },
     watch: {
-      files: '<config:lint.files>',
-      tasks: 'default'
+      files: ['<config:lint.files>','views/*'],
+      tasks: 'default shell:doxx'
     },
     jshint: {
       options: {

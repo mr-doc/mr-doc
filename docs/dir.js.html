@@ -1,18 +1,12 @@
-mixin iForSymbolType(symbol)
-  i(class=["alert", "alert-"+(symbol.type === "function" || symbol.type === "method" ? "info":"success")])
-
-mixin labelForSymbolType(symbol)
-  div(class=["label", "label-"+(symbol.ctx.type === "function" || symbol.ctx.type === "method" ? "info":"success"), "radius", "ctx-type"])= symbol.ctx.type
-
-doctype 5
-html
-  head
-    meta(name='viewport', content='width=device-width', charset='utf-8')
-    title= title
-    link(rel="stylesheet", href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css")
-    link(rel="stylesheet", href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css")
-    link(rel="stylesheet", href="http://twitter.github.com/bootstrap/assets/css/docs.css")
-    style
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width" charset="utf-8">
+    <title>doxx</title>
+    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css">
+    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/docs.css">
+    <style>
       body > .navbar .brand {
         float:left;
         text-shadow: rgba(255, 255, 255, 0.0980392) 0px 1px 0px, rgba(255, 255, 255, 0.4) 0px 0px 30px;
@@ -20,7 +14,7 @@ html
         margin-left:0px;
         font-weight:normal;
       }
-
+      
       .bs-docs-sidenav i{
         width: 8px;
         height: 8px;
@@ -29,7 +23,7 @@ html
         display: inline-block;
         margin-right:0.5em;
       }
-
+      
       code[class*="language-"],pre[class*="language-"]{color:black;text-shadow:0 1px white;font-family:Consolas,Monaco,'Andale Mono',monospace;direction:ltr;text-align:left;white-space:pre;word-spacing:normal;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*="language-"]{padding:1em;margin:.5em 0;overflow:auto}:not(pre)>code[class*="language-"],pre[class*="language-"]{background:#f5f2f0}:not(pre)>code[class*="language-"]{padding:.1em;border-radius:.3em}.token.comment,.token.prolog,.token.doctype,.token.cdata{color:slategray}.token.punctuation{color:#999}.namespace{opacity:.7}.token.property,.token.tag,.token.boolean,.token.number{color:#905}.token.selector,.token.attr-name,.token.string{color:#690}.token.operator,.token.entity,.token.url,.language-css .token.string,.style .token.string{color:#a67f59;background:hsla(0,0%,100%,.5)}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.regex,.token.important{color:#e90}.token.important{font-weight:bold}.token.entity{cursor:help}
       div.description {margin: 14px 0; padding-top: 14px; border-top:1px solid #eee; border-bottom:1px solid #eee; }
       .tags {}
@@ -38,96 +32,89 @@ html
         margin-right:0.5em;
         //- float:right; margin-top:8px 
       }
-
+      
       footer iframe{vertical-align:middle;}
+      
+    </style>
+  </head>
+  <body data-spy="scroll" data-target=".bs-docs-sidebar">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container"><a class="brand">Doxx</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav pull-right sponsored"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <header id="overview" class="jumbotron subhead">
+      <div class="container">
+        <h1>doxx</h1>
+        <p class="lead"></p>
+      </div>
+    </header>
+    <div class="container">
+      <div class="row">
+        <div class="span3 bs-docs-sidebar">
+          <ul class="nav nav-list bs-docs-sidenav affix-top">
+            <li class=""><a href="index.html">Main</a></li>
+            <li class=""><a href="compile.js.html">compile.js</a></li>
+            <li class="active"><a href="dir.js.html">dir.js</a></li>
+            <li class=""><a href="parser.js.html">parser.js</a></li>
+            <li class=""><a href="symbols.js.html">symbols.js</a></li>
+          </ul>
+          <ul class="nav nav-list bs-docs-sidenav bs-docs-sidenav2 affix-top">
+            <li><a href="dir.js.html#collectFiles"><i class="alert alert-info"></i>collectFiles</a></li>
+          </ul>
+        </div>
+        <div class="span9">
+          <section id="collectFiles">
+            <h1>collectFiles</h1>
+            <h5 class="subheader">
+              <div class="label label-info radius ctx-type">method</div><span>exports.collectFiles()</span> -> <span>Array</span>
+            </h5>
+          </section>
+          <div class="description"><p>Create an array of all the right files in the source dir</p>
+            <pre><code class="language-javascript">exports.collectFiles = function(source, options, callback) {
+  var dirtyFiles = findit.findSync(source), // tee hee!
+      ignore  = options.ignore || [],
+      files   = [];
 
-  body(data-spy="scroll", data-target=".bs-docs-sidebar")
-    div.navbar.navbar-inverse.navbar-fixed-top
-      div.navbar-inner
-        div.container
-          a.brand Doxx
-          div.nav-collapse.collapse
-            ul.nav.pull-right.sponsored
-              
+  dirtyFiles.forEach(function(file){
+    file = path.relative(source, file);
 
-    header.jumbotron.subhead#overview
-      div.container
-        h1= title
-        p.lead
+    var doNotIgnore = _.all(ignore, function(d){
+      // return true if no part of the path is in the ignore list
+      return (file.indexOf(d) === -1);
+    });
 
-    .container
-      .row
-        .span3.bs-docs-sidebar
-          ul.nav.nav-list.bs-docs-sidenav.affix-top
-            each file in files
-              li(class=(file.name !== currentName ? "":"active"))
-                a(href=file.targetName) #{file.name}
+    if ((file.substr(-2) === 'js') && doNotIgnore) {
+      files.push(file);
+    }
+  });
 
-          ul.nav.nav-list.bs-docs-sidenav.bs-docs-sidenav2.affix-top
-            each symbol in symbols
-              li
-                a(href=symbol.targetFile+'#'+symbol.name)
-                  mixin iForSymbolType(symbol)
-                  | #{symbol.name}
-
-        .span9
-          each symbol in dox
-            if symbol.ctx
-              section(id=symbol.ctx.name)
-                  
-                  h1= symbol.ctx.name
-                  h5.subheader
-                    mixin labelForSymbolType(symbol)
-                    span= symbol.ctx.string
-                    |  -> 
-                    span= symbol.ctx.return.types
-
-                if symbol.hasParams
-                  //- First show options
-                  table.table.table-bordered.table-striped
-                    thead
-                      tr
-                        th(style="width:20%") Option name
-                        th(style="width:20%") Type
-                        th Description
-                    tbody
-                      each tag in symbol.tags
-                        if tag.type == 'param'
-                          tr
-                            td= tag.name
-                            td= tag.types
-                            td= tag.description
-
-              .description
-                !=symbol.description.full
-
-                if symbol.code
-                  pre
-                    code.language-javascript
-                      !=symbol.code
-    
-    footer.footer
-      div.container
-        p Documentation generated with 
-          a(href="https://github.com/FGRibreau/doxx") Doxx 
-          | created by 
-          a.twitter-follow-button(href='https://twitter.com/FGRibreau',data-show-count='false') Francois-Guillaume Ribreau
-        p Doxx is sponsored by 
-          a.bringr(href='http://bringr.net/?btt', title="Outil d'analyse des réseaux sociaux") Bringr 
-          | and 
-          a.redsmin(href='https://redsmin.com/?btt', title="Full Redis GUI") Redsmin
-        p Theme borrowed from Twitter Bootstrap
-    
-    script(src="http://platform.twitter.com/widgets.js")
-    script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js")
-    script(src="http://leaverou.github.com/prefixfree/prefixfree.js")
-    script(src="http://twitter.github.com/bootstrap/assets/js/bootstrap-transition.js")
-    script(src="http://twitter.github.com/bootstrap/assets/js/bootstrap-scrollspy.js")
-    script(src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js")
-    script(src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js")
-    script(src="http://twitter.github.com/bootstrap/assets/js/bootstrap-affix.js")
-
-    script
+  return files;
+};</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <p>Documentation generated with <a href="https://github.com/FGRibreau/doxx">Doxx </a>created by <a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau</a></p>
+        <p>Doxx is sponsored by <a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr </a>and <a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
+        <p>Theme borrowed from Twitter Bootstrap</p>
+      </div>
+    </footer>
+    <script src="http://platform.twitter.com/widgets.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+    <script src="http://leaverou.github.com/prefixfree/prefixfree.js"></script>
+    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-transition.js"></script>
+    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-scrollspy.js"></script>
+    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
+    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
+    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-affix.js"></script>
+    <script>
       /**
        * Prism: Lightweight, robust, elegant syntax highlighting
        * MIT license http://www.opensource.org/licenses/mit-license.php/
@@ -137,9 +124,10 @@ html
       Prism.languages.css={comment:/\/\*[\w\W]*?\*\//g,atrule:/@[\w-]+?(\s+[^;{]+)?(?=\s*{|\s*;)/gi,url:/url\((["']?).*?\1\)/gi,selector:/[^\{\}\s][^\{\}]*(?=\s*\{)/g,property:/(\b|\B)[a-z-]+(?=\s*:)/ig,string:/("|')(\\?.)*?\1/g,important:/\B!important\b/gi,ignore:/&(lt|gt|amp);/gi,punctuation:/[\{\};:]/g};Prism.languages.markup&&Prism.languages.insertBefore("markup","tag",{style:{pattern:/(&lt;|<)style[\w\W]*?(>|&gt;)[\w\W]*?(&lt;|<)\/style(>|&gt;)/ig,inside:{tag:{pattern:/(&lt;|<)style[\w\W]*?(>|&gt;)|(&lt;|<)\/style(>|&gt;)/ig,inside:Prism.languages.markup.tag.inside},rest:Prism.languages.css}}});;
       Prism.languages.clike={comment:{pattern:/(^|[^\\])(\/\*[\w\W]*?\*\/|\/\/.*?(\r?\n|$))/g,lookbehind:!0},string:/("|')(\\?.)*?\1/g,keyword:/\b(if|else|while|do|for|return|in|instanceof|function|new|try|catch|finally|null|break|continue)\b/g,"boolean":/\b(true|false)\b/g,number:/\b-?(0x)?\d*\.?[\da-f]+\b/g,operator:/[-+]{1,2}|!|=?&lt;|=?&gt;|={1,2}|(&amp;){1,2}|\|?\||\?|\*|\//g,ignore:/&(lt|gt|amp);/gi,punctuation:/[{}[\];(),.:]/g};;
       Prism.languages.javascript=Prism.languages.extend("clike",{keyword:/\b(var|let|if|else|while|do|for|return|in|instanceof|function|new|with|typeof|try|catch|finally|null|break|continue)\b/g,number:/\b(-?(0x)?\d*\.?[\da-f]+|NaN|-?Infinity)\b/g});Prism.languages.insertBefore("javascript","keyword",{regex:{pattern:/(^|[^/])\/(?!\/)(\[.+?]|\\.|[^/\r\n])+\/[gim]{0,3}(?=\s*($|[\r\n,.;})]))/g,lookbehind:!0}});Prism.languages.markup&&Prism.languages.insertBefore("markup","tag",{script:{pattern:/(&lt;|<)script[\w\W]*?(>|&gt;)[\w\W]*?(&lt;|<)\/script(>|&gt;)/ig,inside:{tag:{pattern:/(&lt;|<)script[\w\W]*?(>|&gt;)|(&lt;|<)\/script(>|&gt;)/ig,inside:Prism.languages.markup.tag.inside},rest:Prism.languages.javascript}}});;
-
-    // App js
-    script
+      
+    </script>
+    <!-- App js-->
+    <script>
       $(function(){
         var $window = $(window);
         $('.bs-docs-sidenav2').affix({
@@ -149,3 +137,6 @@ html
           }
         });
       })
+    </script>
+  </body>
+</html>

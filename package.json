@@ -1,12 +1,9 @@
 {
   "name": "doxx",
   "description": "Generic, template based, HTML output for Dox documentation generator",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "homepage": "https://github.com/FGRibreau/doxx",
-  "author": {
-    "name": "FG Ribreau",
-    "email": "github@fgribreau.com"
-  },
+  "author": "Francois-Guillaume Ribreau <npm@fgribreau.com> (http://fgribreau.com)",
   "repository": {
     "type": "git",
     "url": "git://github.com/FGRibreau/doxx.git"
@@ -14,10 +11,12 @@
   "bugs": {
     "url": "https://github.com/FGRibreau/doxx/issues"
   },
-  "licenses": [{
+  "licenses": [
+    {
       "type": "MIT",
       "url": "https://github.com/FGRibreau/doxx/blob/master/LICENSE-MIT"
-  }],
+    }
+  ],
   "main": "lib/doxx",
   "bin": {
     "doxx": "./bin/doxx"
@@ -34,7 +33,8 @@
     "lodash": "~1.0.0-rc.3"
   },
   "devDependencies": {
-    "grunt": "~0.3.15"
+    "grunt": "~0.3.15",
+    "grunt-shell": "~0.1.4"
   },
   "keywords": [
     "dox",
