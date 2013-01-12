@@ -25,7 +25,7 @@ module.exports = function(grunt) {
     },
     watch: {
       files: ['<config:lint.files>','views/*', 'test/*'],
-      tasks: 'default shell:doxx shell:nodeunit'
+      tasks: 'default shell:doxx test'
     },
     jshint: {
       options: {
@@ -49,4 +49,5 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask('default', 'lint');
+  grunt.registerTask('test', 'shell:nodeunit');
 };
