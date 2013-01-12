@@ -73,9 +73,10 @@
         <div class="span9">
           <section id="structure">
             <h1>structure</h1>
-            <h5 class="subheader">
+            <h5 class="subheader"></h5>
+            <p>
               <div class="label label-info radius ctx-type">function</div><span>structure()</span> -> <span>Array</span>
-            </h5>
+            </p>
           </section>
           <table class="table table-bordered table-striped">
             <thead>
@@ -91,24 +92,9 @@
                 <td>Array</td>
                 <td>array of symbols</td>
               </tr>
-              <tr>
-                <td>file</td>
-                <td>String</td>
-                <td>filename</td>
-              </tr>
             </tbody>
           </table>
-          <div class="description"><p>Return the structure of a parsed file</p>
-            <pre><code class="language-javascript">function structure(symbols, file){
-  return _.compact(symbols.map(function(method){
-    if (!method.ctx || !method.ctx.name){return null;}
-    return {
-      targetFile:file,
-      name:method.ctx.name,
-      type:method.ctx.type
-    };
-  })) || [];
-}</code></pre>
+          <div class="description"><p>Return the structure of a parsed file</p> 
           </div>
         </div>
       </div>

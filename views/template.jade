@@ -2,7 +2,7 @@ mixin iForSymbolType(symbol)
   i(class=["alert", "alert-"+(symbol.type === "function" || symbol.type === "method" ? "info":"success")])
 
 mixin labelForSymbolType(symbol)
-  div(class=["label", "label-"+(symbol.ctx.type === "function" || symbol.ctx.type === "method" ? "info":"success"), "radius", "ctx-type"])= symbol.ctx.type
+  div(class=["label", "label-"+(symbol.gtype === "function" || symbol.gtype === "method" ? "info":"success"), "radius", "ctx-type"])= symbol.ctx.type
 
 doctype 5
 html
@@ -76,39 +76,42 @@ html
 
         .span9
           each symbol in dox
-            if symbol.ctx
-              section(id=symbol.ctx.name)
-                  
-                  h1= symbol.ctx.name
-                  h5.subheader
+            section(id=symbol.ctx.name)
+                h1= symbol.ctx.name
+                h5.subheader
+                if !symbol.gtype && symbol.type
+                  p
+                    div(class=["label", "label-inverse", "radius", "ctx-type"])= symbol.type
+                else
+                  p
                     mixin labelForSymbolType(symbol)
-                    span= symbol.ctx.string
-                    |  -> 
-                    span= symbol.return
+                    if symbol.ctx.string
+                      span= symbol.ctx.string
+                    if symbol.return
+                      |  -> 
+                      span= symbol.return
 
-                if symbol.hasParams
-                  //- First show options
-                  table.table.table-bordered.table-striped
-                    thead
-                      tr
-                        th(style="width:20%") Option name
-                        th(style="width:20%") Type
-                        th Description
-                    tbody
-                      each tag in symbol.tags
-                        if tag.type == 'param'
-                          tr
-                            td= tag.name
-                            td= tag.types
-                            td= tag.description
+              if symbol.hasParams
+                table.table.table-bordered.table-striped
+                  thead
+                    tr
+                      th(style="width:20%") Option name
+                      th(style="width:20%") Type
+                      th Description
+                  tbody
+                    each tag in symbol.tags
+                      if tag.type == 'param'
+                        tr
+                          td= tag.name
+                          td= tag.types
+                          td= tag.description
 
-              .description
-                !=symbol.description.full
+              .description !{symbol.description.full} !{symbol.description.extra}
 
-                if symbol.code
-                  pre
-                    code.language-javascript
-                      !=symbol.code
+              if !symbol.ctx.string && symbol.code
+                pre
+                  code.language-javascript
+                    != symbol.code
     
     footer.footer
       div.container

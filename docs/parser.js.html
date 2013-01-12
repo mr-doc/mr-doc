@@ -69,6 +69,8 @@
               </li>
               <li><a href="#has"><i class="alert alert-info"></i>has</a>
               </li>
+              <li><a href="#_compact"><i class="alert alert-info"></i>_compact</a>
+              </li>
               <li><a href="#parse"><i class="alert alert-info"></i>parse</a>
               </li>
             </ul>
@@ -77,9 +79,10 @@
         <div class="span9">
           <section id="shouldPass">
             <h1>shouldPass</h1>
-            <h5 class="subheader">
+            <h5 class="subheader"></h5>
+            <p>
               <div class="label label-info radius ctx-type">function</div><span>shouldPass()</span> -> <span>Boolean</span>
-            </h5>
+            </p>
           </section>
           <table class="table table-bordered table-striped">
             <thead>
@@ -97,22 +100,14 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Test if a symbol should be ignored or not</p>
-            <pre><code class="language-javascript">function shouldPass(symbol){
-  if(symbol.isPrivate){return false;}
-  if(symbol.ignore){return false;}
-
-  // Only for coffeescript
-  return symbol.tags.filter(function(tag){
-    return tag.type === "private" || tag.type === "ignore";
-  }).length === 0;
-}</code></pre>
+          <div class="description"><p>Test if a symbol should be ignored or not</p> 
           </div>
           <section id="has">
             <h1>has</h1>
-            <h5 class="subheader">
+            <h5 class="subheader"></h5>
+            <p>
               <div class="label label-info radius ctx-type">function</div><span>has()</span> -> <span>Boolean</span>
-            </h5>
+            </p>
           </section>
           <table class="table table-bordered table-striped">
             <thead>
@@ -130,18 +125,23 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>has Helper return a closure that check if a tag has a specific type</p>
-            <pre><code class="language-javascript">function has(val){
-  return function(tag){
-    return tag.type === val;
-  };
-}</code></pre>
+          <div class="description"><p>has Helper return a closure that check if a tag has a specific type</p> 
+          </div>
+          <section id="_compact">
+            <h1>_compact</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">function</div><span>_compact()</span> -> <span>Array</span>
+            </p>
+          </section>
+          <div class="description"><p>Compact multi-line expression</p> 
           </div>
           <section id="parse">
             <h1>parse</h1>
-            <h5 class="subheader">
+            <h5 class="subheader"></h5>
+            <p>
               <div class="label label-info radius ctx-type">function</div><span>parse()</span> -> <span>Array</span>
-            </h5>
+            </p>
           </section>
           <table class="table table-bordered table-striped">
             <thead>
@@ -159,64 +159,7 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Parse a file and returns a generic format</p>
-            <pre><code class="language-javascript">function parse(filepath){
-  var json = null;
-
-  try{
-    json = dox.parseComments(fs.readFileSync(filepath).toString(), {raw: false});
-  } catch(e) {
-    console.error("doxx:", e);
-    return [];
-  }
-
-  // json now contains an array of tags
-  // {
-  //  tags:[]
-  //  description:{
-  //    full:""
-  //    summary:""
-  //    body:""
-  //  }
-  //  ignore:false
-  //  isPrivate:false
-  //  ctx:{
-  //    type:"declaration"
-  //    name:""
-  //    value:[]
-  //    string:""
-  //  }
-  // }
-
-  var hasParams = has('param');
-  var isReturn  = has('return');
-  var hasType   = has('type');
-
-  return json.filter(shouldPass).map(function(symbol){
-    var types   = symbol.tags.filter(hasType);
-    var returns = symbol.tags.filter(isReturn);
-
-    if(symbol.tags.length > 0 && symbol.tags.filter(hasParams).length > 0){
-      symbol.hasParams = true;
-    }
-
-    if(!symbol.ctx){
-      symbol.ctx = {};
-    }
-
-
-    if(returns.length === 1){
-      symbol["return"] = returns[0].types;
-    } else if(types.length === 1){
-      symbol["return"] = types[0].types;
-    } else {
-      symbol["return"] = "Undefined";
-    }
-
-
-    return symbol;
-  });
-}</code></pre>
+          <div class="description"><p>Parse a file and returns a generic format</p> 
           </div>
         </div>
       </div>
