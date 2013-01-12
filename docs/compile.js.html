@@ -37,7 +37,7 @@
       
     </style>
   </head>
-  <body data-spy="scroll" data-target=".bs-docs-sidebar">
+  <body data-spy="scroll" data-target=".scrollspy">
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container"><a class="brand">Doxx</a>
@@ -63,10 +63,14 @@
             <li class=""><a href="parser.js.html">parser.js</a></li>
             <li class=""><a href="symbols.js.html">symbols.js</a></li>
           </ul>
-          <ul class="nav nav-list bs-docs-sidenav bs-docs-sidenav2 affix-top">
-            <li><a href="compile.js.html#compile"><i class="alert alert-info"></i>compile</a></li>
-            <li><a href="compile.js.html#tpl"><i class="alert alert-success"></i>tpl</a></li>
-          </ul>
+          <div class="scrollspy">
+            <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#compile"><i class="alert alert-info"></i>compile</a>
+              </li>
+              <li><a href="#tpl"><i class="alert alert-success"></i>tpl</a>
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="span9">
           <section id="compile">
@@ -141,7 +145,7 @@ module.exports = compile;</code></pre>
     <script>
       $(function(){
         var $window = $(window);
-        $('.bs-docs-sidenav2').affix({
+        $('.scrollspy .nav').affix({
           offset: {
             top: function () { return $window.width() <= 980 ? 480 : 400 }
           , bottom: 50

@@ -37,7 +37,7 @@
       
     </style>
   </head>
-  <body data-spy="scroll" data-target=".bs-docs-sidebar">
+  <body data-spy="scroll" data-target=".scrollspy">
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container"><a class="brand">Doxx</a>
@@ -63,9 +63,12 @@
             <li class=""><a href="parser.js.html">parser.js</a></li>
             <li class="active"><a href="symbols.js.html">symbols.js</a></li>
           </ul>
-          <ul class="nav nav-list bs-docs-sidenav bs-docs-sidenav2 affix-top">
-            <li><a href="symbols.js.html#structure"><i class="alert alert-info"></i>structure</a></li>
-          </ul>
+          <div class="scrollspy">
+            <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#structure"><i class="alert alert-info"></i>structure</a>
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="span9">
           <section id="structure">
@@ -98,8 +101,7 @@
           <div class="description"><p>Return the structure of a parsed file</p>
             <pre><code class="language-javascript">function structure(symbols, file){
   return _.compact(symbols.map(function(method){
-    if (!method.ctx){return null;}
-
+    if (!method.ctx || !method.ctx.name){return null;}
     return {
       targetFile:file,
       name:method.ctx.name,
@@ -142,7 +144,7 @@
     <script>
       $(function(){
         var $window = $(window);
-        $('.bs-docs-sidenav2').affix({
+        $('.scrollspy .nav').affix({
           offset: {
             top: function () { return $window.width() <= 980 ? 480 : 400 }
           , bottom: 50
