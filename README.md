@@ -8,6 +8,9 @@ Doxx was tested with *JavaScript* as well as generated JavaScript from *CoffeeSc
 
 ## Demo
 [doxx/docs/compile.js](http://fgribreau.github.com/doxx/docs/compile.js.html)
+[doxx/docs/dir.js](http://fgribreau.github.com/doxx/docs/dir.js.html)
+[doxx/docs/parser.js](http://fgribreau.github.com/doxx/docs/parser.js.html)
+
 
 ## Usage
 
