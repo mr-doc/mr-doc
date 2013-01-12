@@ -25,7 +25,7 @@
       }
       
       code[class*="language-"],pre[class*="language-"]{color:black;text-shadow:0 1px white;font-family:Consolas,Monaco,'Andale Mono',monospace;direction:ltr;text-align:left;white-space:pre;word-spacing:normal;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*="language-"]{padding:1em;margin:.5em 0;overflow:auto}:not(pre)>code[class*="language-"],pre[class*="language-"]{background:#f5f2f0}:not(pre)>code[class*="language-"]{padding:.1em;border-radius:.3em}.token.comment,.token.prolog,.token.doctype,.token.cdata{color:slategray}.token.punctuation{color:#999}.namespace{opacity:.7}.token.property,.token.tag,.token.boolean,.token.number{color:#905}.token.selector,.token.attr-name,.token.string{color:#690}.token.operator,.token.entity,.token.url,.language-css .token.string,.style .token.string{color:#a67f59;background:hsla(0,0%,100%,.5)}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.regex,.token.important{color:#e90}.token.important{font-weight:bold}.token.entity{cursor:help}
-      div.description {margin: 14px 0; padding-top: 14px; border-top:1px solid #eee; border-bottom:1px solid #eee; }
+      div.description {margin: 14px 0; padding-top: 14px; border-bottom:1px solid #eee; }
       .tags {}
       .ctx-type { 
         display:inline-block;
@@ -64,19 +64,40 @@
             <li class="active"><a href="symbols.js.html">symbols.js</a></li>
           </ul>
           <ul class="nav nav-list bs-docs-sidenav bs-docs-sidenav2 affix-top">
-            <li><a href="symbols.js.html#exports"><i class="alert alert-info"></i>exports</a></li>
+            <li><a href="symbols.js.html#structure"><i class="alert alert-info"></i>structure</a></li>
           </ul>
         </div>
         <div class="span9">
-          <section id="exports">
-            <h1>exports</h1>
+          <section id="structure">
+            <h1>structure</h1>
             <h5 class="subheader">
-              <div class="label label-info radius ctx-type">method</div><span>module.exports()</span> -> <span>Array</span>
+              <div class="label label-info radius ctx-type">function</div><span>structure()</span> -> <span>Array</span>
             </h5>
           </section>
-          <div class="description"><p>Return the structure of a dox</p>
-            <pre><code class="language-javascript">module.exports = function structure(dox, file){
-  return _.compact(dox.map(function(method){
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>symbols</td>
+                <td>Array</td>
+                <td>array of symbols</td>
+              </tr>
+              <tr>
+                <td>file</td>
+                <td>String</td>
+                <td>filename</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Return the structure of a parsed file</p>
+            <pre><code class="language-javascript">function structure(symbols, file){
+  return _.compact(symbols.map(function(method){
     if (!method.ctx){return null;}
 
     return {
@@ -85,7 +106,7 @@
       type:method.ctx.type
     };
   })) || [];
-};</code></pre>
+}</code></pre>
           </div>
         </div>
       </div>

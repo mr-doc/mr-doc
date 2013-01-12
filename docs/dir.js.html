@@ -25,7 +25,7 @@
       }
       
       code[class*="language-"],pre[class*="language-"]{color:black;text-shadow:0 1px white;font-family:Consolas,Monaco,'Andale Mono',monospace;direction:ltr;text-align:left;white-space:pre;word-spacing:normal;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*="language-"]{padding:1em;margin:.5em 0;overflow:auto}:not(pre)>code[class*="language-"],pre[class*="language-"]{background:#f5f2f0}:not(pre)>code[class*="language-"]{padding:.1em;border-radius:.3em}.token.comment,.token.prolog,.token.doctype,.token.cdata{color:slategray}.token.punctuation{color:#999}.namespace{opacity:.7}.token.property,.token.tag,.token.boolean,.token.number{color:#905}.token.selector,.token.attr-name,.token.string{color:#690}.token.operator,.token.entity,.token.url,.language-css .token.string,.style .token.string{color:#a67f59;background:hsla(0,0%,100%,.5)}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.regex,.token.important{color:#e90}.token.important{font-weight:bold}.token.entity{cursor:help}
-      div.description {margin: 14px 0; padding-top: 14px; border-top:1px solid #eee; border-bottom:1px solid #eee; }
+      div.description {margin: 14px 0; padding-top: 14px; border-bottom:1px solid #eee; }
       .tags {}
       .ctx-type { 
         display:inline-block;
@@ -71,14 +71,35 @@
           <section id="collectFiles">
             <h1>collectFiles</h1>
             <h5 class="subheader">
-              <div class="label label-info radius ctx-type">method</div><span>exports.collectFiles()</span> -> <span>Array</span>
+              <div class="label label-info radius ctx-type">function</div><span>collectFiles()</span> -> <span>Array</span>
             </h5>
           </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>source</td>
+                <td>String</td>
+                <td>source path</td>
+              </tr>
+              <tr>
+                <td>options</td>
+                <td>Object</td>
+                <td>option object</td>
+              </tr>
+            </tbody>
+          </table>
           <div class="description"><p>Create an array of all the right files in the source dir</p>
-            <pre><code class="language-javascript">exports.collectFiles = function(source, options, callback) {
+            <pre><code class="language-javascript">function collectFiles(source, options) {
   var dirtyFiles = findit.findSync(source), // tee hee!
-      ignore  = options.ignore || [],
-      files   = [];
+      ignore     = options.ignore || [],
+      files      = [];
 
   dirtyFiles.forEach(function(file){
     file = path.relative(source, file);
@@ -94,7 +115,7 @@
   });
 
   return files;
-};</code></pre>
+}</code></pre>
           </div>
         </div>
       </div>

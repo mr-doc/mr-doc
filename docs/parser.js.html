@@ -25,7 +25,7 @@
       }
       
       code[class*="language-"],pre[class*="language-"]{color:black;text-shadow:0 1px white;font-family:Consolas,Monaco,'Andale Mono',monospace;direction:ltr;text-align:left;white-space:pre;word-spacing:normal;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*="language-"]{padding:1em;margin:.5em 0;overflow:auto}:not(pre)>code[class*="language-"],pre[class*="language-"]{background:#f5f2f0}:not(pre)>code[class*="language-"]{padding:.1em;border-radius:.3em}.token.comment,.token.prolog,.token.doctype,.token.cdata{color:slategray}.token.punctuation{color:#999}.namespace{opacity:.7}.token.property,.token.tag,.token.boolean,.token.number{color:#905}.token.selector,.token.attr-name,.token.string{color:#690}.token.operator,.token.entity,.token.url,.language-css .token.string,.style .token.string{color:#a67f59;background:hsla(0,0%,100%,.5)}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.regex,.token.important{color:#e90}.token.important{font-weight:bold}.token.entity{cursor:help}
-      div.description {margin: 14px 0; padding-top: 14px; border-top:1px solid #eee; border-bottom:1px solid #eee; }
+      div.description {margin: 14px 0; padding-top: 14px; border-bottom:1px solid #eee; }
       .tags {}
       .ctx-type { 
         display:inline-block;
@@ -65,7 +65,8 @@
           </ul>
           <ul class="nav nav-list bs-docs-sidenav bs-docs-sidenav2 affix-top">
             <li><a href="parser.js.html#shouldPass"><i class="alert alert-info"></i>shouldPass</a></li>
-            <li><a href="parser.js.html#exports"><i class="alert alert-info"></i>exports</a></li>
+            <li><a href="parser.js.html#has"><i class="alert alert-info"></i>has</a></li>
+            <li><a href="parser.js.html#parse"><i class="alert alert-info"></i>parse</a></li>
           </ul>
         </div>
         <div class="span9">
@@ -75,31 +76,93 @@
               <div class="label label-info radius ctx-type">function</div><span>shouldPass()</span> -> <span>Boolean</span>
             </h5>
           </section>
-          <div class="description"><p>Test if a method should be ignored or not</p>
-            <pre><code class="language-javascript">function shouldPass(method){
-  if(method.isPrivate){return false;}
-  if(method.ignore){return false;}
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>symbol</td>
+                <td>Object</td>
+                <td>symbol to check against</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Test if a symbol should be ignored or not</p>
+            <pre><code class="language-javascript">function shouldPass(symbol){
+  if(symbol.isPrivate){return false;}
+  if(symbol.ignore){return false;}
 
-  return method.tags.filter(function(tag){
+  // Only for coffeescript
+  return symbol.tags.filter(function(tag){
     return tag.type === "private" || tag.type === "ignore";
   }).length === 0;
 }</code></pre>
           </div>
-          <section id="exports">
-            <h1>exports</h1>
+          <section id="has">
+            <h1>has</h1>
             <h5 class="subheader">
-              <div class="label label-info radius ctx-type">method</div><span>module.exports()</span> -> <span>Object</span>
+              <div class="label label-info radius ctx-type">function</div><span>has()</span> -> <span>Boolean</span>
             </h5>
           </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>val</td>
+                <td>String</td>
+                <td>value to check against</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>has Helper return a closure that check if a tag has a specific type</p>
+            <pre><code class="language-javascript">function has(val){
+  return function(tag){
+    return tag.type === val;
+  };
+}</code></pre>
+          </div>
+          <section id="parse">
+            <h1>parse</h1>
+            <h5 class="subheader">
+              <div class="label label-info radius ctx-type">function</div><span>parse()</span> -> <span>Array</span>
+            </h5>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>filepath</td>
+                <td>String</td>
+                <td>file path of the file to parse</td>
+              </tr>
+            </tbody>
+          </table>
           <div class="description"><p>Parse a file and returns a generic format</p>
-            <pre><code class="language-javascript">module.exports = function parse(filepath){
+            <pre><code class="language-javascript">function parse(filepath){
   var json = null;
 
   try{
     json = dox.parseComments(fs.readFileSync(filepath).toString(), {raw: false});
   } catch(e) {
     console.error("doxx:", e);
-    return {};
+    return [];
   }
 
   // json now contains an array of tags
@@ -119,16 +182,15 @@
   //    string:""
   //  }
   // }
-  function has(val){
-    return function(tag){
-      return tag.type === val;
-    };
-  }
 
-  var hasParams = has('params');
+  var hasParams = has('param');
   var isReturn  = has('return');
+  var hasType   = has('type');
 
   return json.filter(shouldPass).map(function(symbol){
+    var types   = symbol.tags.filter(hasType);
+    var returns = symbol.tags.filter(isReturn);
+
     if(symbol.tags.length > 0 && symbol.tags.filter(hasParams).length > 0){
       symbol.hasParams = true;
     }
@@ -137,18 +199,19 @@
       symbol.ctx = {};
     }
 
-    var ret = symbol.tags.filter(isReturn);
 
-    if(ret.length === 1){
-      symbol.ctx["return"] = ret[0];
-    } else{
-      symbol.ctx["return"] = {types:"Undefined"};
+    if(returns.length === 1){
+      symbol["return"] = returns[0].types;
+    } else if(types.length === 1){
+      symbol["return"] = types[0].types;
+    } else {
+      symbol["return"] = "Undefined";
     }
 
 
     return symbol;
   });
-};</code></pre>
+}</code></pre>
           </div>
         </div>
       </div>
