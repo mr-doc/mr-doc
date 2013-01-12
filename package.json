@@ -34,7 +34,8 @@
   },
   "devDependencies": {
     "grunt": "~0.3.15",
-    "grunt-shell": "~0.1.4"
+    "grunt-shell": "~0.1.4",
+    "nodeunit": "~0.7.4"
   },
   "keywords": [
     "dox",

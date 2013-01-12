@@ -14,11 +14,18 @@ module.exports = function(grunt) {
         command:'./bin/doxx --source lib --target docs',
         stdout:true,
         stderr:true
+      },
+      nodeunit: {//--reporter minimal
+        command: './node_modules/nodeunit/bin/nodeunit test/*.test.js',
+        stdout: true,
+        stderr: true,
+        failOnError:false,
+        warnOnError: true
       }
     },
     watch: {
-      files: ['<config:lint.files>','views/*'],
-      tasks: 'default shell:doxx'
+      files: ['<config:lint.files>','views/*', 'test/*'],
+      tasks: 'default shell:doxx shell:nodeunit'
     },
     jshint: {
       options: {
