@@ -92,34 +92,9 @@
                 <td>String</td>
                 <td>source path</td>
               </tr>
-              <tr>
-                <td>options</td>
-                <td>Object</td>
-                <td>option object</td>
-              </tr>
             </tbody>
           </table>
-          <div class="description"><p>Create an array of all the right files in the source dir</p>
-            <pre><code class="language-javascript">function collectFiles(source, options) {
-  var dirtyFiles = findit.findSync(source), // tee hee!
-      ignore     = options.ignore || [],
-      files      = [];
-
-  dirtyFiles.forEach(function(file){
-    file = path.relative(source, file);
-
-    var doNotIgnore = _.all(ignore, function(d){
-      // return true if no part of the path is in the ignore list
-      return (file.indexOf(d) === -1);
-    });
-
-    if ((file.substr(-2) === 'js') && doNotIgnore) {
-      files.push(file);
-    }
-  });
-
-  return files;
-}</code></pre>
+          <div class="description"><p>Create an array of all the right files in the source dir</p> 
           </div>
         </div>
       </div>
