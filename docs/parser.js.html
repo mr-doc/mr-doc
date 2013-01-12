@@ -101,6 +101,15 @@
             </tbody>
           </table>
           <div class="description"><p>Test if a symbol should be ignored or not</p> 
+            <pre><code class="language-javascript">function shouldPass(symbol){
+  if(symbol.isPrivate){return false;}
+  if(symbol.ignore){return false;}
+
+  // Only for coffeescript
+  return symbol.tags.filter(function(tag){
+    return tag.type === "private" || tag.type === "ignore";
+  }).length === 0;
+}</code></pre>
           </div>
           <section id="has">
             <h1>has</h1>
@@ -126,6 +135,16 @@
             </tbody>
           </table>
           <div class="description"><p>has Helper return a closure that check if a tag has a specific type</p> 
+            <pre><code class="language-javascript">function has(val){
+  return function(tag){
+    return tag.type === val;
+  };
+}
+
+var hasParams      = has('param');
+var isReturn       = has('return');
+var hasDescription = has('description');
+var hasType        = has('type');</code></pre>
           </div>
           <section id="_compact">
             <h1>_compact</h1>
@@ -135,6 +154,30 @@
             </p>
           </section>
           <div class="description"><p>Compact multi-line expression</p> 
+            <pre><code class="language-javascript">function _compact(tags){
+  // [{"type":"description","string":"Note: if `addClass` is defined at the step level."},
+  //  {"type":"","string":"The two defined `addClass` will be taken into account in the popover"},
+  //  {"type":"type","types":["String"]}]
+
+  var index = {};
+  return _.compact(tags.map(function(tag, i){
+    if(!tag.type){
+      if(i === 0){return;}
+      // append to previous
+      tags[i-1].string += " " + tag.string;
+      return null;
+    }
+
+    if(!index.hasOwnProperty(tag.type)){
+      index[tag.type] = i;
+      return tag;
+    }
+
+    // Merge with
+    tags[index[tag.type]].string += " " + tag.string;
+    return null;
+  }));
+}</code></pre>
           </div>
           <section id="parse">
             <h1>parse</h1>
@@ -160,6 +203,36 @@
             </tbody>
           </table>
           <div class="description"><p>Parse a file and returns a generic format</p> 
+            <pre><code class="language-javascript">function parse(filepath){
+  var json = null;
+
+  try{
+    json = dox.parseComments(fs.readFileSync(filepath).toString(), {raw: false});
+  } catch(e) {
+    console.error("doxx:", e);
+    return [];
+  }
+
+  // json now contains an array of tags
+  // {
+  //  tags:[]
+  //  description:{
+  //    full:""
+  //    summary:""
+  //    body:""
+  //  }
+  //  ignore:false
+  //  isPrivate:false
+  //  ctx:{
+  //    type:"declaration"
+  //    name:""
+  //    value:[]
+  //    string:""
+  //  }
+  // }
+
+  return json.filter(shouldPass).map(_mapSymbol);
+}</code></pre>
           </div>
         </div>
       </div>

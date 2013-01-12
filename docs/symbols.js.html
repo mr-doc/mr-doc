@@ -95,6 +95,16 @@
             </tbody>
           </table>
           <div class="description"><p>Return the structure of a parsed file</p> 
+            <pre><code class="language-javascript">function structure(symbols, file){
+  return _.compact(symbols.map(function(method){
+    if (!method.ctx || !method.ctx.name){return null;}
+    return {
+      targetFile:file,
+      name:method.ctx.name,
+      type:method.ctx.type
+    };
+  })) || [];
+}</code></pre>
           </div>
         </div>
       </div>

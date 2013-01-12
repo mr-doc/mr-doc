@@ -108,10 +108,9 @@ html
 
               .description !{symbol.description.full} !{symbol.description.extra}
 
-              if !symbol.ctx.string && symbol.code
-                pre
-                  code.language-javascript
-                    != symbol.code
+              pre
+                code.language-javascript
+                  != symbol.code
     
     footer.footer
       div.container
