@@ -14,10 +14,12 @@
   "bugs": {
     "url": "https://github.com/FGRibreau/doxx/issues"
   },
-  "licenses": [{
+  "licenses": [
+    {
       "type": "MIT",
       "url": "https://github.com/FGRibreau/doxx/blob/master/LICENSE-MIT"
-  }],
+    }
+  ],
   "main": "lib/doxx",
   "bin": {
     "doxx": "./bin/doxx"
@@ -34,7 +36,8 @@
     "lodash": "~1.0.0-rc.3"
   },
   "devDependencies": {
-    "grunt": "~0.3.15"
+    "grunt": "~0.3.15",
+    "grunt-shell": "~0.1.4"
   },
   "keywords": [
     "dox",

@@ -1,8 +1,10 @@
 #!/usr/bin/env node
+"use strict";
 
 var program = require('commander'),
     fs      = require('fs'),
     path    = require('path'),
+    mkdirp  = require('mkdirp'),
     _       = require('lodash'),
 
     dir     = require('../lib/dir'),
@@ -58,32 +60,44 @@ ignore     = ignore.trim().replace(' ','').split(',');
 // Find, cleanup and validate all potential files
 var files  = dir.collectFiles(source, ignore);
 
-dir.createTargetFolders(target, files);
+
+mkdirp.sync(target);
 
 // Parse each file
 files = files.map(function(file) {
   var dox = parse(path.join(source, file), {});
+  var targetName = file+'.html';
   return {
-    name: file,
-    dox: dox,
-    symbols: symbols(dox)
+    name:       file,
+    targetName: targetName,
+    dox:        dox,
+    symbols:    symbols(dox, targetName)
   };
 });
 
 // Compute all symboles
-var allSymbols = files.reduce(function(m, a, b){
-  m = (a.symbols || []).concat(b.symbols || []);
+var allSymbols = files.reduce(function(m, a){
+  m = m.concat(a.symbols || []);
   return m;
 }, []);
+
+files.unshift({
+  name:"Main",
+  targetName: "index.html",
+  dox:[],
+  symbols:[]
+});
 
 // Render and write each file
 files.forEach(function(file){
 
   var options = _.extend({}, file, {
-    title: program.title || require(process.cwd() + '/package').name,
-    allSymbols: allSymbols
+    title:        program.title || require(process.cwd() + '/package').name,
+    allSymbols:   allSymbols,
+    files:        files,
+    currentName:  file.name
   });
 
   var compiled = compile(options);
-  fs.writeFileSync(path.join(target, file.name+".html"), compiled);
+  fs.writeFileSync(path.join(target, file.targetName), compiled);
 });
