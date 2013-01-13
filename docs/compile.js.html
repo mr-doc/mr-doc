@@ -67,6 +67,8 @@
             <ul class="nav nav-list bs-docs-sidenav affix-top">
               <li><a href="#compile"><i class="alert alert-info"></i>compile</a>
               </li>
+              <li><a href="#code"><i class="alert alert-info"></i>code</a>
+              </li>
               <li><a href="#tpl"><i class="alert alert-success"></i>tpl</a>
               </li>
             </ul>
@@ -97,9 +99,45 @@
             </tbody>
           </table>
           <div class="description"><p>Compile</p> 
-            <pre><code class="language-javascript">function compile(locals){
-  return jade.compile(compile.tpl,{pretty:true})(locals);
+            <pre><code class="language-javascript">function compile(locals) {
+  return jade.compile(compile.tpl, {
+    pretty: true
+  })(locals);
 }</code></pre>
+          </div>
+          <section id="code">
+            <h1>code</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>jade.filters.code()</span> -> <span>String</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>block</td>
+                <td>String</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Jade support for filter <code>:code</code></p> 
+            <pre><code class="language-javascript">jade.filters.code = function( block ) {
+ return block.replace( /&/g, '&amp;'  )
+  .replace( /</g, '&lt;'   )
+  .replace( />/g, '&gt;'   )
+  .replace( /"/g, '&quot;' )
+  .replace( /#/g, '&#35;'  )
+  .replace( /\\/g, '\\\\'  )
+  .replace( /\n/g, '\\n'   );
+};</code></pre>
           </div>
           <section id="tpl">
             <h1>tpl</h1>
@@ -109,7 +147,7 @@
             </p>
           </section>
           <div class="description"><p>Template used to produce the documentation</p> 
-            <pre><code class="language-javascript">compile.tpl = fs.readFileSync(path.resolve(__dirname,'../views/template.jade')).toString();
+            <pre><code class="language-javascript">compile.tpl = fs.readFileSync(path.resolve(__dirname, '../views/template.jade')).toString();
 
 module.exports = compile;</code></pre>
           </div>
