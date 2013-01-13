@@ -31,10 +31,11 @@ exports['._compact'] = function(t){
     "tags": [{
       "type": "description",
       "string": "a"
-    }, {
-      "type": "",
-      "string": "b"
-    }, {
+    },
+    {"type": "","string": "b"},
+    {"type": "","string": "c"},
+    {"type": "","string": "d"},
+    {
       "type": "type",
       "types": ["String"]
     }],
@@ -52,11 +53,10 @@ exports['._compact'] = function(t){
 
   var compacted = parser._compact(symbol.tags);
   t.equal(compacted.length, 2);
-  t.equal(compacted[0].string, "a b");
+  t.equal(compacted[0].string, "a b c d");
 
   t.done();
 };
-
 // exports['._mapSymbol should add @description to .description full'] = function(t){
 //   var symbol = {"tags":[{"type":"description","string":"Note: if `addClass` is defined at the step level, the two defined `addClass` will be taken into account in the popover"},{"type":"type","types":["String"]}],"description":{"full":"<p>Css class to add to the .popover element</p>","summary":"<p>Css class to add to the .popover element</p>","body":""},"isPrivate":false,"ignore":false,"code":"addClass: \"\",","ctx":{},"type":"String"};
 

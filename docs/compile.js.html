@@ -130,10 +130,10 @@
           </table>
           <div class="description"><p>Jade support for filter <code>:code</code></p> 
             <pre><code class="language-javascript">jade.filters.code = function( block ) {
- return block.replace( /&/g, '&amp;'  )
-  .replace( /</g, '&lt;'   )
-  .replace( />/g, '&gt;'   )
-  .replace( /"/g, '&quot;' )
+ return block.replace( /&amp;/g, '&amp;'  )
+  .replace( /&lt;/g, '&lt;'   )
+  .replace( /&gt;/g, '&gt;'   )
+  .replace( /&quot;/g, '&quot;' )
   .replace( /#/g, '&#35;'  )
   .replace( /\\/g, '\\\\'  )
   .replace( /\n/g, '\\n'   );

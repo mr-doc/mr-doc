@@ -107,7 +107,7 @@
 
   // Only for coffeescript
   return symbol.tags.filter(function(tag){
-    return tag.type === "private" || tag.type === "ignore";
+    return tag.type === &quot;private&quot; || tag.type === &quot;ignore&quot;;
   }).length === 0;
 }</code></pre>
           </div>
@@ -155,28 +155,33 @@ var hasType        = has('type');</code></pre>
           </section>
           <div class="description"><p>Compact multi-line expression</p> 
             <pre><code class="language-javascript">function _compact(tags){
-  // [{"type":"description","string":"Note: if `addClass` is defined at the step level."},
-  //  {"type":"","string":"The two defined `addClass` will be taken into account in the popover"},
-  //  {"type":"type","types":["String"]}]
+  // [{&quot;type&quot;:&quot;description&quot;,&quot;string&quot;:&quot;Note: if `addClass` is defined at the step level.&quot;},
+  //  {&quot;type&quot;:&quot;&quot;,&quot;string&quot;:&quot;The two defined `addClass` will be taken into account in the popover&quot;},
+  //  {&quot;type&quot;:&quot;type&quot;,&quot;types&quot;:[&quot;String&quot;]}]
 
   var index = {};
-  return _.compact(tags.map(function(tag, i){
+  var compacted = [];
+
+  tags.forEach(function(tag, i){
     if(!tag.type){
       if(i === 0){return;}
       // append to previous
-      tags[i-1].string += " " + tag.string;
-      return null;
+      compacted[compacted.length-1].string += &quot; &quot; + tag.string;
+      return;
     }
 
     if(!index.hasOwnProperty(tag.type)){
-      index[tag.type] = i;
-      return tag;
+      index[tag.type] = compacted.length;
+      compacted.push(tag);
+      return;
     }
 
     // Merge with
-    tags[index[tag.type]].string += " " + tag.string;
-    return null;
-  }));
+    compacted[index[tag.type]].string += &quot; &quot; + tag.string;
+  });
+
+  index = null;
+  return compacted;
 }</code></pre>
           </div>
           <section id="parse">
@@ -209,7 +214,7 @@ var hasType        = has('type');</code></pre>
   try{
     json = dox.parseComments(fs.readFileSync(filepath).toString(), {raw: false});
   } catch(e) {
-    console.error("doxx:", e);
+    console.error(&quot;doxx:&quot;, e);
     return [];
   }
 
@@ -217,17 +222,17 @@ var hasType        = has('type');</code></pre>
   // {
   //  tags:[]
   //  description:{
-  //    full:""
-  //    summary:""
-  //    body:""
+  //    full:&quot;&quot;
+  //    summary:&quot;&quot;
+  //    body:&quot;&quot;
   //  }
   //  ignore:false
   //  isPrivate:false
   //  ctx:{
-  //    type:"declaration"
-  //    name:""
+  //    type:&quot;declaration&quot;
+  //    name:&quot;&quot;
   //    value:[]
-  //    string:""
+  //    string:&quot;&quot;
   //  }
   // }
 
