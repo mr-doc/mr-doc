@@ -90,6 +90,18 @@ files.unshift({
   symbols:[]
 });
 
+// Make sure the folder structure in target mirrors source
+var folders = [];
+
+files.forEach(function(file){
+  var folder = file.targetName.substr(0, file.targetName.lastIndexOf('/'));
+
+  if ((folder !== '') && (folders.indexOf(folder) === -1)) {
+    folders.push(folder);
+    mkdirp.sync(target + '/' + folder);
+  }
+});
+
 // Render and write each file
 files.forEach(function(file){
 
