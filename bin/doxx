@@ -90,8 +90,39 @@ files.unshift({
   symbols:[]
 });
 
+// Make sure the folder structure in target mirrors source
+var folders = [];
+
+files.forEach(function(file){
+  var folder = file.targetName.substr(0, file.targetName.lastIndexOf('/'));
+
+  if ((folder !== '') && (folders.indexOf(folder) === -1)) {
+    folders.push(folder);
+    mkdirp.sync(target + '/' + folder);
+  }
+});
+
+
 // Render and write each file
 files.forEach(function(file){
+
+  // Set each files relName in relation to where this file is in the directory tree
+  files.forEach(function(f){
+
+    // Count how deep the current file is in relation to base
+    var count = file.name.match(/\//g);
+    count = count === null ? 0 : count.length;
+
+    // relName is equal to targetName at the base dir
+    f.relName = f.targetName;
+
+    // For each directory in depth of current file add a ../ to the relative filename of this link
+    while (count > 0) {
+      f.relName = '../' + f.relName;
+      count--;
+    }
+
+  });
 
   var options = _.extend({}, file, {
     title:        program.title || require(process.cwd() + '/package').name,
