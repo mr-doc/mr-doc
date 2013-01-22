@@ -33,10 +33,10 @@ html
       code[class*="language-"],pre[class*="language-"]{color:black;text-shadow:0 1px white;font-family:Consolas,Monaco,'Andale Mono',monospace;direction:ltr;text-align:left;white-space:pre;word-spacing:normal;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*="language-"]{padding:1em;margin:.5em 0;overflow:auto}:not(pre)>code[class*="language-"],pre[class*="language-"]{background:#f5f2f0}:not(pre)>code[class*="language-"]{padding:.1em;border-radius:.3em}.token.comment,.token.prolog,.token.doctype,.token.cdata{color:slategray}.token.punctuation{color:#999}.namespace{opacity:.7}.token.property,.token.tag,.token.boolean,.token.number{color:#905}.token.selector,.token.attr-name,.token.string{color:#690}.token.operator,.token.entity,.token.url,.language-css .token.string,.style .token.string{color:#a67f59;background:hsla(0,0%,100%,.5)}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.regex,.token.important{color:#e90}.token.important{font-weight:bold}.token.entity{cursor:help}
       div.description {margin: 14px 0; padding-top: 14px; border-bottom:1px solid #eee; }
       .tags {}
-      .ctx-type { 
+      .ctx-type {
         display:inline-block;
         margin-right:0.5em;
-        //- float:right; margin-top:8px 
+        //- float:right; margin-top:8px
       }
 
       footer iframe{vertical-align:middle;}
@@ -48,7 +48,7 @@ html
           a.brand Doxx
           div.nav-collapse.collapse
             ul.nav.pull-right.sponsored
-              
+
 
     header.jumbotron.subhead#overview
       div.container
@@ -61,7 +61,7 @@ html
           ul.nav.nav-list.bs-docs-sidenav.affix-top
             each file in files
               li(class=(file.name !== currentName ? "":"active"))
-                a(href=file.targetName) #{file.name}
+                a(href=file.relName) #{file.name}
 
           .scrollspy
             ul.nav.nav-list.bs-docs-sidenav.affix-top
@@ -88,7 +88,7 @@ html
                     if symbol.ctx.string
                       span= symbol.ctx.string
                     if symbol.return
-                      |  -> 
+                      |  ->
                       span= symbol.return
 
               if symbol.hasParams
@@ -111,19 +111,19 @@ html
               pre
                 code.language-javascript
                   = symbol.code
-    
+
     footer.footer
       div.container
-        p Documentation generated with 
-          a(href="https://github.com/FGRibreau/doxx") Doxx 
-          | created by 
+        p Documentation generated with
+          a(href="https://github.com/FGRibreau/doxx") Doxx
+          | created by
           a.twitter-follow-button(href='https://twitter.com/FGRibreau',data-show-count='false') Francois-Guillaume Ribreau
-        p Doxx is sponsored by 
-          a.bringr(href='http://bringr.net/?btt', title="Outil d'analyse des réseaux sociaux") Bringr 
-          | and 
+        p Doxx is sponsored by
+          a.bringr(href='http://bringr.net/?btt', title="Outil d'analyse des réseaux sociaux") Bringr
+          | and
           a.redsmin(href='https://redsmin.com/?btt', title="Full Redis GUI") Redsmin
         p Theme borrowed from Twitter Bootstrap
-    
+
     script(src="http://platform.twitter.com/widgets.js")
     script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js")
     script(src="http://leaverou.github.com/prefixfree/prefixfree.js")
