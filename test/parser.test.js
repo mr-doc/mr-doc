@@ -35,6 +35,16 @@ exports['._compact'] = function(t){
     {"type": "","string": "b"},
     {"type": "","string": "c"},
     {"type": "","string": "d"},
+    {"type": "param","name":"cl","types":["String"],"description": "a Css class"},
+    {
+      "type": "param",
+      "name": "options",
+      "types": ["Object"],
+      "description": "d"
+    },
+    {"type": "","string": "c"},
+    {"type": "","string": "b"},
+    {"type": "","string": "a"},
     {
       "type": "type",
       "types": ["String"]
@@ -52,8 +62,9 @@ exports['._compact'] = function(t){
   };
 
   var compacted = parser._compact(symbol.tags);
-  t.equal(compacted.length, 2);
+  t.equal(compacted.length, 4);
   t.equal(compacted[0].string, "a b c d");
+  t.equal(compacted[2].description, "d c b a");
 
   t.done();
 };
