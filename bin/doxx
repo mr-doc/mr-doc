@@ -124,8 +124,18 @@ files.forEach(function(file){
 
   });
 
+  var title = program.title;
+
+  if (!title) {
+    try {
+      title = require(process.cwd() + '/package').name
+    } catch (e) {
+      title = 'Title not set';
+    }
+  }
+
   var options = _.extend({}, file, {
-    title:        program.title || require(process.cwd() + '/package').name,
+    title:        title,
     allSymbols:   allSymbols,
     files:        files,
     currentName:  file.name
