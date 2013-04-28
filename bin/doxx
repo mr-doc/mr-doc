@@ -60,7 +60,7 @@ var target = path.resolve(process.cwd(), program.target) || process.cwd() + '/do
 ignore     = ignore.trim().replace(' ','').split(',');
 
 // Find, cleanup and validate all potential files
-var files  = dir.collectFiles(source, ignore);
+var files  = dir.collectFiles(source, {ignore:ignore});
 
 
 mkdirp.sync(target);
