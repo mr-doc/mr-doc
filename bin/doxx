@@ -94,7 +94,7 @@ files.unshift({
 var folders = [];
 
 files.forEach(function(file){
-  var folder = file.targetName.substr(0, file.targetName.lastIndexOf('/'));
+  var folder = file.targetName.substr(0, file.targetName.lastIndexOf(path.sep));
 
   if ((folder !== '') && (folders.indexOf(folder) === -1)) {
     folders.push(folder);
