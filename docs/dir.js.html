@@ -101,7 +101,7 @@
           </table>
           <div class="description"><p>Create an array of all the right files in the source dir</p> 
             <pre><code class="language-javascript">function collectFiles(source, options) {
-  var dirtyFiles = findit.findSync(source), // tee hee!
+  var dirtyFiles = walkdir.sync(source), // tee hee!
       ignore     = options.ignore || [],
       files      = [];
 
