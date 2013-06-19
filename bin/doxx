@@ -6,6 +6,7 @@ var program = require('commander'),
     path    = require('path'),
     mkdirp  = require('mkdirp'),
     _       = require('lodash'),
+    marked  = require('marked'),
 
     dir     = require('../lib/dir'),
     parse   = require('../lib/parser'),
@@ -17,7 +18,8 @@ var program = require('commander'),
 /**
  * Options & Defaults
  */
-var ignoredDirs = 'test,public,static,views,templates';
+var ignoredDirs = 'test,public,static,views,templates',
+    pkg;
 
 program
   .version(version)
@@ -27,7 +29,8 @@ program
   .option('-s, --source <source>', 'The folder which should get parsed')
   .option('-i, --ignore <directories>', 'Comma seperated list of directories to ignore. Default: ' + ignoredDirs)
   .option('-T, --target <target>', 'The folder which will contain the results. Default: <process.cwd()>/docs')
-  .option('--template <jade template>', 'The jade template file to use');
+  .option('--template <jade template>', 'The jade template file to use')
+  .option('-R --readme <file>', 'The markdown file to use on the main page of the documentations. Checks the current directory for a package.json or README.md by default')
 
 function showHelp(){
   console.log('  Examples:\n');
@@ -83,9 +86,34 @@ var allSymbols = files.reduce(function(m, a){
   return m;
 }, []);
 
+// Get package.json 
+try{
+  pkg = require(process.cwd() + '/package')
+} catch (err) {
+}
+
+var readme = pkg && pkg.readme 
+  , readMeFile = path.resolve(process.cwd(), program.readme || (pkg && pkg.readmeFileName) || 'README.md')
+
+if(!readme && fs.existsSync(readMeFile)){
+  readme = fs.readFileSync(readMeFile).toString()
+} else {
+  console.warn(new Error('No README.md file found at ' + readMeFile))
+}
+
+readme = readme || (pkg && pkg.description)
+
+// Enable line-breaks ala github markdown
+marked.setOptions({
+  breaks: true,
+  smartLists: true
+})
+
+// Get readme data
 files.unshift({
   name:"Main",
   targetName: "index.html",
+  readme: marked(readme),
   dox:[],
   symbols:[]
 });
@@ -127,11 +155,7 @@ files.forEach(function(file){
   var title = program.title;
 
   if (!title) {
-    try {
-      title = require(process.cwd() + '/package').name
-    } catch (e) {
-      title = 'Title not set';
-    }
+    title = pkg && pkg.name || 'Title Not Set'
   }
 
   var options = _.extend({}, file, {
@@ -140,7 +164,7 @@ files.forEach(function(file){
     files:        files,
     currentName:  file.name
   });
-
+  
   var compiled = compile(options);
   fs.writeFileSync(path.join(target, file.targetName), compiled);
 });
