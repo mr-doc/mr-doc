@@ -3,9 +3,9 @@
   <head>
     <meta name="viewport" content="width=device-width" charset="utf-8">
     <title>doxx</title>
-    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
-    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css">
-    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/docs.css">
+    <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/bootstrap-responsive.css">
+    <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/docs.css">
     <style>
       body > .navbar .brand {
         float:left;
@@ -22,6 +22,11 @@
         margin: 0px;
         display: inline-block;
         margin-right:0.5em;
+      }
+      
+      .bs-docs-sidenav > li:first-child > a {
+        border-top-right-radius: 6px;
+        border-top-left-radius: 6px;
       }
       
       code[class*="language-"],pre[class*="language-"]{color:black;text-shadow:0 1px white;font-family:Consolas,Monaco,'Andale Mono',monospace;direction:ltr;text-align:left;white-space:pre;word-spacing:normal;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*="language-"]{padding:1em;margin:.5em 0;overflow:auto}:not(pre)>code[class*="language-"],pre[class*="language-"]{background:#f5f2f0}:not(pre)>code[class*="language-"]{padding:.1em;border-radius:.3em}.token.comment,.token.prolog,.token.doctype,.token.cdata{color:slategray}.token.punctuation{color:#999}.namespace{opacity:.7}.token.property,.token.tag,.token.boolean,.token.number{color:#905}.token.selector,.token.attr-name,.token.string{color:#690}.token.operator,.token.entity,.token.url,.language-css .token.string,.style .token.string{color:#a67f59;background:hsla(0,0%,100%,.5)}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.regex,.token.important{color:#e90}.token.important{font-weight:bold}.token.entity{cursor:help}
@@ -69,24 +74,95 @@
           </div>
         </div>
         <div class="span9">
+          <section id="Main"><h1>Doxx <a href="https://travis-ci.org/FGRibreau/doxx"><img src="https://travis-ci.org/FGRibreau/doxx.png" alt="Build Status"></a></h1>
+<p>Use <a href="https://github.com/visionmedia/dox">dox</a> to automatically generate beautiful html documentation. <strong>Doxx is a total refactoring of <a href="https://github.com/punkave/dox-foundation/">dox-foundation</a></strong>.</p>
+<p>Outputted HTML is by default based on templates and css from <a href="twitter.github.com/bootstrap/">Twitter Bootstrap</a> and syntax highlighting is done by <a href="http://prismjs.com/">Prism.js</a>.</p>
+<p>Doxx was tested with <strong>JavaScript</strong> as well as generated JavaScript from <strong>CoffeeScript</strong>.</p>
+<h2>Demo</h2>
+<ul>
+<li><a href="http://fgribreau.github.com/doxx/docs/compile.js.html">doxx/docs/compile.js</a></li>
+<li><a href="http://fgribreau.github.com/doxx/docs/dir.js.html">doxx/docs/dir.js</a></li>
+<li><a href="http://fgribreau.github.com/doxx/docs/parser.js.html">doxx/docs/parser.js</a></li>
+</ul>
+<h2>Usage</h2>
+<p>JavaScript JavaDoc style</p>
+<pre><code class="lang-javascript">/**
+ * Create an array of all the right files in the source dir
+ * @param  {String}   source path
+ * @param  {Object}   options
+ * @param  {Function} callback
+ * @return {Array} an array of string path
+ */
+function collectFiles(source, options, callback) {
+  ...
+}</code></pre>
+<p>CoffeeScript JavaDoc style</p>
+<pre><code class="lang-coffeescript">###*
+ * Create an array of all the right files in the source dir
+ * @param  {String}   source path
+ * @param  {Object}   options
+ * @param  {Function} callback
+ * @return {Array} an array of string path
+###
+collectFiles = (source, options, callback) -&gt;
+  ...</code></pre>
+<h2>Installation</h2>
+<p>Install the module with: <code>npm install doxx -g</code></p>
+<h2>CLI</h2>
+<pre><code>$ doxx --help
+
+  Usage: doxx [options]
+
+  Options:
+
+    -h, --help                  output usage information
+    -V, --version               output the version number
+    -r, --raw                   output &quot;raw&quot; comments, leaving the markdown intact
+    -d, --debug                 output parsed comments for debugging
+    -t, --title &lt;string&gt;        The title for the page produced
+    -s, --source &lt;source&gt;       The folder which should get parsed
+    -i, --ignore &lt;directories&gt;  Comma seperated list of directories to ignore. Default: test,public,static,views,templates
+    -T, --target &lt;target&gt;       The folder which will contain the results. Default: &lt;process.cwd()&gt;/docs
+    --template &lt;jade template&gt;  The jade template file to use
+
+  Examples:
+
+    # parse a whole folder
+    $ doxx --source lib --target docs
+
+    # parse a whole folder and use a specific template
+    $ doxx --template ./view/myowntpl.jade --source lib --target docs</code></pre>
+<h2>Contributing</h2>
+<p>In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using <a href="https://github.com/cowboy/grunt">grunt</a>.</p>
+<h2>Release History</h2>
+<ul>
+<li><em>0.0.1</em> - (dox-foundation) Initial release</li>
+<li><em>0.2.0</em> - (dox-foundation) Readable output</li>
+<li><em>0.3.0</em> - (dox-foundation) Support for folder parsing</li>
+<li><em>0.4.0</em> - (dox-foundation) Improved project navigation, major refactor of folder code</li>
+<li><em>0.5.0</em> - Initial release of doxx</li>
+</ul>
+<h2>License</h2>
+<p>Copyright (c) 2013 Francois-Guillaume Ribreau<br>MIT License</p>
+</section>
         </div>
       </div>
     </div>
     <footer class="footer">
       <div class="container">
-        <p>Documentation generated with<a href="https://github.com/FGRibreau/doxx">Doxx</a>created by<a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau</a></p>
-        <p>Doxx is sponsored by<a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr</a>and<a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
+        <p>Documentation generated with <a href="https://github.com/FGRibreau/doxx">Doxx </a>created by <a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau</a></p>
+        <p>Doxx is sponsored by <a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr </a>and <a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
         <p>Theme borrowed from Twitter Bootstrap</p>
       </div>
     </footer>
     <script src="http://platform.twitter.com/widgets.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
     <script src="http://leaverou.github.com/prefixfree/prefixfree.js"></script>
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-transition.js"></script>
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-scrollspy.js"></script>
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-affix.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-transition.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-scrollspy.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-dropdown.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-collapse.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-affix.js"></script>
     <script>
       /**
        * Prism: Lightweight, robust, elegant syntax highlighting

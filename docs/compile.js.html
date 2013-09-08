@@ -3,9 +3,9 @@
   <head>
     <meta name="viewport" content="width=device-width" charset="utf-8">
     <title>doxx</title>
-    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
-    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css">
-    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/docs.css">
+    <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/bootstrap-responsive.css">
+    <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/docs.css">
     <style>
       body > .navbar .brand {
         float:left;
@@ -22,6 +22,11 @@
         margin: 0px;
         display: inline-block;
         margin-right:0.5em;
+      }
+      
+      .bs-docs-sidenav > li:first-child > a {
+        border-top-right-radius: 6px;
+        border-top-left-radius: 6px;
       }
       
       code[class*="language-"],pre[class*="language-"]{color:black;text-shadow:0 1px white;font-family:Consolas,Monaco,'Andale Mono',monospace;direction:ltr;text-align:left;white-space:pre;word-spacing:normal;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*="language-"]{padding:1em;margin:.5em 0;overflow:auto}:not(pre)>code[class*="language-"],pre[class*="language-"]{background:#f5f2f0}:not(pre)>code[class*="language-"]{padding:.1em;border-radius:.3em}.token.comment,.token.prolog,.token.doctype,.token.cdata{color:slategray}.token.punctuation{color:#999}.namespace{opacity:.7}.token.property,.token.tag,.token.boolean,.token.number{color:#905}.token.selector,.token.attr-name,.token.string{color:#690}.token.operator,.token.entity,.token.url,.language-css .token.string,.style .token.string{color:#a67f59;background:hsla(0,0%,100%,.5)}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.regex,.token.important{color:#e90}.token.important{font-weight:bold}.token.entity{cursor:help}
@@ -98,13 +103,12 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Compile</p> 
-            <pre><code class="language-javascript">function compile(locals) {
+          <div class="description"><p>Compile</p> </div>
+          <pre><code class="language-javascript">function compile(locals) {
   return jade.compile(compile.tpl, {
     pretty: true
   })(locals);
 }</code></pre>
-          </div>
           <section id="code">
             <h1>code</h1>
             <h5 class="subheader"></h5>
@@ -128,8 +132,8 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Jade support for filter <code>:code</code></p> 
-            <pre><code class="language-javascript">jade.filters.code = function( block ) {
+          <div class="description"><p>Jade support for filter <code>:code</code></p> </div>
+          <pre><code class="language-javascript">jade.filters.code = function( block ) {
  return block.replace( /&amp;/g, '&amp;'  )
   .replace( /&lt;/g, '&lt;'   )
   .replace( /&gt;/g, '&gt;'   )
@@ -138,7 +142,6 @@
   .replace( /\\/g, '\\\\'  )
   .replace( /\n/g, '\\n'   );
 };</code></pre>
-          </div>
           <section id="tpl">
             <h1>tpl</h1>
             <h5 class="subheader"></h5>
@@ -146,29 +149,28 @@
               <div class="label label-success radius ctx-type">property</div><span>compile.tpl</span>
             </p>
           </section>
-          <div class="description"><p>Template used to produce the documentation</p> 
-            <pre><code class="language-javascript">compile.tpl = fs.readFileSync(path.resolve(__dirname, '../views/template.jade')).toString();
+          <div class="description"><p>Template used to produce the documentation</p> </div>
+          <pre><code class="language-javascript">compile.tpl = fs.readFileSync(path.resolve(__dirname, '../views/template.jade')).toString();
 
 module.exports = compile;</code></pre>
-          </div>
         </div>
       </div>
     </div>
     <footer class="footer">
       <div class="container">
-        <p>Documentation generated with<a href="https://github.com/FGRibreau/doxx">Doxx</a>created by<a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau</a></p>
-        <p>Doxx is sponsored by<a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr</a>and<a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
+        <p>Documentation generated with <a href="https://github.com/FGRibreau/doxx">Doxx </a>created by <a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau</a></p>
+        <p>Doxx is sponsored by <a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr </a>and <a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
         <p>Theme borrowed from Twitter Bootstrap</p>
       </div>
     </footer>
     <script src="http://platform.twitter.com/widgets.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
     <script src="http://leaverou.github.com/prefixfree/prefixfree.js"></script>
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-transition.js"></script>
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-scrollspy.js"></script>
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-affix.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-transition.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-scrollspy.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-dropdown.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-collapse.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-affix.js"></script>
     <script>
       /**
        * Prism: Lightweight, robust, elegant syntax highlighting
