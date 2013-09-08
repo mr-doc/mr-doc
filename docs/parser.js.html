@@ -3,9 +3,9 @@
   <head>
     <meta name="viewport" content="width=device-width" charset="utf-8">
     <title>doxx</title>
-    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
-    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css">
-    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/docs.css">
+    <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/bootstrap-responsive.css">
+    <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/docs.css">
     <style>
       body > .navbar .brand {
         float:left;
@@ -22,6 +22,11 @@
         margin: 0px;
         display: inline-block;
         margin-right:0.5em;
+      }
+      
+      .bs-docs-sidenav > li:first-child > a {
+        border-top-right-radius: 6px;
+        border-top-left-radius: 6px;
       }
       
       code[class*="language-"],pre[class*="language-"]{color:black;text-shadow:0 1px white;font-family:Consolas,Monaco,'Andale Mono',monospace;direction:ltr;text-align:left;white-space:pre;word-spacing:normal;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*="language-"]{padding:1em;margin:.5em 0;overflow:auto}:not(pre)>code[class*="language-"],pre[class*="language-"]{background:#f5f2f0}:not(pre)>code[class*="language-"]{padding:.1em;border-radius:.3em}.token.comment,.token.prolog,.token.doctype,.token.cdata{color:slategray}.token.punctuation{color:#999}.namespace{opacity:.7}.token.property,.token.tag,.token.boolean,.token.number{color:#905}.token.selector,.token.attr-name,.token.string{color:#690}.token.operator,.token.entity,.token.url,.language-css .token.string,.style .token.string{color:#a67f59;background:hsla(0,0%,100%,.5)}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.regex,.token.important{color:#e90}.token.important{font-weight:bold}.token.entity{cursor:help}
@@ -100,8 +105,8 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Test if a symbol should be ignored or not</p> 
-            <pre><code class="language-javascript">function shouldPass(symbol){
+          <div class="description"><p>Test if a symbol should be ignored or not</p> </div>
+          <pre><code class="language-javascript">function shouldPass(symbol){
   if(symbol.isPrivate){return false;}
   if(symbol.ignore){return false;}
 
@@ -110,7 +115,6 @@
     return tag.type === &quot;private&quot; || tag.type === &quot;ignore&quot;;
   }).length === 0;
 }</code></pre>
-          </div>
           <section id="has">
             <h1>has</h1>
             <h5 class="subheader"></h5>
@@ -134,8 +138,8 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>has Helper return a closure that check if a tag has a specific type</p> 
-            <pre><code class="language-javascript">function has(val){
+          <div class="description"><p>has Helper return a closure that check if a tag has a specific type</p> </div>
+          <pre><code class="language-javascript">function has(val){
   return function(tag){
     return tag.type === val;
   };
@@ -145,7 +149,6 @@ var hasParams      = has('param');
 var isReturn       = has('return');
 var hasDescription = has('description');
 var hasType        = has('type');</code></pre>
-          </div>
           <section id="_compact">
             <h1>_compact</h1>
             <h5 class="subheader"></h5>
@@ -153,8 +156,8 @@ var hasType        = has('type');</code></pre>
               <div class="label label-info radius ctx-type">function</div><span>_compact()</span> -><span>Array</span>
             </p>
           </section>
-          <div class="description"><p>Compact multi-line expression</p> 
-            <pre><code class="language-javascript">function _compact(tags){
+          <div class="description"><p>Compact multi-line expression</p> </div>
+          <pre><code class="language-javascript">function _compact(tags){
   // [{&quot;type&quot;:&quot;description&quot;,&quot;string&quot;:&quot;Note: if `addClass` is defined at the step level.&quot;},
   //  {&quot;type&quot;:&quot;&quot;,&quot;string&quot;:&quot;The two defined `addClass` will be taken into account in the popover&quot;},
   //  {&quot;type&quot;:&quot;type&quot;,&quot;types&quot;:[&quot;String&quot;]}]
@@ -179,7 +182,6 @@ var hasType        = has('type');</code></pre>
 
   return compacted;
 }</code></pre>
-          </div>
           <section id="parse">
             <h1>parse</h1>
             <h5 class="subheader"></h5>
@@ -203,8 +205,8 @@ var hasType        = has('type');</code></pre>
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Parse a file and returns a generic format</p> 
-            <pre><code class="language-javascript">function parse(filepath){
+          <div class="description"><p>Parse a file and returns a generic format</p> </div>
+          <pre><code class="language-javascript">function parse(filepath){
   var json = null;
 
   try{
@@ -234,25 +236,24 @@ var hasType        = has('type');</code></pre>
 
   return json.filter(shouldPass).map(_mapSymbol);
 }</code></pre>
-          </div>
         </div>
       </div>
     </div>
     <footer class="footer">
       <div class="container">
-        <p>Documentation generated with<a href="https://github.com/FGRibreau/doxx">Doxx</a>created by<a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau</a></p>
-        <p>Doxx is sponsored by<a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr</a>and<a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
+        <p>Documentation generated with <a href="https://github.com/FGRibreau/doxx">Doxx </a>created by <a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau</a></p>
+        <p>Doxx is sponsored by <a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr </a>and <a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
         <p>Theme borrowed from Twitter Bootstrap</p>
       </div>
     </footer>
     <script src="http://platform.twitter.com/widgets.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
     <script src="http://leaverou.github.com/prefixfree/prefixfree.js"></script>
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-transition.js"></script>
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-scrollspy.js"></script>
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-affix.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-transition.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-scrollspy.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-dropdown.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-collapse.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-affix.js"></script>
     <script>
       /**
        * Prism: Lightweight, robust, elegant syntax highlighting
