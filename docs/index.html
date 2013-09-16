@@ -88,10 +88,11 @@
 <p>JavaScript JavaDoc style</p>
 <pre><code class="lang-javascript">/**
  * Create an array of all the right files in the source dir
- * @param  {String}   source path
- * @param  {Object}   options
- * @param  {Function} callback
- * @return {Array} an array of string path
+ * @param      {String}   source path
+ * @param      {Object}   options
+ * @param      {Function} callback
+ * @jsFiddle   A jsFiddle embed URL
+ * @return     {Array} an array of string path
  */
 function collectFiles(source, options, callback) {
   ...
@@ -99,10 +100,11 @@ function collectFiles(source, options, callback) {
 <p>CoffeeScript JavaDoc style</p>
 <pre><code class="lang-coffeescript">###*
  * Create an array of all the right files in the source dir
- * @param  {String}   source path
- * @param  {Object}   options
- * @param  {Function} callback
- * @return {Array} an array of string path
+ * @param      {String}   source path
+ * @param      {Object}   options
+ * @param      {Function} callback
+ * @jsFiddle   A jsFiddle embed URL
+ * @return     {Array} an array of string path
 ###
 collectFiles = (source, options, callback) -&gt;
   ...</code></pre>
@@ -141,6 +143,7 @@ collectFiles = (source, options, callback) -&gt;
 <li><em>0.3.0</em> - (dox-foundation) Support for folder parsing</li>
 <li><em>0.4.0</em> - (dox-foundation) Improved project navigation, major refactor of folder code</li>
 <li><em>0.5.0</em> - Initial release of doxx</li>
+<li><em>0.7.0</em> - Merge pull requests #16 #17 #19 #20</li>
 </ul>
 <h2>License</h2>
 <p>Copyright (c) 2013 Francois-Guillaume Ribreau<br>MIT License</p>
