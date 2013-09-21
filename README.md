@@ -88,6 +88,9 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 * *0.5.0* - Initial release of doxx
 * *0.7.0* - Merge pull requests #16 #17 #19 #20
 
+## Donate
+[Donate Bitcoins](https://coinbase.com/checkouts/fc3041b9d8116e0b98e7d243c4727a30)
+
 ## License
 Copyright (c) 2013 Francois-Guillaume Ribreau
 MIT License
