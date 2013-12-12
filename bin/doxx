@@ -19,7 +19,8 @@ var program = require('commander'),
  * Options & Defaults
  */
 var ignoredDirs = 'test,public,static,views,templates',
-    pkg;
+    pkg,
+    target_extension = 'html';
 
 program
   .version(version)
@@ -29,6 +30,7 @@ program
   .option('-s, --source <source>', 'The folder which should get parsed')
   .option('-i, --ignore <directories>', 'Comma seperated list of directories to ignore. Default: ' + ignoredDirs)
   .option('-T, --target <target>', 'The folder which will contain the results. Default: <process.cwd()>/docs')
+  .option('-e, --target_extension <target_extension>', 'Target files extension. Default: ' + target_extension)
   .option('--template <jade template>', 'The jade template file to use')
   .option('-R --readme <file>', 'The markdown file to use on the main page of the documentations. Checks the current directory for a package.json or README.md by default')
 
@@ -45,6 +47,10 @@ program.on('--help', showHelp);
 
 // parse argv
 program.parse(process.argv);
+
+if(program.target_extension){
+  target_extension = program.target_extension;
+}
 
 if(program.template){
   compile.tpl = fs.readFileSync(program.template).toString();
@@ -71,7 +77,7 @@ mkdirp.sync(target);
 // Parse each file
 files = files.map(function(file) {
   var dox = parse(path.join(source, file), {});
-  var targetName = file+'.html';
+  var targetName = file+'.'+target_extension;
   return {
     name:       file,
     targetName: targetName,
