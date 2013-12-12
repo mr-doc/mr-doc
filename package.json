@@ -1,7 +1,7 @@
 {
   "name": "doxx",
   "description": "Generic, template based, HTML output for Dox documentation generator",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "homepage": "https://github.com/FGRibreau/doxx",
   "author": "Francois-Guillaume Ribreau <npm@fgribreau.com> (http://fgribreau.com)",
   "repository": {
@@ -28,7 +28,7 @@
     "node": ">= 0.6.0"
   },
   "dependencies": {
-    "dox": "~0.3.3",
+    "dox": "~0.4.4",
     "commander": "~0.5.2",
     "jade": "~0.28.1",
     "mkdirp": "~0.3.4",
