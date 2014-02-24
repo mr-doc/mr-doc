@@ -30,7 +30,7 @@
   "dependencies": {
     "dox": "~0.4.4",
     "commander": "~0.5.2",
-    "jade": "~0.28.1",
+    "jade": "~1.1.x",
     "mkdirp": "~0.3.4",
     "walkdir": "~0.0.7",
     "lodash": "~1.0.0-rc.3",
