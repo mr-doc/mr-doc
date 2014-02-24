@@ -54,6 +54,7 @@ if(program.target_extension){
 
 if(program.template){
   compile.tpl = fs.readFileSync(program.template).toString();
+  compile.tplFileName = program.template;
 }
 
 if (!program.source) {

@@ -4,7 +4,7 @@ mixin iForSymbolType(symbol)
 mixin labelForSymbolType(symbol)
   div(class=["label", "label-"+(symbol.gtype === "function" || symbol.gtype === "method" ? "info":"success"), "radius", "ctx-type"])= symbol.ctx.type
 
-doctype 5
+doctype html
 html
   head
     meta(name='viewport', content='width=device-width', charset='utf-8')
@@ -12,7 +12,7 @@ html
     link(rel="stylesheet", href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css")
     link(rel="stylesheet", href="http://getbootstrap.com/2.3.2/assets/css/bootstrap-responsive.css")
     link(rel="stylesheet", href="http://getbootstrap.com/2.3.2/assets/css/docs.css")
-    style
+    style.
       body > .navbar .brand {
         float:left;
         text-shadow: rgba(255, 255, 255, 0.0980392) 0px 1px 0px, rgba(255, 255, 255, 0.4) 0px 0px 30px;
@@ -145,7 +145,7 @@ html
     script(src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-collapse.js")
     script(src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-affix.js")
 
-    script
+    script.
       /**
        * Prism: Lightweight, robust, elegant syntax highlighting
        * MIT license http://www.opensource.org/licenses/mit-license.php/
@@ -157,7 +157,7 @@ html
       Prism.languages.javascript=Prism.languages.extend("clike",{keyword:/\b(var|let|if|else|while|do|for|return|in|instanceof|function|new|with|typeof|try|catch|finally|null|break|continue)\b/g,number:/\b(-?(0x)?\d*\.?[\da-f]+|NaN|-?Infinity)\b/g});Prism.languages.insertBefore("javascript","keyword",{regex:{pattern:/(^|[^/])\/(?!\/)(\[.+?]|\\.|[^/\r\n])+\/[gim]{0,3}(?=\s*($|[\r\n,.;})]))/g,lookbehind:!0}});Prism.languages.markup&&Prism.languages.insertBefore("markup","tag",{script:{pattern:/(&lt;|<)script[\w\W]*?(>|&gt;)[\w\W]*?(&lt;|<)\/script(>|&gt;)/ig,inside:{tag:{pattern:/(&lt;|<)script[\w\W]*?(>|&gt;)|(&lt;|<)\/script(>|&gt;)/ig,inside:Prism.languages.markup.tag.inside},rest:Prism.languages.javascript}}});;
 
     // App js
-    script
+    script.
       $(function(){
         var $window = $(window);
         $('.scrollspy .nav').affix({
