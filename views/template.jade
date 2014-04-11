@@ -74,10 +74,12 @@ html
                 li
                   if name === currentName
                     a(href='#'+symbol.name)
-                      mixin iForSymbolType(symbol) #{symbol.name}
+                      mixin iForSymbolType(symbol)
+                      span #{symbol.name}
                   else
                     a(href=symbol.targetFile+'#'+symbol.name)
-                      mixin iForSymbolType(symbol) #{symbol.name}
+                      mixin iForSymbolType(symbol)
+                      span #{symbol.name}
 
         .span9
           if locals.readme
