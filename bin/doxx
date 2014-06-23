@@ -145,8 +145,8 @@ files.forEach(function(file){
   files.forEach(function(f){
 
     // Count how deep the current file is in relation to base
-    var count = file.name.match(/\//g);
-    count = count === null ? 0 : count.length;
+    var count = file.name.split(path.sep);
+    count = count === null ? 0 : count.length - 1;
 
     // relName is equal to targetName at the base dir
     f.relName = f.targetName;
