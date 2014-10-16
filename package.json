@@ -11,12 +11,10 @@
   "bugs": {
     "url": "https://github.com/FGRibreau/doxx/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/FGRibreau/doxx/blob/master/LICENSE-MIT"
-    }
-  ],
+  "licenses": [{
+    "type": "MIT",
+    "url": "https://github.com/FGRibreau/doxx/blob/master/LICENSE-MIT"
+  }],
   "main": "lib/doxx",
   "bin": {
     "doxx": "./bin/doxx"
@@ -25,7 +23,7 @@
     "test": "grunt test"
   },
   "engines": {
-    "node": ">= 0.8.0"
+    "node": ">= 0.10.0"
   },
   "dependencies": {
     "dox": "~0.5.3",
