@@ -85,10 +85,6 @@ $ doxx --help
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](https://github.com/cowboy/grunt).
 
-## Donation
-
-- [Gratipay (gittip)](https://gratipay.com/FGRibreau/)
-
 ## Release History
 * *0.0.1* - (dox-foundation) Initial release
 * *0.2.0* - (dox-foundation) Readable output
@@ -102,7 +98,9 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 * *1.0.0* - Upgraded dependencies, removed support for NodeJS 0.6 & 0.8.
 
 ## Donate
-[Donate Bitcoins](https://coinbase.com/checkouts/fc3041b9d8116e0b98e7d243c4727a30)
+
+* [Donate Bitcoins](https://coinbase.com/checkouts/fc3041b9d8116e0b98e7d243c4727a30)
+* [Gratipay (gittip)](https://gratipay.com/FGRibreau/)
 
 ## License
 Copyright (c) 2013 Francois-Guillaume Ribreau
