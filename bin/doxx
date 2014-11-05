@@ -3,7 +3,7 @@
 
 var program = require('commander'),
     version = require('../package').version,
-    doxx = require('../lib/index'),
+    doxx = require('../lib/doxx'),
     defaults = require('../lib/defaults');
 
 /**
