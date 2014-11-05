@@ -96,6 +96,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 * *0.7.2* - Upgrade dox to ~0.4.4
 * *0.7.4* - Merge pull requests #29 #30
 * *1.0.0* - Upgraded dependencies, removed support for NodeJS 0.6 & 0.8.
+* *1.1.0* - Doxx is now exposed as a nodejs module #47 /thanks @leejt489
 
 ## Donate
 
