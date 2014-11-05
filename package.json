@@ -1,7 +1,7 @@
 {
   "name": "doxx",
   "description": "Generic, template based, HTML output for Dox documentation generator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "homepage": "https://github.com/FGRibreau/doxx",
   "author": "Francois-Guillaume Ribreau <npm@fgribreau.com> (http://fgribreau.com)",
   "repository": {
@@ -11,10 +11,12 @@
   "bugs": {
     "url": "https://github.com/FGRibreau/doxx/issues"
   },
-  "licenses": [{
-    "type": "MIT",
-    "url": "https://github.com/FGRibreau/doxx/blob/master/LICENSE-MIT"
-  }],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/FGRibreau/doxx/blob/master/LICENSE-MIT"
+    }
+  ],
   "main": "lib/doxx.js",
   "bin": {
     "doxx": "./bin/doxx"
