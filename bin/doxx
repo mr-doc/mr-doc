@@ -2,25 +2,16 @@
 "use strict";
 
 var program = require('commander'),
-    fs      = require('fs'),
-    path    = require('path'),
-    mkdirp  = require('mkdirp'),
-    _       = require('lodash'),
-    marked  = require('marked'),
-
-    dir     = require('../lib/dir'),
-    parse   = require('../lib/parser'),
-    compile = require('../lib/compile'),
-    symbols = require('../lib/symbols'),
-
-    version = require('../package').version;
+    version = require('../package').version,
+    doxx = require('../lib/index'),
+    defaults = require('../lib/defaults');
 
 /**
  * Options & Defaults
  */
-var ignoredDirs = 'test,public,static,views,templates',
-    pkg,
-    target_extension = 'html';
+var ignoredDirs = defaults.ignoredDirs,
+pkg = defaults.pkg,
+target_extension = defaults.tartget_extension;
 
 program
   .version(version)
@@ -48,130 +39,4 @@ program.on('--help', showHelp);
 // parse argv
 program.parse(process.argv);
 
-if(program.target_extension){
-  target_extension = program.target_extension;
-}
-
-if(program.template){
-  compile.tpl = fs.readFileSync(program.template).toString();
-  compile.tplFileName = program.template;
-}
-
-if (!program.source) {
-  console.error("  Error you must define a source\n");
-  return showHelp();
-}
-
-var target = path.resolve(process.cwd(), program.target) || process.cwd() + '/docs',
-    source = path.resolve(process.cwd(), program.source),
-    ignore = program.ignore || ignoredDirs;
-
-// Cleanup and turn into an array the ignoredDirs
-ignore     = ignore.trim().replace(' ','').split(',');
-
-// Find, cleanup and validate all potential files
-var files  = dir.collectFiles(source, {ignore:ignore});
-
-
-mkdirp.sync(target);
-
-// Parse each file
-files = files.map(function(file) {
-  var dox = parse(path.join(source, file), {});
-  var targetName = file+'.'+target_extension;
-  return {
-    name:       file,
-    targetName: targetName,
-    dox:        dox,
-    symbols:    symbols(dox, targetName)
-  };
-});
-
-// Compute all symboles
-var allSymbols = files.reduce(function(m, a){
-  m = m.concat(a.symbols || []);
-  return m;
-}, []);
-
-// Get package.json 
-try{
-  pkg = require(process.cwd() + '/package')
-} catch (err) {
-}
-
-var readme = pkg && pkg.readme 
-  , readMeFile = path.resolve(process.cwd(), program.readme || (pkg && pkg.readmeFileName) || 'README.md')
-
-if(!readme && fs.existsSync(readMeFile)){
-  readme = fs.readFileSync(readMeFile).toString()
-} else {
-  console.warn(new Error('No README.md file found at ' + readMeFile))
-}
-
-readme = readme || (pkg && pkg.description)
-
-// Enable line-breaks ala github markdown
-marked.setOptions({
-  breaks: true,
-  smartLists: true
-})
-
-// Get readme data
-files.unshift({
-  name:"Main",
-  targetName: "index.html",
-  readme: marked(readme),
-  dox:[],
-  symbols:[]
-});
-
-// Make sure the folder structure in target mirrors source
-var folders = [];
-
-files.forEach(function(file){
-  var folder = file.targetName.substr(0, file.targetName.lastIndexOf(path.sep));
-
-  if ((folder !== '') && (folders.indexOf(folder) === -1)) {
-    folders.push(folder);
-    mkdirp.sync(target + '/' + folder);
-  }
-});
-
-
-// Render and write each file
-files.forEach(function(file){
-
-  // Set each files relName in relation to where this file is in the directory tree
-  files.forEach(function(f){
-
-    // Count how deep the current file is in relation to base
-    var count = file.name.split(path.sep);
-    count = count === null ? 0 : count.length - 1;
-
-    // relName is equal to targetName at the base dir
-    f.relName = f.targetName;
-
-    // For each directory in depth of current file add a ../ to the relative filename of this link
-    while (count > 0) {
-      f.relName = '../' + f.relName;
-      count--;
-    }
-
-  });
-
-  var title = program.title;
-
-  if (!title) {
-    title = pkg && pkg.name || 'Title Not Set'
-  }
-
-  var options = _.extend({}, file, {
-    title:        title,
-    allSymbols:   allSymbols,
-    files:        files,
-    currentName:  file.name
-  });
-  
-  var compiled = compile(options);
-  fs.writeFileSync(path.join(target, file.targetName), compiled);
-});
+doxx(program);

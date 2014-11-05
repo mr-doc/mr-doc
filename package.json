@@ -15,7 +15,7 @@
     "type": "MIT",
     "url": "https://github.com/FGRibreau/doxx/blob/master/LICENSE-MIT"
   }],
-  "main": "lib/doxx",
+  "main": "lib/doxx.js",
   "bin": {
     "doxx": "./bin/doxx"
   },
