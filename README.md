@@ -98,6 +98,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 * *1.0.0* - Upgraded dependencies, removed support for NodeJS 0.6 & 0.8.
 * *1.1.0* - Doxx is now exposed as a nodejs module #47 /thanks @leejt489
 * *1.1.1* - Fix require issue from @leejt489 by @nicolasbrugneaux in #49
+* *1.2.0* - [New] [Add the ability to send in pre-compiled dox source by @leejt489 #51 ](https://github.com/FGRibreau/doxx/pull/51)
 
 ## Donate
 
