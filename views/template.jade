@@ -123,7 +123,7 @@ html
                       tr
                         td= tag.name
                         td= tag.types
-                        td= tag.description
+                        td!= tag.description
 
             .description !{symbol.description.full} !{symbol.description.extra}
             if symbol.code
