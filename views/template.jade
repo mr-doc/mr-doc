@@ -124,6 +124,11 @@ html
                         td= tag.name
                         td= tag.types
                         td!= tag.description
+                    if tag.type == 'return'
+                      tr
+                        td= tag.type
+                        td= tag.types
+                        td= tag.Description
 
             .description !{symbol.description.full} !{symbol.description.extra}
             if symbol.code
