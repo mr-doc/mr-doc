@@ -102,6 +102,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 * *1.2.1* - [Fix] [Fixes TypeError thrown if target option not passed. by @gwagroves #53](https://github.com/FGRibreau/doxx/pull/53)
  *1.2.2* - [Fix] [Updated dox version. by @trusktr #57](https://github.com/FGRibreau/doxx/pull/57)
  *1.2.5* - [Fix] [Add condition for return tag #60](https://github.com/FGRibreau/doxx/pull/60)
+ *1.2.6* - [Fix] [Making Doxx compatible with Windows folder structure #63](https://github.com/FGRibreau/doxx/pull/63)
 
 ## Donate
 
