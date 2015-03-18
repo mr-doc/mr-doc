@@ -1,7 +1,7 @@
 {
   "name": "doxx",
   "description": "Generic, template based, HTML output for Dox documentation generator",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "homepage": "https://github.com/FGRibreau/doxx",
   "author": "Francois-Guillaume Ribreau <npm@fgribreau.com> (http://fgribreau.com)",
   "repository": {
