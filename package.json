@@ -11,12 +11,10 @@
   "bugs": {
     "url": "https://github.com/FGRibreau/doxx/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/FGRibreau/doxx/blob/master/LICENSE-MIT"
-    }
-  ],
+  "licenses": [{
+    "type": "MIT",
+    "url": "https://github.com/FGRibreau/doxx/blob/master/LICENSE-MIT"
+  }],
   "main": "lib/doxx.js",
   "bin": {
     "doxx": "./bin/doxx"
@@ -32,7 +30,7 @@
     "dox": "0.x.x",
     "jade": "1.x.x",
     "lodash": "3.x.x",
-    "marked": "0.3.x",
+    "marked": "0.3.3",
     "mkdirp": "0.5.x",
     "walkdir": "0.0.x"
   },
