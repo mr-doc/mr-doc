@@ -15,6 +15,11 @@
         font-weight:normal;
       }
       
+      .bs-docs-sidenav.affix {
+        box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.5);
+        z-index: 10;
+      }
+      
       .bs-docs-sidenav i{
         width: 8px;
         height: 8px;
@@ -22,6 +27,10 @@
         margin: 0px;
         display: inline-block;
         margin-right:0.5em;
+      }
+      
+      .bs-docs-sidenav > li > a {
+          word-wrap: break-word;
       }
       
       .bs-docs-sidenav > li:first-child > a {
@@ -62,21 +71,23 @@
       <div class="row">
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
-            <li class=""><a href="index.html">Main</a></li>
-            <li class=""><a href="compile.js.html">compile.js</a></li>
-            <li class=""><a href="dir.js.html">dir.js</a></li>
+            <li><a href="index.html">Main</a></li>
+            <li><a href="compile.js.html">compile.js</a></li>
+            <li><a href="defaults.js.html">defaults.js</a></li>
+            <li><a href="dir.js.html">dir.js</a></li>
+            <li><a href="doxx.js.html">doxx.js</a></li>
             <li class="active"><a href="parser.js.html">parser.js</a></li>
-            <li class=""><a href="symbols.js.html">symbols.js</a></li>
+            <li><a href="symbols.js.html">symbols.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
-              <li><a href="#shouldPass"><i class="alert alert-info"></i>shouldPass</a>
+              <li><a href="#shouldPass"><i class="alert alert-info"></i><span>shouldPass</span></a>
               </li>
-              <li><a href="#has"><i class="alert alert-info"></i>has</a>
+              <li><a href="#has"><i class="alert alert-info"></i><span>has</span></a>
               </li>
-              <li><a href="#_compact"><i class="alert alert-info"></i>_compact</a>
+              <li><a href="#_compact"><i class="alert alert-info"></i><span>_compact</span></a>
               </li>
-              <li><a href="#parse"><i class="alert alert-info"></i>parse</a>
+              <li><a href="#parse"><i class="alert alert-info"></i><span>parse</span></a>
               </li>
             </ul>
           </div>
@@ -101,7 +112,12 @@
               <tr>
                 <td>symbol</td>
                 <td>Object</td>
-                <td>symbol to check against</td>
+                <td><p>symbol to check against</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Boolean</td>
+                <td><p>true if the symbol is not private nor must be ignored</p></td>
               </tr>
             </tbody>
           </table>
@@ -134,7 +150,12 @@
               <tr>
                 <td>val</td>
                 <td>String</td>
-                <td>value to check against</td>
+                <td><p>value to check against</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Boolean</td>
+                <td><p>True if <code>tag</code> type is <code>val</code></p></td>
               </tr>
             </tbody>
           </table>
@@ -147,6 +168,7 @@
 
 var hasParams      = has('param');
 var isReturn       = has('return');
+var isRequires     = has('requires');
 var hasDescription = has('description');
 var hasType        = has('type');
 var hasJSFiddle    = has('jsFiddle');</code></pre>
@@ -202,7 +224,12 @@ var hasJSFiddle    = has('jsFiddle');</code></pre>
               <tr>
                 <td>filepath</td>
                 <td>String</td>
-                <td>file path of the file to parse</td>
+                <td><p>file path of the file to parse</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Array</td>
+                <td><p>array of symbols</p></td>
               </tr>
             </tbody>
           </table>
@@ -242,8 +269,8 @@ var hasJSFiddle    = has('jsFiddle');</code></pre>
     </div>
     <footer class="footer">
       <div class="container">
-        <p>Documentation generated with <a href="https://github.com/FGRibreau/doxx">Doxx </a>created by <a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau</a></p>
-        <p>Doxx is sponsored by <a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr </a>and <a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
+        <p>Documentation generated with <a href="https://github.com/FGRibreau/doxx">Doxx </a> created by <a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau </a></p>
+        <p>Doxx is sponsored by <a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr </a> and <a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
         <p>Theme borrowed from Twitter Bootstrap</p>
       </div>
     </footer>

@@ -72,109 +72,183 @@
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
             <li><a href="index.html">Main</a></li>
-            <li class="active"><a href="compile.js.html">compile.js</a></li>
+            <li><a href="compile.js.html">compile.js</a></li>
             <li><a href="defaults.js.html">defaults.js</a></li>
             <li><a href="dir.js.html">dir.js</a></li>
-            <li><a href="doxx.js.html">doxx.js</a></li>
+            <li class="active"><a href="doxx.js.html">doxx.js</a></li>
             <li><a href="parser.js.html">parser.js</a></li>
             <li><a href="symbols.js.html">symbols.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
-              <li><a href="#compile"><i class="alert alert-info"></i><span>compile</span></a>
-              </li>
-              <li><a href="#code"><i class="alert alert-info"></i><span>code</span></a>
+              <li><a href="#ignoredDirs"><i class="alert alert-success"></i><span>ignoredDirs</span></a>
               </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <section id="compile">
-            <h1>compile</h1>
+          <section id="ignoredDirs">
+            <h1>ignoredDirs</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">function</div><span>compile()</span> -><span>String</span>
+              <div class="label label-success radius ctx-type">declaration</div><span>ignoredDirs</span>
             </p>
           </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>locals</td>
-                <td>Object</td>
-                <td><p>local variable object</p></td>
-              </tr>
-              <tr>
-                <td>return</td>
-                <td>String</td>
-                <td><p>rendered content</p></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>Compile</p> </div>
-          <pre><code class="language-javascript">function compile(locals) {
-  return jade.compile(compile.tpl, {
-    pretty: true,
-    filename: compile.tplFileName
-  })(locals);
+          <div class="description"><p>Options &amp; Defaults</p> </div>
+          <pre><code class="language-javascript">var ignoredDirs = defaults.ignoredDirs,
+pkg = defaults.pkg,
+target_extension = defaults.target_extension;
+
+module.exports = function(options) {
+
+	if(options.target_extension){
+		target_extension = options.target_extension;
+	}
+
+	if(options.template){
+		compile.tpl = fs.readFileSync(options.template).toString();
+		compile.tplFileName = options.template;
+	}
+
+	if (!options.source) {
+		console.error(&quot;  Error you must define a source\n&quot;);
+		return;
+	}
+
+
+	var target, ignore;
+	if (!options.target) {
+		target = process.cwd() + '/docs';
+	} else {
+		target = path.resolve(process.cwd(), options.target) || process.cwd() + '/docs';
+	}
+	ignore = options.ignore || ignoredDirs;
+
+	//Cleanup and turn into an array the ignoredDirs
+	ignore = ignore.trim().replace(' ','').split(',');
+
+	mkdirp.sync(target);
+
+	var source;
+
+	if (options.source instanceof Array) {
+		source = options.source;
+		//Handle already compiled input
+		var files = source.map(function(doc) {
+			var targetName = doc.name+'.'+target_extension;
+			if (!doc.targetName) doc.targetName = targetName;
+			doc.symbols = symbols(doc.dox, doc.targetName);
+			return doc;
+		});
+	} else {
+		//Compile files
+		//Find, cleanup and validate all potential files
+		source = path.resolve(process.cwd(), options.source);
+		var files  = dir.collectFiles(source, {ignore:ignore});
+
+		//Parse each file
+		files = files.map(function(file) {
+			var dox = parse(path.join(source, file), {});
+			var targetName = file+'.'+target_extension;
+			return {
+				name:       file.replace(/\\/g, '/'),
+				targetName: targetName.replace(/\\/g, '/'),
+				dox:        dox,
+				symbols:    symbols(dox, targetName)
+			};
+		});
+
+	}
+
+	//Compute all symboles
+	var allSymbols = files.reduce(function(m, a){
+		m = m.concat(a.symbols || []);
+		return m;
+	}, []);
+
+	//Get package.json
+	try{
+		pkg = require(process.cwd() + '/package')
+	} catch (err) {
+	}
+
+	var readme = pkg &amp;&amp; pkg.readme
+	, readMeFile = path.resolve(process.cwd(), options.readme || (pkg &amp;&amp; pkg.readmeFileName) || 'README.md')
+
+	if(!readme &amp;&amp; fs.existsSync(readMeFile)){
+		readme = fs.readFileSync(readMeFile).toString()
+	} else {
+		console.warn(new Error('No README.md file found at ' + readMeFile))
+	}
+
+	readme = readme || (pkg &amp;&amp; pkg.description)
+
+	//Enable line-breaks ala github markdown
+	marked.setOptions({
+		breaks: true,
+		smartLists: true
+	})
+
+	//Get readme data
+	files.unshift({
+		name:&quot;Main&quot;,
+		targetName: &quot;index.html&quot;,
+		readme: marked(readme),
+		dox:[],
+		symbols:[]
+	});
+
+	//Make sure the folder structure in target mirrors source
+	var folders = [];
+
+	files.forEach(function(file){
+		var folder = file.targetName.substr(0, file.targetName.lastIndexOf(path.sep));
+
+		if ((folder !== '') &amp;&amp; (folders.indexOf(folder) === -1)) {
+			folders.push(folder);
+			mkdirp.sync(target + '/' + folder);
+		}
+	});
+
+	//Render and write each file
+	files.forEach(function(file){
+
+		// Set each files relName in relation to where this file is in the directory tree
+		files.forEach(function(f){
+
+			// Count how deep the current file is in relation to base
+			var count = file.name.split('/');
+			count = count === null ? 0 : count.length - 1;
+
+			// relName is equal to targetName at the base dir
+			f.relName = f.targetName;
+
+			// For each directory in depth of current file add a ../ to the relative filename of this link
+			while (count &gt; 0) {
+				f.relName = '../' + f.relName;
+				count--;
+			}
+
+		});
+
+		var title = options.title;
+
+		if (!title) {
+			title = pkg &amp;&amp; pkg.name || 'Title Not Set'
+		}
+
+		var compileOptions = _.extend({}, file, {
+			title:        title,
+			allSymbols:   allSymbols,
+			files:        files,
+			currentName:  file.name
+		});
+
+		var compiled = compile(compileOptions);
+		fs.writeFileSync(path.join(target, file.targetName), compiled);
+	});
+
 }</code></pre>
-          <h5>jsFiddle</h5>
-          <p>
-            <iframe width="100%" height="300" src="http://jsfiddle.net/4L6Br/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
-          </p>
-          <section id="code">
-            <h1>code</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">method</div><span>jade.filters.code()</span> -><span>String</span>
-            </p>
-          </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>block</td>
-                <td>String</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>return</td>
-                <td>String</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>Jade support for filter <code>:code</code></p> </div>
-          <pre><code class="language-javascript">jade.filters.code = function( block ) {
- return block.replace( /&amp;/g, '&amp;amp;'  )
-  .replace( /&lt;/g, '&amp;lt;'   )
-  .replace( /&gt;/g, '&amp;gt;'   )
-  .replace( /&quot;/g, '&amp;quot;' )
-  .replace( /#/g, '&amp;#35;'  )
-  .replace( /\\/g, '\\\\'  )
-  .replace( /\n/g, '\\n'   );
-};
-
-
-/**
- * Template used to produce the documentation
- * @type {String} template string
- */
-compile.tpl = fs.readFileSync(path.resolve(__dirname, '../views/template.jade')).toString();
-
-module.exports = compile;</code></pre>
         </div>
       </div>
     </div>

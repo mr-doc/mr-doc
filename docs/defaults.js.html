@@ -72,8 +72,8 @@
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
             <li><a href="index.html">Main</a></li>
-            <li class="active"><a href="compile.js.html">compile.js</a></li>
-            <li><a href="defaults.js.html">defaults.js</a></li>
+            <li><a href="compile.js.html">compile.js</a></li>
+            <li class="active"><a href="defaults.js.html">defaults.js</a></li>
             <li><a href="dir.js.html">dir.js</a></li>
             <li><a href="doxx.js.html">doxx.js</a></li>
             <li><a href="parser.js.html">parser.js</a></li>
@@ -81,100 +81,25 @@
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
-              <li><a href="#compile"><i class="alert alert-info"></i><span>compile</span></a>
-              </li>
-              <li><a href="#code"><i class="alert alert-info"></i><span>code</span></a>
+              <li><a href="#exports"><i class="alert alert-success"></i><span>exports</span></a>
               </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <section id="compile">
-            <h1>compile</h1>
+          <section id="exports">
+            <h1>exports</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">function</div><span>compile()</span> -><span>String</span>
+              <div class="label label-success radius ctx-type">property</div><span>module.exports</span>
             </p>
           </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>locals</td>
-                <td>Object</td>
-                <td><p>local variable object</p></td>
-              </tr>
-              <tr>
-                <td>return</td>
-                <td>String</td>
-                <td><p>rendered content</p></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>Compile</p> </div>
-          <pre><code class="language-javascript">function compile(locals) {
-  return jade.compile(compile.tpl, {
-    pretty: true,
-    filename: compile.tplFileName
-  })(locals);
+          <div class="description"><p>Options &amp; Default configuration options.</p> </div>
+          <pre><code class="language-javascript">module.exports = {
+		ignoredDirs: 'test,public,static,views,templates',
+		pkg: undefined,
+		target_extension: 'html'
 }</code></pre>
-          <h5>jsFiddle</h5>
-          <p>
-            <iframe width="100%" height="300" src="http://jsfiddle.net/4L6Br/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
-          </p>
-          <section id="code">
-            <h1>code</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">method</div><span>jade.filters.code()</span> -><span>String</span>
-            </p>
-          </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>block</td>
-                <td>String</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>return</td>
-                <td>String</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>Jade support for filter <code>:code</code></p> </div>
-          <pre><code class="language-javascript">jade.filters.code = function( block ) {
- return block.replace( /&amp;/g, '&amp;amp;'  )
-  .replace( /&lt;/g, '&amp;lt;'   )
-  .replace( /&gt;/g, '&amp;gt;'   )
-  .replace( /&quot;/g, '&amp;quot;' )
-  .replace( /#/g, '&amp;#35;'  )
-  .replace( /\\/g, '\\\\'  )
-  .replace( /\n/g, '\\n'   );
-};
-
-
-/**
- * Template used to produce the documentation
- * @type {String} template string
- */
-compile.tpl = fs.readFileSync(path.resolve(__dirname, '../views/template.jade')).toString();
-
-module.exports = compile;</code></pre>
         </div>
       </div>
     </div>

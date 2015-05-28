@@ -15,6 +15,11 @@
         font-weight:normal;
       }
       
+      .bs-docs-sidenav.affix {
+        box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.5);
+        z-index: 10;
+      }
+      
       .bs-docs-sidenav i{
         width: 8px;
         height: 8px;
@@ -22,6 +27,10 @@
         margin: 0px;
         display: inline-block;
         margin-right:0.5em;
+      }
+      
+      .bs-docs-sidenav > li > a {
+          word-wrap: break-word;
       }
       
       .bs-docs-sidenav > li:first-child > a {
@@ -63,10 +72,12 @@
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
             <li class="active"><a href="index.html">Main</a></li>
-            <li class=""><a href="compile.js.html">compile.js</a></li>
-            <li class=""><a href="dir.js.html">dir.js</a></li>
-            <li class=""><a href="parser.js.html">parser.js</a></li>
-            <li class=""><a href="symbols.js.html">symbols.js</a></li>
+            <li><a href="compile.js.html">compile.js</a></li>
+            <li><a href="defaults.js.html">defaults.js</a></li>
+            <li><a href="dir.js.html">dir.js</a></li>
+            <li><a href="doxx.js.html">doxx.js</a></li>
+            <li><a href="parser.js.html">parser.js</a></li>
+            <li><a href="symbols.js.html">symbols.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
@@ -74,19 +85,15 @@
           </div>
         </div>
         <div class="span9">
-          <section id="Main"><h1 id="doxx-build-status-https-travis-ci-org-fgribreau-doxx-png-https-travis-ci-org-fgribreau-doxx-gittip-http-badgr-co-gittip-fgribreau-png-https-www-gittip-com-fgribreau-">Doxx <a href="https://travis-ci.org/FGRibreau/doxx"><img src="https://travis-ci.org/FGRibreau/doxx.png" alt="Build Status"></a> <a href="https://www.gittip.com/fgribreau/"><img src="http://badgr.co/gittip/fgribreau.png" alt="Gittip"></a></h1>
-<p>Use <a href="https://github.com/visionmedia/dox">dox</a> to automatically generate beautiful html documentation. <strong>Doxx is a total refactoring of <a href="https://github.com/punkave/dox-foundation/">dox-foundation</a></strong>.</p>
-<p>Outputted HTML is by default based on templates and css from <a href="twitter.github.com/bootstrap/">Twitter Bootstrap</a> and syntax highlighting is done by <a href="http://prismjs.com/">Prism.js</a>.</p>
-<p>Doxx was tested with <strong>JavaScript</strong> as well as generated JavaScript from <strong>CoffeeScript</strong>.</p>
-<h2 id="demo">Demo</h2>
+          <section id="Main"><h1>Doxx <a href="https://travis-ci.org/FGRibreau/doxx"><img src="https://travis-ci.org/FGRibreau/doxx.png" alt="Build Status"></a> <a href="https://david-dm.org/FGRibreau/doxx"><img src="https://david-dm.org/FGRibreau/doxx.png" alt="Deps"></a></h1>
+<p>Use <a href="https://github.com/visionmedia/dox">dox</a> to automatically generate beautiful html documentation. <strong>Doxx is a total refactoring of <a href="https://github.com/punkave/dox-foundation/">dox-foundation</a></strong>.</p><p>Outputted HTML is by default based on templates and css from <a href="twitter.github.com/bootstrap/">Twitter Bootstrap</a> and syntax highlighting is done by <a href="http://prismjs.com/">Prism.js</a>.</p><p>Doxx was tested with <strong>JavaScript</strong> as well as generated JavaScript from <strong>CoffeeScript</strong>.</p><h2>Demo</h2>
 <ul>
 <li><a href="http://fgribreau.github.com/doxx/docs/compile.js.html">doxx/docs/compile.js</a></li>
 <li><a href="http://fgribreau.github.com/doxx/docs/dir.js.html">doxx/docs/dir.js</a></li>
 <li><a href="http://fgribreau.github.com/doxx/docs/parser.js.html">doxx/docs/parser.js</a></li>
 </ul>
-<h2 id="usage">Usage</h2>
-<p>JavaScript JavaDoc style</p>
-<pre><code class="lang-javascript">/**
+<h2>Usage</h2>
+<p>JavaScript JavaDoc style</p><pre><code class="lang-javascript">/**
  * Create an array of all the right files in the source dir
  * @param      {String}   source path
  * @param      {Object}   options
@@ -96,9 +103,9 @@
  */
 function collectFiles(source, options, callback) {
   ...
-}</code></pre>
-<p>CoffeeScript JavaDoc style</p>
-<pre><code class="lang-coffeescript">###*
+}
+</code></pre>
+<p>CoffeeScript JavaDoc style</p><pre><code class="lang-coffeescript">###*
  * Create an array of all the right files in the source dir
  * @param      {String}   source path
  * @param      {Object}   options
@@ -107,10 +114,10 @@ function collectFiles(source, options, callback) {
  * @return     {Array} an array of string path
 ###
 collectFiles = (source, options, callback) -&gt;
-  ...</code></pre>
-<h2 id="installation">Installation</h2>
-<p>Install the module with: <code>npm install doxx -g</code></p>
-<h2 id="cli">CLI</h2>
+  ...
+</code></pre>
+<h2>Installation</h2>
+<p>Install the module with: <code>npm install doxx -g</code></p><h2>CLI</h2>
 <pre><code>$ doxx --help
 
   Usage: doxx [options]
@@ -134,31 +141,27 @@ collectFiles = (source, options, callback) -&gt;
     $ doxx --source lib --target docs
 
     # parse a whole folder and use a specific template
-    $ doxx --template ./view/myowntpl.jade --source lib --target docs</code></pre>
-<h2 id="contributing">Contributing</h2>
-<p>In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using <a href="https://github.com/cowboy/grunt">grunt</a>.</p>
-<h2 id="release-history">Release History</h2>
+    $ doxx --template ./view/myowntpl.jade --source lib --target docs
+</code></pre><h2>Related</h2>
 <ul>
-<li><em>0.0.1</em> - (dox-foundation) Initial release</li>
-<li><em>0.2.0</em> - (dox-foundation) Readable output</li>
-<li><em>0.3.0</em> - (dox-foundation) Support for folder parsing</li>
-<li><em>0.4.0</em> - (dox-foundation) Improved project navigation, major refactor of folder code</li>
-<li><em>0.5.0</em> - Initial release of doxx</li>
-<li><em>0.7.0</em> - Merge pull requests #16 #17 #19 #20</li>
-<li><em>0.7.1</em> - Merge pull request #25 - Add target_extension option</li>
+<li><a href="https://github.com/evertton/grunt-doxx">grunt-doxx</a> - Doxx grunt plugin automatically generates the documentation for your project.</li>
 </ul>
-<h2 id="donate">Donate</h2>
-<p><a href="https://coinbase.com/checkouts/fc3041b9d8116e0b98e7d243c4727a30">Donate Bitcoins</a></p>
-<h2 id="license">License</h2>
-<p>Copyright (c) 2013 Francois-Guillaume Ribreau<br>MIT License</p>
-</section>
+<h2>Contributing</h2>
+<p>In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using <a href="https://github.com/cowboy/grunt">grunt</a>.</p><h2><a href="/CHANGELOG.md">Changelog</a></h2>
+<h2>Donate</h2>
+<ul>
+<li><a href="https://coinbase.com/checkouts/fc3041b9d8116e0b98e7d243c4727a30">Donate Bitcoins</a></li>
+<li><a href="https://gratipay.com/FGRibreau/">Gratipay (gittip)</a></li>
+</ul>
+<h2>License</h2>
+<p>Copyright (c) 2013 Francois-Guillaume Ribreau<br />MIT License</p></section>
         </div>
       </div>
     </div>
     <footer class="footer">
       <div class="container">
-        <p>Documentation generated with <a href="https://github.com/FGRibreau/doxx">Doxx </a>created by <a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau</a></p>
-        <p>Doxx is sponsored by <a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr </a>and <a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
+        <p>Documentation generated with <a href="https://github.com/FGRibreau/doxx">Doxx </a> created by <a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau </a></p>
+        <p>Doxx is sponsored by <a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr </a> and <a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
         <p>Theme borrowed from Twitter Bootstrap</p>
       </div>
     </footer>
