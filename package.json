@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "commander": "~2.5.0",
-    "dox": "^0.6.1",
+    "dox": "^0.8.0",
     "jade": "~1.7.x",
     "lodash": "~2.4.1",
     "marked": "~0.3.2",
