@@ -1,5 +1,21 @@
 # Change Log
 
+## [v1.4.0](https://github.com/fgribreau/doxx/tree/v1.4.0) (2015-05-30)
+
+[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.3.0...v1.4.0)
+
+**Merged pull requests:**
+
+- examples and returns [\#67](https://github.com/FGRibreau/doxx/pull/67) ([scottnath](https://github.com/scottnath))
+
+## [v1.3.0](https://github.com/fgribreau/doxx/tree/v1.3.0) (2015-05-26)
+
+[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.2.8...v1.3.0)
+
+## [v1.2.8](https://github.com/fgribreau/doxx/tree/v1.2.8) (2015-05-26)
+
+[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.2.7...v1.2.8)
+
 ## [v1.2.7](https://github.com/fgribreau/doxx/tree/v1.2.7) (2015-05-26)
 
 [Full Changelog](https://github.com/fgribreau/doxx/compare/v1.2.6...v1.2.7)
