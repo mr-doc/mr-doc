@@ -26,13 +26,13 @@
     "node": ">= 0.10.0"
   },
   "dependencies": {
-    "commander": "2.x.x",
-    "dox": "0.x.x",
-    "jade": "1.x.x",
-    "lodash": "3.x.x",
-    "marked": "0.3.3",
-    "mkdirp": "0.5.x",
-    "walkdir": "0.0.x"
+    "commander": "~2.5.0",
+    "dox": "^0.8.0",
+    "jade": "~1.7.x",
+    "lodash": "~2.4.1",
+    "marked": "~0.3.2",
+    "mkdirp": "~0.5.0",
+    "walkdir": "~0.0.7"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
