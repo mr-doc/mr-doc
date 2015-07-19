@@ -122,12 +122,12 @@ html
                     if tag.type == 'param'
                       tr
                         td= tag.name
-                        td= tag.types
+                        td= tag.types.join(', ')
                         td!= tag.description
                     if tag.type == 'return'
                       tr
                         td= tag.type
-                        td= tag.types
+                        td= tag.types.join(', ')
                         td!= tag.description
 
             .description !{symbol.description.full} !{symbol.description.extra}
