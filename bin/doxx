@@ -10,7 +10,7 @@ var program = require('commander'),
 /**
  * Options & Defaults
  */
-var defaults = option().defaults();
+var defaults = option().getDefaults();
 
 program
   .version(version)
