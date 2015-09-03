@@ -37,11 +37,10 @@
     "walkdir": "~0.0.7"
   },
   "devDependencies": {
-    "babel": "^5.8.23",
-    "babel-eslint": "^4.1.1",
     "chai": "^3.2.0",
     "gulp": "^3.9.0",
     "gulp-babel": "^5.2.1",
+    "gulp-jsbeautify": "^0.1.1",
     "gulp-jshint": "^1.11.2",
     "gulp-mocha": "^2.1.3",
     "gulp-shell": "^0.4.3",
