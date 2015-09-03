@@ -14,12 +14,10 @@
         margin-left:0px;
         font-weight:normal;
       }
-      
       .bs-docs-sidenav.affix {
         box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.5);
         z-index: 10;
       }
-      
       .bs-docs-sidenav i{
         width: 8px;
         height: 8px;
@@ -28,16 +26,13 @@
         display: inline-block;
         margin-right:0.5em;
       }
-      
       .bs-docs-sidenav > li > a {
           word-wrap: break-word;
       }
-      
       .bs-docs-sidenav > li:first-child > a {
         border-top-right-radius: 6px;
         border-top-left-radius: 6px;
       }
-      
       /* http://prismjs.com/download.html?themes=prism&languages=markup+css+clike+javascript */
       /**
       * prism.js default theme for JavaScript, CSS and HTML
@@ -181,9 +176,7 @@
         margin-right:0.5em;
         //- float:right; margin-top:8px
       }
-      
       footer iframe{vertical-align:middle;}
-      
     </style>
   </head>
   <body data-spy="scroll" data-target=".scrollspy">
@@ -232,7 +225,7 @@
             <h1>Option</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-success radius ctx-type">class</div><span>new Option()</span>
+              <div class="label label-success radius ctx-type">class</div><span>new Option()</span><span>&nbsp;</span>
             </p>
           </section>
           <div class="description"><p>The class that sets the options.</p></div>
@@ -245,7 +238,7 @@
             <h1>setOptions</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>Option.prototype.setOptions()</span>
+              <div class="label label-info radius ctx-type">method</div><span>Option.prototype.setOptions()</span><span>&nbsp;</span>
             </p>
           </section>
           <div class="description"><p>Sets the options</p></div>
@@ -282,7 +275,7 @@
             <h1>getOptions</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>Option.prototype.getOptions()</span>
+              <div class="label label-info radius ctx-type">method</div><span>Option.prototype.getOptions()</span><span>&nbsp;</span>
             </p>
           </section>
           <div class="description"><p>Returns the current options.</p></div>
@@ -293,7 +286,7 @@
             <h1>getDefaults</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>Option.prototype.getDefaults()</span>
+              <div class="label label-info radius ctx-type">method</div><span>Option.prototype.getDefaults()</span><span>&nbsp;</span>
             </p>
           </section>
           <div class="description"><p>Returns the default options.</p></div>
@@ -349,7 +342,6 @@ return new Option(options);
       Prism.languages.css={comment:/\/\*[\w\W]*?\*\//,atrule:{pattern:/@[\w-]+?.*?(;|(?=\s*\{))/i,inside:{rule:/@[\w-]+/}},url:/url\((?:(["'])(\\(?:\r\n|[\w\W])|(?!\1)[^\\\r\n])*\1|.*?)\)/i,selector:/[^\{\}\s][^\{\};]*?(?=\s*\{)/,string:/("|')(\\(?:\r\n|[\w\W])|(?!\1)[^\\\r\n])*\1/,property:/(\b|\B)[\w-]+(?=\s*:)/i,important:/\B!important\b/i,"function":/[-a-z0-9]+(?=\()/i,punctuation:/[(){};:]/},Prism.languages.css.atrule.inside.rest=Prism.util.clone(Prism.languages.css),Prism.languages.markup&&(Prism.languages.insertBefore("markup","tag",{style:{pattern:/<style[\w\W]*?>[\w\W]*?<\/style>/i,inside:{tag:{pattern:/<style[\w\W]*?>|<\/style>/i,inside:Prism.languages.markup.tag.inside},rest:Prism.languages.css},alias:"language-css"}}),Prism.languages.insertBefore("inside","attr-value",{"style-attr":{pattern:/\s*style=("|').*?\1/i,inside:{"attr-name":{pattern:/^\s*style/i,inside:Prism.languages.markup.tag.inside},punctuation:/^\s*=\s*['"]|['"]\s*$/,"attr-value":{pattern:/.+/i,inside:Prism.languages.css}},alias:"language-css"}},Prism.languages.markup.tag));;
       Prism.languages.clike={comment:[{pattern:/(^|[^\\])\/\*[\w\W]*?\*\//,lookbehind:!0},{pattern:/(^|[^\\:])\/\/.*/,lookbehind:!0}],string:/("|')(\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/,"class-name":{pattern:/((?:\b(?:class|interface|extends|implements|trait|instanceof|new)\s+)|(?:catch\s+\())[a-z0-9_\.\\]+/i,lookbehind:!0,inside:{punctuation:/(\.|\\)/}},keyword:/\b(if|else|while|do|for|return|in|instanceof|function|new|try|throw|catch|finally|null|break|continue)\b/,"boolean":/\b(true|false)\b/,"function":/[a-z0-9_]+(?=\()/i,number:/\b-?(0x[\dA-Fa-f]+|\d*\.?\d+([Ee]-?\d+)?)\b/,operator:/--?|\+\+?|!=?=?|<=?|>=?|==?=?|&&?|\|\|?|\?|\*|\/|~|\^|%/,punctuation:/[{}[\];(),.:]/};;
       Prism.languages.javascript=Prism.languages.extend("clike",{keyword:/\b(as|async|await|break|case|catch|class|const|continue|debugger|default|delete|do|else|enum|export|extends|false|finally|for|from|function|get|if|implements|import|in|instanceof|interface|let|new|null|of|package|private|protected|public|return|set|static|super|switch|this|throw|true|try|typeof|var|void|while|with|yield)\b/,number:/\b-?(0x[\dA-Fa-f]+|0b[01]+|0o[0-7]+|\d*\.?\d+([Ee][+-]?\d+)?|NaN|Infinity)\b/,"function":/(?!\d)[a-z0-9_$]+(?=\()/i}),Prism.languages.insertBefore("javascript","keyword",{regex:{pattern:/(^|[^/])\/(?!\/)(\[.+?]|\\.|[^/\\\r\n])+\/[gimyu]{0,5}(?=\s*($|[\r\n,.;})]))/,lookbehind:!0}}),Prism.languages.insertBefore("javascript","class-name",{"template-string":{pattern:/`(?:\\`|\\?[^`])*`/,inside:{interpolation:{pattern:/\$\{[^}]+\}/,inside:{"interpolation-punctuation":{pattern:/^\$\{|\}$/,alias:"punctuation"},rest:Prism.languages.javascript}},string:/[\s\S]+/}}}),Prism.languages.markup&&Prism.languages.insertBefore("markup","tag",{script:{pattern:/<script[\w\W]*?>[\w\W]*?<\/script>/i,inside:{tag:{pattern:/<script[\w\W]*?>|<\/script>/i,inside:Prism.languages.markup.tag.inside},rest:Prism.languages.javascript},alias:"language-javascript"}});;
-      
     </script>
     <!-- App js-->
     <script>
