@@ -73,78 +73,84 @@
           <ul class="nav nav-list bs-docs-sidenav affix-top">
             <li><a href="index.html">Main</a></li>
             <li><a href="compiler.js.html">compiler.js</a></li>
-            <li class="active"><a href="dir.js.html">dir.js</a></li>
+            <li><a href="dir.js.html">dir.js</a></li>
             <li><a href="doxx.js.html">doxx.js</a></li>
-            <li><a href="option.js.html">option.js</a></li>
+            <li class="active"><a href="options.js.html">options.js</a></li>
             <li><a href="parser.js.html">parser.js</a></li>
             <li><a href="symbol.js.html">symbol.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
-              <li><a href="#collectFiles"><i class="alert alert-info"></i><span>collectFiles</span></a>
-              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <section id="collectFiles">
-            <h1>collectFiles</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">method</div><span>collectFiles()</span>
-            </p>
-          </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>source</td>
-                <td>String</td>
-                <td><p>source path</p></td>
-              </tr>
-              <tr>
-                <td>options</td>
-                <td>Object</td>
-                <td><p>option object</p></td>
-              </tr>
-              <tr>
-                <td>return</td>
-                <td>Array</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>Create an array of all the right files in the source dir</p></div>
-          <pre><code class="language-javascript">static collectFiles(source, options) {
-  var dirtyFiles = walkdir.sync(source), // tee hee!
-    ignore = options.ignore || [],
-    files = [];
+          <!--.description !{symbol.description.full} !{symbol.description.extra}-->
+          <pre><code class="language-javascript">import path from 'path';
+import _ from 'lodash';
+class Option {
+	constructor(options) {
+		this.options = this.defaults();
+		if(options)
+			this.setOptions(options)
+	}
+	setOptions(options) {
+		if (options.extension) {
+			this.options.extension = options.extension;
+		}
 
-  dirtyFiles.forEach(function (file) {
-    file = path.relative(source, file);
+		if (options.template) {
+			this.options.template.path = options.template;
+		}
+		
+		var files;
+		if (!options.source) {
+			console.error(new Error(&quot;Error, you must define a source&quot;));
+			return;
+		} else this.options.source = options.source;
+		
+		if(options.target){
+			this.options.target = path.resolve(process.cwd(), options.target) ||
+			process.cwd();
+		}
+		if(options.ignore){
+			this.options.blacklist = options.ignore
+			.trim().replace(' ', '').split(',');
+		}
+		
+		if(options.readme){
+			this.options.readme = options.readme;
+		}
 
-    var doNotIgnore = _.all(ignore, function (d) {
-      // return true if no part of the path is in the ignore list
-      return (file.indexOf(d) === -1);
-    });
-
-    if ((file.substr(-2) === 'js') &amp;&amp; doNotIgnore) {
-      files.push(file);
-    }
-  });
-
-  return files;
+	}
+	getOptions() {
+		return this.options;
+	}
+	defaults() {
+		return {
+			// The title for the page produced
+			'title': '',
+			// The folder which should get parsed
+			'source': '',
+			// The folder which will contain the results.
+			'target': '',
+			// The target files extension.
+			'extension': 'html',
+			// The comma seperated list of directories to ignore. (alias for ignore)
+			'blacklist': ['test', 'public', 'static', 'views', 'templates'],
+			// The markdown file to use on the main page of the documentations. Checks the current directory for a package.json or README.md by default
+			'readme': '',
+			'package': undefined,
+			'template': {
+				'path':'../views/template.jade'
+			}
+		};
+	}
 }
-}
 
-
-export default Dir;</code></pre>
+export default (options) =&gt; {
+	return new Option(options);
+}</code></pre>
         </div>
       </div>
     </div>

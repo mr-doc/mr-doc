@@ -72,34 +72,154 @@
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
             <li><a href="index.html">Main</a></li>
-            <li><a href="compile.js.html">compile.js</a></li>
-            <li class="active"><a href="defaults.js.html">defaults.js</a></li>
+            <li><a href="compiler.js.html">compiler.js</a></li>
             <li><a href="dir.js.html">dir.js</a></li>
             <li><a href="doxx.js.html">doxx.js</a></li>
+            <li><a href="option.js.html">option.js</a></li>
             <li><a href="parser.js.html">parser.js</a></li>
-            <li><a href="symbols.js.html">symbols.js</a></li>
+            <li class="active"><a href="symbol.js.html">symbol.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
-              <li><a href="#exports"><i class="alert alert-success"></i><span>exports</span></a>
+              <li><a href="#has"><i class="alert alert-info"></i><span>has</span></a>
               </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <section id="exports">
-            <h1>exports</h1>
+          <section id="has">
+            <h1>has</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-success radius ctx-type">property</div><span>module.exports</span>
+              <div class="label label-info radius ctx-type">method</div><span>has()</span>
             </p>
           </section>
-          <div class="description"><p>Options &amp; Default configuration options.</p> </div>
-          <pre><code class="language-javascript">module.exports = {
-		ignoredDirs: 'test,public,static,views,templates',
-		pkg: undefined,
-		target_extension: 'html'
-}</code></pre>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>val</td>
+                <td>String</td>
+                <td><p>value to check against</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Boolean</td>
+                <td><p>True if <code>tag</code> type is <code>val</code></p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>has Helper return a closure that check if a tag has a specific type</p></div>
+          <pre><code class="language-javascript">has(val) {
+  return function (tag) {
+    return tag.type === val;
+  };
+}
+compact(tags) {
+  var compacted = [];
+
+  tags.forEach(function (tag, i) {
+    if (!tag.type) {
+      if (i === 0) { return; }
+      // append to previous
+      var prevTag = compacted[compacted.length - 1];
+      if (prevTag.description) {
+        prevTag.description += &quot; &quot; + tag.string;
+      } else {
+        prevTag.string += &quot; &quot; + tag.string;
+      }
+      return;
+    }
+
+    compacted.push(tag);
+  });
+
+  return compacted;
+}
+map(symbol) {
+  symbol.tags = this.compact(symbol.tags);
+  var tags = {};
+  ['type', 'description', 'example', 'file', 'fileoverview',
+    'overview', 'param', 'require', 'jsFiddle', 'return'].forEach(tag =&gt; {
+      tags[tag.toLowerCase() + 's'] = symbol.tags.filter(this.has(tag));
+    });
+  var { types, descriptions, examples, files, fileoverviews,
+    overviews, returns, requires, jsfiddles } = tags;
+  if (symbol.tags.length &gt; 0 &amp;&amp; symbol.tags.filter(this.has('param')).length &gt; 0) {
+    symbol.hasParams = true;
+  }
+
+  if (!symbol.ctx) {
+    symbol.ctx = {};
+  }
+
+  if (symbol.ctx.type) {
+    symbol.gtype = symbol.ctx.type;
+  }
+
+  if (types.length === 1) {
+    symbol.type = types[0].types.join(' | ');
+  }
+
+  if (files.length === 1) {
+    symbol.file = files[0].type;
+    symbol.fileString = files[0].string;
+    symbol.fileHtml = files[0].html;
+  }
+
+  if (fileoverviews.length === 1) {
+    symbol.files = fileoverviews[0].type;
+    symbol.fileString = fileoverviews[0].string;
+    symbol.fileHtml = fileoverviews[0].html;
+  }
+
+  if (overviews.length === 1) {
+    symbol.files = overviews[0].type;
+    symbol.fileString = overviews[0].string;
+    symbol.fileHtml = overviews[0].html;
+  }
+
+  if (returns.length !== 0) {
+    symbol.returns = [];
+    returns.forEach(function (returned) {
+      symbol.returns.push(returned);
+    })
+  }
+
+  if (examples.length !== 0) {
+    symbol.examples = [];
+    examples.forEach(function (example) {
+      symbol.examples.push(example.string);
+    })
+  }
+
+  if (requires.length !== 0) {
+    symbol.requires = [];
+    requires.forEach(function (required) {
+      symbol.requires.push(required.string);
+    });
+  }
+  console.log(descriptions)
+  symbol.description.extra = '';
+  if (descriptions.length === 1) {
+    symbol.description.extra = &quot;&lt;p&gt;&quot; + descriptions[0].string + &quot;&lt;/p&gt;&quot;;
+  }
+
+  if (jsfiddles.length === 1) {
+    symbol.jsfiddle = jsfiddles[0].string;
+  }
+
+  return symbol;
+}
+}
+
+export default Symbol;</code></pre>
         </div>
       </div>
     </div>

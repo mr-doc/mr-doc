@@ -72,109 +72,85 @@
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
             <li><a href="index.html">Main</a></li>
-            <li class="active"><a href="compile.js.html">compile.js</a></li>
-            <li><a href="defaults.js.html">defaults.js</a></li>
+            <li><a href="compiler.js.html">compiler.js</a></li>
             <li><a href="dir.js.html">dir.js</a></li>
             <li><a href="doxx.js.html">doxx.js</a></li>
+            <li class="active"><a href="option.js.html">option.js</a></li>
             <li><a href="parser.js.html">parser.js</a></li>
-            <li><a href="symbols.js.html">symbols.js</a></li>
+            <li><a href="symbol.js.html">symbol.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
-              <li><a href="#compile"><i class="alert alert-info"></i><span>compile</span></a>
-              </li>
-              <li><a href="#code"><i class="alert alert-info"></i><span>code</span></a>
-              </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <section id="compile">
-            <h1>compile</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">function</div><span>compile()</span> -><span>String</span>
-            </p>
-          </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>locals</td>
-                <td>Object</td>
-                <td><p>local variable object</p></td>
-              </tr>
-              <tr>
-                <td>return</td>
-                <td>String</td>
-                <td><p>rendered content</p></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>Compile</p> </div>
-          <pre><code class="language-javascript">function compile(locals) {
-  return jade.compile(compile.tpl, {
-    pretty: true,
-    filename: compile.tplFileName
-  })(locals);
+          <div class="description"><p>global __dirname, process</p></div>
+          <pre><code class="language-javascript">import path from 'path';
+import _ from 'lodash';
+class Option {
+	constructor(options) {
+		this.options = this.defaults();
+		if(options)
+			this.setOptions(options)
+	}
+	setOptions(options) {
+		if (options.extension) {
+			this.options.extension = options.extension;
+		}
+
+		if (options.template) {
+			this.options.template.path = options.template;
+		}
+		
+		var files;
+		if (!options.source) {
+			console.error(new Error(&quot;Error, you must define a source&quot;));
+			return;
+		} else this.options.source = options.source;
+		
+		if(options.target){
+			this.options.target = path.resolve(process.cwd(), options.target) ||
+			process.cwd();
+		}
+		if(options.ignore){
+			this.options.blacklist = options.ignore
+			.trim().replace(' ', '').split(',');
+		}
+		
+		if(options.readme){
+			this.options.readme = options.readme;
+		}
+
+	}
+	getOptions() {
+		return this.options;
+	}
+	defaults() {
+		return {
+			// The title for the page produced
+			'title': '',
+			// The folder which should get parsed
+			'source': '',
+			// The folder which will contain the results.
+			'target': '',
+			// The target files extension.
+			'extension': 'html',
+			// The comma seperated list of directories to ignore. (alias for ignore)
+			'blacklist': ['test', 'public', 'static', 'views', 'templates'],
+			// The markdown file to use on the main page of the documentations. Checks the current directory for a package.json or README.md by default
+			'readme': '',
+			'package': undefined,
+			'template': {
+				'path':'../views/template.jade'
+			}
+		};
+	}
+}
+
+export default (options) =&gt; {
+	return new Option(options);
 }</code></pre>
-          <h5>jsFiddle</h5>
-          <p>
-            <iframe width="100%" height="300" src="http://jsfiddle.net/4L6Br/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
-          </p>
-          <section id="code">
-            <h1>code</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">method</div><span>jade.filters.code()</span> -><span>String</span>
-            </p>
-          </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>block</td>
-                <td>String</td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>return</td>
-                <td>String</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>Jade support for filter <code>:code</code></p> </div>
-          <pre><code class="language-javascript">jade.filters.code = function( block ) {
- return block.replace( /&amp;/g, '&amp;amp;'  )
-  .replace( /&lt;/g, '&amp;lt;'   )
-  .replace( /&gt;/g, '&amp;gt;'   )
-  .replace( /&quot;/g, '&amp;quot;' )
-  .replace( /#/g, '&amp;#35;'  )
-  .replace( /\\/g, '\\\\'  )
-  .replace( /\n/g, '\\n'   );
-};
-
-
-/**
- * Template used to produce the documentation
- * @type {String} template string
- */
-compile.tpl = fs.readFileSync(path.resolve(__dirname, '../views/template.jade')).toString();
-
-module.exports = compile;</code></pre>
         </div>
       </div>
     </div>

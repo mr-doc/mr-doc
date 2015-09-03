@@ -72,26 +72,48 @@
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
             <li><a href="index.html">Main</a></li>
-            <li><a href="compile.js.html">compile.js</a></li>
-            <li><a href="defaults.js.html">defaults.js</a></li>
+            <li class="active"><a href="compiler.js.html">compiler.js</a></li>
             <li><a href="dir.js.html">dir.js</a></li>
             <li><a href="doxx.js.html">doxx.js</a></li>
+            <li><a href="option.js.html">option.js</a></li>
             <li><a href="parser.js.html">parser.js</a></li>
-            <li class="active"><a href="symbols.js.html">symbols.js</a></li>
+            <li><a href="symbol.js.html">symbol.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
-              <li><a href="#structure"><i class="alert alert-info"></i><span>structure</span></a>
+              <li><a href="#Compiler"><i class="alert alert-success"></i><span>Compiler</span></a>
+              </li>
+              <li><a href="#compile"><i class="alert alert-info"></i><span>compile</span></a>
+              </li>
+              <li><a href="#setup"><i class="alert alert-info"></i><span>setup</span></a>
+              </li>
+              <li><a href="#template"><i class="alert alert-success"></i><span>template</span></a>
+              </li>
+              <li><a href="#code"><i class="alert alert-info"></i><span>code</span></a>
               </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <section id="structure">
-            <h1>structure</h1>
+          <section id="Compiler">
+            <h1>Compiler</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">function</div><span>structure()</span> -><span>Array</span>
+              <div class="label label-success radius ctx-type">class</div><span>new Compiler()</span>
+            </p>
+          </section>
+          <div class="description"><p>The class that compiles the jade template.</p></div>
+          <pre><code class="language-javascript">export default class Compiler {
+	constructor (parser) {
+		this.options = parser.options;
+		this.files = parser.files;
+		this.setup();
+	}</code></pre>
+          <section id="compile">
+            <h1>compile</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>Compiler.prototype.compile()</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -104,32 +126,88 @@
             </thead>
             <tbody>
               <tr>
-                <td>symbols</td>
-                <td>Array</td>
-                <td><p>array of symbols</p></td>
-              </tr>
-              <tr>
-                <td>file</td>
-                <td>String</td>
-                <td><p>filename</p></td>
+                <td>locals</td>
+                <td>Object</td>
+                <td><p>local variable object</p></td>
               </tr>
               <tr>
                 <td>return</td>
-                <td>Array</td>
+                <td>String</td>
+                <td><p>rendered content</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Compiles the docs.</p></div>
+          <pre><code class="language-javascript">compile (locals) {
+	var { path } = this.options.template;
+  return jade.compile(this.template, {
+    pretty: true,
+    filename: path
+  })(locals);
+}</code></pre>
+          <h5>jsFiddle</h5>
+          <p>
+            <iframe width="100%" height="300" src="http://jsfiddle.net/4L6Br/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+          </p>
+          <section id="setup">
+            <h1>setup</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>Compiler.prototype.setup()</span>
+            </p>
+          </section>
+          <div class="description"></div>
+          <pre><code class="language-javascript">setup() {
+	this.jade = jade;</code></pre>
+          <section id="template">
+            <h1>template</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>this.template</span>
+            </p>
+          </section>
+          <div class="description"><p>Template used to produce the documentation</p></div>
+          <pre><code class="language-javascript">this.template = fs.readFileSync(path.resolve(
+	__dirname, this.options.template.path)).toString();</code></pre>
+          <section id="code">
+            <h1>code</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>this.jade.filters.code()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>block</td>
+                <td>String</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>String</td>
                 <td></td>
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Return the structure of a parsed file</p> </div>
-          <pre><code class="language-javascript">function structure(symbols, file){
-  return _.compact(symbols.map(function(method){
-    if (!method.ctx || !method.ctx.name){return null;}
-    return {
-      targetFile:file,
-      name:method.ctx.name,
-      type:method.ctx.type
-    };
-  })) || [];
+          <div class="description"><p>Jade support for filter <code>:code</code></p></div>
+          <pre><code class="language-javascript">this.jade.filters.code = function(block) {
+ return block.replace( /&amp;/g, '&amp;amp;'  )
+  .replace( /&lt;/g, '&amp;lt;'   )
+  .replace( /&gt;/g, '&amp;gt;'   )
+  .replace( /&quot;/g, '&amp;quot;' )
+  .replace( /#/g, '&amp;#35;'  )
+  .replace( /\\/g, '\\\\'  )
+  .replace( /\n/g, '\\n'   );
+};
+	}
 }</code></pre>
         </div>
       </div>

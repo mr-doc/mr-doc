@@ -72,116 +72,74 @@
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
             <li><a href="index.html">Main</a></li>
-            <li><a href="compile.js.html">compile.js</a></li>
-            <li><a href="defaults.js.html">defaults.js</a></li>
+            <li><a href="compiler.js.html">compiler.js</a></li>
             <li><a href="dir.js.html">dir.js</a></li>
             <li class="active"><a href="doxx.js.html">doxx.js</a></li>
+            <li><a href="option.js.html">option.js</a></li>
             <li><a href="parser.js.html">parser.js</a></li>
-            <li><a href="symbols.js.html">symbols.js</a></li>
+            <li><a href="symbol.js.html">symbol.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
-              <li><a href="#ignoredDirs"><i class="alert alert-success"></i><span>ignoredDirs</span></a>
+              <li><a href="#Doxx"><i class="alert alert-success"></i><span>Doxx</span></a>
+              </li>
+              <li><a href="#generate"><i class="alert alert-info"></i><span>generate</span></a>
               </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <section id="ignoredDirs">
-            <h1>ignoredDirs</h1>
+          <section id="Doxx">
+            <h1>Doxx</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-success radius ctx-type">declaration</div><span>ignoredDirs</span>
+              <div class="label label-success radius ctx-type">class</div><span>new Doxx()</span>
             </p>
           </section>
-          <div class="description"><p>Options &amp; Defaults</p> </div>
-          <pre><code class="language-javascript">var ignoredDirs = defaults.ignoredDirs,
-pkg = defaults.pkg,
-target_extension = defaults.target_extension;
-
-module.exports = function(options) {
-
-	if(options.target_extension){
-		target_extension = options.target_extension;
-	}
-
-	if(options.template){
-		compile.tpl = fs.readFileSync(options.template).toString();
-		compile.tplFileName = options.template;
-	}
-
-	if (!options.source) {
-		console.error(&quot;  Error you must define a source\n&quot;);
-		return;
-	}
-
-
-	var target, ignore;
-	if (!options.target) {
-		target = process.cwd() + '/docs';
-	} else {
-		target = path.resolve(process.cwd(), options.target) || process.cwd() + '/docs';
-	}
-	ignore = options.ignore || ignoredDirs;
-
-	//Cleanup and turn into an array the ignoredDirs
-	ignore = ignore.trim().replace(' ','').split(',');
-
-	mkdirp.sync(target);
-
-	var source;
-
-	if (options.source instanceof Array) {
-		source = options.source;
-		//Handle already compiled input
-		var files = source.map(function(doc) {
-			var targetName = doc.name+'.'+target_extension;
-			if (!doc.targetName) doc.targetName = targetName;
-			doc.symbols = symbols(doc.dox, doc.targetName);
-			return doc;
-		});
-	} else {
-		//Compile files
-		//Find, cleanup and validate all potential files
-		source = path.resolve(process.cwd(), options.source);
-		var files  = dir.collectFiles(source, {ignore:ignore});
-
-		//Parse each file
-		files = files.map(function(file) {
-			var dox = parse(path.join(source, file), {});
-			var targetName = file+'.'+target_extension;
-			return {
-				name:       file.replace(/\\/g, '/'),
-				targetName: targetName.replace(/\\/g, '/'),
-				dox:        dox,
-				symbols:    symbols(dox, targetName)
-			};
-		});
-
-	}
-
+          <div class="description"></div>
+          <pre><code class="language-javascript">class Doxx extends Compiler {
+	// Initialize the compiler
+	// and pass the parser.
+	constructor(options) {
+		super(parser(options));
+	}</code></pre>
+          <section id="generate">
+            <h1>generate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>Doxx.prototype.generate()</span>
+            </p>
+          </section>
+          <div class="description"><p>Generates the documentations.</p></div>
+          <pre><code class="language-javascript">generate() {
+	console.log('generating')
 	//Compute all symboles
-	var allSymbols = files.reduce(function(m, a){
+	var allSymbols = this.files.reduce(function (m, a) {
 		m = m.concat(a.symbols || []);
 		return m;
 	}, []);
-
+	
+	var pkg;
 	//Get package.json
-	try{
+	try {
 		pkg = require(process.cwd() + '/package')
-	} catch (err) {
-	}
+	} catch (err) { }
 
-	var readme = pkg &amp;&amp; pkg.readme
-	, readMeFile = path.resolve(process.cwd(), options.readme || (pkg &amp;&amp; pkg.readmeFileName) || 'README.md')
+	var readme = pkg &amp;&amp; pkg.readme,
+		readMeFile = path.resolve(process.cwd(), this.options.readme || (pkg &amp;&amp; pkg.readmeFileName) || 'README.md')
 
-	if(!readme &amp;&amp; fs.existsSync(readMeFile)){
+	if (!readme &amp;&amp; fs.existsSync(readMeFile)) {
 		readme = fs.readFileSync(readMeFile).toString()
 	} else {
-		console.warn(new Error('No README.md file found at ' + readMeFile))
+		console.warn(new Error('No README.md file found at ' + readMeFile));
 	}
 
 	readme = readme || (pkg &amp;&amp; pkg.description)
+
+	if (!readme) {
+		console.warn(new Error('Empty README.md ' + readMeFile));
+		readme = '';
+	}
 
 	//Enable line-breaks ala github markdown
 	marked.setOptions({
@@ -190,31 +148,31 @@ module.exports = function(options) {
 	})
 
 	//Get readme data
-	files.unshift({
-		name:&quot;Main&quot;,
+	this.files.unshift({
+		name: &quot;Main&quot;,
 		targetName: &quot;index.html&quot;,
 		readme: marked(readme),
-		dox:[],
-		symbols:[]
+		dox: [],
+		symbols: []
 	});
 
 	//Make sure the folder structure in target mirrors source
 	var folders = [];
 
-	files.forEach(function(file){
+	this.files.forEach(file =&gt; {
 		var folder = file.targetName.substr(0, file.targetName.lastIndexOf(path.sep));
 
 		if ((folder !== '') &amp;&amp; (folders.indexOf(folder) === -1)) {
 			folders.push(folder);
-			mkdirp.sync(target + '/' + folder);
+			mkdirp.sync(this.options.target + '/' + folder);
 		}
 	});
 
 	//Render and write each file
-	files.forEach(function(file){
+	this.files.forEach(file =&gt; {
 
 		// Set each files relName in relation to where this file is in the directory tree
-		files.forEach(function(f){
+		this.files.forEach(function (f) {
 
 			// Count how deep the current file is in relation to base
 			var count = file.name.split('/');
@@ -228,26 +186,32 @@ module.exports = function(options) {
 				f.relName = '../' + f.relName;
 				count--;
 			}
-
 		});
 
-		var title = options.title;
+		var title = this.options.title;
 
 		if (!title) {
 			title = pkg &amp;&amp; pkg.name || 'Title Not Set'
 		}
 
 		var compileOptions = _.extend({}, file, {
-			title:        title,
-			allSymbols:   allSymbols,
-			files:        files,
-			currentName:  file.name
+			title: title,
+			allSymbols: allSymbols,
+			files: this.files,
+			currentName: file.name
 		});
 
-		var compiled = compile(compileOptions);
-		fs.writeFileSync(path.join(target, file.targetName), compiled);
+		var compiled = this.compile(compileOptions);
+		mkdirp(this.options.target, err =&gt;{
+			if (err) return;
+			else 
+				fs.writeFileSync(path.join(this.options.target, file.targetName), compiled)
+		});
 	});
-
+}
+}
+export default function (options) {
+return new Doxx(options);
 }</code></pre>
         </div>
       </div>

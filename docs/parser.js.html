@@ -72,32 +72,70 @@
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
             <li><a href="index.html">Main</a></li>
-            <li><a href="compile.js.html">compile.js</a></li>
-            <li><a href="defaults.js.html">defaults.js</a></li>
+            <li><a href="compiler.js.html">compiler.js</a></li>
             <li><a href="dir.js.html">dir.js</a></li>
             <li><a href="doxx.js.html">doxx.js</a></li>
+            <li><a href="option.js.html">option.js</a></li>
             <li class="active"><a href="parser.js.html">parser.js</a></li>
-            <li><a href="symbols.js.html">symbols.js</a></li>
+            <li><a href="symbol.js.html">symbol.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#parse"><i class="alert alert-info"></i><span>parse</span></a>
+              </li>
               <li><a href="#shouldPass"><i class="alert alert-info"></i><span>shouldPass</span></a>
               </li>
-              <li><a href="#has"><i class="alert alert-info"></i><span>has</span></a>
-              </li>
-              <li><a href="#_compact"><i class="alert alert-info"></i><span>_compact</span></a>
-              </li>
-              <li><a href="#parse"><i class="alert alert-info"></i><span>parse</span></a>
+              <li><a href="#structure"><i class="alert alert-info"></i><span>structure</span></a>
               </li>
             </ul>
           </div>
         </div>
         <div class="span9">
+          <section id="parse">
+            <h1>parse</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>parse()</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>filepath</td>
+                <td>string</td>
+                <td><p>The filepath to the source</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>object</td>
+                <td><p>Returns a JSON representation of the tags as an array</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"></div>
+          <pre><code class="language-javascript">parse(filepath) {
+	var json = null;
+	try {
+		json = dox.parseComments(fs.readFileSync(filepath).toString(), { raw: false });
+	} catch (e) {
+		console.error(&quot;doxx:&quot;, e);
+		return [];
+	}
+
+	return json.filter(this.shouldPass).map(this.map.bind(this));
+}</code></pre>
           <section id="shouldPass">
             <h1>shouldPass</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">function</div><span>shouldPass()</span> -><span>Boolean</span>
+              <div class="label label-info radius ctx-type">method</div><span>shouldPass()</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -121,21 +159,21 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Test if a symbol should be ignored or not</p> </div>
-          <pre><code class="language-javascript">function shouldPass(symbol){
-  if(symbol.isPrivate){return false;}
-  if(symbol.ignore){return false;}
+          <div class="description"><p>Test if a symbol should be ignored or not</p></div>
+          <pre><code class="language-javascript">shouldPass(symbol) {
+	if (symbol.isPrivate) { return false; }
+	if (symbol.ignore) { return false; }
 
-  // Only for coffeescript
-  return symbol.tags.filter(function(tag){
-    return tag.type === &quot;private&quot; || tag.type === &quot;ignore&quot;;
-  }).length === 0;
+	// Only for coffeescript
+	return symbol.tags.filter(function (tag) {
+		return tag.type === &quot;private&quot; || tag.type === &quot;ignore&quot;;
+	}).length === 0;
 }</code></pre>
-          <section id="has">
-            <h1>has</h1>
+          <section id="structure">
+            <h1>structure</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">function</div><span>has()</span> -><span>Boolean</span>
+              <div class="label label-info radius ctx-type">method</div><span>structure()</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -148,121 +186,37 @@
             </thead>
             <tbody>
               <tr>
-                <td>val</td>
+                <td>symbols</td>
+                <td>Array</td>
+                <td><p>array of symbols</p></td>
+              </tr>
+              <tr>
+                <td>file</td>
                 <td>String</td>
-                <td><p>value to check against</p></td>
-              </tr>
-              <tr>
-                <td>return</td>
-                <td>Boolean</td>
-                <td><p>True if <code>tag</code> type is <code>val</code></p></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>has Helper return a closure that check if a tag has a specific type</p> </div>
-          <pre><code class="language-javascript">function has(val){
-  return function(tag){
-    return tag.type === val;
-  };
-}
-
-var hasParams      = has('param');
-var isReturn       = has('return');
-var isRequires     = has('requires');
-var hasDescription = has('description');
-var hasType        = has('type');
-var hasJSFiddle    = has('jsFiddle');</code></pre>
-          <section id="_compact">
-            <h1>_compact</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">function</div><span>_compact()</span> -><span>Array</span>
-            </p>
-          </section>
-          <div class="description"><p>Compact multi-line expression</p> </div>
-          <pre><code class="language-javascript">function _compact(tags){
-  // [{&quot;type&quot;:&quot;description&quot;,&quot;string&quot;:&quot;Note: if `addClass` is defined at the step level.&quot;},
-  //  {&quot;type&quot;:&quot;&quot;,&quot;string&quot;:&quot;The two defined `addClass` will be taken into account in the popover&quot;},
-  //  {&quot;type&quot;:&quot;type&quot;,&quot;types&quot;:[&quot;String&quot;]}]
-
-  var compacted = [];
-
-  tags.forEach(function(tag, i){
-    if(!tag.type){
-      if(i === 0){return;}
-      // append to previous
-      var prevTag = compacted[compacted.length-1];
-      if (prevTag.description) {
-        prevTag.description += &quot; &quot; + tag.string;
-      } else {
-        prevTag.string += &quot; &quot; + tag.string;
-      }
-      return;
-    }
-
-    compacted.push(tag);
-  });
-
-  return compacted;
-}</code></pre>
-          <section id="parse">
-            <h1>parse</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">function</div><span>parse()</span> -><span>Array</span>
-            </p>
-          </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>filepath</td>
-                <td>String</td>
-                <td><p>file path of the file to parse</p></td>
+                <td><p>filename</p></td>
               </tr>
               <tr>
                 <td>return</td>
                 <td>Array</td>
-                <td><p>array of symbols</p></td>
+                <td></td>
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Parse a file and returns a generic format</p> </div>
-          <pre><code class="language-javascript">function parse(filepath){
-  var json = null;
+          <div class="description"><p>Return the structure of a parsed file</p></div>
+          <pre><code class="language-javascript">structure(symbols, file) {
+	return _.compact(symbols.map(function (method) {
+		if (!method.ctx || !method.ctx.name) { return null; }
+		return {
+			targetFile: file,
+			name: method.ctx.name,
+			type: method.ctx.type
+		};
+	})) || [];
+}
+}
 
-  try{
-    json = dox.parseComments(fs.readFileSync(filepath).toString(), {raw: false});
-  } catch(e) {
-    console.error(&quot;doxx:&quot;, e);
-    return [];
-  }
-
-  // json now contains an array of tags
-  // {
-  //  tags:[]
-  //  description:{
-  //    full:&quot;&quot;
-  //    summary:&quot;&quot;
-  //    body:&quot;&quot;
-  //  }
-  //  ignore:false
-  //  isPrivate:false
-  //  ctx:{
-  //    type:&quot;declaration&quot;
-  //    name:&quot;&quot;
-  //    value:[]
-  //    string:&quot;&quot;
-  //  }
-  // }
-
-  return json.filter(shouldPass).map(_mapSymbol);
+export default (options) =&gt;{
+return new Parser(options);
 }</code></pre>
         </div>
       </div>
