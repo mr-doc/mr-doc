@@ -214,7 +214,7 @@
         </div>
         <div class="span9">
           <section id="Main"><h1>Doxx <a href="https://travis-ci.org/FGRibreau/doxx"><img src="https://travis-ci.org/FGRibreau/doxx.png" alt="Build Status"></a></h1>
-<p>Use <a href="https://github.com/visionmedia/dox">dox</a> to automatically generate beautiful html documentation. <strong>Doxx is a total refactoring of <a href="https://github.com/punkave/dox-foundation/">dox-foundation</a></strong>.</p><p>Outputted HTML is by default based on templates and css from <a href="twitter.github.com/bootstrap/">Twitter Bootstrap</a> and syntax highlighting is done by <a href="http://prismjs.com/">Prism.js</a>.</p><p>Doxx was tested with <strong>JavaScript</strong> as well as generated JavaScript from <strong>CoffeeScript</strong>.</p><h2>Demo</h2>
+<p>Use <a href="https://github.com/visionmedia/dox">dox</a> to automatically generate beautiful html documentation. <strong>Doxx is a total refactoring of <a href="https://github.com/punkave/dox-foundation/">dox-foundation</a></strong>.</p><p>Outputted HTML is by default based on templates and css from <a href="twitter.github.com/bootstrap/">Twitter Bootstrap</a> and syntax highlighting is done by <a href="http://prismjs.com/">Prism.js</a>.</p><p>Doxx was written in ES6, tranformed to ES5 with <a href="https://babeljs.io/">babel</a> and tested with <a href="https://github.com/mochajs/mocha">mocha</a>.</p><h2>Demo</h2>
 <ul>
 <li><a href="http://fgribreau.github.com/doxx/docs/compile.js.html">doxx/docs/compile.js</a></li>
 <li><a href="http://fgribreau.github.com/doxx/docs/dir.js.html">doxx/docs/dir.js</a></li>
@@ -260,8 +260,8 @@ collectFiles = (source, options, callback) -&gt;
     -s, --source &lt;source&gt;                      The folder which should get parsed
     -i, --ignore &lt;directories&gt;                 Comma seperated list of directories to ignore. Default: test,public,static,views,templates
     -T, --target &lt;target&gt;                      The folder which will contain the results. Default: &lt;process.cwd()&gt;/docs
-    -e, --target_extension &lt;target_extension&gt;  Target files extension. Default: html
-    --template &lt;jade template&gt;                 The jade template file to use
+    -e, --extension &lt;extension&gt;  Target files extension. Default: html
+    -j, --template &lt;jade template&gt;                 The jade template file to use
 
   Examples:
 
@@ -273,9 +273,10 @@ collectFiles = (source, options, callback) -&gt;
 </code></pre><h2>Related</h2>
 <ul>
 <li><a href="https://github.com/evertton/grunt-doxx">grunt-doxx</a> - Doxx grunt plugin automatically generates the documentation for your project.</li>
+<li><a href="https://github.com/filipovskii/gulp-doxx">gulp-doxx</a> - Doxx documentation generator for gulp</li>
 </ul>
 <h2>Contributing</h2>
-<p>In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using <a href="https://github.com/cowboy/grunt">grunt</a>.</p><h2><a href="/CHANGELOG.md">Changelog</a></h2>
+<p>In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using <a href="https://github.com/gulpjs/gulp">gulp</a> and <a href="https://github.com/mochajs/mocha">mocha</a>.</p><h2><a href="/CHANGELOG.md">Changelog</a></h2>
 <h2>Donate</h2>
 <ul>
 <li><a href="https://coinbase.com/checkouts/fc3041b9d8116e0b98e7d243c4727a30">Donate Bitcoins</a></li>

@@ -217,8 +217,6 @@
               </li>
               <li><a href="#shouldPass"><i class="alert alert-info"></i><span>shouldPass</span></a>
               </li>
-              <li><a href="#structure"><i class="alert alert-info"></i><span>structure</span></a>
-              </li>
             </ul>
           </div>
         </div>
@@ -255,7 +253,7 @@
       this.files = source.map(doc =&gt; {
         var targetName = doc.name + '.' + extension;
         if (!doc.targetName) doc.targetName = targetName;
-        doc.symbols = this.structure(doc.dox, doc.targetName);
+        doc.symbols = Symbol.structure(doc.dox, doc.targetName);
         return doc;
       });
     } else {
@@ -270,7 +268,7 @@
           name: file.replace(/\\/g, '/'),
           targetName: targetName.replace(/\\/g, '/'),
           dox: dox,
-          symbols: this.structure(dox, targetName)
+          symbols: Symbol.structure(dox, targetName)
         };
       });
     }
@@ -358,53 +356,7 @@
     return symbol.tags.filter(function (tag) {
       return tag.type === 'private' || tag.type === 'ignore';
     }).length === 0;
-  }</code></pre>
-          <section id="structure">
-            <h1>structure</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">method</div><span>Parser.prototype.structure()</span><span>&nbsp;</span>
-            </p>
-          </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>symbols</td>
-                <td>Array</td>
-                <td><p>array of symbols</p></td>
-              </tr>
-              <tr>
-                <td>file</td>
-                <td>String</td>
-                <td><p>filename</p></td>
-              </tr>
-              <tr>
-                <td>return</td>
-                <td>Array</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>Returns the structure of a parsed file</p></div>
-          <pre><code class="language-javascript">structure(symbols, file) {
-  return _.compact(symbols.map(function (method) {
-    if (!method.ctx || !method.ctx.name) {
-      return null;
-    }
-    return {
-      targetFile: file,
-      name: method.ctx.name,
-      type: method.ctx.type
-    };
-  })) || [];
-}
+  }
 }
 
 export default (options) =&gt; {
