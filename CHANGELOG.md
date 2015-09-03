@@ -1,5 +1,29 @@
 # Change Log
 
+## [v2.0.0](https://github.com/fgribreau/doxx/tree/v2.0.0) (2015-09-03)
+
+[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.5.0...v2.0.0)
+
+**Closed issues:**
+
+- Using @description tag doubles the description [\#70](https://github.com/FGRibreau/doxx/issues/70)
+
+- TypeLexerSyntaxError [\#69](https://github.com/FGRibreau/doxx/issues/69)
+
+- Get exception when running doxx --source lib --target docs [\#64](https://github.com/FGRibreau/doxx/issues/64)
+
+**Merged pull requests:**
+
+- Update Doxx [\#71](https://github.com/FGRibreau/doxx/pull/71) ([iwatakeshi](https://github.com/iwatakeshi))
+
+## [v1.5.0](https://github.com/fgribreau/doxx/tree/v1.5.0) (2015-07-21)
+
+[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.4.0...v1.5.0)
+
+**Merged pull requests:**
+
+- add a space after commas for multiple values [\#68](https://github.com/FGRibreau/doxx/pull/68) ([ForestMist](https://github.com/ForestMist))
+
 ## [v1.4.0](https://github.com/fgribreau/doxx/tree/v1.4.0) (2015-05-30)
 
 [Full Changelog](https://github.com/fgribreau/doxx/compare/v1.3.0...v1.4.0)
