@@ -3,15 +3,14 @@
 
 var program = require('commander'),
     version = require('../package').version,
-    doxx = require('../lib/doxx'),
-    defaults = require('../lib/defaults');
+    doxx = require('../src/doxx'),
+    option = require('../src/option'),
+    _ = require('lodash');
 
 /**
  * Options & Defaults
  */
-var ignoredDirs = defaults.ignoredDirs,
-pkg = defaults.pkg,
-target_extension = defaults.tartget_extension;
+var defaults = option().getDefaults();
 
 program
   .version(version)
@@ -19,10 +18,10 @@ program
   .option('-d, --debug', 'output parsed comments for debugging')
   .option('-t, --title <string>', 'The title for the page produced')
   .option('-s, --source <source>', 'The folder which should get parsed')
-  .option('-i, --ignore <directories>', 'Comma seperated list of directories to ignore. Default: ' + ignoredDirs)
-  .option('-T, --target <target>', 'The folder which will contain the results. Default: <process.cwd()>/docs')
-  .option('-e, --target_extension <target_extension>', 'Target files extension. Default: ' + target_extension)
-  .option('--template <jade template>', 'The jade template file to use')
+  .option('-i, --ignore <directories>', 'The comma seperated list of directories to ignore. Default: ' + defaults.blacklist.toString())
+  .option('-T, --target <target>', 'The folder which will contain the results. Default: <CWD>/docs')
+  .option('-e, --extension <target extension>', 'The target files extension. Default: ' + defaults.extension)
+  .option('-j','--template <jade template>', 'The jade template file to use')
   .option('-R --readme <file>', 'The markdown file to use on the main page of the documentations. Checks the current directory for a package.json or README.md by default')
 
 function showHelp(){
@@ -39,4 +38,7 @@ program.on('--help', showHelp);
 // parse argv
 program.parse(process.argv);
 
-doxx(program);
+var options = option(program).getOptions();
+
+if(!_.isEmpty(options.source))
+doxx(options).generate();

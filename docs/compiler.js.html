@@ -200,153 +200,181 @@
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
             <li><a href="index.html">Main</a></li>
-            <li><a href="compiler.js.html">compiler.js</a></li>
+            <li class="active"><a href="compiler.js.html">compiler.js</a></li>
             <li><a href="dir.js.html">dir.js</a></li>
-            <li class="active"><a href="doxx.js.html">doxx.js</a></li>
+            <li><a href="doxx.js.html">doxx.js</a></li>
             <li><a href="option.js.html">option.js</a></li>
             <li><a href="parser.js.html">parser.js</a></li>
             <li><a href="symbol.js.html">symbol.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
-              <li><a href="#Doxx"><i class="alert alert-success"></i><span>Doxx</span></a>
+              <li><a href="#Compiler"><i class="alert alert-success"></i><span>Compiler</span></a>
               </li>
-              <li><a href="#generate"><i class="alert alert-info"></i><span>generate</span></a>
+              <li><a href="#options"><i class="alert alert-success"></i><span>options</span></a>
+              </li>
+              <li><a href="#files"><i class="alert alert-success"></i><span>files</span></a>
+              </li>
+              <li><a href="#compile"><i class="alert alert-info"></i><span>compile</span></a>
+              </li>
+              <li><a href="#setup"><i class="alert alert-info"></i><span>setup</span></a>
+              </li>
+              <li><a href="#jade"><i class="alert alert-success"></i><span>jade</span></a>
+              </li>
+              <li><a href="#template"><i class="alert alert-success"></i><span>template</span></a>
+              </li>
+              <li><a href="#code"><i class="alert alert-info"></i><span>code</span></a>
               </li>
             </ul>
           </div>
         </div>
         <div class="span9">
-          <section id="Doxx">
-            <h1>Doxx</h1>
+          <section id="Compiler">
+            <h1>Compiler</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-success radius ctx-type">class</div><span>new Doxx()</span><span>&nbsp;</span><span class="label label-default">extends </span><span>&nbsp;</span><span>Compiler</span>
+              <div class="label label-success radius ctx-type">class</div><span>new Compiler()</span><span>&nbsp;</span>
             </p>
           </section>
-          <div class="description"><p>The main class that creates beautiful documents.</p></div>
-          <pre><code class="language-javascript">class Doxx extends Compiler {
-  // Initialize the compiler
-  // and pass the parser.
-  constructor(options) {
-      super(parser(options));
+          <div class="description"><p>The class that compiles the Jade template.</p></div>
+          <pre><code class="language-javascript">class Compiler {
+  constructor(parser) {</code></pre>
+          <section id="options">
+            <h1>options</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>this.options</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Gets the options from the parser.</p></div>
+          <pre><code class="language-javascript">this.options = parser.options;</code></pre>
+          <section id="files">
+            <h1>files</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>this.files</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Gets the parsed files from the parser</p></div>
+          <pre><code class="language-javascript">this.files = parser.files;
+// Set up the compiler
+this.setup();
     }</code></pre>
-          <section id="generate">
-            <h1>generate</h1>
+          <section id="compile">
+            <h1>compile</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>Doxx.prototype.generate()</span><span>&nbsp;</span>
+              <div class="label label-info radius ctx-type">method</div><span>compile()</span><span>&nbsp;</span>
             </p>
           </section>
-          <div class="description"><p>Generates the documentations.</p></div>
-          <pre><code class="language-javascript">generate() {
-  // Compute all symboles
-  var allSymbols = this.files.reduce(function (m, a) {
-    m = m.concat(a.symbols || []);
-    return m;
-  }, []);
-
-  var pkg;
-  // Get package.json
-  try {
-    pkg = require(process.cwd() + '/package');
-  } catch (err) {}
-
-  var readme = pkg &amp;&amp; pkg.readme,
-    readMeFile = path.resolve(process.cwd(), this.options.readme ||
-      (pkg &amp;&amp; pkg.readmeFileName) || 'README.md');
-
-  if (!readme &amp;&amp; fs.existsSync(readMeFile)) {
-    readme = fs.readFileSync(readMeFile).toString();
-  } else {
-    console.warn(new Error('No README.md file found at ' + readMeFile));
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>locals</td>
+                <td>Object</td>
+                <td><p>local variable object</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>String</td>
+                <td><p>rendered content</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Compiles the docs.</p></div>
+          <pre><code class="language-javascript">compile(locals) {
+    // Get the path (alias for filename)
+    var {
+      path
+    } = this.options.template;
+    // Return the compiled template
+    return this.jade.compile(this.template, {
+      pretty: true,
+      filename: path
+    })(locals);
+  }</code></pre>
+          <h5>jsFiddle</h5>
+          <p>
+            <iframe width="100%" height="300" src="http://jsfiddle.net/4L6Br/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+          </p>
+          <section id="setup">
+            <h1>setup</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>setup()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Sets up the compiler by initializing jade,<br />the template, and the filters for jade.</p></div>
+          <pre><code class="language-javascript">setup() {</code></pre>
+          <section id="jade">
+            <h1>jade</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>this.jade</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Jade used to compile the documentation</p></div>
+          <pre><code class="language-javascript">this.jade = jade;</code></pre>
+          <section id="template">
+            <h1>template</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>this.template</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Template used to produce the documentation</p></div>
+          <pre><code class="language-javascript">this.template = fs.readFileSync(path.resolve(
+  __dirname, this.options.template.path)).toString();</code></pre>
+          <section id="code">
+            <h1>code</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>this.jade.filters.code()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>block</td>
+                <td>String</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>String</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Jade support for filter <code>:code</code></p></div>
+          <pre><code class="language-javascript">this.jade.filters.code = function (block) {
+  return block.replace(/&amp;/g, '&amp;amp;')
+    .replace(/&lt;/g, '&amp;lt;')
+    .replace(/&gt;/g, '&amp;gt;')
+    .replace(/&quot;/g, '&amp;quot;')
+    .replace(/#/g, '&amp;#35;')
+    .replace(/\\/g, '\\\\')
+    .replace(/\n/g, '\\n');
+};
   }
-
-  readme = readme || (pkg &amp;&amp; pkg.description);
-
-  if (!readme) {
-    console.warn(new Error('Empty README.md ' + readMeFile));
-    readme = '';
-  }
-
-  // Enable line-breaks ala github markdown
-  marked.setOptions({
-    breaks: true,
-    smartLists: true
-  });
-
-  // Get readme data
-  this.files.unshift({
-    name: 'Main',
-    targetName: 'index.html',
-    readme: marked(readme),
-    dox: [],
-    symbols: []
-  });
-
-  // Make sure the folder structure in target mirrors source
-  var folders = [];
-
-  this.files.forEach(file =&gt; {
-    var folder = file.targetName
-      .substr(0, file.targetName.lastIndexOf(path.sep));
-
-    if ((folder !== '') &amp;&amp; (folders.indexOf(folder) === -1)) {
-      folders.push(folder);
-      mkdirp.sync(this.options.target + '/' + folder);
-    }
-  });
-
-  // Render and write each file
-  this.files.forEach(file =&gt; {
-
-    // Set each files relName in relation 
-    // to where this file is in the directory tree
-    this.files.forEach(function (f) {
-
-      // Count how deep the current file is in relation to base
-      var count = file.name.split('/');
-      count = count === null ? 0 : count.length - 1;
-
-      // relName is equal to targetName at the base dir
-      f.relName = f.targetName;
-
-      // For each directory in depth of current file 
-      // add a ../ to the relative filename of this link
-      while (count &gt; 0) {
-        f.relName = '../' + f.relName;
-        count--;
-      }
-    });
-
-    var title = this.options.title;
-
-    if (!title) {
-      title = pkg &amp;&amp; pkg.name || 'Title Not Set';
-    }
-
-    var compileOptions = _.extend({}, file, {
-      title: title,
-      allSymbols: allSymbols,
-      files: this.files,
-      currentName: file.name
-    });
-
-    var compiled = this.compile(compileOptions);
-    mkdirp(this.options.target, err =&gt; {
-      if (err) return;
-      else
-        fs.writeFileSync(path.join(
-            this.options.target, file.targetName),
-          compiled);
-    });
-  });
 }
-}
-export default function (options) {
-'use strict';
-return new Doxx(options);
-}</code></pre>
+
+export
+default Compiler;</code></pre>
         </div>
       </div>
     </div>

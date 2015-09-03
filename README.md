@@ -4,7 +4,7 @@ Use [dox](https://github.com/visionmedia/dox) to automatically generate beautifu
 
 Outputted HTML is by default based on templates and css from [Twitter Bootstrap](twitter.github.com/bootstrap/) and syntax highlighting is done by [Prism.js](http://prismjs.com/).
 
-Doxx was tested with **JavaScript** as well as generated JavaScript from **CoffeeScript**.
+Doxx was written in ES6, tranformed to ES5 with [babel](https://babeljs.io/) and tested with [mocha](https://github.com/mochajs/mocha).
 
 ## Demo
 * [doxx/docs/compile.js](http://fgribreau.github.com/doxx/docs/compile.js.html)
@@ -66,8 +66,8 @@ $ doxx --help
     -s, --source <source>                      The folder which should get parsed
     -i, --ignore <directories>                 Comma seperated list of directories to ignore. Default: test,public,static,views,templates
     -T, --target <target>                      The folder which will contain the results. Default: <process.cwd()>/docs
-    -e, --target_extension <target_extension>  Target files extension. Default: html
-    --template <jade template>                 The jade template file to use
+    -e, --extension <extension>  Target files extension. Default: html
+    -j, --template <jade template>                 The jade template file to use
 
   Examples:
 
@@ -81,9 +81,10 @@ $ doxx --help
 ## Related
 
 * [grunt-doxx](https://github.com/evertton/grunt-doxx) - Doxx grunt plugin automatically generates the documentation for your project.
+* [gulp-doxx](https://github.com/filipovskii/gulp-doxx) - Doxx documentation generator for gulp
 
 ## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [grunt](https://github.com/cowboy/grunt).
+In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [gulp](https://github.com/gulpjs/gulp) and [mocha](https://github.com/mochajs/mocha).
 
 ## [Changelog](/CHANGELOG.md)
 
