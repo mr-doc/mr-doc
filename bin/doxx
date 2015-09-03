@@ -1,10 +1,10 @@
-#!/usr/bin/env babel-node
+#!/usr/bin/env node
 "use strict";
 
 var program = require('commander'),
     version = require('../package').version,
-    doxx = require('../lib/doxx'),
-    option = require('../lib/option'),
+    doxx = require('../src/doxx'),
+    option = require('../src/option'),
     _ = require('lodash');
 
 /**

@@ -233,11 +233,11 @@
           </section>
           <div class="description"><p>The main class that creates beautiful documents.</p></div>
           <pre><code class="language-javascript">class Doxx extends Compiler {
-	// Initialize the compiler
-	// and pass the parser.
-	constructor(options) {
-		super(parser(options));
-	}</code></pre>
+  // Initialize the compiler
+  // and pass the parser.
+  constructor(options) {
+      super(parser(options));
+    }</code></pre>
           <section id="generate">
             <h1>generate</h1>
             <h5 class="subheader"></h5>
@@ -247,105 +247,111 @@
           </section>
           <div class="description"><p>Generates the documentations.</p></div>
           <pre><code class="language-javascript">generate() {
-	console.log('generating')
-	//Compute all symboles
-	var allSymbols = this.files.reduce(function (m, a) {
-		m = m.concat(a.symbols || []);
-		return m;
-	}, []);
-	
-	var pkg;
-	//Get package.json
-	try {
-		pkg = require(process.cwd() + '/package')
-	} catch (err) { }
+  //Compute all symboles
+  var allSymbols = this.files.reduce(function (m, a) {
+    m = m.concat(a.symbols || []);
+    return m;
+  }, []);
 
-	var readme = pkg &amp;&amp; pkg.readme,
-		readMeFile = path.resolve(process.cwd(), this.options.readme || (pkg &amp;&amp; pkg.readmeFileName) || 'README.md')
+  var pkg;
+  //Get package.json
+  try {
+    pkg = require(process.cwd() + '/package');
+  } catch (err) {}
 
-	if (!readme &amp;&amp; fs.existsSync(readMeFile)) {
-		readme = fs.readFileSync(readMeFile).toString()
-	} else {
-		console.warn(new Error('No README.md file found at ' + readMeFile));
-	}
+  var readme = pkg &amp;&amp; pkg.readme,
+    readMeFile = path.resolve(process.cwd(), this.options.readme ||
+      (pkg &amp;&amp; pkg.readmeFileName) || 'README.md');
 
-	readme = readme || (pkg &amp;&amp; pkg.description)
+  if (!readme &amp;&amp; fs.existsSync(readMeFile)) {
+    readme = fs.readFileSync(readMeFile).toString();
+  } else {
+    console.warn(new Error('No README.md file found at ' + readMeFile));
+  }
 
-	if (!readme) {
-		console.warn(new Error('Empty README.md ' + readMeFile));
-		readme = '';
-	}
+  readme = readme || (pkg &amp;&amp; pkg.description);
 
-	//Enable line-breaks ala github markdown
-	marked.setOptions({
-		breaks: true,
-		smartLists: true
-	})
+  if (!readme) {
+    console.warn(new Error('Empty README.md ' + readMeFile));
+    readme = '';
+  }
 
-	//Get readme data
-	this.files.unshift({
-		name: &quot;Main&quot;,
-		targetName: &quot;index.html&quot;,
-		readme: marked(readme),
-		dox: [],
-		symbols: []
-	});
+  //Enable line-breaks ala github markdown
+  marked.setOptions({
+    breaks: true,
+    smartLists: true
+  });
 
-	//Make sure the folder structure in target mirrors source
-	var folders = [];
+  //Get readme data
+  this.files.unshift({
+    name: 'Main',
+    targetName: 'index.html',
+    readme: marked(readme),
+    dox: [],
+    symbols: []
+  });
 
-	this.files.forEach(file =&gt; {
-		var folder = file.targetName.substr(0, file.targetName.lastIndexOf(path.sep));
+  //Make sure the folder structure in target mirrors source
+  var folders = [];
 
-		if ((folder !== '') &amp;&amp; (folders.indexOf(folder) === -1)) {
-			folders.push(folder);
-			mkdirp.sync(this.options.target + '/' + folder);
-		}
-	});
+  this.files.forEach(file =&gt; {
+    var folder = file.targetName
+      .substr(0, file.targetName.lastIndexOf(path.sep));
 
-	//Render and write each file
-	this.files.forEach(file =&gt; {
+    if ((folder !== '') &amp;&amp; (folders.indexOf(folder) === -1)) {
+      folders.push(folder);
+      mkdirp.sync(this.options.target + '/' + folder);
+    }
+  });
 
-		// Set each files relName in relation to where this file is in the directory tree
-		this.files.forEach(function (f) {
+  //Render and write each file
+  this.files.forEach(file =&gt; {
 
-			// Count how deep the current file is in relation to base
-			var count = file.name.split('/');
-			count = count === null ? 0 : count.length - 1;
+    // Set each files relName in relation 
+    // to where this file is in the directory tree
+    this.files.forEach(function (f) {
 
-			// relName is equal to targetName at the base dir
-			f.relName = f.targetName;
+      // Count how deep the current file is in relation to base
+      var count = file.name.split('/');
+      count = count === null ? 0 : count.length - 1;
 
-			// For each directory in depth of current file add a ../ to the relative filename of this link
-			while (count &gt; 0) {
-				f.relName = '../' + f.relName;
-				count--;
-			}
-		});
+      // relName is equal to targetName at the base dir
+      f.relName = f.targetName;
 
-		var title = this.options.title;
+      // For each directory in depth of current file 
+      // add a ../ to the relative filename of this link
+      while (count &gt; 0) {
+        f.relName = '../' + f.relName;
+        count--;
+      }
+    });
 
-		if (!title) {
-			title = pkg &amp;&amp; pkg.name || 'Title Not Set'
-		}
+    var title = this.options.title;
 
-		var compileOptions = _.extend({}, file, {
-			title: title,
-			allSymbols: allSymbols,
-			files: this.files,
-			currentName: file.name
-		});
+    if (!title) {
+      title = pkg &amp;&amp; pkg.name || 'Title Not Set';
+    }
 
-		var compiled = this.compile(compileOptions);
-		mkdirp(this.options.target, err =&gt;{
-			if (err) return;
-			else 
-				fs.writeFileSync(path.join(this.options.target, file.targetName), compiled)
-		});
-	});
+    var compileOptions = _.extend({}, file, {
+      title: title,
+      allSymbols: allSymbols,
+      files: this.files,
+      currentName: file.name
+    });
+
+    var compiled = this.compile(compileOptions);
+    mkdirp(this.options.target, err =&gt; {
+      if (err) return;
+      else
+        fs.writeFileSync(path.join(
+            this.options.target, file.targetName),
+          compiled);
+    });
+  });
 }
 }
 export default function (options) {
+'use strict';
 return new Doxx(options);
 }</code></pre>
         </div>

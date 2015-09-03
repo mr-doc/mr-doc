@@ -220,6 +220,8 @@
               </li>
               <li><a href="#compact"><i class="alert alert-info"></i><span>compact</span></a>
               </li>
+              <li><a href="#compacted"><i class="alert alert-success"></i><span>compacted</span></a>
+              </li>
             </ul>
           </div>
         </div>
@@ -249,10 +251,10 @@
           </table>
           <div class="description"><p>Checks if a tag has a specific type</p></div>
           <pre><code class="language-javascript">static has(val) {
-  return function (tag) {
-    return tag.type === val;
-  };
-}</code></pre>
+    return function (tag) {
+      return tag.type === val;
+    };
+  }</code></pre>
           <section id="compact">
             <h1>compact</h1>
             <h5 class="subheader"></h5>
@@ -261,31 +263,37 @@
             </p>
           </section>
           <div class="description"><p>Compacts multi-line expression</p></div>
-          <pre><code class="language-javascript">static compact(tags) {
-  
-  // [{&quot;type&quot;:&quot;description&quot;,&quot;string&quot;:&quot;Note: if `addClass` is defined at the step level.&quot;},
-  //  {&quot;type&quot;:&quot;&quot;,&quot;string&quot;:&quot;The two defined `addClass` will be taken into account in the popover&quot;},
-  //  {&quot;type&quot;:&quot;type&quot;,&quot;types&quot;:[&quot;String&quot;]}]
-  var compacted = [];
+          <pre><code class="language-javascript">static compact(tags) {</code></pre>
+          <section id="compacted">
+            <h1>compacted</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">declaration</div><span>compacted</span>
+            </p>
+          </section>
+          <div class="description"><p>[{&quot;type&quot;:&quot;description&quot;,<br />    &quot;string&quot;:&quot;Note: if <code>addClass</code> is defined at the step level.&quot;},<br />     {&quot;type&quot;:&quot;&quot;,<br />     &quot;string&quot;: &quot;The two defined <code>addClass</code><br />     will be taken into account in the popover&quot;},<br />     {&quot;type&quot;:&quot;type&quot;,&quot;types&quot;:[&quot;String&quot;]}]</p></div>
+          <pre><code class="language-javascript">var compacted = [];
 
-  tags.forEach(function (tag, i) {
-    if (!tag.type) {
-      if (i === 0) { return; }
-      // Append to previous
-      var prevTag = compacted[compacted.length - 1];
-      if (prevTag.description) {
-        prevTag.description += &quot; &quot; + tag.string;
-      } else {
-        prevTag.string += &quot; &quot; + tag.string;
-      }
+tags.forEach(function (tag, i) {
+  if (!tag.type) {
+    if (i === 0) {
       return;
     }
+    // Append to previous
+    var prevTag = compacted[compacted.length - 1];
+    if (prevTag.description) {
+      prevTag.description += ' ' + tag.string;
+    } else {
+      prevTag.string += ' ' + tag.string;
+    }
+    return;
+  }
 
-    compacted.push(tag);
-  });
+  compacted.push(tag);
+});
 
-  return compacted;
-}</code></pre>
+return compacted;
+  }</code></pre>
         </div>
       </div>
     </div>

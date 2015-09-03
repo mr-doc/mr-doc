@@ -1,5 +1,5 @@
 /**global describe, it */
-var Symbol = require('../lib/symbol.js');
+var Symbol = require('../src/symbol.js');
 var assert = require('chai').assert;
 describe('Symbol', function () {
   describe('map', function () {

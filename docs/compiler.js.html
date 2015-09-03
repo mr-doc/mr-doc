@@ -245,7 +245,7 @@
           </section>
           <div class="description"><p>The class that compiles the Jade template.</p></div>
           <pre><code class="language-javascript">class Compiler {
-	constructor (parser) {</code></pre>
+  constructor(parser) {</code></pre>
           <section id="options">
             <h1>options</h1>
             <h5 class="subheader"></h5>
@@ -266,7 +266,7 @@
           <pre><code class="language-javascript">this.files = parser.files;
 // Set up the compiler
 this.setup();
-	}</code></pre>
+    }</code></pre>
           <section id="compile">
             <h1>compile</h1>
             <h5 class="subheader"></h5>
@@ -291,15 +291,17 @@ this.setup();
             </tbody>
           </table>
           <div class="description"><p>Compiles the docs.</p></div>
-          <pre><code class="language-javascript">compile (locals) {
-	// Get the path (alias for filename)
-	var { path } = this.options.template;
-	// Return the compiled template
-  return this.jade.compile(this.template, {
-    pretty: true,
-    filename: path
-  })(locals);
-}</code></pre>
+          <pre><code class="language-javascript">compile(locals) {
+    // Get the path (alias for filename)
+    var {
+      path
+    } = this.options.template;
+    // Return the compiled template
+    return this.jade.compile(this.template, {
+      pretty: true,
+      filename: path
+    })(locals);
+  }</code></pre>
           <h5>jsFiddle</h5>
           <p>
             <iframe width="100%" height="300" src="http://jsfiddle.net/4L6Br/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
@@ -331,7 +333,7 @@ this.setup();
           </section>
           <div class="description"><p>Template used to produce the documentation</p></div>
           <pre><code class="language-javascript">this.template = fs.readFileSync(path.resolve(
-	__dirname, this.options.template.path)).toString();</code></pre>
+  __dirname, this.options.template.path)).toString();</code></pre>
           <section id="code">
             <h1>code</h1>
             <h5 class="subheader"></h5>
@@ -356,19 +358,20 @@ this.setup();
             </tbody>
           </table>
           <div class="description"><p>Jade support for filter <code>:code</code></p></div>
-          <pre><code class="language-javascript">this.jade.filters.code = function(block) {
- return block.replace( /&amp;/g, '&amp;amp;'  )
-  .replace( /&lt;/g, '&amp;lt;'   )
-  .replace( /&gt;/g, '&amp;gt;'   )
-  .replace( /&quot;/g, '&amp;quot;' )
-  .replace( /#/g, '&amp;#35;'  )
-  .replace( /\\/g, '\\\\'  )
-  .replace( /\n/g, '\\n'   );
+          <pre><code class="language-javascript">this.jade.filters.code = function (block) {
+  return block.replace(/&amp;/g, '&amp;amp;')
+    .replace(/&lt;/g, '&amp;lt;')
+    .replace(/&gt;/g, '&amp;gt;')
+    .replace(/&quot;/g, '&amp;quot;')
+    .replace(/#/g, '&amp;#35;')
+    .replace(/\\/g, '\\\\')
+    .replace(/\n/g, '\\n');
 };
-	}
+  }
 }
 
-export default Compiler;</code></pre>
+export
+default Compiler;</code></pre>
         </div>
       </div>
     </div>

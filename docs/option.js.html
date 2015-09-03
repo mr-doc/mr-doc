@@ -237,11 +237,10 @@
           </section>
           <div class="description"><p>The class that sets the options.</p></div>
           <pre><code class="language-javascript">class Option {
-	constructor(options) {
-		this.options = this.getDefaults();
-		if(options)
-			this.setOptions(options)
-	}</code></pre>
+  constructor(options) {
+      this.options = this.getDefaults();
+      if (options) this.setOptions(options);
+    }</code></pre>
           <section id="setOptions">
             <h1>setOptions</h1>
             <h5 class="subheader"></h5>
@@ -251,34 +250,34 @@
           </section>
           <div class="description"><p>Sets the options</p></div>
           <pre><code class="language-javascript">setOptions(options) {
-	if (options.extension) {
-		this.options.extension = options.extension;
-	}
+    if (options.extension) {
+      this.options.extension = options.extension;
+    }
 
-	if (options.template) {
-		this.options.template.path = options.template;
-	}
-	
-	var files;
-	if (!options.source) {
-		console.error(new Error(&quot;Error, you must define a source&quot;));
-		return;
-	} else this.options.source = options.source;
-	
-	if(options.target){
-		this.options.target = path.resolve(process.cwd(), options.target) ||
-		process.cwd();
-	}
-	if(options.ignore){
-		this.options.blacklist = options.ignore
-		.trim().replace(' ', '').split(',');
-	}
-	
-	if(options.readme){
-		this.options.readme = options.readme;
-	}
+    if (options.template) {
+      this.options.template.path = options.template;
+    }
 
-}</code></pre>
+    if (!options.source) {
+      console.error(new Error('Error, you must define a source'));
+      return;
+    } else
+      this.options.source = options.source;
+
+    if (options.target) {
+      this.options.target = path.resolve(process.cwd(), options.target) ||
+        process.cwd();
+    }
+    if (options.ignore) {
+      this.options.blacklist = options.ignore
+        .trim().replace(' ', '').split(',');
+    }
+
+    if (options.readme) {
+      this.options.readme = options.readme;
+    }
+
+  }</code></pre>
           <section id="getOptions">
             <h1>getOptions</h1>
             <h5 class="subheader"></h5>
@@ -288,8 +287,8 @@
           </section>
           <div class="description"><p>Returns the current options.</p></div>
           <pre><code class="language-javascript">getOptions() {
-	return this.options;
-}</code></pre>
+    return this.options;
+  }</code></pre>
           <section id="getDefaults">
             <h1>getDefaults</h1>
             <h5 class="subheader"></h5>
@@ -299,30 +298,32 @@
           </section>
           <div class="description"><p>Returns the default options.</p></div>
           <pre><code class="language-javascript">getDefaults() {
-	return {
-		// The title for the page produced
-		'title': '',
-		// The folder which should get parsed
-		'source': '',
-		// The folder which will contain the results.
-		'target': '',
-		// The target files extension.
-		'extension': 'html',
-		// The comma seperated list of directories to ignore. (alias for ignore)
-		'blacklist': ['test', 'public', 'static', 'views', 'templates'],
-		// The markdown file to use on the main page of the documentations. Checks the current directory for a package.json or README.md by default
-		'readme': '',
-		'package': undefined,
-		'template': {
-			'path':'../views/template.jade'
-		}
-	};
+  return {
+    // The title for the page produced
+    'title': '',
+    // The folder which should get parsed
+    'source': '',
+    // The folder which will contain the results.
+    'target': '',
+    // The target files extension.
+    'extension': 'html',
+    // The comma seperated list of directories to ignore. (alias for ignore)
+    'blacklist': ['test', 'public', 'static', 'views', 'templates'],
+    // The markdown file to use on the main page of the documentations. 
+    // Checks the current directory for a package.json or README.md by default
+    'readme': '',
+    'package': undefined,
+    'template': {
+      'path': '../views/template.jade'
+    }
+  };
 }
 }
 
 export default (options) =&gt; {
+'use strict';
 return new Option(options);
-}</code></pre>
+};</code></pre>
         </div>
       </div>
     </div>

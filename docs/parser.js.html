@@ -239,12 +239,12 @@
           </section>
           <div class="description"><p>The class that parses the dox tags.</p></div>
           <pre><code class="language-javascript">class Parser {
-	constructor(options) {
-		if (options) {
-			this.options = options;
-			this.start();
-		}
-	}</code></pre>
+  constructor(options) {
+      if (options) {
+        this.options = options;
+        this.start();
+      }
+    }</code></pre>
           <section id="start">
             <h1>start</h1>
             <h5 class="subheader"></h5>
@@ -254,32 +254,34 @@
           </section>
           <div class="description"><p>Starts the parser.</p></div>
           <pre><code class="language-javascript">start() {
-	var { source, extension, blacklist } = this.options;
+    var {
+      source, extension, blacklist
+    } = this.options;
 
-	if (_.isArray(source)) {
-		this.files = source.map(doc=&gt; {
-			var targetName = doc.name + '.' + extension;
-			if (!doc.targetName) doc.targetName = targetName;
-			doc.symbols = this.structure(doc.dox, doc.targetName);
-			return doc;
-		});
-	} else {
-		source = path.resolve(process.cwd(), source);
-		this.files = Dir.collectFiles(source, {
-			ignore: blacklist
-		});
-		this.files = this.files.map(file =&gt; {
-			var dox = this.parse(path.join(source, file));
-			var targetName = file + '.' + extension;
-			return {
-				name: file.replace(/\\/g, '/'),
-				targetName: targetName.replace(/\\/g, '/'),
-				dox: dox,
-				symbols: this.structure(dox, targetName)
-			}
-		});
-	}
-}</code></pre>
+    if (_.isArray(source)) {
+      this.files = source.map(doc =&gt; {
+        var targetName = doc.name + '.' + extension;
+        if (!doc.targetName) doc.targetName = targetName;
+        doc.symbols = this.structure(doc.dox, doc.targetName);
+        return doc;
+      });
+    } else {
+      source = path.resolve(process.cwd(), source);
+      this.files = Dir.collectFiles(source, {
+        ignore: blacklist
+      });
+      this.files = this.files.map(file =&gt; {
+        var dox = this.parse(path.join(source, file));
+        var targetName = file + '.' + extension;
+        return {
+          name: file.replace(/\\/g, '/'),
+          targetName: targetName.replace(/\\/g, '/'),
+          dox: dox,
+          symbols: this.structure(dox, targetName)
+        };
+      });
+    }
+  }</code></pre>
           <section id="parse">
             <h1>parse</h1>
             <h5 class="subheader"></h5>
@@ -305,16 +307,18 @@
           </table>
           <div class="description"><p>Parses the source using dox.</p></div>
           <pre><code class="language-javascript">parse(filepath) {
-	var json = null;
-	try {
-		json = dox.parseComments(fs.readFileSync(filepath).toString(), { raw: false });
-	} catch (e) {
-		console.error(&quot;doxx:&quot;, e);
-		return [];
-	}
+    var json = null;
+    try {
+      json = dox.parseComments(fs.readFileSync(filepath).toString(), {
+        raw: false
+      });
+    } catch (e) {
+      console.error('doxx:', e);
+      return [];
+    }
 
-	return json.filter(this.shouldPass).map(Symbol.map);
-}</code></pre>
+    return json.filter(this.shouldPass).map(Symbol.map);
+  }</code></pre>
           <section id="shouldPass">
             <h1>shouldPass</h1>
             <h5 class="subheader"></h5>
@@ -340,14 +344,18 @@
           </table>
           <div class="description"><p>Tests if a symbol should be ignored or not.</p></div>
           <pre><code class="language-javascript">shouldPass(symbol) {
-	if (symbol.isPrivate) { return false; }
-	if (symbol.ignore) { return false; }
+    if (symbol.isPrivate) {
+      return false;
+    }
+    if (symbol.ignore) {
+      return false;
+    }
 
-	// Only for coffeescript
-	return symbol.tags.filter(function (tag) {
-		return tag.type === &quot;private&quot; || tag.type === &quot;ignore&quot;;
-	}).length === 0;
-}</code></pre>
+    // Only for coffeescript
+    return symbol.tags.filter(function (tag) {
+      return tag.type === 'private' || tag.type === 'ignore';
+    }).length === 0;
+  }</code></pre>
           <section id="structure">
             <h1>structure</h1>
             <h5 class="subheader"></h5>
@@ -378,20 +386,23 @@
           </table>
           <div class="description"><p>Returns the structure of a parsed file</p></div>
           <pre><code class="language-javascript">structure(symbols, file) {
-	return _.compact(symbols.map(function (method) {
-		if (!method.ctx || !method.ctx.name) { return null; }
-		return {
-			targetFile: file,
-			name: method.ctx.name,
-			type: method.ctx.type
-		};
-	})) || [];
+  return _.compact(symbols.map(function (method) {
+    if (!method.ctx || !method.ctx.name) {
+      return null;
+    }
+    return {
+      targetFile: file,
+      name: method.ctx.name,
+      type: method.ctx.type
+    };
+  })) || [];
 }
 }
 
 export default (options) =&gt; {
+'use strict';
 return new Parser(options);
-}</code></pre>
+};</code></pre>
         </div>
       </div>
     </div>
