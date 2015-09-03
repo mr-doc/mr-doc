@@ -129,7 +129,7 @@
 		return [];
 	}
 
-	return json.filter(this.shouldPass).map(this.map.bind(this));
+	return json.filter(this.shouldPass).map(Symbol.map);
 }</code></pre>
           <section id="shouldPass">
             <h1>shouldPass</h1>

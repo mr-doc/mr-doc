@@ -116,12 +116,12 @@
             </tbody>
           </table>
           <div class="description"><p>has Helper return a closure that check if a tag has a specific type</p></div>
-          <pre><code class="language-javascript">has(val) {
+          <pre><code class="language-javascript">static has(val) {
   return function (tag) {
     return tag.type === val;
   };
 }
-compact(tags) {
+static compact(tags) {
   var compacted = [];
 
   tags.forEach(function (tag, i) {
@@ -142,16 +142,16 @@ compact(tags) {
 
   return compacted;
 }
-map(symbol) {
-  symbol.tags = this.compact(symbol.tags);
+static map(symbol) {
+  symbol.tags = Symbol.compact(symbol.tags);
   var tags = {};
   ['type', 'description', 'example', 'file', 'fileoverview',
     'overview', 'param', 'require', 'jsFiddle', 'return'].forEach(tag =&gt; {
-      tags[tag.toLowerCase() + 's'] = symbol.tags.filter(this.has(tag));
+      tags[tag.toLowerCase() + 's'] = symbol.tags.filter(Symbol.has(tag));
     });
   var { types, descriptions, examples, files, fileoverviews,
     overviews, returns, requires, jsfiddles } = tags;
-  if (symbol.tags.length &gt; 0 &amp;&amp; symbol.tags.filter(this.has('param')).length &gt; 0) {
+  if (symbol.tags.length &gt; 0 &amp;&amp; symbol.tags.filter(Symbol.has('param')).length &gt; 0) {
     symbol.hasParams = true;
   }
 

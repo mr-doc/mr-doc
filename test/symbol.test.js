@@ -18,7 +18,7 @@ describe('Symbol', function () {
         "ignore": false,
         "code": "keyboard: true,"
       };
-      var mapped = (new Symbol()).map(symbol);
+      var mapped = Symbol.map(symbol);
       assert.deepEqual(mapped.type, "Boolean");
       assert.deepEqual(mapped.type, "Boolean");
       assert.deepEqual(mapped.gtype, undefined);
@@ -61,7 +61,7 @@ describe('Symbol', function () {
         "type": "String"
       };
       
-      var compacted = new Symbol().compact(symbol.tags);
+      var compacted = Symbol.compact(symbol.tags);
       assert.equal(compacted.length, 4);
       assert.equal(compacted[0].string, "a b c d");
       assert.equal(compacted[2].description, "d c b a");
