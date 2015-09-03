@@ -3,4 +3,6 @@ node_js:
   - 0.12
   - 0.11
   - iojs
-#TODO: Add - 0.10 back
+  - 0.10
+
+before_install: npm i -g gulp

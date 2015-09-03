@@ -22,7 +22,7 @@
     "doxx": "./bin/doxx"
   },
   "scripts": {
-    "test": "mocha --compilers js:babel/register"
+    "test": "gulp test"
   },
   "engines": {
     "node": ">= 0.10.0"
