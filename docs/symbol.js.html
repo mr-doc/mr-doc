@@ -209,6 +209,8 @@
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#structure"><i class="alert alert-info"></i><span>structure</span></a>
+              </li>
               <li><a href="#has"><i class="alert alert-info"></i><span>has</span></a>
               </li>
               <li><a href="#compact"><i class="alert alert-info"></i><span>compact</span></a>
@@ -217,6 +219,52 @@
           </div>
         </div>
         <div class="span9">
+          <section id="structure">
+            <h1>structure</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>structure()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>symbols</td>
+                <td>Array</td>
+                <td><p>array of symbols</p></td>
+              </tr>
+              <tr>
+                <td>file</td>
+                <td>String</td>
+                <td><p>filename</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Array</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Returns the structure of a parsed file</p></div>
+          <pre><code class="language-javascript">static structure(symbols, file) {
+  return _.compact(symbols.map(function (method) {
+    if (!method.ctx || !method.ctx.name) {
+      return null;
+    }
+    return {
+      targetFile: file,
+      name: method.ctx.name,
+      type: method.ctx.type
+    };
+  })) || [];
+}</code></pre>
           <section id="has">
             <h1>has</h1>
             <h5 class="subheader"></h5>

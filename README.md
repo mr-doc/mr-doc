@@ -4,7 +4,7 @@ Use [dox](https://github.com/visionmedia/dox) to automatically generate beautifu
 
 Outputted HTML is by default based on templates and css from [Twitter Bootstrap](twitter.github.com/bootstrap/) and syntax highlighting is done by [Prism.js](http://prismjs.com/).
 
-Doxx was written in ES6, tranformed to ES5 with [babel](https://babeljs.io/) and tested with [mocha](https://github.com/mochajs/mocha).
+Doxx was written in ES6, tranformed to ES5 with [babel](https://babeljs.io/), and tested with [mocha](https://github.com/mochajs/mocha).
 
 ## Demo
 * [doxx/docs/compile.js](http://fgribreau.github.com/doxx/docs/compile.js.html)
