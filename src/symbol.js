@@ -6,7 +6,13 @@ Object.defineProperty(exports, '__esModule', {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
 
 var Symbol = (function () {
   function Symbol() {
@@ -14,13 +20,34 @@ var Symbol = (function () {
   }
 
   /**
-   * Checks if a tag has a specific type
-   * @param  {string}  val value to check against
-   * @returns {function}  A function that evaluates the truth
-   * when True if `tag` type is `val`
+   * Returns the structure of a parsed file
+   * @param  {Array} symbols  array of symbols
+   * @param  {String} file    filename
+   * @return {Array}
    */
 
   _createClass(Symbol, null, [{
+    key: 'structure',
+    value: function structure(symbols, file) {
+      return _lodash2['default'].compact(symbols.map(function (method) {
+        if (!method.ctx || !method.ctx.name) {
+          return null;
+        }
+        return {
+          targetFile: file,
+          name: method.ctx.name,
+          type: method.ctx.type
+        };
+      })) || [];
+    }
+
+    /**
+     * Checks if a tag has a specific type
+     * @param  {string}  val value to check against
+     * @return {function}  A function that evaluates the truth
+     * when True if `tag` type is `val`
+     */
+  }, {
     key: 'has',
     value: function has(val) {
       return function (tag) {
@@ -30,18 +57,18 @@ var Symbol = (function () {
 
     /**
      * Compacts multi-line expression
-     * @returns {Array}
+     * @return {Array}
      */
   }, {
     key: 'compact',
     value: function compact(tags) {
 
-      /*[{"type":"description",
-      "string":"Note: if `addClass` is defined at the step level."},
-       {"type":"",
-       "string": "The two defined `addClass` 
-       will be taken into account in the popover"},
-       {"type":"type","types":["String"]}]*/
+      // [{"type":"description",
+      // "string":"Note: if `addClass` is defined at the step level."},
+      //  {"type":"",
+      //  "string": "The two defined `addClass`
+      //  will be taken into account in the popover"},
+      //  {"type":"type","types":["String"]}]
       var compacted = [];
 
       tags.forEach(function (tag, i) {
@@ -69,7 +96,7 @@ var Symbol = (function () {
      * Maps symbols
      * @private
      * @param {Object} symbol
-     * @returns {Object}
+     * @return {Object}
      */
   }, {
     key: 'map',
@@ -145,6 +172,7 @@ var Symbol = (function () {
         });
       }
 
+      // No idea what this is for but it's there anyways.
       symbol.description.extra = '';
       if (descriptions.length === 1) {
         symbol.description.extra = '<p>' + descriptions[0].string + '</p>';

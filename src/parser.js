@@ -67,7 +67,7 @@ var Parser = (function () {
         this.files = source.map(function (doc) {
           var targetName = doc.name + '.' + extension;
           if (!doc.targetName) doc.targetName = targetName;
-          doc.symbols = _this.structure(doc.dox, doc.targetName);
+          doc.symbols = _symbol2['default'].structure(doc.dox, doc.targetName);
           return doc;
         });
       } else {
@@ -82,7 +82,7 @@ var Parser = (function () {
             name: file.replace(/\\/g, '/'),
             targetName: targetName.replace(/\\/g, '/'),
             dox: dox,
-            symbols: _this.structure(dox, targetName)
+            symbols: _symbol2['default'].structure(dox, targetName)
           };
         });
       }
@@ -91,7 +91,7 @@ var Parser = (function () {
     /**
      * Parses the source using dox.
      * @param {string} filepath The path to the source 
-     * @returns {object} Returns a JSON representation of the tags as an array
+     * @return {object} Returns a JSON representation of the tags as an array
      * @example
      * {
      *	tags:[]
@@ -129,7 +129,7 @@ var Parser = (function () {
     /**
      * Tests if a symbol should be ignored or not.
      * @param  {Object} symbol symbol to check against
-     * @returns {Boolean} true if the symbol is not private nor must be ignored
+     * @return {Boolean} true if the symbol is not private nor must be ignored
      */
   }, {
     key: 'shouldPass',
@@ -146,34 +146,12 @@ var Parser = (function () {
         return tag.type === 'private' || tag.type === 'ignore';
       }).length === 0;
     }
-
-    /**
-     * Returns the structure of a parsed file
-     * @param  {Array} symbols  array of symbols
-     * @param  {String} file    filename
-     * @returns {Array}
-     */
-  }, {
-    key: 'structure',
-    value: function structure(symbols, file) {
-      return _lodash2['default'].compact(symbols.map(function (method) {
-        if (!method.ctx || !method.ctx.name) {
-          return null;
-        }
-        return {
-          targetFile: file,
-          name: method.ctx.name,
-          type: method.ctx.type
-        };
-      })) || [];
-    }
   }]);
 
   return Parser;
 })();
 
 exports['default'] = function (options) {
-  'use strict';
   return new Parser(options);
 };
 

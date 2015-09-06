@@ -243,6 +243,11 @@
           </section>
           <div class="description"><p>Sets the options</p></div>
           <pre><code class="language-javascript">setOptions(options) {
+
+    if (options.title) {
+      this.options.title = options.title;
+    }
+
     if (options.extension) {
       this.options.extension = options.extension;
     }
@@ -314,7 +319,6 @@
 }
 
 export default (options) =&gt; {
-'use strict';
 return new Option(options);
 };</code></pre>
         </div>

@@ -44,9 +44,9 @@ var _mkdirp = require('mkdirp');
 var _mkdirp2 = _interopRequireDefault(_mkdirp);
 
 /**
- * The main class that creates beautiful documents.
+ * The main class that creates beautiful documentations.
  * @class Doxx
- * @extends Compiler
+ * @extend Compiler
  */
 
 var Doxx = (function (_Compiler) {
@@ -70,14 +70,14 @@ var Doxx = (function (_Compiler) {
     value: function generate() {
       var _this = this;
 
-      //Compute all symboles
+      // Compute all symboles
       var allSymbols = this.files.reduce(function (m, a) {
         m = m.concat(a.symbols || []);
         return m;
       }, []);
 
       var pkg;
-      //Get package.json
+      // Get package.json
       try {
         pkg = require(process.cwd() + '/package');
       } catch (err) {}
@@ -98,13 +98,13 @@ var Doxx = (function (_Compiler) {
         readme = '';
       }
 
-      //Enable line-breaks ala github markdown
+      // Enable line-breaks ala github markdown
       _marked2['default'].setOptions({
         breaks: true,
         smartLists: true
       });
 
-      //Get readme data
+      // Get readme data
       this.files.unshift({
         name: 'Main',
         targetName: 'index.html',
@@ -113,7 +113,7 @@ var Doxx = (function (_Compiler) {
         symbols: []
       });
 
-      //Make sure the folder structure in target mirrors source
+      // Make sure the folder structure in target mirrors source
       var folders = [];
 
       this.files.forEach(function (file) {
@@ -125,7 +125,7 @@ var Doxx = (function (_Compiler) {
         }
       });
 
-      //Render and write each file
+      // Render and write each file
       this.files.forEach(function (file) {
 
         // Set each files relName in relation
@@ -172,7 +172,6 @@ var Doxx = (function (_Compiler) {
 })(_compiler2['default']);
 
 exports['default'] = function (options) {
-  'use strict';
   return new Doxx(options);
 };
 
