@@ -20,9 +20,9 @@ program
   .option('-s, --source <source>', 'The folder which should get parsed')
   .option('-i, --ignore <directories>', 'The comma seperated list of directories to ignore. Default: ' + defaults.blacklist.toString())
   .option('-T, --target <target>', 'The folder which will contain the results. Default: <CWD>/docs')
-  .option('-e, --extension <target extension>', 'The target files extension. Default: ' + defaults.extension)
-  .option('-j','--template <jade template>', 'The jade template file to use')
-  .option('-R --readme <file>', 'The markdown file to use on the main page of the documentations. Checks the current directory for a package.json or README.md by default')
+  .option('-e, --extension <extension>', 'The target files extension. Default: ' + defaults.extension)
+  .option('-j','--template <template>', 'The Jade template file to use')
+  .option('-R','--readme <file>', 'The markdown file to use on the main page of the documentations. Checks the current directory for a package.json or README.md by default');
 
 function showHelp(){
   console.log('  Examples:\n');
