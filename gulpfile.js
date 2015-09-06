@@ -35,7 +35,7 @@ gulp.task('beautify', function () {
 });
 
 /* Checks the coding style and builds from ES6 to ES5*/
-gulp.task('lib', function () {
+gulp.task('lib',['beautify'],function () {
   return gulp.src('./lib/**/**/*.js')
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'))
@@ -52,7 +52,7 @@ gulp.task('watch', function () {
 });
 
 /* Runs tests */
-gulp.task('mocha', function () {
+gulp.task('mocha', ['beautify','lib'],function () {
   return gulp.src('./test/**/**/*.js', { read: false })
     .pipe(mocha())
     .once('end', function () {

@@ -36,7 +36,7 @@ var Dir = (function () {
    * Create an array of all the right files in the source dir
    * @param  {String}   source source path
    * @param  {Object}   options option object
-   * @returns {Array}
+   * @return {Array}
    */
 
   _createClass(Dir, null, [{

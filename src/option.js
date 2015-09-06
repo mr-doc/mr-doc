@@ -1,4 +1,5 @@
 /*! global __dirname, process */
+
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -35,6 +36,11 @@ var Option = (function () {
   _createClass(Option, [{
     key: 'setOptions',
     value: function setOptions(options) {
+
+      if (options.title) {
+        this.options.title = options.title;
+      }
+
       if (options.extension) {
         this.options.extension = options.extension;
       }
@@ -62,7 +68,7 @@ var Option = (function () {
 
     /**
      * Returns the current options.
-     * @returns {object} The current options
+     * @return {object} The current options
      */
   }, {
     key: 'getOptions',
@@ -72,7 +78,7 @@ var Option = (function () {
 
     /**
      * Returns the default options.
-     * @returns {object} The default options
+     * @return {object} The default options
      */
   }, {
     key: 'getDefaults',
@@ -103,7 +109,6 @@ var Option = (function () {
 })();
 
 exports['default'] = function (options) {
-  'use strict';
   return new Option(options);
 };
 

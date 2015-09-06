@@ -58,16 +58,16 @@ $ doxx --help
 
   Options:
 
-    -h, --help                                 output usage information
-    -V, --version                              output the version number
-    -r, --raw                                  output "raw" comments, leaving the markdown intact
-    -d, --debug                                output parsed comments for debugging
-    -t, --title <string>                       The title for the page produced
-    -s, --source <source>                      The folder which should get parsed
+    -h, --help                                 Outputs usage information.
+    -V, --version                              Outputs the version number.
+    -r, --raw                                  Outputs "raw" comments, leaving the markdown intact.
+    -d, --debug                                Outputs parsed comments for debugging.
+    -t, --title <string>                       The title for the page produced.
+    -s, --source <source>                      The folder which should get parsed.
     -i, --ignore <directories>                 Comma seperated list of directories to ignore. Default: test,public,static,views,templates
-    -T, --target <target>                      The folder which will contain the results. Default: <process.cwd()>/docs
-    -e, --extension <extension>  Target files extension. Default: html
-    -j, --template <jade template>                 The jade template file to use
+    -T, --target <target>                      The folder which will contain the results. Default: <CWD>/docs
+    -e, --extension <extension>                Target files extension. Default: html
+    -j, --template <template>                  The Jade template file to use
 
   Examples:
 

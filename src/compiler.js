@@ -49,7 +49,7 @@ var Compiler = (function () {
    * Compiles the docs.
    * @param  {Object} locals local variable object
    * @jsFiddle http://jsfiddle.net/4L6Br/embedded/
-   * @returns {String} rendered content
+   * @return {String} rendered content
    */
 
   _createClass(Compiler, [{
@@ -85,7 +85,7 @@ var Compiler = (function () {
       /**
        * Jade support for filter `:code`
        * @param  {String} block
-       * @returns {String}
+       * @return {String}
        */
       this.jade.filters.code = function (block) {
         return block.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/#/g, '&#35;').replace(/\\/g, '\\\\').replace(/\n/g, '\\n');
