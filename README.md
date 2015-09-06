@@ -67,7 +67,7 @@ $ doxx --help
     -i, --ignore <directories>                 Comma seperated list of directories to ignore. Default: test,public,static,views,templates
     -T, --target <target>                      The folder which will contain the results. Default: <process.cwd()>/docs
     -e, --extension <extension>  Target files extension. Default: html
-    -j, --template <jade template>                 The jade template file to use
+    -j, --template <template>                 The jade template file to use
 
   Examples:
 
