@@ -1,4 +1,4 @@
-# Doxx [![Build Status](https://travis-ci.org/FGRibreau/doxx.png)](https://travis-ci.org/FGRibreau/doxx)
+# Doxx [![Deps](https://david-dm.org/FGRibreau/doxx.png)](https://david-dm.org/FGRibreau/doxx) [![Version](http://badge.fury.io/js/doxx.png)](https://david-dm.org/FGRibreau/doxx) [![Version](https://travis-ci.org/FGRibreau/doxx.svg)](https://travis-ci.org/FGRibreau/doxx) [![Downloads](http://img.shields.io/npm/dm/doxx.svg)](https://www.npmjs.com/package/doxx)
 
 Use [dox](https://github.com/visionmedia/dox) to automatically generate beautiful html documentation. **Doxx is a total refactoring of [dox-foundation](https://github.com/punkave/dox-foundation/)**.
 
