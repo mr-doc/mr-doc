@@ -15,7 +15,7 @@ var defaults = option().getDefaults();
 program
   .version(version)
   // .option('-r, --raw', 'output \'raw\' comments, leaving the markdown intact')
-  .option('-d, --debug', 'output parsed comments for debugging')
+  .option('-d, --debug', 'Output parsed comments for debugging')
   .option('-t, --title <string>', 'The title for the page produced')
   .option('-s, --source <source>', 'The folder which should get parsed')
   .option('-i, --ignore <directories>', 'The comma seperated list of directories to ignore. Default: ' + defaults.blacklist.toString())
