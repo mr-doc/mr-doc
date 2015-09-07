@@ -35,9 +35,9 @@ var _parser = require('./parser');
 
 var _parser2 = _interopRequireDefault(_parser);
 
-var _marked = require('marked');
+var _markdownIt = require('markdown-it');
 
-var _marked2 = _interopRequireDefault(_marked);
+var _markdownIt2 = _interopRequireDefault(_markdownIt);
 
 var _mkdirp = require('mkdirp');
 
@@ -96,17 +96,14 @@ var Doxx = (function (_Compiler) {
         readme = '';
       }
 
-      // Enable line-breaks ala github markdown
-      _marked2['default'].setOptions({
-        breaks: true,
-        smartLists: true
-      });
+      var md = new _markdownIt2['default']();
+      md = md.render.bind(md);
 
       // Get readme data
       this.files.unshift({
         name: 'Main',
         targetName: 'index.html',
-        readme: (0, _marked2['default'])(readme),
+        readme: md(readme),
         dox: [],
         symbols: []
       });
