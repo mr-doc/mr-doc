@@ -262,24 +262,19 @@
     console.warn(new Error('No README.md file found at ' + readMeFile));
   }
 
-  readme = readme || (pkg &amp;&amp; pkg.description);
-
   if (!readme) {
     console.warn(new Error('Empty README.md ' + readMeFile));
     readme = '';
   }
 
-  // Enable line-breaks ala github markdown
-  marked.setOptions({
-    breaks: true,
-    smartLists: true
-  });
+  var md = new Markdown();
+  md = md.render.bind(md);
 
   // Get readme data
   this.files.unshift({
     name: 'Main',
     targetName: 'index.html',
-    readme: marked(readme),
+    readme: md(readme),
     dox: [],
     symbols: []
   });
@@ -319,20 +314,28 @@
       }
     });
 
-    var title = this.options.title;
+    // Set title
+    var title = pkg &amp;&amp; pkg.name ? pkg.name :
+      this.options.title;
 
-    if (!title) {
-      title = pkg &amp;&amp; pkg.name || 'Title Not Set';
-    }
+    // Set description
+    var description = pkg &amp;&amp; pkg.description ?
+      pkg.description : '';
 
-    var compileOptions = _.extend({}, file, {
-      title: title,
+    // Set locals
+    var locals = _.extend({}, file, {
+      project: {
+        title, description
+      },
       allSymbols: allSymbols,
       files: this.files,
       currentName: file.name
     });
 
-    var compiled = this.compile(compileOptions);
+    // Compile
+    var compiled = this.compile(locals);
+
+    // Write files
     mkdirp(this.options.target, err =&gt; {
       if (err) return;
       else

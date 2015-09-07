@@ -85,7 +85,7 @@ var Option = (function () {
     value: function getDefaults() {
       return {
         // The title for the page produced
-        'title': '',
+        'title': 'Doxx Generated Documentation',
         // The folder which should get parsed
         'source': '',
         // The folder which will contain the results.

@@ -48,10 +48,14 @@ collectFiles = (source, options, callback) ->
 ```
 
 ## Installation
-Install the module with: `npm install doxx -g`
+
+```bash
+# Install the module globally
+$ npm i -g doxx
+```
 
 ## CLI
-```
+```bash
 $ doxx --help
 
   Usage: doxx [options]

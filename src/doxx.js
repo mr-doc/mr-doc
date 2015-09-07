@@ -35,9 +35,9 @@ var _parser = require('./parser');
 
 var _parser2 = _interopRequireDefault(_parser);
 
-var _marked = require('marked');
+var _markdownIt = require('markdown-it');
 
-var _marked2 = _interopRequireDefault(_marked);
+var _markdownIt2 = _interopRequireDefault(_markdownIt);
 
 var _mkdirp = require('mkdirp');
 
@@ -91,24 +91,19 @@ var Doxx = (function (_Compiler) {
         console.warn(new Error('No README.md file found at ' + readMeFile));
       }
 
-      readme = readme || pkg && pkg.description;
-
       if (!readme) {
         console.warn(new Error('Empty README.md ' + readMeFile));
         readme = '';
       }
 
-      // Enable line-breaks ala github markdown
-      _marked2['default'].setOptions({
-        breaks: true,
-        smartLists: true
-      });
+      var md = new _markdownIt2['default']();
+      md = md.render.bind(md);
 
       // Get readme data
       this.files.unshift({
         name: 'Main',
         targetName: 'index.html',
-        readme: (0, _marked2['default'])(readme),
+        readme: md(readme),
         dox: [],
         symbols: []
       });
@@ -147,20 +142,26 @@ var Doxx = (function (_Compiler) {
           }
         });
 
-        var title = _this.options.title;
+        // Set title
+        var title = pkg && pkg.name ? pkg.name : _this.options.title;
 
-        if (!title) {
-          title = pkg && pkg.name || 'Title Not Set';
-        }
+        // Set description
+        var description = pkg && pkg.description ? pkg.description : '';
 
-        var compileOptions = _lodash2['default'].extend({}, file, {
-          title: title,
+        // Set locals
+        var locals = _lodash2['default'].extend({}, file, {
+          project: {
+            title: title, description: description
+          },
           allSymbols: allSymbols,
           files: _this.files,
           currentName: file.name
         });
 
-        var compiled = _this.compile(compileOptions);
+        // Compile
+        var compiled = _this.compile(locals);
+
+        // Write files
         (0, _mkdirp2['default'])(_this.options.target, function (err) {
           if (err) return;else _fs2['default'].writeFileSync(_path2['default'].join(_this.options.target, file.targetName), compiled);
         });
