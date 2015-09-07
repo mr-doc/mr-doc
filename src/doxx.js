@@ -91,8 +91,6 @@ var Doxx = (function (_Compiler) {
         console.warn(new Error('No README.md file found at ' + readMeFile));
       }
 
-      readme = readme || pkg && pkg.description;
-
       if (!readme) {
         console.warn(new Error('Empty README.md ' + readMeFile));
         readme = '';
@@ -147,20 +145,26 @@ var Doxx = (function (_Compiler) {
           }
         });
 
-        var title = _this.options.title;
+        // Set title
+        var title = pkg && pkg.name ? pkg.name : _this.options.title;
 
-        if (!title) {
-          title = pkg && pkg.name || 'Title Not Set';
-        }
+        // Set description
+        var description = pkg && pkg.description ? pkg.description : '';
 
-        var compileOptions = _lodash2['default'].extend({}, file, {
-          title: title,
+        // Set locals
+        var locals = _lodash2['default'].extend({}, file, {
+          project: {
+            title: title, description: description
+          },
           allSymbols: allSymbols,
           files: _this.files,
           currentName: file.name
         });
 
-        var compiled = _this.compile(compileOptions);
+        // Compile
+        var compiled = _this.compile(locals);
+
+        // Write files
         (0, _mkdirp2['default'])(_this.options.target, function (err) {
           if (err) return;else _fs2['default'].writeFileSync(_path2['default'].join(_this.options.target, file.targetName), compiled);
         });
