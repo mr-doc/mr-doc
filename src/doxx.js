@@ -148,10 +148,17 @@ var Doxx = (function (_Compiler) {
         // Set description
         var description = pkg && pkg.description ? pkg.description : '';
 
+        // Set URLs
+        var url = {
+          github: pkg && pkg.homepage ? pkg.homepage.indexOf('github') > -1 ? pkg.homepage : false : false,
+          npm: pkg && pkg.name ? 'https://npmjs.com/package/' + pkg.name : false,
+          homepage: pkg && pkg.homepage ? pkg.homepage.indexOf('github') === -1 ? pkg.homepage : false : false
+        };
+
         // Set locals
         var locals = _lodash2['default'].extend({}, file, {
           project: {
-            title: title, description: description
+            title: title, description: description, url: url
           },
           allSymbols: allSymbols,
           files: _this.files,

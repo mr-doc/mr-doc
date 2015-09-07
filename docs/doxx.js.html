@@ -322,10 +322,22 @@
     var description = pkg &amp;&amp; pkg.description ?
       pkg.description : '';
 
+    // Set URLs
+    var url = {
+      github: pkg &amp;&amp; pkg.homepage ?
+        pkg.homepage.indexOf('github') &gt; -1 ?
+        pkg.homepage : false : false,
+      npm: pkg &amp;&amp; pkg.name ?
+        'https://npmjs.com/package/' + pkg.name : false,
+      homepage: pkg &amp;&amp; pkg.homepage ?
+        pkg.homepage.indexOf('github') === -1 ?
+        pkg.homepage : false : false
+    };
+
     // Set locals
     var locals = _.extend({}, file, {
       project: {
-        title, description
+        title, description, url
       },
       allSymbols: allSymbols,
       files: this.files,
