@@ -51,7 +51,7 @@ var Theme = (function () {
     this.bower = _bower2['default'];
     this.options = {
       bower: {
-        path: process.cwd() + '/bower',
+        path: options.bower,
         dir: {
           path: _path2['default'].join(options.target, 'bower_components')
         },

@@ -22,8 +22,6 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-require('source-map-support/register');
-
 /**
  * The class that sets the options.
  * @class Option
@@ -76,10 +74,6 @@ var Option = (function () {
       if (options.bower) {
         if (_lodash2['default'].isString(options.bower) && !_lodash2['default'].isEmpty(options.bower)) {
           this.options.bower = _path2['default'].resolve(process.cwd(), options.bower) || process.cwd();
-        } else {
-          this.options.bower = process.cwd();
-
-          this.options.bower += '/bower.json';
         }
       }
     }

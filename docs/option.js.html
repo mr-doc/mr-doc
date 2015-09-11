@@ -110,10 +110,6 @@
       if (_.isString(options.bower) &amp;&amp; !_.isEmpty(options.bower)) {
         this.options.bower = path.resolve(process.cwd(), options.bower) ||
           process.cwd();
-      } else {
-        this.options.bower = process.cwd();
-
-        this.options.bower += '/bower.json';
       }
     }
   }</code></pre>
