@@ -22,6 +22,8 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
+require('source-map-support/register');
+
 /**
  * The class that compiles the Jade template.
  * @class Compiler
@@ -48,21 +50,36 @@ var Compiler = (function () {
   /**
    * Compiles the docs.
    * @param  {Object} locals local variable object
+   * @param {object} template the template
    * @jsFiddle http://jsfiddle.net/4L6Br/embedded/
    * @return {String} rendered content
    */
 
   _createClass(Compiler, [{
     key: 'compile',
-    value: function compile(locals) {
+    value: function compile(locals, template) {
       // Get the path (alias for filename)
       var path = this.options.template.path;
 
       // Return the compiled template
-      return this.jade.compile(this.template, {
+      return this.jade.compile(template || this.template, {
         pretty: true,
         filename: path
       })(locals);
+    }
+
+    /** 
+     * Sets the template
+     * @param {String} path The path to the template
+     */
+  }, {
+    key: 'setTemplate',
+    value: function setTemplate(path) {
+      /**
+       * Template used to produce the documentation
+       * @type {String} template string
+       */
+      this.template = _fs2['default'].readFileSync(_path2['default'].resolve(__dirname, path || this.options.template.path)).toString();
     }
 
     /**
@@ -77,11 +94,7 @@ var Compiler = (function () {
        * @type {Jade} Jade compiler
        */
       this.jade = _jade2['default'];
-      /**
-       * Template used to produce the documentation
-       * @type {String} template string
-       */
-      this.template = _fs2['default'].readFileSync(_path2['default'].resolve(__dirname, this.options.template.path)).toString();
+
       /**
        * Jade support for filter `:code`
        * @param  {String} block

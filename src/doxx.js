@@ -43,6 +43,12 @@ var _mkdirp = require('mkdirp');
 
 var _mkdirp2 = _interopRequireDefault(_mkdirp);
 
+var _theme = require('./theme');
+
+var _theme2 = _interopRequireDefault(_theme);
+
+require('source-map-support/register');
+
 /**
  * The main class that creates beautiful documentations.
  * @class Doxx
@@ -59,6 +65,8 @@ var Doxx = (function (_Compiler) {
     _classCallCheck(this, Doxx);
 
     _get(Object.getPrototypeOf(Doxx.prototype), 'constructor', this).call(this, (0, _parser2['default'])(options));
+    // The locals stack
+    this.locals = [];
   }
 
   /**
@@ -88,11 +96,11 @@ var Doxx = (function (_Compiler) {
       if (!readme && _fs2['default'].existsSync(readMeFile)) {
         readme = _fs2['default'].readFileSync(readMeFile).toString();
       } else {
-        console.warn(new Error('No README.md file found at ' + readMeFile));
+        console.log(new Error('No README.md file found at ' + readMeFile));
       }
 
       if (!readme) {
-        console.warn(new Error('Empty README.md ' + readMeFile));
+        console.log(new Error('Empty README.md ' + readMeFile));
         readme = '';
       }
 
@@ -143,7 +151,7 @@ var Doxx = (function (_Compiler) {
         });
 
         // Set title
-        var title = pkg && pkg.name ? pkg.name : _this.options.title;
+        var title = _this.options.title ? _this.options.title : pkg && pkg.name ? pkg.name : _this.options.title = 'Doxx Generated Documentation';
 
         // Set description
         var description = pkg && pkg.description ? pkg.description : '';
@@ -155,24 +163,31 @@ var Doxx = (function (_Compiler) {
           homepage: pkg && pkg.homepage ? pkg.homepage.indexOf('github') === -1 ? pkg.homepage : false : false
         };
 
-        // Set locals
-        var locals = _lodash2['default'].extend({}, file, {
+        // Push locals into stack
+        _this.locals.push(_lodash2['default'].extend({}, file, {
           project: {
             title: title, description: description, url: url
           },
           allSymbols: allSymbols,
           files: _this.files,
           currentName: file.name
-        });
-
-        // Compile
-        var compiled = _this.compile(locals);
-
-        // Write files
-        (0, _mkdirp2['default'])(_this.options.target, function (err) {
-          if (err) return;else _fs2['default'].writeFileSync(_path2['default'].join(_this.options.target, file.targetName), compiled);
-        });
+        }));
       });
+
+      // Install theme
+      (0, _theme2['default'])(this.options).install().then(function (template) {
+        console.info('doxx: Successfully installed theme!');
+        _lodash2['default'].forEach(_this.files, function (file, index) {
+          // Set template
+          _this.setTemplate(template.path);
+          // Compile the template
+          var compiled = _this.compile(_this.locals[index]);
+          // Write files
+          (0, _mkdirp2['default'])(_this.options.target, function (error) {
+            if (error) return;else _fs2['default'].writeFileSync(_path2['default'].join(_this.options.target, file.targetName), compiled);
+          });
+        });
+      }, console.log);
     }
   }]);
 

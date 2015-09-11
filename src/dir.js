@@ -22,6 +22,8 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+require('source-map-support/register');
+
 /**
  * The class that manages directories.
  * @class Dir

@@ -1,0 +1,128 @@
+mixin iForSymbolType(symbol)
+  i(class=["alert", "alert-"+(symbol.type === "function" || symbol.type === "method" ? "info":"success")])
+
+mixin labelForSymbolType(symbol)
+  div(class=["label", "label-"+(symbol.gtype === "function" || symbol.gtype === "method" ? "info":"success"), "radius", "ctx-type"])= symbol.ctx.type
+
+doctype html
+html
+  head
+    meta(name='viewport', content='width=device-width', charset='utf-8')
+    title= project.title
+    link(rel="stylesheet", href="css/bootstrap.min.css")
+    link(rel="stylesheet", href="css/bootstrap-responsive.min.css")
+    link(rel="stylesheet", href="css/docs.min.css")
+    link(rel="stylesheet", href="css/index.min.css")
+    link(rel="stylesheet", href="css/prism.min.css")
+  body(data-spy="scroll", data-target=".scrollspy")
+    div.navbar.navbar-inverse.navbar-fixed-top
+      div.navbar-inner
+        div.container
+          a.brand Doxx
+          div.nav-collapse.collapse
+            ul.nav.pull-right.sponsored
+
+
+    header.jumbotron.subhead#overview
+      div.container
+        h1= project.title
+        p.lead
+
+    .container
+      .row
+        .span3.bs-docs-sidebar
+          ul.nav.nav-list.bs-docs-sidenav.affix-top
+            each file in files
+              li(class=(file.name !== currentName ? "":"active"))
+                a(href=file.relName) #{file.name}
+
+          .scrollspy
+            ul.nav.nav-list.bs-docs-sidenav.affix-top
+              each symbol in symbols
+                li
+                  if name === currentName
+                    a(href='#'+symbol.name)
+                      mixin iForSymbolType(symbol)
+                      span #{symbol.name}
+                  else
+                    a(href=symbol.targetFile+'#'+symbol.name)
+                      mixin iForSymbolType(symbol)
+                      span #{symbol.name}
+
+        .span9
+          if locals.readme
+            section.readme(id=name) !{readme}
+          each symbol in dox
+            if symbol.ctx.name
+              section(id=symbol.ctx.name)
+                  h1= symbol.ctx.name
+                  h5.subheader
+                  if !symbol.gtype && symbol.type
+                    p
+                      div(class=["label", "label-inverse", "radius", "ctx-type"])= symbol.type
+                  else
+                    p
+                      mixin labelForSymbolType(symbol)
+                      if symbol.ctx.string
+                        span &nbsp;
+                        span=  symbol.ctx.string
+                        span &nbsp;
+                      if symbol.ctx.extends
+                        span &nbsp;
+                        span.label.label-default extends
+                        span &nbsp;
+                        span=  symbol.ctx.extends
+                      if symbol.return
+                        |  ->
+                        span= symbol.return
+            if symbol.hasParams
+              table.table.table-bordered.table-striped
+                thead
+                  tr
+                    th(style="width:20%") Option name
+                    th(style="width:20%") Type
+                    th Description
+                tbody
+                  each tag in symbol.tags
+                    if tag.type == 'param'
+                      tr
+                        td= tag.name
+                        td= tag.types.join(', ')
+                        td!= tag.description
+                    if tag.type == 'return'
+                      tr
+                        td= tag.type
+                        td= tag.types.join(', ')
+                        td!= tag.description
+
+            .description !{symbol.description.full}
+            if symbol.code
+              pre
+                code.language-javascript
+                  = symbol.code
+            if symbol.jsfiddle
+              h5 jsFiddle
+              p
+                iframe(width="100%", height="300", src=symbol.jsfiddle , allowfullscreen="allowfullscreen", frameborder="0")
+
+    footer.footer
+      div.container
+        p Documentation generated with 
+          a(href="https://github.com/FGRibreau/doxx") Doxx 
+          |  created by 
+          a.twitter-follow-button(href='https://twitter.com/FGRibreau',data-show-count='false') Francois-Guillaume Ribreau 
+        p Doxx is sponsored by 
+          a.bringr(href='http://bringr.net/?btt', title="Outil d'analyse des réseaux sociaux") Bringr 
+          |  and 
+          a.redsmin(href='https://redsmin.com/?btt', title="Full Redis GUI") Redsmin
+        p Theme borrowed from Twitter Bootstrap
+
+    script(src="js/twitter-widget.min.js")
+    script(src="js/jquery.min.js")
+    script(src="js/bootstrap-transition.min.js")
+    script(src="js/bootstrap-scrollspy.min.js")
+    script(src="js/bootstrap-dropdown.min.js")
+    script(src="js/bootstrap-collapse.min.js")
+    script(src="js/bootstrap-affix.min.js")
+    script(src="js/prism.min.js")
+    script(src="js/index.min.js")

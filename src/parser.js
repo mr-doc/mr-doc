@@ -30,9 +30,11 @@ var _dox = require('dox');
 
 var _dox2 = _interopRequireDefault(_dox);
 
-var _fs = require('fs');
+var _fsExtra = require('fs-extra');
 
-var _fs2 = _interopRequireDefault(_fs);
+var _fsExtra2 = _interopRequireDefault(_fsExtra);
+
+require('source-map-support/register');
 
 /**
  * The class that parses the dox tags.
@@ -115,7 +117,7 @@ var Parser = (function () {
     value: function parse(filepath) {
       var json = null;
       try {
-        json = _dox2['default'].parseComments(_fs2['default'].readFileSync(filepath).toString(), {
+        json = _dox2['default'].parseComments(_fsExtra2['default'].readFileSync(filepath).toString(), {
           raw: false
         });
       } catch (e) {

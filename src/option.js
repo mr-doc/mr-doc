@@ -16,6 +16,14 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
+require('source-map-support/register');
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+require('source-map-support/register');
+
 /**
  * The class that sets the options.
  * @class Option
@@ -64,6 +72,16 @@ var Option = (function () {
       if (options.readme) {
         this.options.readme = options.readme;
       }
+
+      if (options.bower) {
+        if (_lodash2['default'].isString(options.bower) && !_lodash2['default'].isEmpty(options.bower)) {
+          this.options.bower = _path2['default'].resolve(process.cwd(), options.bower) || process.cwd();
+        } else {
+          this.options.bower = process.cwd();
+
+          this.options.bower += '/bower.json';
+        }
+      }
     }
 
     /**
@@ -85,7 +103,7 @@ var Option = (function () {
     value: function getDefaults() {
       return {
         // The title for the page produced
-        'title': 'Doxx Generated Documentation',
+        'title': undefined,
         // The folder which should get parsed
         'source': '',
         // The folder which will contain the results.
@@ -93,14 +111,15 @@ var Option = (function () {
         // The target files extension.
         'extension': 'html',
         // The comma seperated list of directories to ignore. (alias for ignore)
-        'blacklist': ['test', 'public', 'static', 'views', 'templates'],
+        'blacklist': ['test', 'public', 'static', 'template', 'views', 'template', 'templates'],
         // The markdown file to use on the main page of the documentations.
         // Checks the current directory for a package.json or README.md by default
         'readme': '',
         'package': undefined,
         'template': {
-          'path': '../views/template.jade'
-        }
+          'path': '../template/index.jade'
+        },
+        'bower': undefined
       };
     }
   }]);

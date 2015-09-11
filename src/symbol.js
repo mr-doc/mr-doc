@@ -14,6 +14,13 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+require('source-map-support/register');
+
+/**
+ * The class that manges symbols.
+ * @class Symbol
+ */
+
 var Symbol = (function () {
   function Symbol() {
     _classCallCheck(this, Symbol);

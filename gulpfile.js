@@ -55,14 +55,12 @@ gulp.task('watch', function () {
 gulp.task('mocha', ['beautify','lib'],function () {
   return gulp.src('./test/**/**/*.js', { read: false })
     .pipe(mocha())
-    .once('end', function () {
-      //process.exit();
-    });
+    .once('end', function () {});
 });
 
 /* Runs the doxx command and builds the docs */
 gulp.task('doc', shell.task([
-  './bin/doxx --source lib --target docs',
+  './bin/doxx --source lib --target docs --bower --title Doxx',
 ]));
 
 gulp.task('default', ['beautify', 'lib', 'watch']);
