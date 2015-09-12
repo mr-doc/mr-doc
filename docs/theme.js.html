@@ -82,7 +82,7 @@
       this.options = {
         theme: {
           name: options.theme,
-          path: Path.join(root.path, 'theme/'),
+          path: Path.join(process.cwd(), 'doxx_theme/'),
           target: {
             path: options.target
           }
@@ -113,7 +113,14 @@
             </p>
           </section>
           <div class="description"><p>The commands to install the theme</p></div>
-          <pre><code class="language-javascript">let commands = {</code></pre>
+          <pre><code class="language-javascript">let commands = {
+  showProgress: (command) =&gt; {
+    var count = 0;
+    while (count &lt; 100) {
+      logUpdate(frame() + ' ' + command);
+      count++;
+    }
+  },</code></pre>
           <section id="preProcess">
             <h1>preProcess</h1>
             <h5 class="subheader"></h5>
@@ -124,6 +131,7 @@
           <div class="description"><p>Create necessary paths to<br />process the commands</p></div>
           <pre><code class="language-javascript">preProcess: () =&gt; {
   let d = when.defer();
+
   let theme = this.options.theme.name;
   // Create short-hands for paths
 
@@ -225,12 +233,15 @@
           <div class="description"><p>Creates a temp dir for bower<br />to install the bower components</p></div>
           <pre><code class="language-javascript">createTempDir: (result) =&gt; {
   let d = when.defer();
+
   var {
     src
   } = result;
   mkdirp(src.theme.path, (error) =&gt; {
     if (error) d.reject(error);
-    else d.resolve(result);
+    else {
+      d.resolve(result);
+    }
   });
   return d.promise;
 },</code></pre>
@@ -265,9 +276,11 @@
           <div class="description"><p>Installs the theme through bower</p></div>
           <pre><code class="language-javascript">installTheme: (result) =&gt; {
   var d = when.defer();
+
   var {
     theme, src
   } = result;
+
   this.bower.commands
     .install([theme], {
       save: false
@@ -309,6 +322,7 @@
           <div class="description"><p>Copies the css dir from the assets dir<br />to the target dir</p></div>
           <pre><code class="language-javascript">copyAssetCSS: (result) =&gt; {
   let d = when.defer();
+
   var {
     src, dest
   } = result;
@@ -354,6 +368,7 @@
           <div class="description"><p>Copies the js dir from the assets dir<br />to the target dir</p></div>
           <pre><code class="language-javascript">copyAssetJS: (result) =&gt; {
   let d = when.defer();
+
   var {
     src, dest
   } = result;
@@ -398,6 +413,7 @@
           <div class="description"><p>Copies the template dir from the assets dir<br />to the target dir</p></div>
           <pre><code class="language-javascript">copyTemplate: (result) =&gt; {
   let d = when.defer();
+
   var {
     src, dest
   } = result;
@@ -443,6 +459,7 @@
           <div class="description"><p>Reads the template and strigifies it.</p></div>
           <pre><code class="language-javascript">stringifyTemplate: (result) =&gt; {
   let d = when.defer();
+
   var {
     dest, src, theme
   } = result;
@@ -488,6 +505,7 @@
           <div class="description"><p>Removes the template dir from<br />the target dir</p></div>
           <pre><code class="language-javascript">deleteTemplateDir: (result) =&gt; {
   let d = when.defer();
+
   var {
     dest
   } = result;
@@ -527,6 +545,7 @@
           <div class="description"><p>Removes the temp dir</p></div>
           <pre><code class="language-javascript">deleteTempDir: (result) =&gt; {
   let d = when.defer();
+
   var {
     src
   } = result;
@@ -546,26 +565,58 @@ d.resolve({
 });
     } else {
 
-// Preprocess the commands
-commands.preProcess()
-  // Create a temp dir
-  .then(commands.createTempDir)
-  // Install the theme using bower
-  .then(commands.installTheme)
-  // Copy css dir files
-  .then(commands.copyAssetCSS)
-  // Copy the js dir &amp; files
-  .then(commands.copyAssetJS)
-  // Copy the template dir &amp; file
-  .then(commands.copyTemplate)
-  // Convert the template to a string
-  .then(commands.stringifyTemplate)
-  // Delete the template dir
-  .then(commands.deleteTemplateDir)
-  // Delete the temp dir
-  .then(commands.deleteTempDir)
-  // We're done!
-  .then(d.resolve);
+((notify) =&gt; {
+
+  // Preprocess the commands
+  return commands.preProcess()
+    .tap(() =&gt; {
+      notify('Preparing to install theme');
+    })
+    // Create a temp dir
+    .then(commands.createTempDir)
+    .tap(() =&gt; {
+      return notify(
+        'Creating a temp directory \'doxx_theme\'');
+    })
+    // Install the theme using bower
+    .then(commands.installTheme)
+    .tap(() =&gt; {
+      return notify('Installing theme');
+    })
+    // Copy css dir files
+    .then(commands.copyAssetCSS)
+    .tap(() =&gt; {
+      return notify('Copying css directory');
+    })
+    // Copy the js dir &amp; files
+    .then(commands.copyAssetJS)
+    .tap(() =&gt; {
+      return notify('Copying js directory');
+    })
+    // Copy the template dir &amp; file
+    .then(commands.copyTemplate)
+    .tap(() =&gt; {
+      return notify('Copying template directory');
+    })
+    // Convert the template to a string
+    .then(commands.stringifyTemplate)
+    .tap(() =&gt; {
+      return notify('Rendering the template');
+    })
+    // Delete the template dir
+    .then(commands.deleteTemplateDir)
+    .tap(() =&gt; {
+      return notify('Removing the template directory');
+    })
+    // Delete the temp dir
+    .then(commands.deleteTempDir)
+    .tap(() =&gt; {
+      return notify('Removing the temp directory');
+    })
+    .then(d.resolve);
+})(commands.showProgress);
+
+
     }
     return d.promise;
   }

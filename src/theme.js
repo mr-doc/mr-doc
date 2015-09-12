@@ -39,10 +39,15 @@ var _del2 = _interopRequireDefault(_del);
 
 require('source-map-support/register');
 
-var _appRootPath = require('app-root-path');
+var _elegantSpinner = require('elegant-spinner');
 
-var _appRootPath2 = _interopRequireDefault(_appRootPath);
+var _elegantSpinner2 = _interopRequireDefault(_elegantSpinner);
 
+var _logUpdate = require('log-update');
+
+var _logUpdate2 = _interopRequireDefault(_logUpdate);
+
+var frame = (0, _elegantSpinner2['default'])();
 /**
  * The class that installs themes.
  * @class  Theme
@@ -56,7 +61,7 @@ var Theme = (function () {
     this.options = {
       theme: {
         name: options.theme,
-        path: _path2['default'].join(_appRootPath2['default'].path, 'theme/'),
+        path: _path2['default'].join(process.cwd(), 'doxx_theme/'),
         target: {
           path: options.target
         }
@@ -81,12 +86,18 @@ var Theme = (function () {
       var _this = this;
 
       var d = _when2['default'].defer();
-
       /** 
        * The commands to install the theme
        * @type {object}
        */
       var commands = {
+        showProgress: function showProgress(command) {
+          var count = 0;
+          while (count < 100) {
+            (0, _logUpdate2['default'])(frame() + ' ' + command);
+            count++;
+          }
+        },
         /**
          * Create necessary paths to 
          * process the commands
@@ -94,6 +105,7 @@ var Theme = (function () {
          */
         preProcess: function preProcess() {
           var d = _when2['default'].defer();
+
           var theme = _this.options.theme.name;
           // Create short-hands for paths
 
@@ -168,10 +180,13 @@ var Theme = (function () {
          */
         createTempDir: function createTempDir(result) {
           var d = _when2['default'].defer();
+
           var src = result.src;
 
           (0, _mkdirp2['default'])(src.theme.path, function (error) {
-            if (error) d.reject(error);else d.resolve(result);
+            if (error) d.reject(error);else {
+              d.resolve(result);
+            }
           });
           return d.promise;
         },
@@ -182,6 +197,7 @@ var Theme = (function () {
          */
         installTheme: function installTheme(result) {
           var d = _when2['default'].defer();
+
           var theme = result.theme;
           var src = result.src;
 
@@ -202,6 +218,7 @@ var Theme = (function () {
          */
         copyAssetCSS: function copyAssetCSS(result) {
           var d = _when2['default'].defer();
+
           var src = result.src;
           var dest = result.dest;
 
@@ -222,6 +239,7 @@ var Theme = (function () {
          */
         copyAssetJS: function copyAssetJS(result) {
           var d = _when2['default'].defer();
+
           var src = result.src;
           var dest = result.dest;
 
@@ -242,6 +260,7 @@ var Theme = (function () {
          */
         copyTemplate: function copyTemplate(result) {
           var d = _when2['default'].defer();
+
           var src = result.src;
           var dest = result.dest;
 
@@ -261,6 +280,7 @@ var Theme = (function () {
          */
         stringifyTemplate: function stringifyTemplate(result) {
           var d = _when2['default'].defer();
+
           var dest = result.dest;
           var src = result.src;
           var theme = result.theme;
@@ -283,6 +303,7 @@ var Theme = (function () {
          */
         deleteTemplateDir: function deleteTemplateDir(result) {
           var d = _when2['default'].defer();
+
           var dest = result.dest;
 
           (0, _del2['default'])([dest.template.path]).then(function () {
@@ -297,6 +318,7 @@ var Theme = (function () {
          */
         deleteTempDir: function deleteTempDir(result) {
           var d = _when2['default'].defer();
+
           var src = result.src;
 
           (0, _del2['default'])([src.theme.path]).then(function () {
@@ -313,26 +335,45 @@ var Theme = (function () {
         });
       } else {
 
-        // Preprocess the commands
-        commands.preProcess()
-        // Create a temp dir
-        .then(commands.createTempDir)
-        // Install the theme using bower
-        .then(commands.installTheme)
-        // Copy css dir files
-        .then(commands.copyAssetCSS)
-        // Copy the js dir & files
-        .then(commands.copyAssetJS)
-        // Copy the template dir & file
-        .then(commands.copyTemplate)
-        // Convert the template to a string
-        .then(commands.stringifyTemplate)
-        // Delete the template dir
-        .then(commands.deleteTemplateDir)
-        // Delete the temp dir
-        .then(commands.deleteTempDir)
-        // We're done!
-        .then(d.resolve);
+        (function (notify) {
+
+          // Preprocess the commands
+          return commands.preProcess().tap(function () {
+            notify('Preparing to install theme');
+          })
+          // Create a temp dir
+          .then(commands.createTempDir).tap(function () {
+            return notify('Creating a temp directory \'doxx_theme\'');
+          })
+          // Install the theme using bower
+          .then(commands.installTheme).tap(function () {
+            return notify('Installing theme');
+          })
+          // Copy css dir files
+          .then(commands.copyAssetCSS).tap(function () {
+            return notify('Copying css directory');
+          })
+          // Copy the js dir & files
+          .then(commands.copyAssetJS).tap(function () {
+            return notify('Copying js directory');
+          })
+          // Copy the template dir & file
+          .then(commands.copyTemplate).tap(function () {
+            return notify('Copying template directory');
+          })
+          // Convert the template to a string
+          .then(commands.stringifyTemplate).tap(function () {
+            return notify('Rendering the template');
+          })
+          // Delete the template dir
+          .then(commands.deleteTemplateDir).tap(function () {
+            return notify('Removing the template directory');
+          })
+          // Delete the temp dir
+          .then(commands.deleteTempDir).tap(function () {
+            return notify('Removing the temp directory');
+          }).then(d.resolve);
+        })(commands.showProgress);
       }
       return d.promise;
     }

@@ -68,7 +68,7 @@ $ doxx --help
     -d, --debug                                Outputs parsed comments for debugging.
     -t, --title <string>                       The title for the page produced.
     -s, --source <source>                      The folder which should get parsed.
-    -i, --ignore <directories>                 Comma seperated list of directories to ignore. Default: test,public,static, view, view, views, templates
+    -i, --ignore <directories>                 Comma seperated list of directories to ignore. Default: test,public,static, view, views, templates
     -T, --target <target>                      The folder which will contain the results. Default: <CWD>/docs
     -e, --extension <extension>                Target files extension. Default: html
     -j, --template <template>                  The Jade template file to use

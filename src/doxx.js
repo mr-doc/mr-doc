@@ -187,7 +187,7 @@ var Doxx = (function (_Compiler) {
             if (error) return;else _fs2['default'].writeFileSync(_path2['default'].join(_this.options.target, file.targetName), compiled);
           });
         });
-      }, console.log);
+      }, console.error);
     }
   }]);
 
