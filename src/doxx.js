@@ -133,22 +133,21 @@ var Doxx = (function (_Compiler) {
 
         // Set each files relName in relation
         // to where this file is in the directory tree
-        _this.files.forEach(function (f) {
 
-          // Count how deep the current file is in relation to base
-          var count = file.name.split('/');
-          count = count === null ? 0 : count.length - 1;
+        // Count how deep the current file is in relation to base
+        var count = file.name.split('/');
+        count = count === null ? 0 : count.length - 1;
 
-          // relName is equal to targetName at the base dir
-          f.relName = f.targetName;
-
-          // For each directory in depth of current file
-          // add a ../ to the relative filename of this link
-          while (count > 0) {
-            f.relName = '../' + f.relName;
-            count--;
-          }
-        });
+        // relName is equal to targetName at the base dir
+        file.relName = file.targetName;
+        file.relPath = './';
+        // For each directory in depth of current file
+        // add a ../ to the relative filename of this link
+        while (count > 0) {
+          file.relName = '../' + file.relName;
+          file.relPath += '../';
+          count--;
+        }
 
         // Set title
         var title = _this.options.title ? _this.options.title : pkg && pkg.name ? pkg.name : _this.options.title = 'Doxx Generated Documentation';
@@ -170,7 +169,8 @@ var Doxx = (function (_Compiler) {
           },
           allSymbols: allSymbols,
           files: _this.files,
-          currentName: file.name
+          currentName: file.name,
+          path: file.relPath
         }));
       });
 

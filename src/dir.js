@@ -48,10 +48,8 @@ var Dir = (function () {
           // tee hee!
       ignore = options.ignore || [],
           files = [];
-
       dirtyFiles.forEach(function (file) {
         file = _path2['default'].relative(source, file);
-
         var doNotIgnore = _lodash2['default'].all(ignore, function (d) {
           // return true if no part of the path is in the ignore/black list
           return file.indexOf(d) === -1;
