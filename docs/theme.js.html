@@ -48,7 +48,7 @@
               </li>
               <li><a href="#preProcess"><i class="alert alert-success"></i><span>preProcess</span></a>
               </li>
-              <li><a href="#createTempDir"><i class="alert alert-success"></i><span>createTempDir</span></a>
+              <li><a href="#createDoxxDir"><i class="alert alert-success"></i><span>createDoxxDir</span></a>
               </li>
               <li><a href="#installTheme"><i class="alert alert-success"></i><span>installTheme</span></a>
               </li>
@@ -61,8 +61,6 @@
               <li><a href="#stringifyTemplate"><i class="alert alert-success"></i><span>stringifyTemplate</span></a>
               </li>
               <li><a href="#deleteTemplateDir"><i class="alert alert-success"></i><span>deleteTemplateDir</span></a>
-              </li>
-              <li><a href="#deleteTempDir"><i class="alert alert-success"></i><span>deleteTempDir</span></a>
               </li>
             </ul>
           </div>
@@ -79,10 +77,33 @@
           <pre><code class="language-javascript">class Theme {
   constructor(options) {
       this.bower = bower;
+      let home = osenv.home() ||
+        process.env.HOME ||
+        process.env.HOMEPATH ||
+        process.env.USERPROFILE;
+      let hiddenPath = Path.join(home, '.doxx');
       this.options = {
         theme: {
           name: options.theme,
-          path: Path.join(process.cwd(), 'doxx_theme/'),
+          path: hiddenPath,
+          exists: () =&gt; {
+            try {
+              fs.statSync(hiddenPath);
+              return true;
+            } catch (err) {
+              return !(err &amp;&amp; err.code === 'ENOENT');
+            }
+          },
+          bower: {
+            exists: () =&gt; {
+              try {
+                fs.statSync(hiddenPath);
+                return true;
+              } catch (err) {
+                return !(err &amp;&amp; err.code === 'ENOENT');
+              }
+            }
+          },
           target: {
             path: options.target
           }
@@ -104,7 +125,7 @@
           </section>
           <div class="description"><p>Installs the theme and its assets</p></div>
           <pre><code class="language-javascript">install() {
-  let d = when.defer();</code></pre>
+  let final = when.defer();</code></pre>
           <section id="commands">
             <h1>commands</h1>
             <h5 class="subheader"></h5>
@@ -202,11 +223,11 @@
   });
   return d.promise;
 },</code></pre>
-          <section id="createTempDir">
-            <h1>createTempDir</h1>
+          <section id="createDoxxDir">
+            <h1>createDoxxDir</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>createTempDir</span><span>&nbsp;</span>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>createDoxxDir</span><span>&nbsp;</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -231,18 +252,22 @@
             </tbody>
           </table>
           <div class="description"><p>Creates a temp dir for bower<br />to install the bower components</p></div>
-          <pre><code class="language-javascript">createTempDir: (result) =&gt; {
+          <pre><code class="language-javascript">createDoxxDir: (result) =&gt; {
   let d = when.defer();
 
   var {
     src
   } = result;
-  mkdirp(src.theme.path, (error) =&gt; {
-    if (error) d.reject(error);
-    else {
-      d.resolve(result);
-    }
-  });
+  if (this.options.theme.exists()) {
+    d.resolve(result);
+  } else {
+    mkdirp(src.theme.path, (error) =&gt; {
+      if (error) d.reject(error);
+      else {
+        d.resolve(result);
+      }
+    });
+  }
   return d.promise;
 },</code></pre>
           <section id="installTheme">
@@ -280,15 +305,19 @@
   var {
     theme, src
   } = result;
+  if (this.options.theme.bower.exists()) {
+    d.resolve(result);
+  } else {
+    this.bower.commands
+      .install([theme], {
+        save: false
+      }, {
+        cwd: src.theme.path
+      }).on('end', () =&gt; {
+        d.resolve(result);
+      }).on('error', d.reject);
+  }
 
-  this.bower.commands
-    .install([theme], {
-      save: false
-    }, {
-      cwd: src.theme.path
-    }).on('end', () =&gt; {
-      d.resolve(result);
-    }).on('error', d.reject);
   return d.promise;
 },</code></pre>
           <section id="copyAssetCSS">
@@ -513,52 +542,12 @@
     d.resolve(result);
   });
   return d.promise;
-},</code></pre>
-          <section id="deleteTempDir">
-            <h1>deleteTempDir</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>deleteTempDir</span><span>&nbsp;</span>
-            </p>
-          </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>result</td>
-                <td>object</td>
-                <td><p>The result</p></td>
-              </tr>
-              <tr>
-                <td>return</td>
-                <td>Function</td>
-                <td><p>The promise</p></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>Removes the temp dir</p></div>
-          <pre><code class="language-javascript">deleteTempDir: (result) =&gt; {
-  let d = when.defer();
-
-  var {
-    src
-  } = result;
-  del([src.theme.path]).then(() =&gt; {
-    d.resolve(result);
-  });
-  return d.promise;
 }
     };
 
     // Check if the template is enabled (legacy)
     if (this.options.template.isEnabled()) {
-d.resolve({
+final.resolve({
   template: File.readFileSync(
     Path.resolve(__dirname,
       this.options.template.path)).toString()
@@ -573,10 +562,9 @@ d.resolve({
       notify('Preparing to install theme');
     })
     // Create a temp dir
-    .then(commands.createTempDir)
+    .then(commands.createDoxxDir)
     .tap(() =&gt; {
-      return notify(
-        'Creating a temp directory \'doxx_theme\'');
+      return notify('Creating home directory');
     })
     // Install the theme using bower
     .then(commands.installTheme)
@@ -608,17 +596,12 @@ d.resolve({
     .tap(() =&gt; {
       return notify('Removing the template directory');
     })
-    // Delete the temp dir
-    .then(commands.deleteTempDir)
-    .tap(() =&gt; {
-      return notify('Removing the temp directory');
-    })
-    .then(d.resolve);
+    .then(final.resolve);
 })(commands.showProgress);
 
 
     }
-    return d.promise;
+    return final.promise;
   }
 
 }

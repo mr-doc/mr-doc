@@ -33,6 +33,10 @@ var _fsExtra = require('fs-extra');
 
 var _fsExtra2 = _interopRequireDefault(_fsExtra);
 
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
 var _del = require('del');
 
 var _del2 = _interopRequireDefault(_del);
@@ -47,7 +51,12 @@ var _logUpdate = require('log-update');
 
 var _logUpdate2 = _interopRequireDefault(_logUpdate);
 
+var _osenv = require('osenv');
+
+var _osenv2 = _interopRequireDefault(_osenv);
+
 var frame = (0, _elegantSpinner2['default'])();
+
 /**
  * The class that installs themes.
  * @class  Theme
@@ -58,10 +67,30 @@ var Theme = (function () {
     _classCallCheck(this, Theme);
 
     this.bower = _bower2['default'];
+    var home = _osenv2['default'].home() || process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+    var hiddenPath = _path2['default'].join(home, '.doxx');
     this.options = {
       theme: {
         name: options.theme,
-        path: _path2['default'].join(process.cwd(), 'doxx_theme/'),
+        path: hiddenPath,
+        exists: function exists() {
+          try {
+            _fs2['default'].statSync(hiddenPath);
+            return true;
+          } catch (err) {
+            return !(err && err.code === 'ENOENT');
+          }
+        },
+        bower: {
+          exists: function exists() {
+            try {
+              _fs2['default'].statSync(hiddenPath);
+              return true;
+            } catch (err) {
+              return !(err && err.code === 'ENOENT');
+            }
+          }
+        },
         target: {
           path: options.target
         }
@@ -85,7 +114,7 @@ var Theme = (function () {
     value: function install() {
       var _this = this;
 
-      var d = _when2['default'].defer();
+      var final = _when2['default'].defer();
       /** 
        * The commands to install the theme
        * @type {object}
@@ -178,16 +207,20 @@ var Theme = (function () {
          * @param  {object} result The result
          * @return {Function}        The promise
          */
-        createTempDir: function createTempDir(result) {
+        createDoxxDir: function createDoxxDir(result) {
           var d = _when2['default'].defer();
 
           var src = result.src;
 
-          (0, _mkdirp2['default'])(src.theme.path, function (error) {
-            if (error) d.reject(error);else {
-              d.resolve(result);
-            }
-          });
+          if (_this.options.theme.exists()) {
+            d.resolve(result);
+          } else {
+            (0, _mkdirp2['default'])(src.theme.path, function (error) {
+              if (error) d.reject(error);else {
+                d.resolve(result);
+              }
+            });
+          }
           return d.promise;
         },
         /** 
@@ -201,13 +234,18 @@ var Theme = (function () {
           var theme = result.theme;
           var src = result.src;
 
-          _this.bower.commands.install([theme], {
-            save: false
-          }, {
-            cwd: src.theme.path
-          }).on('end', function () {
+          if (_this.options.theme.bower.exists()) {
             d.resolve(result);
-          }).on('error', d.reject);
+          } else {
+            _this.bower.commands.install([theme], {
+              save: false
+            }, {
+              cwd: src.theme.path
+            }).on('end', function () {
+              d.resolve(result);
+            }).on('error', d.reject);
+          }
+
           return d.promise;
         },
         /**
@@ -310,27 +348,12 @@ var Theme = (function () {
             d.resolve(result);
           });
           return d.promise;
-        },
-        /**
-         * Removes the temp dir
-         * @param  {object} result The result
-         * @return {Function}        The promise
-         */
-        deleteTempDir: function deleteTempDir(result) {
-          var d = _when2['default'].defer();
-
-          var src = result.src;
-
-          (0, _del2['default'])([src.theme.path]).then(function () {
-            d.resolve(result);
-          });
-          return d.promise;
         }
       };
 
       // Check if the template is enabled (legacy)
       if (this.options.template.isEnabled()) {
-        d.resolve({
+        final.resolve({
           template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, this.options.template.path)).toString()
         });
       } else {
@@ -342,8 +365,8 @@ var Theme = (function () {
             notify('Preparing to install theme');
           })
           // Create a temp dir
-          .then(commands.createTempDir).tap(function () {
-            return notify('Creating a temp directory \'doxx_theme\'');
+          .then(commands.createDoxxDir).tap(function () {
+            return notify('Creating home directory');
           })
           // Install the theme using bower
           .then(commands.installTheme).tap(function () {
@@ -368,14 +391,10 @@ var Theme = (function () {
           // Delete the template dir
           .then(commands.deleteTemplateDir).tap(function () {
             return notify('Removing the template directory');
-          })
-          // Delete the temp dir
-          .then(commands.deleteTempDir).tap(function () {
-            return notify('Removing the temp directory');
-          }).then(d.resolve);
+          }).then(final.resolve);
         })(commands.showProgress);
       }
-      return d.promise;
+      return final.promise;
     }
   }]);
 

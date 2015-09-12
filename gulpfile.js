@@ -58,6 +58,11 @@ gulp.task('mocha', ['beautify','lib'],function () {
     .once('end', function () {});
 });
 
+/* Cleans the Doxx cache */
+gulp.task('clean', shell.task([
+  './bin/doxx cache clean',
+]))
+
 /* Runs the doxx command and builds the docs */
 gulp.task('doc', shell.task([
   './bin/doxx --source lib --target docs --title Doxx',
