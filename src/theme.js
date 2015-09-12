@@ -39,6 +39,10 @@ var _del2 = _interopRequireDefault(_del);
 
 require('source-map-support/register');
 
+var _appRootPath = require('app-root-path');
+
+var _appRootPath2 = _interopRequireDefault(_appRootPath);
+
 /**
  * The class that installs themes.
  * @class  Theme
@@ -50,46 +54,28 @@ var Theme = (function () {
 
     this.bower = _bower2['default'];
     this.options = {
-      bower: {
-        path: options.bower,
-        dir: {
-          path: _path2['default'].join(options.target, 'bower_components')
-        },
-        isEnabled: function isEnabled() {
-          return !!options.bower;
+      theme: {
+        name: options.theme,
+        path: _path2['default'].join(_appRootPath2['default'].path, 'theme/'),
+        target: {
+          path: options.target
         }
       },
-      target: {
-        path: options.target
+      template: {
+        path: options.template.path,
+        isEnabled: function isEnabled() {
+          return !!options.template.path;
+        }
       }
     };
-    this.setup();
   }
 
   /** 
-   * Sets up the package to install
-   * bower components
+   * Installs the theme and its assets
+   * @return {Function} The promise
    */
 
   _createClass(Theme, [{
-    key: 'setup',
-    value: function setup() {
-      try {
-        this['package'] = require(this.options.bower.path);
-      } catch (error) {}
-
-      if (!this['package']) {
-        try {
-          this['package'] = require('../bower');
-        } catch (error) {}
-      }
-    }
-
-    /** 
-     * Installs the theme and its assets
-     * @return {Function} The promise
-     */
-  }, {
     key: 'install',
     value: function install() {
       var _this = this;
@@ -101,119 +87,125 @@ var Theme = (function () {
        * @type {object}
        */
       var commands = {
-        /** 
-         * Installs the theme through bower
-         * @param  {String} theme The theme to install
-         * @return {Function}       The promise
-         */
-        installTheme: function installTheme(theme) {
-          var d = _when2['default'].defer();
-
-          if (!theme) _lodash2['default'].forEach(_this['package'], function (value, key) {
-            if (key === 'devDependencies' || key === 'dependencies') _lodash2['default'].forEach(_this['package'][key], function (v, k) {
-              if (k.indexOf('doxx-theme-') > -1) {
-                theme = k;
-              }
-            });
-          });
-          _this.bower.commands.install([theme], {
-            save: true
-          }).on('end', function () {
-            d.resolve(theme);
-          });
-          return d.promise;
-        },
         /**
-         * Copies the bower dir to the target dir
-         * @param  {String} theme The theme to install
+         * Create necessary paths to 
+         * process the commands
          * @return {Function}       The promise
          */
-        copyBower: function copyBower(theme) {
+        preProcess: function preProcess() {
           var d = _when2['default'].defer();
+          var theme = _this.options.theme.name;
+          // Create short-hands for paths
 
           // Sources
           var src = {
-            bower: _path2['default'].join(_this.bower.config.cwd, 'bower_components/')
+            theme: {
+              path: _this.options.theme.path
+            }
           };
+
           // Destinations
           var dest = {
-            bower: _this.options.bower.dir.path
-          };
-          // Copy the bower src file
-          _fsExtra2['default'].copy(src.bower, dest.bower, {
-            clobber: true
-          }, function (error) {
-            if (error) d.reject(error);else {
-              d.resolve({
-                theme: theme, src: src, dest: dest
-              });
+            theme: {
+              path: _this.options.theme.target.path
             }
+          };
+
+          // Assets dir
+          var assets = {
+            path: _path2['default'].join(_path2['default'].join(src.theme.path, 'bower_components/'), theme + '/assets/')
+          };
+
+          // Template dir
+          var template = {
+            path: _path2['default'].join(_path2['default'].join(src.theme.path, 'bower_components/'), theme + '/template/')
+          };
+
+          // The css dir within assets dir
+          _lodash2['default'].extend(src, {
+            css: {
+              path: _path2['default'].join(assets.path, 'css/')
+            }
+          });
+          _lodash2['default'].extend(dest, {
+            css: {
+              path: _path2['default'].join(dest.theme.path, 'css/')
+            }
+          });
+
+          // The js dir within assets dir
+          _lodash2['default'].extend(src, {
+            js: {
+              path: _path2['default'].join(assets.path, 'js/')
+            }
+          });
+          _lodash2['default'].extend(dest, {
+            js: {
+              path: _path2['default'].join(dest.theme.path, 'js/')
+            }
+          });
+
+          // The bower template dir within assets dir
+          _lodash2['default'].extend(src, {
+            template: template
+          });
+          _lodash2['default'].extend(dest, {
+            template: {
+              path: _path2['default'].join(dest.theme.path, 'template/')
+            }
+          });
+
+          d.resolve({
+            theme: theme, src: src, dest: dest
           });
           return d.promise;
         },
         /**
-         * Removes the original bower dir
+         * Creates a temp dir for bower
+         * to install the bower components
          * @param  {object} result The result
          * @return {Function}        The promise
          */
-        removeBowerSrc: function removeBowerSrc(result) {
+        createTempDir: function createTempDir(result) {
           var d = _when2['default'].defer();
           var src = result.src;
 
-          (0, _del2['default'])([src.bower]).then(function () {
-            d.resolve(result);
+          (0, _mkdirp2['default'])(src.theme.path, function (error) {
+            if (error) d.reject(error);else d.resolve(result);
           });
           return d.promise;
         },
         /** 
-         * Copies the asset dir from the copied bower dir
+         * Installs the theme through bower
          * @param  {object} result The result
-         * @return {Function}        The promise
+         * @return {Function}       The promise
          */
-        copyAssets: function copyAssets(result) {
+        installTheme: function installTheme(result) {
           var d = _when2['default'].defer();
           var theme = result.theme;
           var src = result.src;
-          var dest = result.dest;
 
-          _lodash2['default'].extend(src, {
-            assets: {
-              dir: _path2['default'].join(_path2['default'].join(_this.options.target.path, 'bower_components/'), theme + '/assets/')
-            }
-          });
-          _lodash2['default'].extend(dest, {
-            assets: {
-              dir: _path2['default'].join(_this.options.target.path, 'assets/')
-            }
-          });
-
-          _fsExtra2['default'].copy(src.assets.dir, dest.assets.dir, {
-            clobber: true
-          }, function (error) {
-            if (error) d.reject(error);else {
-              d.resolve(result);
-            }
-          });
+          _this.bower.commands.install([theme], {
+            save: false
+          }, {
+            cwd: src.theme.path
+          }).on('end', function () {
+            d.resolve(result);
+          }).on('error', d.reject);
           return d.promise;
         },
         /**
          * Copies the css dir from the assets dir
+         * to the target dir
          * @param  {object} result The result
          * @return {Function}        The promise
          */
         copyAssetCSS: function copyAssetCSS(result) {
           var d = _when2['default'].defer();
-          var theme = result.theme;
           var src = result.src;
           var dest = result.dest;
 
-          _lodash2['default'].extend(src.assets, {
-            css: _path2['default'].join(_path2['default'].join(_this.options.target.path, 'bower_components/'), theme + '/assets/css/')
-          });
-          _lodash2['default'].extend(dest.assets, {
-            css: _path2['default'].join(_this.options.target.path, 'css/')
-          });
-          _fsExtra2['default'].copy(src.assets.css, dest.assets.css, {
+          _fsExtra2['default'].copy(src.css.path, dest.css.path, {
             clobber: true
           }, function (error) {
             if (error) d.reject(error);else {
@@ -224,63 +216,36 @@ var Theme = (function () {
         },
         /**
          * Copies the js dir from the assets dir
+         * to the target dir
          * @param  {object} result The result
          * @return {Function}        The promise
          */
         copyAssetJS: function copyAssetJS(result) {
           var d = _when2['default'].defer();
-          var theme = result.theme;
           var src = result.src;
           var dest = result.dest;
 
-          _lodash2['default'].extend(src.assets, {
-            js: _path2['default'].join(_path2['default'].join(_this.options.target.path, 'bower_components/'), theme + '/assets/js')
-          });
-          _lodash2['default'].extend(dest.assets, {
-            js: _path2['default'].join(_this.options.target.path, 'js/')
-          });
-          _fsExtra2['default'].copy(src.assets.js, dest.assets.js, {
+          _fsExtra2['default'].copy(src.js.path, dest.js.path, {
             clobber: true
           }, function (error) {
             if (error) d.reject(error);else {
               d.resolve(result);
             }
-          });
-          return d.promise;
-        },
-        /**
-         * Removes the assets dir from the target
-         * @param  {object} result The result
-         * @return {Function}        The promise
-         */
-        deleteAssets: function deleteAssets(result) {
-          var d = _when2['default'].defer();
-          var dest = result.dest;
-
-          (0, _del2['default'])([dest.assets.dir]).then(function () {
-            d.resolve(result);
           });
           return d.promise;
         },
         /**
          * Copies the template dir from the assets dir
+         * to the target dir
          * @param  {object} result The result
          * @return {Function}        The promise
          */
         copyTemplate: function copyTemplate(result) {
           var d = _when2['default'].defer();
-          var theme = result.theme;
           var src = result.src;
           var dest = result.dest;
 
-          _lodash2['default'].extend(src, {
-            template: _path2['default'].join(_path2['default'].join(_this.options.target.path, 'bower_components/'), theme + '/template/')
-          });
-          _lodash2['default'].extend(dest, {
-            template: _path2['default'].join(_this.options.target.path, '/template/')
-          });
-
-          _fsExtra2['default'].copy(src.template, dest.template, {
+          _fsExtra2['default'].copy(src.template.path, dest.template.path, {
             clobber: true
           }, function (error) {
             if (error) d.reject(error);else {
@@ -289,34 +254,86 @@ var Theme = (function () {
           });
           return d.promise;
         },
+        /** 
+         * Reads the template and strigifies it.
+         * @param  {object} result The result
+         * @return {Function}      The promise
+         */
+        stringifyTemplate: function stringifyTemplate(result) {
+          var d = _when2['default'].defer();
+          var dest = result.dest;
+          var src = result.src;
+          var theme = result.theme;
+
+          var file = dest.template.path + 'index.jade';
+
+          _fsExtra2['default'].readFile(file, function (error, data) {
+            if (error) d.reject(error);else d.resolve({
+              dest: dest, src: src, theme: theme,
+              template: data.toString()
+            });
+          });
+          return d.promise;
+        },
         /**
-         * Removes the bower dir from the target dir
+         * Removes the template dir from
+         * the target dir
          * @param  {object} result The result
          * @return {Function}        The promise
          */
-        removeBowerDest: function removeBowerDest() {
+        deleteTemplateDir: function deleteTemplateDir(result) {
           var d = _when2['default'].defer();
-          (0, _del2['default'])([_path2['default'].join(_this.options.target.path, 'bower_components/')]).then(function () {
-            d.resolve({
-              path: _path2['default'].join(_this.options.target.path, 'template/') + 'index.jade'
-            });
+          var dest = result.dest;
+
+          (0, _del2['default'])([dest.template.path]).then(function () {
+            d.resolve(result);
+          });
+          return d.promise;
+        },
+        /**
+         * Removes the temp dir
+         * @param  {object} result The result
+         * @return {Function}        The promise
+         */
+        deleteTempDir: function deleteTempDir(result) {
+          var d = _when2['default'].defer();
+          var src = result.src;
+
+          (0, _del2['default'])([src.theme.path]).then(function () {
+            d.resolve(result);
           });
           return d.promise;
         }
       };
 
-      (0, _mkdirp2['default'])(this.options.target.path, function (error) {
-        if (error) d.reject(error);
-        var promise;
-        // Decide between default template
-        // or provided template from bower
-        // and install it
-        if (!_this.options.bower.isEnabled()) promise = commands.installTheme('doxx-theme-default');else promise = commands.installTheme();
+      // Check if the template is enabled (legacy)
+      if (this.options.template.isEnabled()) {
+        d.resolve({
+          template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, this.options.template.path)).toString()
+        });
+      } else {
 
-        // Run through the commands
-        promise.then(commands.copyBower).then(commands.removeBowerSrc).then(commands.copyAssets).then(commands.copyAssetCSS).then(commands.copyAssetJS).then(commands.deleteAssets).then(commands.copyTemplate).then(commands.removeBowerDest).then(d.resolve);
-      });
-
+        // Preprocess the commands
+        commands.preProcess()
+        // Create a temp dir
+        .then(commands.createTempDir)
+        // Install the theme using bower
+        .then(commands.installTheme)
+        // Copy css dir files
+        .then(commands.copyAssetCSS)
+        // Copy the js dir & files
+        .then(commands.copyAssetJS)
+        // Copy the template dir & file
+        .then(commands.copyTemplate)
+        // Convert the template to a string
+        .then(commands.stringifyTemplate)
+        // Delete the template dir
+        .then(commands.deleteTemplateDir)
+        // Delete the temp dir
+        .then(commands.deleteTempDir)
+        // We're done!
+        .then(d.resolve);
+      }
       return d.promise;
     }
   }]);
@@ -324,8 +341,8 @@ var Theme = (function () {
   return Theme;
 })();
 
-exports['default'] = function (bower) {
-  return new Theme(bower);
+exports['default'] = function (theme) {
+  return new Theme(theme);
 };
 
 module.exports = exports['default'];

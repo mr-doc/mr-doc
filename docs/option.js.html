@@ -106,11 +106,12 @@
       this.options.readme = options.readme;
     }
 
-    if (options.bower) {
-      if (_.isString(options.bower) &amp;&amp; !_.isEmpty(options.bower)) {
-        this.options.bower = path.resolve(process.cwd(), options.bower) ||
-          process.cwd();
-      }
+    if (options.theme) {
+      if (_.isString(options.theme) &amp;&amp; !_.isEmpty(options.theme)) {
+        this.options.theme =
+          options.theme.indexOf('doxx-theme-') &gt; -1 ? options.theme :
+          'doxx-theme-' + options.theme;
+      } else this.options.theme = 'doxx-theme-default';
     }
   }</code></pre>
           <section id="getOptions">
@@ -144,7 +145,7 @@
     'extension': 'html',
     // The comma seperated list of directories to ignore. (alias for ignore)
     'blacklist': [
-      'test', 'public', 'static', 'template',
+      'test', 'public', 'static', 'view',
       'views', 'template', 'templates'
     ],
     // The markdown file to use on the main page of the documentations. 
@@ -152,9 +153,9 @@
     'readme': '',
     'package': undefined,
     'template': {
-      'path': '../template/index.jade'
+      'path': undefined
     },
-    'bower': undefined
+    'theme': 'doxx-theme-default'
   };
 }
 }

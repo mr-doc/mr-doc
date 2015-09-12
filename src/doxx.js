@@ -175,11 +175,11 @@ var Doxx = (function (_Compiler) {
       });
 
       // Install theme
-      (0, _theme2['default'])(this.options).install().then(function (template) {
-        console.info('doxx: Successfully installed theme!');
+      (0, _theme2['default'])(this.options).install().then(function (result) {
+        console.info('doxx: Successfully installed theme: ' + result.theme + '!');
         _lodash2['default'].forEach(_this.files, function (file, index) {
           // Set template
-          _this.setTemplate(template.path);
+          _this.setTemplate(result.template);
           // Compile the template
           var compiled = _this.compile(_this.locals[index]);
           // Write files

@@ -71,10 +71,10 @@ var Option = (function () {
         this.options.readme = options.readme;
       }
 
-      if (options.bower) {
-        if (_lodash2['default'].isString(options.bower) && !_lodash2['default'].isEmpty(options.bower)) {
-          this.options.bower = _path2['default'].resolve(process.cwd(), options.bower) || process.cwd();
-        }
+      if (options.theme) {
+        if (_lodash2['default'].isString(options.theme) && !_lodash2['default'].isEmpty(options.theme)) {
+          this.options.theme = options.theme.indexOf('doxx-theme-') > -1 ? options.theme : 'doxx-theme-' + options.theme;
+        } else this.options.theme = 'doxx-theme-default';
       }
     }
 
@@ -105,15 +105,15 @@ var Option = (function () {
         // The target files extension.
         'extension': 'html',
         // The comma seperated list of directories to ignore. (alias for ignore)
-        'blacklist': ['test', 'public', 'static', 'template', 'views', 'template', 'templates'],
+        'blacklist': ['test', 'public', 'static', 'view', 'views', 'template', 'templates'],
         // The markdown file to use on the main page of the documentations.
         // Checks the current directory for a package.json or README.md by default
         'readme': '',
         'package': undefined,
         'template': {
-          'path': '../template/index.jade'
+          'path': undefined
         },
-        'bower': undefined
+        'theme': 'doxx-theme-default'
       };
     }
   }]);

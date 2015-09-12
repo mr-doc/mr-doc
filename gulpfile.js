@@ -60,7 +60,7 @@ gulp.task('mocha', ['beautify','lib'],function () {
 
 /* Runs the doxx command and builds the docs */
 gulp.task('doc', shell.task([
-  './bin/doxx --source lib --target docs --bower --title Doxx',
+  './bin/doxx --source lib --target docs --title Doxx',
 ]));
 
 gulp.task('default', ['beautify', 'lib', 'watch']);

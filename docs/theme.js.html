@@ -42,29 +42,27 @@
             <ul class="nav nav-list bs-docs-sidenav affix-top">
               <li><a href="#Theme"><i class="alert alert-success"></i><span>Theme</span></a>
               </li>
-              <li><a href="#setup"><i class="alert alert-info"></i><span>setup</span></a>
-              </li>
               <li><a href="#install"><i class="alert alert-info"></i><span>install</span></a>
               </li>
               <li><a href="#commands"><i class="alert alert-success"></i><span>commands</span></a>
               </li>
+              <li><a href="#preProcess"><i class="alert alert-success"></i><span>preProcess</span></a>
+              </li>
+              <li><a href="#createTempDir"><i class="alert alert-success"></i><span>createTempDir</span></a>
+              </li>
               <li><a href="#installTheme"><i class="alert alert-success"></i><span>installTheme</span></a>
-              </li>
-              <li><a href="#copyBower"><i class="alert alert-success"></i><span>copyBower</span></a>
-              </li>
-              <li><a href="#removeBowerSrc"><i class="alert alert-success"></i><span>removeBowerSrc</span></a>
-              </li>
-              <li><a href="#copyAssets"><i class="alert alert-success"></i><span>copyAssets</span></a>
               </li>
               <li><a href="#copyAssetCSS"><i class="alert alert-success"></i><span>copyAssetCSS</span></a>
               </li>
               <li><a href="#copyAssetJS"><i class="alert alert-success"></i><span>copyAssetJS</span></a>
               </li>
-              <li><a href="#deleteAssets"><i class="alert alert-success"></i><span>deleteAssets</span></a>
-              </li>
               <li><a href="#copyTemplate"><i class="alert alert-success"></i><span>copyTemplate</span></a>
               </li>
-              <li><a href="#removeBowerDest"><i class="alert alert-success"></i><span>removeBowerDest</span></a>
+              <li><a href="#stringifyTemplate"><i class="alert alert-success"></i><span>stringifyTemplate</span></a>
+              </li>
+              <li><a href="#deleteTemplateDir"><i class="alert alert-success"></i><span>deleteTemplateDir</span></a>
+              </li>
+              <li><a href="#deleteTempDir"><i class="alert alert-success"></i><span>deleteTempDir</span></a>
               </li>
             </ul>
           </div>
@@ -82,41 +80,21 @@
   constructor(options) {
       this.bower = bower;
       this.options = {
-        bower: {
-          path: options.bower,
-          dir: {
-            path: Path.join(options.target, 'bower_components')
-          },
-          isEnabled: () =&gt; {
-            return !!options.bower;
+        theme: {
+          name: options.theme,
+          path: Path.join(root.path, 'theme/'),
+          target: {
+            path: options.target
           }
         },
-        target: {
-          path: options.target
+        template: {
+          path: options.template.path,
+          isEnabled: () =&gt; {
+            return !!options.template.path;
+          }
         }
       };
-      this.setup();
     }</code></pre>
-          <section id="setup">
-            <h1>setup</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Theme.prototype.setup()</span><span>&nbsp;</span>
-            </p>
-          </section>
-          <div class="description"><p>Sets up the package to install<br />bower components</p></div>
-          <pre><code class="language-javascript">setup() {
-    try {
-      this.package = require(this.options.bower.path);
-    } catch (error) {}
-
-    if (!this.package) {
-      try {
-        this.package = require('../bower');
-      } catch (error) {}
-    }
-
-  }</code></pre>
           <section id="install">
             <h1>install</h1>
             <h5 class="subheader"></h5>
@@ -136,6 +114,126 @@
           </section>
           <div class="description"><p>The commands to install the theme</p></div>
           <pre><code class="language-javascript">let commands = {</code></pre>
+          <section id="preProcess">
+            <h1>preProcess</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>preProcess</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Create necessary paths to<br />process the commands</p></div>
+          <pre><code class="language-javascript">preProcess: () =&gt; {
+  let d = when.defer();
+  let theme = this.options.theme.name;
+  // Create short-hands for paths
+
+  // Sources
+  var src = {
+    theme: {
+      path: this.options.theme.path
+    }
+  };
+
+  // Destinations
+  var dest = {
+    theme: {
+      path: this.options.theme.target.path
+    }
+  };
+
+  // Assets dir
+  let assets = {
+    path: Path.join(Path.join(
+        src.theme.path, 'bower_components/'),
+      theme + '/assets/')
+  };
+
+  // Template dir
+  let template = {
+    path: Path.join(Path.join(
+        src.theme.path, 'bower_components/'),
+      theme + '/template/')
+  };
+
+  // The css dir within assets dir
+  _.extend(src, {
+    css: {
+      path: Path.join(assets.path, 'css/')
+    }
+  });
+  _.extend(dest, {
+    css: {
+      path: Path.join(dest.theme.path, 'css/')
+    }
+  });
+
+  // The js dir within assets dir
+  _.extend(src, {
+    js: {
+      path: Path.join(assets.path, 'js/')
+    }
+  });
+  _.extend(dest, {
+    js: {
+      path: Path.join(dest.theme.path, 'js/')
+    }
+  });
+
+  // The bower template dir within assets dir
+  _.extend(src, {
+    template
+  });
+  _.extend(dest, {
+    template: {
+      path: Path.join(dest.theme.path, 'template/')
+    }
+  });
+
+  d.resolve({
+    theme, src, dest
+  });
+  return d.promise;
+},</code></pre>
+          <section id="createTempDir">
+            <h1>createTempDir</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>createTempDir</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>result</td>
+                <td>object</td>
+                <td><p>The result</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Function</td>
+                <td><p>The promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Creates a temp dir for bower<br />to install the bower components</p></div>
+          <pre><code class="language-javascript">createTempDir: (result) =&gt; {
+  let d = when.defer();
+  var {
+    src
+  } = result;
+  mkdirp(src.theme.path, (error) =&gt; {
+    if (error) d.reject(error);
+    else d.resolve(result);
+  });
+  return d.promise;
+},</code></pre>
           <section id="installTheme">
             <h1>installTheme</h1>
             <h5 class="subheader"></h5>
@@ -153,9 +251,9 @@
             </thead>
             <tbody>
               <tr>
-                <td>theme</td>
-                <td>String</td>
-                <td><p>The theme to install</p></td>
+                <td>result</td>
+                <td>object</td>
+                <td><p>The result</p></td>
               </tr>
               <tr>
                 <td>return</td>
@@ -165,173 +263,19 @@
             </tbody>
           </table>
           <div class="description"><p>Installs the theme through bower</p></div>
-          <pre><code class="language-javascript">installTheme: (theme) =&gt; {
+          <pre><code class="language-javascript">installTheme: (result) =&gt; {
   var d = when.defer();
-
-  if (!theme)
-    _.forEach(this.package, (value, key) =&gt; {
-      if (key === 'devDependencies' || key === 'dependencies')
-        _.forEach(this.package[key], (v, k) =&gt; {
-          if (k.indexOf('doxx-theme-') &gt; -1) {
-            theme = k;
-          }
-        });
-    });
+  var {
+    theme, src
+  } = result;
   this.bower.commands
     .install([theme], {
-      save: true
+      save: false
+    }, {
+      cwd: src.theme.path
     }).on('end', () =&gt; {
-      d.resolve(theme);
-    });
-  return d.promise;
-},</code></pre>
-          <section id="copyBower">
-            <h1>copyBower</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>copyBower</span><span>&nbsp;</span>
-            </p>
-          </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>theme</td>
-                <td>String</td>
-                <td><p>The theme to install</p></td>
-              </tr>
-              <tr>
-                <td>return</td>
-                <td>Function</td>
-                <td><p>The promise</p></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>Copies the bower dir to the target dir</p></div>
-          <pre><code class="language-javascript">copyBower: (theme) =&gt; {
-  let d = when.defer();
-
-  // Sources
-  var src = {
-    bower: Path.join(this.bower.config.cwd, 'bower_components/')
-  };
-  // Destinations
-  var dest = {
-    bower: this.options.bower.dir.path
-  };
-  // Copy the bower src file
-  File.copy(src.bower, dest.bower, {
-    clobber: true
-  }, (error) =&gt; {
-    if (error) d.reject(error);
-    else {
-      d.resolve({
-        theme, src, dest
-      });
-    }
-  });
-  return d.promise;
-},</code></pre>
-          <section id="removeBowerSrc">
-            <h1>removeBowerSrc</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>removeBowerSrc</span><span>&nbsp;</span>
-            </p>
-          </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>result</td>
-                <td>object</td>
-                <td><p>The result</p></td>
-              </tr>
-              <tr>
-                <td>return</td>
-                <td>Function</td>
-                <td><p>The promise</p></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>Removes the original bower dir</p></div>
-          <pre><code class="language-javascript">removeBowerSrc: (result) =&gt; {
-  let d = when.defer();
-  let {
-    src
-  } = result;
-  del([src.bower]).then(() =&gt; {
-    d.resolve(result);
-  });
-  return d.promise;
-},</code></pre>
-          <section id="copyAssets">
-            <h1>copyAssets</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>copyAssets</span><span>&nbsp;</span>
-            </p>
-          </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>result</td>
-                <td>object</td>
-                <td><p>The result</p></td>
-              </tr>
-              <tr>
-                <td>return</td>
-                <td>Function</td>
-                <td><p>The promise</p></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>Copies the asset dir from the copied bower dir</p></div>
-          <pre><code class="language-javascript">copyAssets: (result) =&gt; {
-  let d = when.defer();
-  var {
-    theme, src, dest
-  } = result;
-  _.extend(src, {
-    assets: {
-      dir: Path.join(Path.join(
-          this.options.target.path, 'bower_components/'),
-        theme + '/assets/')
-    }
-  });
-  _.extend(dest, {
-    assets: {
-      dir: Path.join(this.options.target.path, 'assets/')
-    }
-  });
-
-  File.copy(src.assets.dir, dest.assets.dir, {
-    clobber: true
-  }, error =&gt; {
-    if (error) d.reject(error);
-    else {
       d.resolve(result);
-    }
-  });
+    }).on('error', d.reject);
   return d.promise;
 },</code></pre>
           <section id="copyAssetCSS">
@@ -362,21 +306,14 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Copies the css dir from the assets dir</p></div>
+          <div class="description"><p>Copies the css dir from the assets dir<br />to the target dir</p></div>
           <pre><code class="language-javascript">copyAssetCSS: (result) =&gt; {
   let d = when.defer();
   var {
-    theme, src, dest
+    src, dest
   } = result;
-  _.extend(src.assets, {
-    css: Path.join(Path.join(
-        this.options.target.path, 'bower_components/'),
-      theme + '/assets/css/')
-  });
-  _.extend(dest.assets, {
-    css: Path.join(this.options.target.path, 'css/')
-  });
-  File.copy(src.assets.css, dest.assets.css, {
+
+  File.copy(src.css.path, dest.css.path, {
     clobber: true
   }, error =&gt; {
     if (error) d.reject(error);
@@ -414,66 +351,19 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Copies the js dir from the assets dir</p></div>
+          <div class="description"><p>Copies the js dir from the assets dir<br />to the target dir</p></div>
           <pre><code class="language-javascript">copyAssetJS: (result) =&gt; {
   let d = when.defer();
   var {
-    theme, src, dest
+    src, dest
   } = result;
-  _.extend(src.assets, {
-    js: Path.join(Path.join(
-        this.options.target.path, 'bower_components/'),
-      theme + '/assets/js')
-  });
-  _.extend(dest.assets, {
-    js: Path.join(this.options.target.path, 'js/')
-  });
-  File.copy(src.assets.js, dest.assets.js, {
+  File.copy(src.js.path, dest.js.path, {
     clobber: true
   }, error =&gt; {
     if (error) d.reject(error);
     else {
       d.resolve(result);
     }
-  });
-  return d.promise;
-},</code></pre>
-          <section id="deleteAssets">
-            <h1>deleteAssets</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>deleteAssets</span><span>&nbsp;</span>
-            </p>
-          </section>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th style="width:20%">Option name</th>
-                <th style="width:20%">Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>result</td>
-                <td>object</td>
-                <td><p>The result</p></td>
-              </tr>
-              <tr>
-                <td>return</td>
-                <td>Function</td>
-                <td><p>The promise</p></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="description"><p>Removes the assets dir from the target</p></div>
-          <pre><code class="language-javascript">deleteAssets: (result) =&gt; {
-  let d = when.defer();
-  var {
-    dest
-  } = result;
-  del([dest.assets.dir]).then(() =&gt; {
-    d.resolve(result);
   });
   return d.promise;
 },</code></pre>
@@ -505,22 +395,14 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Copies the template dir from the assets dir</p></div>
+          <div class="description"><p>Copies the template dir from the assets dir<br />to the target dir</p></div>
           <pre><code class="language-javascript">copyTemplate: (result) =&gt; {
   let d = when.defer();
   var {
-    theme, src, dest
+    src, dest
   } = result;
-  _.extend(src, {
-    template: Path.join(Path.join(
-        this.options.target.path, 'bower_components/'),
-      theme + '/template/')
-  });
-  _.extend(dest, {
-    template: Path.join(this.options.target.path, '/template/')
-  });
 
-  File.copy(src.template, dest.template, {
+  File.copy(src.template.path, dest.template.path, {
     clobber: true
   }, error =&gt; {
     if (error) d.reject(error);
@@ -530,11 +412,11 @@
   });
   return d.promise;
 },</code></pre>
-          <section id="removeBowerDest">
-            <h1>removeBowerDest</h1>
+          <section id="stringifyTemplate">
+            <h1>stringifyTemplate</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>removeBowerDest</span><span>&nbsp;</span>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>stringifyTemplate</span><span>&nbsp;</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -558,55 +440,141 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Removes the bower dir from the target dir</p></div>
-          <pre><code class="language-javascript">removeBowerDest: () =&gt; {
+          <div class="description"><p>Reads the template and strigifies it.</p></div>
+          <pre><code class="language-javascript">stringifyTemplate: (result) =&gt; {
   let d = when.defer();
-  del([
-    Path.join(
-      this.options.target.path,
-      'bower_components/')
-  ]).then(() =&gt; {
-    d.resolve({
-      path: Path.join(
-        this.options.target.path,
-        'template/') + 'index.jade'
+  var {
+    dest, src, theme
+  } = result;
+  let file = dest.template.path + 'index.jade';
+
+  File.readFile(file, (error, data) =&gt; {
+    if (error) d.reject(error);
+    else d.resolve({
+      dest, src, theme,
+      template: data.toString()
     });
+  });
+  return d.promise;
+},</code></pre>
+          <section id="deleteTemplateDir">
+            <h1>deleteTemplateDir</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>deleteTemplateDir</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>result</td>
+                <td>object</td>
+                <td><p>The result</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Function</td>
+                <td><p>The promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Removes the template dir from<br />the target dir</p></div>
+          <pre><code class="language-javascript">deleteTemplateDir: (result) =&gt; {
+  let d = when.defer();
+  var {
+    dest
+  } = result;
+  del([dest.template.path]).then(() =&gt; {
+    d.resolve(result);
+  });
+  return d.promise;
+},</code></pre>
+          <section id="deleteTempDir">
+            <h1>deleteTempDir</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>deleteTempDir</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>result</td>
+                <td>object</td>
+                <td><p>The result</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Function</td>
+                <td><p>The promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Removes the temp dir</p></div>
+          <pre><code class="language-javascript">deleteTempDir: (result) =&gt; {
+  let d = when.defer();
+  var {
+    src
+  } = result;
+  del([src.theme.path]).then(() =&gt; {
+    d.resolve(result);
   });
   return d.promise;
 }
     };
 
-    mkdirp(this.options.target.path, (error) =&gt; {
-if (error) d.reject(error);
-var promise;
-// Decide between default template 
-// or provided template from bower
-// and install it
-if (!this.options.bower.isEnabled())
-  promise = commands.installTheme('doxx-theme-default');
-else promise = commands.installTheme();
+    // Check if the template is enabled (legacy)
+    if (this.options.template.isEnabled()) {
+d.resolve({
+  template: File.readFileSync(
+    Path.resolve(__dirname,
+      this.options.template.path)).toString()
+});
+    } else {
 
-// Run through the commands
-promise
-  .then(commands.copyBower)
-  .then(commands.removeBowerSrc)
-  .then(commands.copyAssets)
+// Preprocess the commands
+commands.preProcess()
+  // Create a temp dir
+  .then(commands.createTempDir)
+  // Install the theme using bower
+  .then(commands.installTheme)
+  // Copy css dir files
   .then(commands.copyAssetCSS)
+  // Copy the js dir &amp; files
   .then(commands.copyAssetJS)
-  .then(commands.deleteAssets)
+  // Copy the template dir &amp; file
   .then(commands.copyTemplate)
-  .then(commands.removeBowerDest)
+  // Convert the template to a string
+  .then(commands.stringifyTemplate)
+  // Delete the template dir
+  .then(commands.deleteTemplateDir)
+  // Delete the temp dir
+  .then(commands.deleteTempDir)
+  // We're done!
   .then(d.resolve);
-    });
-
+    }
     return d.promise;
   }
 
 }
 
 
-export default (bower) =&gt; {
-  return new Theme(bower);
+export default (theme) =&gt; {
+  return new Theme(theme);
 };</code></pre>
         </div>
       </div>

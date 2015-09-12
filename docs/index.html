@@ -103,7 +103,7 @@ $ npm i -g doxx
     -T, --target &lt;target&gt;                      The folder which will contain the results. Default: &lt;CWD&gt;/docs
     -e, --extension &lt;extension&gt;                Target files extension. Default: html
     -j, --template &lt;template&gt;                  The Jade template file to use
-
+    -b, --theme &lt;theme&gt;                        The name of the theme. e.g. doxx-theme-cayman or cayman 
   Examples:
 
     # parse a whole folder
@@ -112,6 +112,19 @@ $ npm i -g doxx
     # parse a whole folder and use a specific template
     $ doxx --template ./view/myowntpl.jade --source lib --target docs
 </code></pre>
+<h2>Themes</h2>
+<p>With the release of 2.1.0, you are able to use different themes to spice up your docs. To install a theme,
+simply use the <code>--theme</code> option followed by the name of the theme:</p>
+<pre><code class="language-bash">$ doxx --source lib --target docs --theme cayman
+# or
+$ doxx --source lib --target docs --theme doxx-theme-cayman
+</code></pre>
+<p>Note that the prefix <code>doxx-theme-</code> is not necessary except when
+publishing your own themes.</p>
+<p>Also, it is still possible to use templates but would recommend you
+to move on to themes instead.</p>
+<p>If you would like to create your own themes, see
+<a href="https://github.com/iwatakeshi/doxx-theme-starter-kit">doxx-theme-starter-kit</a>.</p>
 <h2>Related</h2>
 <ul>
 <li><a href="https://github.com/evertton/grunt-doxx">grunt-doxx</a> - Doxx grunt plugin automatically generates the documentation for your project.</li>

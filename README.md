@@ -72,7 +72,7 @@ $ doxx --help
     -T, --target <target>                      The folder which will contain the results. Default: <CWD>/docs
     -e, --extension <extension>                Target files extension. Default: html
     -j, --template <template>                  The Jade template file to use
-
+    -b, --theme <theme>                        The name of the theme. e.g. doxx-theme-cayman or cayman 
   Examples:
 
     # parse a whole folder
@@ -81,6 +81,27 @@ $ doxx --help
     # parse a whole folder and use a specific template
     $ doxx --template ./view/myowntpl.jade --source lib --target docs
 ```
+
+## Themes
+
+With the release of 2.1.0, you are able to use different themes to spice up your docs. To install a theme,
+simply use the `--theme` option followed by the name of the theme:
+
+```bash
+$ doxx --source lib --target docs --theme cayman
+# or
+$ doxx --source lib --target docs --theme doxx-theme-cayman
+```
+
+Note that the prefix `doxx-theme-` is not necessary except when
+publishing your own themes.
+
+Also, it is still possible to use templates but would recommend you
+to move on to themes instead.
+
+If you would like to create your own themes, see
+[doxx-theme-starter-kit](https://github.com/iwatakeshi/doxx-theme-starter-kit).
+
 
 ## Related
 

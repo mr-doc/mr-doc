@@ -70,11 +70,25 @@ var Compiler = (function () {
 
     /** 
      * Sets the template
-     * @param {String} path The path to the template
+     * @param {String} template The template
      */
   }, {
     key: 'setTemplate',
-    value: function setTemplate(path) {
+    value: function setTemplate(template) {
+      /**
+       * Template used to produce the documentation
+       * @type {String} template string
+       */
+      this.template = template;
+    }
+
+    /** 
+     * Sets the template
+     * @param {String} path The path to the template
+     */
+  }, {
+    key: 'setTemplateWithPath',
+    value: function setTemplateWithPath(path) {
       /**
        * Template used to produce the documentation
        * @type {String} template string

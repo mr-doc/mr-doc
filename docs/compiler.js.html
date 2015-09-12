@@ -52,6 +52,10 @@
               </li>
               <li><a href="#template"><i class="alert alert-success"></i><span>template</span></a>
               </li>
+              <li><a href="#setTemplateWithPath"><i class="alert alert-info"></i><span>setTemplateWithPath</span></a>
+              </li>
+              <li><a href="#template"><i class="alert alert-success"></i><span>template</span></a>
+              </li>
               <li><a href="#setup"><i class="alert alert-info"></i><span>setup</span></a>
               </li>
               <li><a href="#jade"><i class="alert alert-success"></i><span>jade</span></a>
@@ -159,14 +163,14 @@ this.setup();
             </thead>
             <tbody>
               <tr>
-                <td>path</td>
+                <td>template</td>
                 <td>String</td>
-                <td><p>The path to the template</p></td>
+                <td><p>The template</p></td>
               </tr>
             </tbody>
           </table>
           <div class="description"><p>Sets the template</p></div>
-          <pre><code class="language-javascript">setTemplate(path) {</code></pre>
+          <pre><code class="language-javascript">setTemplate(template) {</code></pre>
           <section id="template">
             <h1>template</h1>
             <h5 class="subheader"></h5>
@@ -175,7 +179,42 @@ this.setup();
             </p>
           </section>
           <div class="description"><p>Template used to produce the documentation</p></div>
-          <pre><code class="language-javascript">this.template = fs.readFileSync(
+          <pre><code class="language-javascript">this.template = template;
+  }</code></pre>
+          <section id="setTemplateWithPath">
+            <h1>setTemplateWithPath</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>setTemplateWithPath()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>path</td>
+                <td>String</td>
+                <td><p>The path to the template</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Sets the template</p></div>
+          <pre><code class="language-javascript">setTemplateWithPath(path) {</code></pre>
+          <section id="template">
+            <h1>template</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>this.template</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Template used to produce the documentation</p></div>
+          <pre><code class="language-javascript">this.template = File.readFileSync(
   Path.resolve(__dirname, path ||
     this.options.template.path)).toString();
   }</code></pre>
