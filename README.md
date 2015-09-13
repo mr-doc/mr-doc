@@ -61,7 +61,7 @@ $ doxx --help
   Usage: doxx [options]
 
   Commands:
-    cache                                      Manages 'Manages the doxx cache. The available commands are clean and remove
+    cache                                      Manages the doxx cache. The available commands are clean and remove
 
   Options:
 
