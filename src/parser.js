@@ -121,7 +121,7 @@ var Parser = (function () {
           raw: false
         });
       } catch (e) {
-        console.error('doxx:', e);
+        console.error('Doxx [error]:', e);
         return [];
       }
 

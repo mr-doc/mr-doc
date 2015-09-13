@@ -149,6 +149,9 @@
 
   // Render and write each file
   this.files.forEach(file =&gt; {
+    // TEST
+    var targets = [];
+
     // Set each files relName in relation 
     // to where this file is in the directory tree
     this.files.forEach(function (f) {
@@ -167,7 +170,23 @@
         f.relPath += '../';
         count--;
       }
+
+      console.log(file.targetName, f.targetName);
+      // TEST
+      targets.push({
+        files: {
+          name: f.name,
+          target: {
+            name: f.targetName
+          },
+          relative: {
+            name: f.relName,
+            path: f.relPath
+          }
+        }
+      });
     });
+    file.targets = targets;
   });
 
   this.files.forEach((file) =&gt; {
@@ -179,7 +198,6 @@
       },
       allSymbols: allSymbols,
       files: this.files,
-      path: file.relPath,
       currentName: file.name
     }));
   });

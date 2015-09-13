@@ -141,6 +141,9 @@ var Doxx = (function (_Compiler) {
 
       // Render and write each file
       this.files.forEach(function (file) {
+        // TEST
+        var targets = [];
+
         // Set each files relName in relation
         // to where this file is in the directory tree
         _this.files.forEach(function (f) {
@@ -159,7 +162,23 @@ var Doxx = (function (_Compiler) {
             f.relPath += '../';
             count--;
           }
+
+          console.log(file.targetName, f.targetName);
+          // TEST
+          targets.push({
+            files: {
+              name: f.name,
+              target: {
+                name: f.targetName
+              },
+              relative: {
+                name: f.relName,
+                path: f.relPath
+              }
+            }
+          });
         });
+        file.targets = targets;
       });
 
       this.files.forEach(function (file) {
@@ -171,7 +190,6 @@ var Doxx = (function (_Compiler) {
           },
           allSymbols: allSymbols,
           files: _this.files,
-          path: file.relPath,
           currentName: file.name
         }));
       });
