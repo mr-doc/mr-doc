@@ -109,6 +109,7 @@ var Theme = (function () {
         }
       }
     };
+    this.isCache = this.options.theme.exists() && this.options.theme.bower.exists();
   }
 
   /** 
@@ -130,7 +131,7 @@ var Theme = (function () {
         showProgress: function showProgress(command) {
           var count = 0;
           while (count < 200) {
-            (0, _logUpdate2['default'])('doxx: ' + frame() + ' ' + command);
+            (0, _logUpdate2['default'])('Doxx [info]: ' + frame() + ' ' + command);
             count++;
           }
         },
@@ -336,7 +337,8 @@ var Theme = (function () {
           _fsExtra2['default'].readFile(file, function (error, data) {
             if (error) d.reject(error);else d.resolve({
               dest: dest, src: src, theme: theme,
-              template: data.toString()
+              template: data.toString(),
+              isCache: _this.isCache
             });
           });
           return d.promise;
@@ -370,35 +372,35 @@ var Theme = (function () {
 
           // Preprocess the commands
           return commands.preProcess().tap(function () {
-            notify('Preparing to install theme');
+            notify('Preparing to install theme' + (_this.isCache ? ' from cache.' : ''));
           })
           // Create a temp dir
           .then(commands.createDoxxDir).tap(function () {
-            return notify('Creating home directory');
+            if (!_this.options.theme.exists()) notify('Creating home directory');
           })
           // Install the theme using bower
           .then(commands.installTheme).tap(function () {
-            return notify('Installing theme');
+            notify('Installing theme');
           })
           // Copy css dir files
           .then(commands.copyAssetCSS).tap(function () {
-            return notify('Copying css directory');
+            notify('Copying css directory to target');
           })
           // Copy the js dir & files
           .then(commands.copyAssetJS).tap(function () {
-            return notify('Copying js directory');
+            notify('Copying js directory to target');
           })
           // Copy the template dir & file
           .then(commands.copyTemplate).tap(function () {
-            return notify('Copying template directory');
+            notify('Copying template directory to target');
           })
           // Convert the template to a string
           .then(commands.stringifyTemplate).tap(function () {
-            return notify('Rendering the template');
+            notify('Rendering the template from target');
           })
           // Delete the template dir
           .then(commands.deleteTemplateDir).tap(function () {
-            return notify('Removing the template directory');
+            notify('Removing template directory from target');
           }).then(final.resolve);
         })(commands.showProgress);
       }

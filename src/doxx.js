@@ -47,8 +47,6 @@ var _theme = require('./theme');
 
 var _theme2 = _interopRequireDefault(_theme);
 
-require('source-map-support/register');
-
 /**
  * The main class that creates beautiful documentations.
  * @class Doxx
@@ -65,7 +63,7 @@ var Doxx = (function (_Compiler) {
     _classCallCheck(this, Doxx);
 
     _get(Object.getPrototypeOf(Doxx.prototype), 'constructor', this).call(this, (0, _parser2['default'])(options));
-    // The locals stack
+    // Set the locals stack
     this.locals = [];
   }
 
@@ -96,11 +94,11 @@ var Doxx = (function (_Compiler) {
       if (!readme && _fs2['default'].existsSync(readMeFile)) {
         readme = _fs2['default'].readFileSync(readMeFile).toString();
       } else {
-        console.log(new Error('No README.md file found at ' + readMeFile));
+        console.warn(new Error('Doxx [warn]: No README.md file found at ' + readMeFile));
       }
 
       if (!readme) {
-        console.log(new Error('Empty README.md ' + readMeFile));
+        console.warn(new Error('Doxx [warn]: Empty README.md ' + readMeFile));
         readme = '';
       }
 
@@ -116,6 +114,19 @@ var Doxx = (function (_Compiler) {
         symbols: []
       });
 
+      // Set title
+      var title = pkg && pkg.name ? pkg.name : this.options.title;
+
+      // Set description
+      var description = pkg && pkg.description ? pkg.description : '';
+
+      // Set URLs
+      var url = {
+        github: pkg && pkg.homepage ? pkg.homepage.indexOf('github') > -1 ? pkg.homepage : false : false,
+        npm: pkg && pkg.name ? 'https://npmjs.com/package/' + pkg.name : false,
+        homepage: pkg && pkg.homepage ? pkg.homepage.indexOf('github') === -1 ? pkg.homepage : false : false
+      };
+
       // Make sure the folder structure in target mirrors source
       var folders = [];
 
@@ -130,53 +141,49 @@ var Doxx = (function (_Compiler) {
 
       // Render and write each file
       this.files.forEach(function (file) {
-
         // Set each files relName in relation
         // to where this file is in the directory tree
+        _this.files.forEach(function (f) {
 
-        // Count how deep the current file is in relation to base
-        var count = file.name.split('/');
-        count = count === null ? 0 : count.length - 1;
+          // Count how deep the current file is in relation to base
+          var count = file.name.split('/');
+          count = count === null ? 0 : count.length - 1;
 
-        // relName is equal to targetName at the base dir
-        file.relName = file.targetName;
-        file.relPath = './';
-        // For each directory in depth of current file
-        // add a ../ to the relative filename of this link
-        while (count > 0) {
-          file.relName = '../' + file.relName;
-          file.relPath += '../';
-          count--;
-        }
+          // relName is equal to targetName at the base dir
+          f.relName = f.targetName;
+          f.relPath = '';
+          // For each directory in depth of current file
+          // add a ../ to the relative filename of this link
+          while (count > 0) {
+            f.relName = '../' + f.relName;
+            f.relPath += '../';
+            count--;
+          }
+        });
+      });
 
-        // Set title
-        var title = _this.options.title ? _this.options.title : pkg && pkg.name ? pkg.name : _this.options.title = 'Doxx Generated Documentation';
-
-        // Set description
-        var description = pkg && pkg.description ? pkg.description : '';
-
-        // Set URLs
-        var url = {
-          github: pkg && pkg.homepage ? pkg.homepage.indexOf('github') > -1 ? pkg.homepage : false : false,
-          npm: pkg && pkg.name ? 'https://npmjs.com/package/' + pkg.name : false,
-          homepage: pkg && pkg.homepage ? pkg.homepage.indexOf('github') === -1 ? pkg.homepage : false : false
-        };
-
-        // Push locals into stack
-        _this.locals.push(_lodash2['default'].extend({}, file, {
+      this.files.forEach(function (file) {
+        // console.log(file.relName, this.files);
+        // Set locals
+        _this.locals.push(_lodash2['default'].assign({}, file, {
           project: {
-            title: title, description: description, url: url
+            title: title, description: description, url: url, path: file.relPath
           },
           allSymbols: allSymbols,
           files: _this.files,
-          currentName: file.name,
-          path: file.relPath
+          path: file.relPath,
+          currentName: file.name
         }));
       });
 
       // Install theme
       (0, _theme2['default'])(this.options).install().then(function (result) {
-        console.info('doxx: Successfully installed theme: ' + result.theme + '!');
+        var isCache = result.isCache;
+        var theme = result.theme;
+
+        if (theme) {
+          console.info('Doxx [info]: Installed theme: ' + theme + (isCache ? ' from cache.' : ''));
+        }
         _lodash2['default'].forEach(_this.files, function (file, index) {
           // Set template
           _this.setTemplate(result.template);

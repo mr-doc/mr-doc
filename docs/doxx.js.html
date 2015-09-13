@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width" charset="utf-8">
-    <title>Doxx</title>
+    <title>doxx</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
     <link rel="stylesheet" href="css/docs.min.css">
@@ -21,7 +21,7 @@
     </div>
     <header id="overview" class="jumbotron subhead">
       <div class="container">
-        <h1>Doxx</h1>
+        <h1>doxx</h1>
         <p class="lead"></p>
       </div>
     </header>
@@ -61,7 +61,7 @@
   // and pass the parser.
   constructor(options) {
       super(parser(options));
-      // The locals stack
+      // Set the locals stack
       this.locals = [];
     }</code></pre>
           <section id="generate">
@@ -92,11 +92,13 @@
   if (!readme &amp;&amp; File.existsSync(readMeFile)) {
     readme = File.readFileSync(readMeFile).toString();
   } else {
-    console.log(new Error('No README.md file found at ' + readMeFile));
+    console.warn(
+      new Error('Doxx [warn]: No README.md file found at ' + readMeFile));
   }
 
   if (!readme) {
-    console.log(new Error('Empty README.md ' + readMeFile));
+    console.warn(
+      new Error('Doxx [warn]: Empty README.md ' + readMeFile));
     readme = '';
   }
 
@@ -111,6 +113,26 @@
     dox: [],
     symbols: []
   });
+
+  // Set title
+  var title = pkg &amp;&amp; pkg.name ? pkg.name :
+    this.options.title;
+
+  // Set description
+  var description = pkg &amp;&amp; pkg.description ?
+    pkg.description : '';
+
+  // Set URLs
+  var url = {
+    github: pkg &amp;&amp; pkg.homepage ?
+      pkg.homepage.indexOf('github') &gt; -1 ?
+      pkg.homepage : false : false,
+    npm: pkg &amp;&amp; pkg.name ?
+      'https://npmjs.com/package/' + pkg.name : false,
+    homepage: pkg &amp;&amp; pkg.homepage ?
+      pkg.homepage.indexOf('github') === -1 ?
+      pkg.homepage : false : false
+  };
 
   // Make sure the folder structure in target mirrors source
   var folders = [];
@@ -127,63 +149,51 @@
 
   // Render and write each file
   this.files.forEach(file =&gt; {
-
     // Set each files relName in relation 
     // to where this file is in the directory tree
+    this.files.forEach(function (f) {
 
-    // Count how deep the current file is in relation to base
-    var count = file.name.split('/');
-    count = count === null ? 0 : count.length - 1;
+      // Count how deep the current file is in relation to base
+      var count = file.name.split('/');
+      count = count === null ? 0 : count.length - 1;
 
-    // relName is equal to targetName at the base dir
-    file.relName = file.targetName;
-    file.relPath = './';
-    // For each directory in depth of current file 
-    // add a ../ to the relative filename of this link
-    while (count &gt; 0) {
-      file.relName = '../' + file.relName;
-      file.relPath += '../';
-      count--;
-    }
+      // relName is equal to targetName at the base dir
+      f.relName = f.targetName;
+      f.relPath = '';
+      // For each directory in depth of current file 
+      // add a ../ to the relative filename of this link
+      while (count &gt; 0) {
+        f.relName = '../' + f.relName;
+        f.relPath += '../';
+        count--;
+      }
+    });
+  });
 
-    // Set title
-    var title = this.options.title ? this.options.title :
-      pkg &amp;&amp; pkg.name ? pkg.name :
-      (this.options.title = 'Doxx Generated Documentation');
-
-    // Set description
-    var description = pkg &amp;&amp; pkg.description ?
-      pkg.description : '';
-
-    // Set URLs
-    var url = {
-      github: pkg &amp;&amp; pkg.homepage ?
-        pkg.homepage.indexOf('github') &gt; -1 ?
-        pkg.homepage : false : false,
-      npm: pkg &amp;&amp; pkg.name ?
-        'https://npmjs.com/package/' + pkg.name : false,
-      homepage: pkg &amp;&amp; pkg.homepage ?
-        pkg.homepage.indexOf('github') === -1 ?
-        pkg.homepage : false : false
-    };
-
-    // Push locals into stack
-    this.locals.push(_.extend({}, file, {
+  this.files.forEach((file) =&gt; {
+    // console.log(file.relName, this.files);
+    // Set locals
+    this.locals.push(_.assign({}, file, {
       project: {
-        title, description, url
+        title, description, url, path: file.relPath
       },
       allSymbols: allSymbols,
       files: this.files,
-      currentName: file.name,
-      path: file.relPath
+      path: file.relPath,
+      currentName: file.name
     }));
-
   });
 
   // Install theme
   theme(this.options).install().then((result) =&gt; {
-    console.info(
-      'doxx: Successfully installed theme: ' + result.theme + '!');
+    var {
+      isCache, theme
+    } = result;
+
+    if (theme) {
+      console.info('Doxx [info]: Installed theme: ' +
+        theme + (isCache ? ' from cache.' : ''));
+    }
     _.forEach(this.files, (file, index) =&gt; {
       // Set template
       this.setTemplate(result.template);

@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width" charset="utf-8">
-    <title>Doxx</title>
+    <title>doxx</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
     <link rel="stylesheet" href="css/docs.min.css">
@@ -21,7 +21,7 @@
     </div>
     <header id="overview" class="jumbotron subhead">
       <div class="container">
-        <h1>Doxx</h1>
+        <h1>doxx</h1>
         <p class="lead"></p>
       </div>
     </header>
@@ -126,6 +126,9 @@
           }
         }
       };
+      this.isCache =
+        this.options.theme.exists() &amp;&amp;
+        this.options.theme.bower.exists();
     }</code></pre>
           <section id="install">
             <h1>install</h1>
@@ -149,7 +152,7 @@
   showProgress: (command) =&gt; {
     var count = 0;
     while (count &lt; 200) {
-      logUpdate('doxx: ' + frame() + ' ' + command);
+      logUpdate('Doxx [info]: ' + frame() + ' ' + command);
       count++;
     }
   },</code></pre>
@@ -510,7 +513,8 @@
     if (error) d.reject(error);
     else d.resolve({
       dest, src, theme,
-      template: data.toString()
+      template: data.toString(),
+        isCache: this.isCache
     });
   });
   return d.promise;
@@ -571,47 +575,47 @@ final.resolve({
   // Preprocess the commands
   return commands.preProcess()
     .tap(() =&gt; {
-      notify('Preparing to install theme');
+      notify('Preparing to install theme' +
+        (this.isCache ? ' from cache.' : ''));
     })
     // Create a temp dir
     .then(commands.createDoxxDir)
     .tap(() =&gt; {
-      return notify('Creating home directory');
+      if (!this.options.theme.exists())
+        notify('Creating home directory');
     })
     // Install the theme using bower
     .then(commands.installTheme)
     .tap(() =&gt; {
-      return notify('Installing theme');
+      notify('Installing theme');
     })
     // Copy css dir files
     .then(commands.copyAssetCSS)
     .tap(() =&gt; {
-      return notify('Copying css directory');
+      notify('Copying css directory to target');
     })
     // Copy the js dir &amp; files
     .then(commands.copyAssetJS)
     .tap(() =&gt; {
-      return notify('Copying js directory');
+      notify('Copying js directory to target');
     })
     // Copy the template dir &amp; file
     .then(commands.copyTemplate)
     .tap(() =&gt; {
-      return notify('Copying template directory');
+      notify('Copying template directory to target');
     })
     // Convert the template to a string
     .then(commands.stringifyTemplate)
     .tap(() =&gt; {
-      return notify('Rendering the template');
+      notify('Rendering the template from target');
     })
     // Delete the template dir
     .then(commands.deleteTemplateDir)
     .tap(() =&gt; {
-      return notify('Removing the template directory');
+      notify('Removing template directory from target');
     })
     .then(final.resolve);
 })(commands.showProgress);
-
-
     }
     return final.promise;
   }

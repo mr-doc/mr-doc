@@ -56,7 +56,7 @@ var Option = (function () {
       }
 
       if (!options.source) {
-        console.error(new Error('Error, you must define a source'));
+        console.error(new Error('Doxx [error]: You must define a source.'));
         return;
       } else this.options.source = options.source;
 
