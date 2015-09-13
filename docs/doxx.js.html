@@ -171,18 +171,16 @@
         count--;
       }
 
-      console.log(file.targetName, f.targetName);
+      // console.log(file.targetName, f.targetName);
       // TEST
       targets.push({
-        files: {
-          name: f.name,
-          target: {
-            name: f.targetName
-          },
-          relative: {
-            name: f.relName,
-            path: f.relPath
-          }
+        name: f.name,
+        target: {
+          name: f.targetName
+        },
+        relative: {
+          name: f.relName,
+          path: f.relPath
         }
       });
     });
@@ -198,7 +196,10 @@
       },
       allSymbols: allSymbols,
       files: this.files,
-      currentName: file.name
+      currentName: file.name,
+      file: {
+        targets: file.targets
+      }
     }));
   });
 

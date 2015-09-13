@@ -163,18 +163,16 @@ var Doxx = (function (_Compiler) {
             count--;
           }
 
-          console.log(file.targetName, f.targetName);
+          // console.log(file.targetName, f.targetName);
           // TEST
           targets.push({
-            files: {
-              name: f.name,
-              target: {
-                name: f.targetName
-              },
-              relative: {
-                name: f.relName,
-                path: f.relPath
-              }
+            name: f.name,
+            target: {
+              name: f.targetName
+            },
+            relative: {
+              name: f.relName,
+              path: f.relPath
             }
           });
         });
@@ -190,7 +188,10 @@ var Doxx = (function (_Compiler) {
           },
           allSymbols: allSymbols,
           files: _this.files,
-          currentName: file.name
+          currentName: file.name,
+          file: {
+            targets: file.targets
+          }
         }));
       });
 
