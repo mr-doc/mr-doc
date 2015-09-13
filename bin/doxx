@@ -29,11 +29,11 @@ var defaults = option().getDefaults();
 /**
  * Docs cache dir
  */
-let home = osenv.home() ||
+var home = osenv.home() ||
         process.env.HOME ||
         process.env.HOMEPATH ||
         process.env.USERPROFILE;
-let hiddenPath = Path.join(home, '.doxx');
+var hiddenPath = Path.join(home, '.doxx');
 
 /**
  * Variables
