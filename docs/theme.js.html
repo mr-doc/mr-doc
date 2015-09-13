@@ -77,11 +77,17 @@
           <pre><code class="language-javascript">class Theme {
   constructor(options) {
       this.bower = bower;
+
+      // Set home directory
       let home = osenv.home() ||
         process.env.HOME ||
         process.env.HOMEPATH ||
         process.env.USERPROFILE;
+
+      // Set hidden path
       let hiddenPath = Path.join(home, '.doxx');
+
+      // Set template options
       this.options = {
         theme: {
           name: options.theme,
@@ -97,7 +103,12 @@
           bower: {
             exists: () =&gt; {
               try {
-                fs.statSync(hiddenPath);
+                var bower = Path.join(
+                  Path.join(
+                    hiddenPath,
+                    'bower_components/'),
+                  options.theme + '/');
+                fs.statSync(bower);
                 return true;
               } catch (err) {
                 return !(err &amp;&amp; err.code === 'ENOENT');
@@ -137,8 +148,8 @@
           <pre><code class="language-javascript">let commands = {
   showProgress: (command) =&gt; {
     var count = 0;
-    while (count &lt; 100) {
-      logUpdate(frame() + ' ' + command);
+    while (count &lt; 200) {
+      logUpdate('doxx: ' + frame() + ' ' + command);
       count++;
     }
   },</code></pre>
@@ -262,6 +273,7 @@
     d.resolve(result);
   } else {
     mkdirp(src.theme.path, (error) =&gt; {
+      console.log(error);
       if (error) d.reject(error);
       else {
         d.resolve(result);

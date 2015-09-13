@@ -54,23 +54,26 @@ program
 
 
   program
-    .command('cache <cmd>', 'Perfoms actions on the Doxx cache. The available commands are \'clean\' and \'remove\'')
+    .command('cache <cmd>')
+    .description('Manages the doxx cache. The available commands are \'clean\' and \'remove\'')
     .action(function (cmd, options) {
       isCmd = true;
-      if(options === 'cache'){
-        try{
-          File.emptyDirSync(hiddenPath);
-        } catch(error){ console.log('doxx: Could not clean the cache.\n', error); }
+      switch(cmd){
+        case 'clean':
+          try{
+            File.emptyDirSync(hiddenPath);
+          } catch(error){ console.log('doxx: Could not clean the cache.\n', error); }
+          break;
+        case 'remove':
+          try{
+            File.removeSync(hiddenPath);
+          } catch(error){ console.log('doxx: Could not remove the cache.\n', error); }
+          break;
+        default:
+          console.log('Invalid command: ' + '\''+ cmd + '\'');
+          break;
       }
-      else if(options === 'remove'){
-        try{
-          File.removeSync(hiddenPath);
-        } catch(error){ console.log('doxx: Could not remove the cache.\n', error); }
-      }
-      return true;
     });
-
-  
 
 function showHelp(){
   console.log('  Examples:\n');
@@ -85,16 +88,11 @@ function showHelp(){
 // examples
 program.on('--help', showHelp);
 
-try{
 // parse argv
 program.parse(process.argv);
-
-
-}catch(error){}
 
 if(!isCmd){
   var options = option(program).getOptions();
   !_.isEmpty(options.source)
     doxx(options).generate();
 }
-

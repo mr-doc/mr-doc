@@ -67,8 +67,14 @@ var Theme = (function () {
     _classCallCheck(this, Theme);
 
     this.bower = _bower2['default'];
+
+    // Set home directory
     var home = _osenv2['default'].home() || process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+
+    // Set hidden path
     var hiddenPath = _path2['default'].join(home, '.doxx');
+
+    // Set template options
     this.options = {
       theme: {
         name: options.theme,
@@ -84,7 +90,8 @@ var Theme = (function () {
         bower: {
           exists: function exists() {
             try {
-              _fs2['default'].statSync(hiddenPath);
+              var bower = _path2['default'].join(_path2['default'].join(hiddenPath, 'bower_components/'), options.theme + '/');
+              _fs2['default'].statSync(bower);
               return true;
             } catch (err) {
               return !(err && err.code === 'ENOENT');
@@ -122,8 +129,8 @@ var Theme = (function () {
       var commands = {
         showProgress: function showProgress(command) {
           var count = 0;
-          while (count < 100) {
-            (0, _logUpdate2['default'])(frame() + ' ' + command);
+          while (count < 200) {
+            (0, _logUpdate2['default'])('doxx: ' + frame() + ' ' + command);
             count++;
           }
         },
@@ -216,6 +223,7 @@ var Theme = (function () {
             d.resolve(result);
           } else {
             (0, _mkdirp2['default'])(src.theme.path, function (error) {
+              console.log(error);
               if (error) d.reject(error);else {
                 d.resolve(result);
               }

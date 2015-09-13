@@ -60,19 +60,22 @@ $ doxx --help
 
   Usage: doxx [options]
 
+  Commands:
+    cache                                      Manages 'Manages the doxx cache. The available commands are clean and remove
+
   Options:
 
-    -h, --help                                 Outputs usage information.
-    -V, --version                              Outputs the version number.
-    -r, --raw                                  Outputs "raw" comments, leaving the markdown intact.
-    -d, --debug                                Outputs parsed comments for debugging.
-    -t, --title <string>                       The title for the page produced.
-    -s, --source <source>                      The folder which should get parsed.
-    -i, --ignore <directories>                 Comma seperated list of directories to ignore. Default: test,public,static, view, views, templates
-    -T, --target <target>                      The folder which will contain the results. Default: <CWD>/docs
-    -e, --extension <extension>                Target files extension. Default: html
-    -j, --template <template>                  The Jade template file to use
-    -b, --theme <theme>                        The name of the theme. e.g. doxx-theme-cayman or cayman 
+    -h, --help                        Outputs usage information.
+    -V, --version                     Outputs the version number.
+    -r, --raw                         Outputs "raw" comments, leaving the markdown intact.
+    -d, --debug                       Outputs parsed comments for debugging.
+    -t, --title <string>              The title for the page produced.
+    -s, --source <source>             The folder which should get parsed.
+    -i, --ignore <directories>        Comma seperated list of directories to ignore. Default: test,public,static, view, views, templates
+    -T, --target <target>             The folder which will contain the results. Default: <CWD>/docs
+    -e, --extension <extension        Target files extension. Default: html
+    -j, --template <template>         The Jade template file to use
+    -b, --theme <theme>               The name of the theme. e.g. doxx-theme-cayman or cayman 
   Examples:
 
     # parse a whole folder
