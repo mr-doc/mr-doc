@@ -61,7 +61,7 @@ $ doxx --help
   Usage: doxx [options]
 
   Commands:
-    cache                             Manages the doxx cache. The available commands are clean and remove
+    cache                             Manages the doxx cache. The available commands are clean and remove.
 
   Options:
 
@@ -71,11 +71,11 @@ $ doxx --help
     -d, --debug                       Outputs parsed comments for debugging.
     -t, --title <string>              The title for the page produced.
     -s, --source <source>             The folder which should get parsed.
-    -i, --ignore <directories>        Comma seperated list of directories to ignore. Default: test,public,static, view, views, templates
+    -i, --ignore <directories>        Comma seperated list of directories to ignore. Default: test, public, static, view, views, templates.
     -T, --target <target>             The folder which will contain the results. Default: <CWD>/docs
-    -e, --extension <extension        Target files extension. Default: html
-    -j, --template <template>         The Jade template file to use
-    -b, --theme <theme>               The name of the theme. e.g. doxx-theme-cayman or cayman 
+    -e, --extension <extension>       Target files extension. Default: html
+    -j, --template <template>         The Jade template file to use.
+    -b, --theme <theme>               The name of the theme. e.g. doxx-theme-cayman or cayman.
   Examples:
 
     # parse a whole folder
