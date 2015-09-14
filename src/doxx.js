@@ -188,13 +188,13 @@ var Doxx = (function (_Compiler) {
   }, {
     key: 'getTargets',
     value: function getTargets(file) {
-      return _lodash2['default'].map(this.files, function () {
+      return _lodash2['default'].map(this.files, function (f) {
         // Count how deep the current file is in relation to base
         var count = file.name.split('/');
         count = count === null ? 0 : count.length - 1;
 
         // name is equal to targetName at the base dir
-        var name = file.targetName;
+        var name = f.targetName;
         // path is equal to the base dir
         var path = '';
         // For each directory in depth of current file
@@ -210,10 +210,10 @@ var Doxx = (function (_Compiler) {
         return {
           // target.file
           file: {
-            name: file.name
+            name: f.name
           },
           // target.name
-          name: file.targetName,
+          name: f.targetName,
           // target.relative
           relative: {
             name: name, path: path
