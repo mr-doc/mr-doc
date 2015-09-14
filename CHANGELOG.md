@@ -1,5 +1,33 @@
 # Change Log
 
+## [v2.1.0](https://github.com/fgribreau/doxx/tree/v2.1.0) (2015-09-14)
+
+[Full Changelog](https://github.com/fgribreau/doxx/compare/v2.0.0...v2.1.0)
+
+**Implemented enhancements:**
+
+- Use update-notifier [\#78](https://github.com/FGRibreau/doxx/issues/78)
+
+- Generate critical path from CSS [\#43](https://github.com/FGRibreau/doxx/issues/43)
+
+- Minify CSS and JS [\#42](https://github.com/FGRibreau/doxx/issues/42)
+
+- broken when viewed from https server [\#5](https://github.com/FGRibreau/doxx/issues/5)
+
+**Merged pull requests:**
+
+- Update [\#77](https://github.com/FGRibreau/doxx/pull/77) ([iwatakeshi](https://github.com/iwatakeshi))
+
+- Update [\#76](https://github.com/FGRibreau/doxx/pull/76) ([iwatakeshi](https://github.com/iwatakeshi))
+
+- Update [\#75](https://github.com/FGRibreau/doxx/pull/75) ([iwatakeshi](https://github.com/iwatakeshi))
+
+- Patch [\#74](https://github.com/FGRibreau/doxx/pull/74) ([iwatakeshi](https://github.com/iwatakeshi))
+
+- Update Doxx [\#72](https://github.com/FGRibreau/doxx/pull/72) ([iwatakeshi](https://github.com/iwatakeshi))
+
+- 2.1.0 [\#80](https://github.com/FGRibreau/doxx/pull/80) ([iwatakeshi](https://github.com/iwatakeshi))
+
 ## [v2.0.0](https://github.com/fgribreau/doxx/tree/v2.0.0) (2015-09-03)
 
 [Full Changelog](https://github.com/fgribreau/doxx/compare/v1.5.0...v2.0.0)
