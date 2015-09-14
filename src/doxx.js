@@ -143,7 +143,7 @@ var Doxx = (function (_Compiler) {
       // Set each files relName in relation
       // to where this file is in the directory tree
       this.files.forEach(function (file) {
-        file.targets = _this.getTargets();
+        file.targets = _this.getTargets(file);
       });
 
       // Set the locals for each file
@@ -187,8 +187,8 @@ var Doxx = (function (_Compiler) {
      */
   }, {
     key: 'getTargets',
-    value: function getTargets() {
-      return _lodash2['default'].map(this.files, function (file) {
+    value: function getTargets(file) {
+      return _lodash2['default'].map(this.files, function () {
         // Count how deep the current file is in relation to base
         var count = file.name.split('/');
         count = count === null ? 0 : count.length - 1;

@@ -151,7 +151,7 @@
     // Set each files relName in relation 
     // to where this file is in the directory tree
     this.files.forEach(file =&gt; {
-      file.targets = this.getTargets();
+      file.targets = this.getTargets(file);
     });
 
     // Set the locals for each file
