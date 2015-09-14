@@ -154,10 +154,7 @@ var Doxx = (function (_Compiler) {
           },
           allSymbols: allSymbols,
           files: _this.files,
-          currentName: file.name,
-          file: {
-            targets: file.targets
-          }
+          currentName: file.name
         }));
       });
 

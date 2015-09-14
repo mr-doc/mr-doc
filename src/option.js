@@ -16,11 +16,11 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
-require('source-map-support/register');
-
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
+
+require('source-map-support/register');
 
 /**
  * The class that sets the options.
