@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>doxx</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/cayman.css">
+    <link rel="stylesheet" href="css/prism.css">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">doxx</h1>
+      <h2 class="project-tagline">Generic, template based, HTML output for Dox documentation generator</h2><a href="https://github.com/FGRibreau/doxx" target="_blank" class="btn">View on GitHub</a><a href="https://npmjs.com/package/doxx" target="_blank" class="btn">View on npm</a>
+    </section>
+    <section data-spy="scroll" data-target=".scrollspy" class="main-content">
+      <div class="row">
+        <div class="col-md-3 bs-docs-sidebar">
+          <ul id="sidebar" class="nav nav-stacked fixed">
+            <li><a href="index.html">Main</a></li>
+            <li><a href="compiler.js.html">compiler.js</a></li>
+            <li><a href="dir.js.html">dir.js</a></li>
+            <li><a href="doxx.js.html">doxx.js</a></li>
+            <li><a href="option.js.html">option.js</a></li>
+            <li><a href="parser.js.html">parser.js</a></li>
+            <li><a href="symbol.js.html">symbol.js</a></li>
+            <li class="active"><a href="theme.js.html">theme.js
+                <ul class="nav nav-stacked">
+                  <li><a href="#Theme"><i class="alert alert-success"></i><span>Theme</span></a>
+                  </li>
+                  <li><a href="#staticInstall"><i class="alert alert-info"></i><span>staticInstall</span></a>
+                  </li>
+                  <li><a href="#commands"><i class="alert alert-success"></i><span>commands</span></a>
+                  </li>
+                  <li><a href="#preProcess"><i class="alert alert-success"></i><span>preProcess</span></a>
+                  </li>
+                  <li><a href="#createDoxxDir"><i class="alert alert-success"></i><span>createDoxxDir</span></a>
+                  </li>
+                  <li><a href="#installTheme"><i class="alert alert-success"></i><span>installTheme</span></a>
+                  </li>
+                  <li><a href="#copyAssetCSS"><i class="alert alert-success"></i><span>copyAssetCSS</span></a>
+                  </li>
+                  <li><a href="#copyAssetJS"><i class="alert alert-success"></i><span>copyAssetJS</span></a>
+                  </li>
+                  <li><a href="#copyTemplate"><i class="alert alert-success"></i><span>copyTemplate</span></a>
+                  </li>
+                  <li><a href="#stringifyTemplate"><i class="alert alert-success"></i><span>stringifyTemplate</span></a>
+                  </li>
+                  <li><a href="#deleteTemplateDir"><i class="alert alert-success"></i><span>deleteTemplateDir</span></a>
+                  </li>
+                  <li><a href="#install"><i class="alert alert-info"></i><span>install</span></a>
+                  </li>
+                </ul></a></li>
+          </ul>
+        </div>
+        <div class="col-md-9">
+          <section id="Theme">
+            <h1>Theme</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">class</div><span>&nbsp;</span><span>new Theme()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>The class that installs themes.</p></div>
+          <pre><code class="language-javascript">class Theme {
+  constructor(options) {
+    // Set hidden path
+    let hiddenPath = Path.join(Dir.getHomeDir(), '.doxx');
+
+    // Set template options
+    this.options = {
+      theme: {
+        name: options.theme,
+        path: hiddenPath
+      },
+      template: {
+        path: options.template.path
+      },
+      target: {
+        path: options.target
+      }
+    };
+  }</code></pre>
+          <section id="staticInstall">
+            <h1>staticInstall</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Theme.staticInstall()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>options</td>
+                <td>Object</td>
+                <td><p>The options</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Function</td>
+                <td><p>The promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Installs the theme and its assets statically</p></div>
+          <pre><code class="language-javascript">static staticInstall(options) {
+    let final = when.defer();</code></pre>
+          <h5>jsFiddle</h5>
+          <p>
+            <iframe width="100%" height="300" src="https://jsfiddle.net/iwatakeshi/k5xsvoez/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+          </p>
+          <div class="description"><p>Required options:</p><pre><code>    theme.name    (the name of the theme)
+    theme.path    (the path to store the theme)
+    target.path   (the path to store the compiled content)
+    template.path (the template path) *for test purposes only*
+</code></pre></div>
+          <pre><code class="language-javascript">// Create cache paths and helpers
+var cache = {
+  theme: {
+    path: options.theme.path
+  },
+  bower: {
+    path: Path.join(Path.join(
+        options.theme.path,
+        'bower_components/'),
+      options.theme.name + '/')
+  }
+};
+
+_.extend(cache, {
+  exists: () =&gt; {
+    return Dir.exists(cache.theme.path) &amp;&amp;
+      Dir.exists(cache.bower.path);
+  }
+});
+
+_.extend(cache.theme, {
+  exists: () =&gt; {
+    return Dir.exists(cache.theme.path);
+  }
+});
+
+_.extend(cache.bower, {
+  exists: () =&gt; {
+    return Dir.exists(cache.bower.path);
+  }
+});</code></pre>
+          <section id="commands">
+            <h1>commands</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">declaration</div><span>&nbsp;</span><span>commands</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>The commands to install the theme</p></div>
+          <pre><code class="language-javascript">let commands = {
+  showProgress: (command) =&gt; {
+    var count = 0;
+    while (count &lt; 200) {
+      logUpdate('Doxx [info]: ' + frame() + ' ' + command);
+      count++;
+    }
+  },</code></pre>
+          <section id="preProcess">
+            <h1>preProcess</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>preProcess</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Create necessary paths to<br />process the commands</p></div>
+          <pre><code class="language-javascript">preProcess: () =&gt; {
+  let d = when.defer();
+
+  let theme = options.theme.name;
+  // Create short-hands for paths
+
+  // Sources
+  var src = {
+    theme: {
+      path: options.theme.path
+    }
+  };
+
+  // Destinations
+  var dest = {
+    theme: {
+      path: options.target.path
+    }
+  };
+
+  // Assets dir
+  let assets = {
+    path: Path.join(Path.join(
+        src.theme.path, 'bower_components/'),
+      theme + '/assets/')
+  };
+
+  // Template dir
+  let template = {
+    path: Path.join(Path.join(
+        src.theme.path, 'bower_components/'),
+      theme + '/template/')
+  };
+
+  // The css dir within assets dir
+  _.extend(src, {
+    css: {
+      path: Path.join(assets.path, 'css/')
+    }
+  });
+  _.extend(dest, {
+    css: {
+      path: Path.join(dest.theme.path, 'css/')
+    }
+  });
+
+  // The js dir within assets dir
+  _.extend(src, {
+    js: {
+      path: Path.join(assets.path, 'js/')
+    }
+  });
+  _.extend(dest, {
+    js: {
+      path: Path.join(dest.theme.path, 'js/')
+    }
+  });
+
+  // The bower template dir within assets dir
+  _.extend(src, {
+    template
+  });
+  _.extend(dest, {
+    template: {
+      path: Path.join(dest.theme.path, 'template/')
+    }
+  });
+
+  d.resolve({
+    theme, src, dest
+  });
+  return d.promise;
+},</code></pre>
+          <section id="createDoxxDir">
+            <h1>createDoxxDir</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>createDoxxDir</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>result</td>
+                <td>object</td>
+                <td><p>The result</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Function</td>
+                <td><p>The promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Creates a temp dir for bower<br />to install the bower components</p></div>
+          <pre><code class="language-javascript">createDoxxDir: (result) =&gt; {
+  let d = when.defer();
+
+  // Check if the source directory exists
+  // Note: This is used for caching
+  if (Dir.exists(cache.theme.exists())) {
+    d.resolve(result);
+  } else {
+    mkdirp(cache.theme.path, (error) =&gt; {
+      console.log(error);
+      if (error) d.reject(error);
+      else {
+        d.resolve(result);
+      }
+    });
+  }
+  return d.promise;
+},</code></pre>
+          <section id="installTheme">
+            <h1>installTheme</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>installTheme</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>result</td>
+                <td>object</td>
+                <td><p>The result</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Function</td>
+                <td><p>The promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Installs the theme through bower</p></div>
+          <pre><code class="language-javascript">installTheme: (result) =&gt; {
+  var d = when.defer();
+  var {
+    theme
+  } = result;
+  // Check if the cached bower dir exists
+  if (Dir.exists(cache.bower.path)) {
+    d.resolve(result);
+  } else {
+    bower.commands
+      .install([theme], {
+        save: false
+      }, {
+        cwd: cache.theme.path
+      }).on('end', () =&gt; {
+        d.resolve(result);
+      }).on('error', d.reject);
+  }
+
+  return d.promise;
+},</code></pre>
+          <section id="copyAssetCSS">
+            <h1>copyAssetCSS</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>copyAssetCSS</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>result</td>
+                <td>object</td>
+                <td><p>The result</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Function</td>
+                <td><p>The promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Copies the css dir from the assets dir<br />to the target dir</p></div>
+          <pre><code class="language-javascript">copyAssetCSS: (result) =&gt; {
+  let d = when.defer();
+
+  var {
+    src, dest
+  } = result;
+
+  File.copy(src.css.path, dest.css.path, {
+    clobber: true
+  }, error =&gt; {
+    if (error) d.reject(error);
+    else {
+      d.resolve(result);
+    }
+  });
+  return d.promise;
+},</code></pre>
+          <section id="copyAssetJS">
+            <h1>copyAssetJS</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>copyAssetJS</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>result</td>
+                <td>object</td>
+                <td><p>The result</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Function</td>
+                <td><p>The promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Copies the js dir from the assets dir<br />to the target dir</p></div>
+          <pre><code class="language-javascript">copyAssetJS: (result) =&gt; {
+  let d = when.defer();
+
+  var {
+    src, dest
+  } = result;
+  File.copy(src.js.path, dest.js.path, {
+    clobber: true
+  }, error =&gt; {
+    if (error) d.reject(error);
+    else {
+      d.resolve(result);
+    }
+  });
+  return d.promise;
+},</code></pre>
+          <section id="copyTemplate">
+            <h1>copyTemplate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>copyTemplate</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>result</td>
+                <td>object</td>
+                <td><p>The result</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Function</td>
+                <td><p>The promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Copies the template dir from the assets dir<br />to the target dir</p></div>
+          <pre><code class="language-javascript">copyTemplate: (result) =&gt; {
+  let d = when.defer();
+
+  var {
+    src, dest
+  } = result;
+
+  File.copy(src.template.path, dest.template.path, {
+    clobber: true
+  }, error =&gt; {
+    if (error) d.reject(error);
+    else {
+      d.resolve(result);
+    }
+  });
+  return d.promise;
+},</code></pre>
+          <section id="stringifyTemplate">
+            <h1>stringifyTemplate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>stringifyTemplate</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>result</td>
+                <td>object</td>
+                <td><p>The result</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Function</td>
+                <td><p>The promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Reads the template and strigifies it.</p></div>
+          <pre><code class="language-javascript">stringifyTemplate: (result) =&gt; {
+  let d = when.defer();
+
+  var {
+    dest, src, theme
+  } = result;
+  let file = dest.template.path + 'index.jade';
+
+  File.readFile(file, (error, data) =&gt; {
+    if (error) d.reject(error);
+    else d.resolve({
+      dest, src, theme,
+      template: data.toString(),
+        isCached: cache.exists()
+    });
+  });
+  return d.promise;
+},</code></pre>
+          <section id="deleteTemplateDir">
+            <h1>deleteTemplateDir</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>deleteTemplateDir</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>result</td>
+                <td>object</td>
+                <td><p>The result</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Function</td>
+                <td><p>The promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Removes the template dir from<br />the target dir</p></div>
+          <pre><code class="language-javascript">deleteTemplateDir: (result) =&gt; {
+  let d = when.defer();
+
+  var {
+    dest
+  } = result;
+  del([dest.template.path]).then(() =&gt; {
+    d.resolve(result);
+  });
+  return d.promise;
+}
+      };
+
+      // Check if the template is enabled (legacy)
+      if (options.template &amp;&amp; options.template.path) {
+final.resolve({
+  template: File.readFileSync(
+    Path.resolve(__dirname,
+      options.template.path)).toString()
+});
+      } else {
+
+((notify) =&gt; {
+
+  // Preprocess the commands
+  return commands.preProcess()
+    .tap(() =&gt; {
+      notify('Preparing to install theme' +
+        (cache.exists() ? ' from cache.' : ''));
+    })
+    // Create a temp dir
+    .then(commands.createDoxxDir)
+    .tap(() =&gt; {
+      if (!cache.theme.exists())
+        notify('Creating home directory');
+    })
+    // Install the theme using bower
+    .then(commands.installTheme)
+    .tap(() =&gt; {
+      notify('Installing theme');
+    })
+    // Copy css dir files
+    .then(commands.copyAssetCSS)
+    .tap(() =&gt; {
+      notify('Copying css directory to target');
+    })
+    // Copy the js dir &amp; files
+    .then(commands.copyAssetJS)
+    .tap(() =&gt; {
+      notify('Copying js directory to target');
+    })
+    // Copy the template dir &amp; file
+    .then(commands.copyTemplate)
+    .tap(() =&gt; {
+      notify('Copying template directory to target');
+    })
+    // Convert the template to a string
+    .then(commands.stringifyTemplate)
+    .tap(() =&gt; {
+      notify('Rendering the template from target');
+    })
+    // Delete the template dir
+    .then(commands.deleteTemplateDir)
+    .tap(() =&gt; {
+      notify('Removing template directory from target');
+    })
+    .then(final.resolve);
+})(commands.showProgress);
+      }
+      return final.promise;
+    }</code></pre>
+          <section id="install">
+            <h1>install</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>install()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Installs the theme and its assets</p></div>
+          <pre><code class="language-javascript">install() {
+  return Theme.staticInstall(this.options);
+}
+}
+
+export default Theme;</code></pre>
+          <div class="footer site-footer">
+            <div class="span site-footer-owner"><a href="https://github.com/iwatakeshi/doxx-theme-cayman">Cayman</a> is maintained by <a href="https://github.com/iwatakeshi">iwatakeshi</a>.</div>
+            <div class="span site-footer-credits">This page was generated by <a href="https://github.com/FGRibreau/doxx">Doxx</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/affix.js"></script>
+    <script src="js/dropdown.js"></script>
+    <script src="js/scrollspy.js"></script>
+    <script src="js/prism.js"></script>
+    <script src="js/prism-bash.js"></script>
+    <script>
+      $(document).ready(function(){
+        $('body').scrollspy({
+          target: ".bs-docs-sidebar",
+          offset: 40
+        }) 
+      });
+    </script>
+  </body>
+</html>

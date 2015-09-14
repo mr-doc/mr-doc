@@ -1,0 +1,69 @@
+{
+  "name": "doxx",
+  "description": "Generic, template based, HTML output for Dox documentation generator",
+  "version": "2.1.0",
+  "homepage": "https://github.com/FGRibreau/doxx",
+  "author": "Francois-Guillaume Ribreau <npm@fgribreau.com> (http://fgribreau.com)",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/FGRibreau/doxx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/FGRibreau/doxx/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/FGRibreau/doxx/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "lib/doxx.js",
+  "bin": {
+    "doxx": "./bin/doxx"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "dependencies": {
+    "bower": "^1.5.2",
+    "commander": "~2.8.1",
+    "del": "^2.0.2",
+    "dox": "^0.8.0",
+    "elegant-spinner": "^1.0.0",
+    "fs-extra": "^0.24.0",
+    "jade": "~1.11.x",
+    "jshint-stylish": "^2.0.1",
+    "lodash": "^3.10.1",
+    "log-update": "^1.0.0",
+    "markdown-it": "^4.4.0",
+    "mkdirp": "~0.5.0",
+    "osenv": "^0.1.3",
+    "source-map-support": "^0.3.2",
+    "update-notifier": "^0.5.0",
+    "walkdir": "~0.0.7",
+    "when": "^3.7.3"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.2.1",
+    "gulp-jsbeautify": "^0.1.1",
+    "gulp-jshint": "^1.11.2",
+    "gulp-mocha": "^2.1.3",
+    "gulp-shell": "^0.4.3",
+    "gulp-sourcemaps": "^1.5.2",
+    "mocha": "^2.3.0"
+  },
+  "keywords": [
+    "dox",
+    "jsdox",
+    "documentor",
+    "documentation",
+    "docs",
+    "dox"
+  ],
+  "optionalDependencies": {}
+}

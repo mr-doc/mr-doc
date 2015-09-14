@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>doxx</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" type="text/css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/cayman.css">
+    <link rel="stylesheet" href="css/prism.css">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">doxx</h1>
+      <h2 class="project-tagline">Generic, template based, HTML output for Dox documentation generator</h2><a href="https://github.com/FGRibreau/doxx" target="_blank" class="btn">View on GitHub</a><a href="https://npmjs.com/package/doxx" target="_blank" class="btn">View on npm</a>
+    </section>
+    <section data-spy="scroll" data-target=".scrollspy" class="main-content">
+      <div class="row">
+        <div class="col-md-3 bs-docs-sidebar">
+          <ul id="sidebar" class="nav nav-stacked fixed">
+            <li class="active"><a href="index.html">Main
+                <ul class="nav nav-stacked">
+                </ul></a></li>
+            <li><a href="compiler.js.html">compiler.js</a></li>
+            <li><a href="dir.js.html">dir.js</a></li>
+            <li><a href="doxx.js.html">doxx.js</a></li>
+            <li><a href="option.js.html">option.js</a></li>
+            <li><a href="parser.js.html">parser.js</a></li>
+            <li><a href="symbol.js.html">symbol.js</a></li>
+            <li><a href="theme.js.html">theme.js</a></li>
+          </ul>
+        </div>
+        <div class="col-md-9">
+          <section id="Main" class="readme"><h1>Doxx <a href="https://david-dm.org/FGRibreau/doxx"><img src="https://david-dm.org/FGRibreau/doxx.png" alt="Deps"></a> <a href="https://david-dm.org/FGRibreau/doxx"><img src="http://badge.fury.io/js/doxx.png" alt="Version"></a> <a href="https://travis-ci.org/FGRibreau/doxx"><img src="https://travis-ci.org/FGRibreau/doxx.svg" alt="Version"></a></h1>
+<p>Doxx is a total refactoring of <a href="https://github.com/punkave/dox-foundation/">dox-foundation</a>  written in ES6, tranformed to ES5 with <a href="https://babeljs.io/">Babel</a>, and is based on <a href="https://github.com/visionmedia/dox">dox</a>. It can automatically generate beautiful documentations and can further spice up your documentations using themes.</p>
+<p>By default, Doxx uses <a href="https://www.github.com/iwatakeshi/doxx-theme-default">doxx-theme-default</a> which uses
+<a href="https://twitter.github.com/bootstrap/">Twitter Bootstrap</a> for the frontend framework and <a href="http://prismjs.com/">Prism.js</a>
+for syntax highlighting.</p>
+<h2>Docs</h2>
+<p>The beautifully documentation can be found at <a href="http://fgribreau.github.io/doxx/docs/">GitHub</a>.</p>
+<h2>Installation</h2>
+<pre><code class="language-bash"># Install the module globally
+$ npm i -g doxx
+</code></pre>
+<h2>Usage</h2>
+<p>JavaScript JavaDoc style</p>
+<pre><code class="language-javascript">/**
+ * Create an array of all the right files in the source dir
+ * @param      {String}   source path
+ * @param      {Object}   options
+ * @param      {Function} callback
+ * @jsFiddle   A jsFiddle embed URL
+ * @return     {Array} an array of string path
+ */
+function collectFiles(source, options, callback) {
+  ...
+}
+
+</code></pre>
+<p>CoffeeScript JavaDoc style</p>
+<pre><code class="language-coffeescript">###*
+ * Create an array of all the right files in the source dir
+ * @param      {String}   source path
+ * @param      {Object}   options
+ * @param      {Function} callback
+ * @jsFiddle   A jsFiddle embed URL
+ * @return     {Array} an array of string path
+###
+collectFiles = (source, options, callback) -&gt;
+  ...
+
+</code></pre>
+<p><strong><em>Notes</em></strong></p>
+<ul>
+<li>Doxx supports the following variations of <code>@return</code> and <code>@jsFiddle</code>:
+<ul>
+<li><code>@return</code>, <code>@returns</code></li>
+<li><code>@jsfiddle</code>, <code>@jsFiddle</code>, <code>@JSFiddle</code></li>
+</ul>
+</li>
+</ul>
+<h2>CLI</h2>
+<pre><code class="language-bash">$ doxx --help
+
+  Usage: doxx [options]
+
+  Commands:
+    cache                         Manages the Doxx cache. The available commands are clean and remove.
+
+  Options:
+
+    -h, --help                    Outputs usage information.
+    -V, --version                 Outputs the version number.
+    -r, --raw                     Outputs &quot;raw&quot; comments, leaving the markdown intact.
+    -d, --debug                   Outputs parsed comments for debugging.
+    -t, --title &lt;string&gt;          The title for the page produced.
+    -s, --source &lt;source&gt;         The folder which should get parsed.
+    -i, --ignore &lt;directories&gt;    Comma seperated list of directories to ignore. Default: test, public, static, view, views, templates.
+    -T, --target &lt;target&gt;         The folder which will contain the results. Default: &lt;CWD&gt;/docs
+    -e, --extension &lt;extension&gt;   Target files extension. Default: html
+    -j, --template &lt;template&gt;     The Jade template file to use.
+    -b, --theme &lt;theme&gt;           The name of the theme. e.g. doxx-theme-cayman or cayman.
+  Examples:
+
+    # parse a whole folder
+    $ doxx --source lib --target docs
+
+    # parse a whole folder and use a specific template
+    $ doxx --template ./view/myowntpl.jade --source lib --target docs
+</code></pre>
+<h2>Themes</h2>
+<h3>Usage</h3>
+<p>With the release of <strong>2.1.0</strong>, you are able to use different themes to <strong><em>spice</em></strong> up your documentations. To install a theme,
+simply use the <code>--theme</code> option followed by the name of the theme:</p>
+<pre><code class="language-bash">$ doxx --source lib --target docs --theme cayman
+# or
+$ doxx --source lib --target docs --theme doxx-theme-cayman
+</code></pre>
+<p><strong><em>Notes</em></strong></p>
+<ul>
+<li>The prefix <code>doxx-theme-</code> is not necessary except when
+publishing your own themes.</li>
+<li>While it is still possible to use templates, I would advise you
+to use themes instead.</li>
+</ul>
+<h3>Creating Themes</h3>
+<p>If you would like to create your own themes, see
+<a href="https://github.com/iwatakeshi/doxx-theme-starter-kit">doxx-theme-starter-kit</a>.</p>
+<h2>Related</h2>
+<ul>
+<li><a href="https://github.com/evertton/grunt-doxx">grunt-doxx</a> - Doxx grunt plugin automatically generates the documentation for your project.</li>
+<li><a href="https://github.com/filipovskii/gulp-doxx">gulp-doxx</a> - Doxx documentation generator for gulp.</li>
+</ul>
+<h2>Contributing</h2>
+<p>In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using <a href="https://github.com/gulpjs/gulp">gulp</a> and <a href="https://github.com/mochajs/mocha">mocha</a>.</p>
+<h2>Changelog</h2>
+<p>The changes can be viewed <a href="/CHANGELOG.md">here</a>.</p>
+<h2>Donate</h2>
+<ul>
+<li><a href="https://coinbase.com/checkouts/fc3041b9d8116e0b98e7d243c4727a30">Donate Bitcoins</a></li>
+<li><a href="https://gratipay.com/FGRibreau/">Gratipay (gittip)</a></li>
+</ul>
+<h2>License</h2>
+<p>MIT License</p>
+<p>Copyright (c) 2013 Francois-Guillaume Ribreau</p>
+</section>
+          <div class="footer site-footer">
+            <div class="span site-footer-owner"><a href="https://github.com/iwatakeshi/doxx-theme-cayman">Cayman</a> is maintained by <a href="https://github.com/iwatakeshi">iwatakeshi</a>.</div>
+            <div class="span site-footer-credits">This page was generated by <a href="https://github.com/FGRibreau/doxx">Doxx</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/affix.js"></script>
+    <script src="js/dropdown.js"></script>
+    <script src="js/scrollspy.js"></script>
+    <script src="js/prism.js"></script>
+    <script src="js/prism-bash.js"></script>
+    <script>
+      $(document).ready(function(){
+        $('body').scrollspy({
+          target: ".bs-docs-sidebar",
+          offset: 40
+        }) 
+      });
+    </script>
+  </body>
+</html>

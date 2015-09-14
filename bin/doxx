@@ -1,0 +1,98 @@
+#!/usr/bin/env node
+"use strict";
+
+var program         = require('commander'),
+    version         = require('../package').version,
+    doxx            = require('../src/doxx'),
+    option          = require('../src/option'),
+    _               = require('lodash'),
+    updateNotifier  = require('update-notifier'),
+    pkg             = require('../package.json'),
+    File            = require('fs-extra'),
+    Path            = require('path'),
+    osenv           = require('osenv');
+
+// Checks for available update and returns an instance
+var notifier = updateNotifier({pkg: pkg});
+
+// Notify using the built-in convenience method
+notifier.notify();
+
+// Show the update if it exists
+if(notifier.update) console.log(notifier.update);
+
+/**
+ * Options & Defaults
+ */
+var defaults = option().getDefaults();
+
+/**
+ * Docs cache dir
+ */
+var home = osenv.home() ||
+        process.env.HOME ||
+        process.env.HOMEPATH ||
+        process.env.USERPROFILE;
+var hiddenPath = Path.join(home, '.doxx');
+
+/**
+ * Variables
+ */
+var isCmd = false;
+
+program
+  .version(version)
+  .option('-d, --debug', 'Output parsed comments for debugging')
+  .option('-t, --title <string>', 'The title for the page produced')
+  .option('-s, --source <source>', 'The folder which should get parsed')
+  .option('-i, --ignore <directories>', 'The comma seperated list of directories to ignore. Default: ' + defaults.blacklist.toString())
+  .option('-T, --target <target>', 'The folder which will contain the results. Default: <CWD>/docs')
+  .option('-e, --extension <extension>', 'The target files extension. Default: ' + defaults.extension)
+  .option('-j, --template <template>', 'The Jade template file to use')
+  .option('-R, --readme <file>', 'The markdown file to use on the main page of the documentations. Checks the current directory for a package.json or README.md by default')
+  .option('-b, --theme <theme>', 'The name of the theme. e.g. doxx-theme-cayman or cayman');
+
+
+  program
+    .command('cache <cmd>')
+    .description('Manages the doxx cache. The available commands are \'clean\' and \'remove\'')
+    .action(function (cmd, options) {
+      isCmd = true;
+      switch(cmd){
+        case 'clean':
+          try{
+            File.emptyDirSync(hiddenPath);
+          } catch(error){ console.log('doxx: Could not clean the cache.\n', error); }
+          break;
+        case 'remove':
+          try{
+            File.removeSync(hiddenPath);
+          } catch(error){ console.log('doxx: Could not remove the cache.\n', error); }
+          break;
+        default:
+          console.log('Invalid command: ' + '\''+ cmd + '\'');
+          break;
+      }
+    });
+
+function showHelp(){
+  console.log('  Examples:\n');
+  console.log('    # parse a whole folder');
+  console.log('    $ doxx --source ./lib --target ./docs\n');
+  console.log('    # parse a whole folder and use a specific template');
+  console.log('    $ doxx --template ./view/myowntpl.jade --source lib --target docs\n');
+  console.log('    # parse a whole folder and apply a theme.');
+  console.log('    $ doxx --source ./lib --target ./docs --theme cayman');
+}
+
+// examples
+program.on('--help', showHelp);
+
+// parse argv
+program.parse(process.argv);
+
+if(!isCmd){
+  var options = option(program).getOptions();
+  !_.isEmpty(options.source)
+    doxx(options).generate();
+}
