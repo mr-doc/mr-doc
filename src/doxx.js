@@ -195,7 +195,6 @@ var Doxx = (function (_Compiler) {
 
         // name is equal to targetName at the base dir
         var name = file.targetName;
-        console.log(name);
         // path is equal to the base dir
         var path = '';
         // For each directory in depth of current file
@@ -209,12 +208,9 @@ var Doxx = (function (_Compiler) {
         // to support nested directories
         // and allow asset files to access the dir
         return {
-          file: {
-            name: name
-          },
-          target: {
-            name: file.targetName
-          },
+          // target.name
+          name: file.targetName,
+          // target.relative
           relative: {
             name: name, path: path
           }
