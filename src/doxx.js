@@ -208,6 +208,10 @@ var Doxx = (function (_Compiler) {
         // to support nested directories
         // and allow asset files to access the dir
         return {
+          // target.file
+          file: {
+            name: file.name
+          },
           // target.name
           name: file.targetName,
           // target.relative
