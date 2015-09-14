@@ -153,7 +153,9 @@ var Doxx = (function (_Compiler) {
           },
           allSymbols: allSymbols,
           files: _this.files,
-          currentName: file.name,
+          current: {
+            name: file.name
+          },
           file: {
             targets: file.targets
           }
