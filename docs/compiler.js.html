@@ -42,25 +42,21 @@
             <ul class="nav nav-list bs-docs-sidenav affix-top">
               <li><a href="#Compiler"><i class="alert alert-success"></i><span>Compiler</span></a>
               </li>
-              <li><a href="#options"><i class="alert alert-success"></i><span>options</span></a>
-              </li>
-              <li><a href="#files"><i class="alert alert-success"></i><span>files</span></a>
+              <li><a href="#jade"><i class="alert alert-success"></i><span>jade</span></a>
               </li>
               <li><a href="#compile"><i class="alert alert-info"></i><span>compile</span></a>
               </li>
-              <li><a href="#setTemplate"><i class="alert alert-info"></i><span>setTemplate</span></a>
+              <li><a href="#compileWithPath"><i class="alert alert-info"></i><span>compileWithPath</span></a>
               </li>
-              <li><a href="#template"><i class="alert alert-success"></i><span>template</span></a>
+              <li><a href="#setTemplate"><i class="alert alert-info"></i><span>setTemplate</span></a>
               </li>
               <li><a href="#setTemplateWithPath"><i class="alert alert-info"></i><span>setTemplateWithPath</span></a>
               </li>
-              <li><a href="#template"><i class="alert alert-success"></i><span>template</span></a>
+              <li><a href="#setFilters"><i class="alert alert-info"></i><span>setFilters</span></a>
               </li>
-              <li><a href="#setup"><i class="alert alert-info"></i><span>setup</span></a>
+              <li><a href="#setCodeFilter"><i class="alert alert-info"></i><span>setCodeFilter</span></a>
               </li>
-              <li><a href="#jade"><i class="alert alert-success"></i><span>jade</span></a>
-              </li>
-              <li><a href="#code"><i class="alert alert-info"></i><span>code</span></a>
+              <li><a href="#code"><i class="alert alert-success"></i><span>code</span></a>
               </li>
             </ul>
           </div>
@@ -76,26 +72,22 @@
           <div class="description"><p>The class that compiles the Jade template.</p></div>
           <pre><code class="language-javascript">class Compiler {
   constructor(parser) {</code></pre>
-          <section id="options">
-            <h1>options</h1>
+          <section id="jade">
+            <h1>jade</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>this.options</span><span>&nbsp;</span>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>this.jade</span><span>&nbsp;</span>
             </p>
           </section>
-          <div class="description"><p>Gets the options from the parser.</p></div>
-          <pre><code class="language-javascript">this.options = parser.options;</code></pre>
-          <section id="files">
-            <h1>files</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>this.files</span><span>&nbsp;</span>
-            </p>
-          </section>
-          <div class="description"><p>Gets the parsed files from the parser</p></div>
-          <pre><code class="language-javascript">this.files = parser.files;
+          <div class="description"><p>Jade used to compile the documentation</p></div>
+          <pre><code class="language-javascript">this.jade = jade;
+
+// Set the options
+this.options = parser ? parser.options : {};
+// Sets the files from the parser
+this.files = parser ? parser.files : [];
 // Set up the compiler
-this.setup();
+this.setCodeFilter();
     }</code></pre>
           <section id="compile">
             <h1>compile</h1>
@@ -116,21 +108,21 @@ this.setup();
               <tr>
                 <td>locals</td>
                 <td>Object</td>
-                <td><p>local variable object</p></td>
+                <td><p>The local variable object</p></td>
               </tr>
               <tr>
                 <td>template</td>
-                <td>object</td>
-                <td><p>the template</p></td>
+                <td>String</td>
+                <td><p>The template to compile</p></td>
               </tr>
               <tr>
                 <td>return</td>
                 <td>String</td>
-                <td><p>rendered content</p></td>
+                <td><p>The compiled content</p></td>
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Compiles the docs.</p></div>
+          <div class="description"><p>Compiles the docs</p></div>
           <pre><code class="language-javascript">compile(locals, template) {
     // Get the path (alias for filename)
     var {
@@ -142,10 +134,57 @@ this.setup();
       filename: path
     })(locals);
   }</code></pre>
-          <h5>jsFiddle</h5>
+          <h5>JSFiddle</h5>
           <p>
-            <iframe width="100%" height="300" src="http://jsfiddle.net/4L6Br/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+            <iframe width="100%" height="300" src="https://jsfiddle.net/iwatakeshi/pmp9ygwL/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
           </p>
+          <section id="compileWithPath">
+            <h1>compileWithPath</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>compileWithPath()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>path</td>
+                <td>Object</td>
+                <td><p>The path to compile</p></td>
+              </tr>
+              <tr>
+                <td>locals</td>
+                <td>Object</td>
+                <td><p>The local variable object</p></td>
+              </tr>
+              <tr>
+                <td>template</td>
+                <td>String</td>
+                <td><p>The template to compile</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>String</td>
+                <td><p>The compiled content</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Compiles the docs with a specified path</p></div>
+          <pre><code class="language-javascript">compileWithPath(path, locals, template) {
+    // Return the compiled template
+    return this.jade.compile(template || this.template, {
+      pretty: true,
+      // Alias for filename
+      filename: path
+    })(locals);
+  }</code></pre>
           <section id="setTemplate">
             <h1>setTemplate</h1>
             <h5 class="subheader"></h5>
@@ -170,17 +209,11 @@ this.setup();
             </tbody>
           </table>
           <div class="description"><p>Sets the template</p></div>
-          <pre><code class="language-javascript">setTemplate(template) {</code></pre>
-          <section id="template">
-            <h1>template</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>this.template</span><span>&nbsp;</span>
-            </p>
-          </section>
-          <div class="description"><p>Template used to produce the documentation</p></div>
-          <pre><code class="language-javascript">this.template = template;
-  }</code></pre>
+          <pre><code class="language-javascript">setTemplate(template) {
+  // Template used to produce the documentation
+  this.template = template;
+  return this;
+}</code></pre>
           <section id="setTemplateWithPath">
             <h1>setTemplateWithPath</h1>
             <h5 class="subheader"></h5>
@@ -205,42 +238,84 @@ this.setup();
             </tbody>
           </table>
           <div class="description"><p>Sets the template</p></div>
-          <pre><code class="language-javascript">setTemplateWithPath(path) {</code></pre>
-          <section id="template">
-            <h1>template</h1>
+          <pre><code class="language-javascript">setTemplateWithPath(path) {
+  // Template used to produce the documentation
+  this.template = File.readFileSync(
+    Path.resolve(__dirname, path ||
+      this.options.template.path)).toString();
+  return this;
+}</code></pre>
+          <section id="setFilters">
+            <h1>setFilters</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>this.template</span><span>&nbsp;</span>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>setFilters()</span><span>&nbsp;</span>
             </p>
           </section>
-          <div class="description"><p>Template used to produce the documentation</p></div>
-          <pre><code class="language-javascript">this.template = File.readFileSync(
-  Path.resolve(__dirname, path ||
-    this.options.template.path)).toString();
-  }</code></pre>
-          <section id="setup">
-            <h1>setup</h1>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>filters</td>
+                <td>Array, Object</td>
+                <td><p>The custom filter(s) to set</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Sets custom filter(s)</p></div>
+          <pre><code class="language-javascript">setFilters(filters) {
+  // Check if the fitlers is an object
+  if (_.isPlainObject(filters)) {
+    this.jade.filters[filters.name] = filters.filter;
+  }
+  // Check if the filters is an array
+  if (_.isArray(filters)) {
+    _.forEach(filters, (filter) =&gt; {
+      this.jade.filters[filter.name] = filter.filter;
+    });
+  }
+  return this;
+}</code></pre>
+          <h5>JSFiddle</h5>
+          <p>
+            <iframe width="100%" height="300" src="https://jsfiddle.net/iwatakeshi/sbr206cf/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+          </p>
+          <section id="setCodeFilter">
+            <h1>setCodeFilter</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>setup()</span><span>&nbsp;</span>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>setCodeFilter()</span><span>&nbsp;</span>
             </p>
           </section>
-          <div class="description"><p>Sets up the compiler by initializing jade,<br />the template, and the filters for jade.</p></div>
-          <pre><code class="language-javascript">setup() {</code></pre>
-          <section id="jade">
-            <h1>jade</h1>
-            <h5 class="subheader"></h5>
-            <p>
-              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>this.jade</span><span>&nbsp;</span>
-            </p>
-          </section>
-          <div class="description"><p>Jade used to compile the documentation</p></div>
-          <pre><code class="language-javascript">this.jade = jade;</code></pre>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>filter</td>
+                <td>Function</td>
+                <td><p>The code filter to set</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Sets the code filter for <code>:code</code></p></div>
+          <pre><code class="language-javascript">setCodeFilter(filter) {</code></pre>
           <section id="code">
             <h1>code</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>this.jade.filters.code()</span><span>&nbsp;</span>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>this.jade.filters.code</span><span>&nbsp;</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -265,7 +340,7 @@ this.setup();
             </tbody>
           </table>
           <div class="description"><p>Jade support for filter <code>:code</code></p></div>
-          <pre><code class="language-javascript">this.jade.filters.code = function (block) {
+          <pre><code class="language-javascript">this.jade.filters.code = filter || function (block) {
   return block.replace(/&amp;/g, '&amp;amp;')
     .replace(/&lt;/g, '&amp;lt;')
     .replace(/&gt;/g, '&amp;gt;')
@@ -274,6 +349,8 @@ this.setup();
     .replace(/\\/g, '\\\\')
     .replace(/\n/g, '\\n');
 };
+
+return this;
   }
 }
 

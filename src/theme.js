@@ -33,15 +33,9 @@ var _fsExtra = require('fs-extra');
 
 var _fsExtra2 = _interopRequireDefault(_fsExtra);
 
-var _fs = require('fs');
-
-var _fs2 = _interopRequireDefault(_fs);
-
 var _del = require('del');
 
 var _del2 = _interopRequireDefault(_del);
-
-require('source-map-support/register');
 
 var _elegantSpinner = require('elegant-spinner');
 
@@ -51,9 +45,11 @@ var _logUpdate = require('log-update');
 
 var _logUpdate2 = _interopRequireDefault(_logUpdate);
 
-var _osenv = require('osenv');
+var _dir = require('./dir');
 
-var _osenv2 = _interopRequireDefault(_osenv);
+var _dir2 = _interopRequireDefault(_dir);
+
+require('source-map-support/register');
 
 var frame = (0, _elegantSpinner2['default'])();
 
@@ -66,63 +62,82 @@ var Theme = (function () {
   function Theme(options) {
     _classCallCheck(this, Theme);
 
-    this.bower = _bower2['default'];
-
-    // Set home directory
-    var home = _osenv2['default'].home() || process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
-
     // Set hidden path
-    var hiddenPath = _path2['default'].join(home, '.doxx');
+    var hiddenPath = _path2['default'].join(_dir2['default'].getHomeDir(), '.doxx');
 
     // Set template options
     this.options = {
       theme: {
         name: options.theme,
-        path: hiddenPath,
-        exists: function exists() {
-          try {
-            _fs2['default'].statSync(hiddenPath);
-            return true;
-          } catch (err) {
-            return !(err && err.code === 'ENOENT');
-          }
-        },
-        bower: {
-          exists: function exists() {
-            try {
-              var bower = _path2['default'].join(_path2['default'].join(hiddenPath, 'bower_components/'), options.theme + '/');
-              _fs2['default'].statSync(bower);
-              return true;
-            } catch (err) {
-              return !(err && err.code === 'ENOENT');
-            }
-          }
-        },
-        target: {
-          path: options.target
-        }
+        path: hiddenPath
       },
       template: {
-        path: options.template.path,
-        isEnabled: function isEnabled() {
-          return !!options.template.path;
-        }
+        path: options.template.path
+      },
+      target: {
+        path: options.target
       }
     };
-    this.isCache = this.options.theme.exists() && this.options.theme.bower.exists();
   }
 
   /** 
-   * Installs the theme and its assets
+   * Installs the theme and its assets statically
+   * @param {Object} options The options
+   * @jsfiddle https://jsfiddle.net/iwatakeshi/k5xsvoez/embedded/
    * @return {Function} The promise
    */
 
   _createClass(Theme, [{
     key: 'install',
-    value: function install() {
-      var _this = this;
 
+    /** 
+     * Installs the theme and its assets
+     * @return {Function} The promise
+     */
+    value: function install() {
+      return Theme.staticInstall(this.options);
+    }
+  }], [{
+    key: 'staticInstall',
+    value: function staticInstall(options) {
       var final = _when2['default'].defer();
+      /*
+        Required options:
+        
+        theme.name    (the name of the theme)
+        theme.path    (the path to store the theme)
+        target.path   (the path to store the compiled content)
+        template.path (the template path) *to be deprecated*
+       */
+
+      // Create cache paths and helpers
+      var cache = {
+        theme: {
+          path: options.theme.path
+        },
+        bower: {
+          path: _path2['default'].join(_path2['default'].join(options.theme.path, 'bower_components/'), options.theme.name + '/')
+        }
+      };
+
+      _lodash2['default'].extend(cache, {
+        exists: function exists() {
+          return _dir2['default'].exists(cache.theme.path) && _dir2['default'].exists(cache.bower.path);
+        }
+      });
+
+      _lodash2['default'].extend(cache.theme, {
+        exists: function exists() {
+          return _dir2['default'].exists(cache.theme.path);
+        }
+      });
+
+      _lodash2['default'].extend(cache.bower, {
+        exists: function exists() {
+          return _dir2['default'].exists(cache.bower.path);
+        }
+      });
+
       /** 
        * The commands to install the theme
        * @type {object}
@@ -143,20 +158,20 @@ var Theme = (function () {
         preProcess: function preProcess() {
           var d = _when2['default'].defer();
 
-          var theme = _this.options.theme.name;
+          var theme = options.theme.name;
           // Create short-hands for paths
 
           // Sources
           var src = {
             theme: {
-              path: _this.options.theme.path
+              path: options.theme.path
             }
           };
 
           // Destinations
           var dest = {
             theme: {
-              path: _this.options.theme.target.path
+              path: options.target.path
             }
           };
 
@@ -218,12 +233,12 @@ var Theme = (function () {
         createDoxxDir: function createDoxxDir(result) {
           var d = _when2['default'].defer();
 
-          var src = result.src;
-
-          if (_this.options.theme.exists()) {
+          // Check if the source directory exists
+          // Note: This is used for caching
+          if (_dir2['default'].exists(cache.theme.exists())) {
             d.resolve(result);
           } else {
-            (0, _mkdirp2['default'])(src.theme.path, function (error) {
+            (0, _mkdirp2['default'])(cache.theme.path, function (error) {
               console.log(error);
               if (error) d.reject(error);else {
                 d.resolve(result);
@@ -239,17 +254,16 @@ var Theme = (function () {
          */
         installTheme: function installTheme(result) {
           var d = _when2['default'].defer();
-
           var theme = result.theme;
-          var src = result.src;
 
-          if (_this.options.theme.bower.exists()) {
+          // Check if the cached bower dir exists
+          if (_dir2['default'].exists(cache.bower.path)) {
             d.resolve(result);
           } else {
-            _this.bower.commands.install([theme], {
+            _bower2['default'].commands.install([theme], {
               save: false
             }, {
-              cwd: src.theme.path
+              cwd: cache.theme.path
             }).on('end', function () {
               d.resolve(result);
             }).on('error', d.reject);
@@ -338,7 +352,7 @@ var Theme = (function () {
             if (error) d.reject(error);else d.resolve({
               dest: dest, src: src, theme: theme,
               template: data.toString(),
-              isCache: _this.isCache
+              isCached: cache.exists()
             });
           });
           return d.promise;
@@ -362,7 +376,7 @@ var Theme = (function () {
       };
 
       // Check if the template is enabled (legacy)
-      if (this.options.template.isEnabled()) {
+      if (options.template.path) {
         final.resolve({
           template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, this.options.template.path)).toString()
         });
@@ -372,11 +386,11 @@ var Theme = (function () {
 
           // Preprocess the commands
           return commands.preProcess().tap(function () {
-            notify('Preparing to install theme' + (_this.isCache ? ' from cache.' : ''));
+            notify('Preparing to install theme' + (cache.exists() ? ' from cache.' : ''));
           })
           // Create a temp dir
           .then(commands.createDoxxDir).tap(function () {
-            if (!_this.options.theme.exists()) notify('Creating home directory');
+            if (!cache.theme.exists()) notify('Creating home directory');
           })
           // Install the theme using bower
           .then(commands.installTheme).tap(function () {

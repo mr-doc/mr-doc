@@ -139,52 +139,17 @@ var Doxx = (function (_Compiler) {
         }
       });
 
-      // Render and write each file
+      // Set each files relName in relation
+      // to where this file is in the directory tree
       this.files.forEach(function (file) {
-        // TEST
-        var targets = [];
-
-        // Set each files relName in relation
-        // to where this file is in the directory tree
-        _this.files.forEach(function (f) {
-
-          // Count how deep the current file is in relation to base
-          var count = file.name.split('/');
-          count = count === null ? 0 : count.length - 1;
-
-          // relName is equal to targetName at the base dir
-          f.relName = f.targetName;
-          f.relPath = '';
-          // For each directory in depth of current file
-          // add a ../ to the relative filename of this link
-          while (count > 0) {
-            f.relName = '../' + f.relName;
-            f.relPath += '../';
-            count--;
-          }
-
-          // console.log(file.targetName, f.targetName);
-          // TEST
-          targets.push({
-            name: f.name,
-            target: {
-              name: f.targetName
-            },
-            relative: {
-              name: f.relName,
-              path: f.relPath
-            }
-          });
-        });
-        file.targets = targets;
+        file.targets = _this.getTargets(file);
       });
 
       this.files.forEach(function (file) {
-        // console.log(file.relName, this.files);
         // Set locals
         _this.locals.push(_lodash2['default'].assign({}, file, {
           project: {
-            title: title, description: description, url: url, path: file.relPath
+            title: title, description: description, url: url
           },
           allSymbols: allSymbols,
           files: _this.files,
@@ -197,11 +162,11 @@ var Doxx = (function (_Compiler) {
 
       // Install theme
       (0, _theme2['default'])(this.options).install().then(function (result) {
-        var isCache = result.isCache;
+        var isCached = result.isCached;
         var theme = result.theme;
 
         if (theme) {
-          console.info('Doxx [info]: Installed theme: ' + theme + (isCache ? ' from cache.' : ''));
+          console.info('Doxx [info]: Installed theme: ' + theme + (isCached ? ' from cache.' : ''));
         }
         _lodash2['default'].forEach(_this.files, function (file, index) {
           // Set template
@@ -214,6 +179,52 @@ var Doxx = (function (_Compiler) {
           });
         });
       }, console.error);
+    }
+
+    /** 
+     * Return the targets for the specified file
+     * @private
+     * @param  {Object} file The file to generate
+     * @return {Object}      The iterator
+     */
+  }, {
+    key: 'getTargets',
+    value: function getTargets(file) {
+
+      // Set the target stack
+      var targets = [];
+
+      _lodash2['default'].forEach(this.files, function (f) {
+
+        // Count how deep the current file is in relation to base
+        var count = file.name.split('/');
+        count = count === null ? 0 : count.length - 1;
+
+        // relName is equal to targetName at the base dir
+        f.relName = f.targetName;
+        f.relPath = '';
+        // For each directory in depth of current file
+        // add a ../ to the relative filename of this link
+        while (count > 0) {
+          f.relName = '../' + f.relName;
+          f.relPath += '../';
+          count--;
+        }
+        // Set the target for each folder
+        // to support nested directories
+        // and allow asset files to access the dir
+        targets.push({
+          name: f.name,
+          target: {
+            name: f.targetName
+          },
+          relative: {
+            name: f.relName,
+            path: f.relPath
+          }
+        });
+      });
+      return targets;
     }
   }]);
 

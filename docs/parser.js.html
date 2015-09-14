@@ -46,6 +46,8 @@
               </li>
               <li><a href="#parse"><i class="alert alert-info"></i><span>parse</span></a>
               </li>
+              <li><a href="#parseComments"><i class="alert alert-info"></i><span>parseComments</span></a>
+              </li>
               <li><a href="#shouldPass"><i class="alert alert-info"></i><span>shouldPass</span></a>
               </li>
             </ul>
@@ -79,36 +81,78 @@
     var {
       source, extension, blacklist
     } = this.options;
-
-    if (_.isArray(source)) {
-      this.files = source.map(doc =&gt; {
-        var targetName = doc.name + '.' + extension;
-        if (!doc.targetName) doc.targetName = targetName;
-        doc.symbols = Symbol.structure(doc.dox, doc.targetName);
-        return doc;
-      });
-    } else {
-      source = path.resolve(process.cwd(), source);
-      this.files = Dir.collectFiles(source, {
-        ignore: blacklist
-      });
-      this.files = this.files.map(file =&gt; {
-        var dox = this.parse(path.join(source, file));
-        var targetName = file + '.' + extension;
-        return {
-          name: file.replace(/\\/g, '/'),
-          targetName: targetName.replace(/\\/g, '/'),
-          dox: dox,
-          symbols: Symbol.structure(dox, targetName)
-        };
-      });
-    }
+    // Parse the files
+    this.files = Parser.parse(source, extension, blacklist);
   }</code></pre>
           <section id="parse">
             <h1>parse</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Parser.prototype.parse()</span><span>&nbsp;</span>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Parser.parse()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>source</td>
+                <td>String, Array</td>
+                <td><p>The source(s) to parse</p></td>
+              </tr>
+              <tr>
+                <td>extension</td>
+                <td>String</td>
+                <td><p>The file extension</p></td>
+              </tr>
+              <tr>
+                <td>ignore</td>
+                <td>Array</td>
+                <td><p>The files to ignore</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Array</td>
+                <td><p>The parsed files</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Parses the source</p></div>
+          <pre><code class="language-javascript">static parse(source, extension, ignore) {
+  if (_.isArray(source)) {
+    return source.map(doc =&gt; {
+      var targetName = doc.name + '.' + extension;
+      if (!doc.targetName) doc.targetName = targetName;
+      doc.symbols = Symbol.structure(doc.dox, doc.targetName);
+      return doc;
+    });
+  } else {
+    source = path.resolve(process.cwd(), source);
+    let files = Dir.collectFiles(source, {
+      ignore
+    });
+    return files.map(file =&gt; {
+      var dox = Parser.parseComments(path.join(source, file));
+      var targetName = file + '.' + extension;
+      return {
+        name: file.replace(/\\/g, '/'),
+        targetName: targetName.replace(/\\/g, '/'),
+        dox,
+        symbols: Symbol.structure(dox, targetName)
+      };
+    });
+  }
+}</code></pre>
+          <section id="parseComments">
+            <h1>parseComments</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Parser.parseComments()</span><span>&nbsp;</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -132,25 +176,29 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Parses the source using dox.</p></div>
-          <pre><code class="language-javascript">parse(filepath) {
+          <div class="description"><p>Parses the source&#39;s comments using dox.</p></div>
+          <pre><code class="language-javascript">static parseComments(filepath) {
     var json = null;
     try {
       json = dox.parseComments(File.readFileSync(filepath).toString(), {
         raw: false
       });
-    } catch (e) {
-      console.error('Doxx [error]:', e);
+    } catch (error) {
+      console.error('Doxx [error]:', error);
       return [];
     }
 
-    return json.filter(this.shouldPass).map(Symbol.map);
+    return json.filter(Parser.shouldPass).map(Symbol.map);
   }</code></pre>
+          <h5>JSFiddle</h5>
+          <p>
+            <iframe width="100%" height="300" src="https://jsfiddle.net/iwatakeshi/8hc50sbc/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+          </p>
           <section id="shouldPass">
             <h1>shouldPass</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Parser.prototype.shouldPass()</span><span>&nbsp;</span>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Parser.shouldPass()</span><span>&nbsp;</span>
             </p>
           </section>
           <table class="table table-bordered table-striped">
@@ -175,7 +223,7 @@
             </tbody>
           </table>
           <div class="description"><p>Tests if a symbol should be ignored or not.</p></div>
-          <pre><code class="language-javascript">shouldPass(symbol) {
+          <pre><code class="language-javascript">static shouldPass(symbol) {
   if (symbol.isPrivate) {
     return false;
   }

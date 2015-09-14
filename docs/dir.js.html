@@ -44,6 +44,10 @@
               </li>
               <li><a href="#collectFiles"><i class="alert alert-info"></i><span>collectFiles</span></a>
               </li>
+              <li><a href="#getHomeDir"><i class="alert alert-info"></i><span>getHomeDir</span></a>
+              </li>
+              <li><a href="#exists"><i class="alert alert-info"></i><span>exists</span></a>
+              </li>
             </ul>
           </div>
         </div>
@@ -109,6 +113,57 @@
   });
 
   return files;
+}</code></pre>
+          <section id="getHomeDir">
+            <h1>getHomeDir</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Dir.getHomeDir()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Locates the home directory for the<br />current operating system.<br />Credits to @cliftonc</p></div>
+          <pre><code class="language-javascript">static getHomeDir() {
+    return osenv.home() ||
+      process.env.HOME ||
+      process.env.HOMEPATH ||
+      process.env.USERPROFILE;
+  }</code></pre>
+          <section id="exists">
+            <h1>exists</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Dir.exists()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>path</td>
+                <td>String</td>
+                <td><p>The path to the directory</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Boolean</td>
+                <td><p>The truth value</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Checks if the directory exists</p></div>
+          <pre><code class="language-javascript">static exists(path) {
+  try {
+    fs.statSync(path);
+    return true;
+  } catch (err) {
+    return !(err &amp;&amp; err.code === 'ENOENT');
+  }
 }
 }
 

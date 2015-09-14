@@ -42,7 +42,7 @@
             <ul class="nav nav-list bs-docs-sidenav affix-top">
               <li><a href="#Theme"><i class="alert alert-success"></i><span>Theme</span></a>
               </li>
-              <li><a href="#install"><i class="alert alert-info"></i><span>install</span></a>
+              <li><a href="#staticInstall"><i class="alert alert-info"></i><span>staticInstall</span></a>
               </li>
               <li><a href="#commands"><i class="alert alert-success"></i><span>commands</span></a>
               </li>
@@ -62,6 +62,8 @@
               </li>
               <li><a href="#deleteTemplateDir"><i class="alert alert-success"></i><span>deleteTemplateDir</span></a>
               </li>
+              <li><a href="#install"><i class="alert alert-info"></i><span>install</span></a>
+              </li>
             </ul>
           </div>
         </div>
@@ -76,70 +78,94 @@
           <div class="description"><p>The class that installs themes.</p></div>
           <pre><code class="language-javascript">class Theme {
   constructor(options) {
-      this.bower = bower;
+    // Set hidden path
+    let hiddenPath = Path.join(Dir.getHomeDir(), '.doxx');
 
-      // Set home directory
-      let home = osenv.home() ||
-        process.env.HOME ||
-        process.env.HOMEPATH ||
-        process.env.USERPROFILE;
-
-      // Set hidden path
-      let hiddenPath = Path.join(home, '.doxx');
-
-      // Set template options
-      this.options = {
-        theme: {
-          name: options.theme,
-          path: hiddenPath,
-          exists: () =&gt; {
-            try {
-              fs.statSync(hiddenPath);
-              return true;
-            } catch (err) {
-              return !(err &amp;&amp; err.code === 'ENOENT');
-            }
-          },
-          bower: {
-            exists: () =&gt; {
-              try {
-                var bower = Path.join(
-                  Path.join(
-                    hiddenPath,
-                    'bower_components/'),
-                  options.theme + '/');
-                fs.statSync(bower);
-                return true;
-              } catch (err) {
-                return !(err &amp;&amp; err.code === 'ENOENT');
-              }
-            }
-          },
-          target: {
-            path: options.target
-          }
-        },
-        template: {
-          path: options.template.path,
-          isEnabled: () =&gt; {
-            return !!options.template.path;
-          }
-        }
-      };
-      this.isCache =
-        this.options.theme.exists() &amp;&amp;
-        this.options.theme.bower.exists();
-    }</code></pre>
-          <section id="install">
-            <h1>install</h1>
+    // Set template options
+    this.options = {
+      theme: {
+        name: options.theme,
+        path: hiddenPath
+      },
+      template: {
+        path: options.template.path
+      },
+      target: {
+        path: options.target
+      }
+    };
+  }</code></pre>
+          <section id="staticInstall">
+            <h1>staticInstall</h1>
             <h5 class="subheader"></h5>
             <p>
-              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Theme.prototype.install()</span><span>&nbsp;</span>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Theme.staticInstall()</span><span>&nbsp;</span>
             </p>
           </section>
-          <div class="description"><p>Installs the theme and its assets</p></div>
-          <pre><code class="language-javascript">install() {
-  let final = when.defer();</code></pre>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>options</td>
+                <td>Object</td>
+                <td><p>The options</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Function</td>
+                <td><p>The promise</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Installs the theme and its assets statically</p></div>
+          <pre><code class="language-javascript">static staticInstall(options) {
+    let final = when.defer();</code></pre>
+          <h5>JSFiddle</h5>
+          <p>
+            <iframe width="100%" height="300" src="https://jsfiddle.net/iwatakeshi/k5xsvoez/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+          </p>
+          <div class="description"><p>Required options:</p><pre><code>    theme.name    (the name of the theme)
+    theme.path    (the path to store the theme)
+    target.path   (the path to store the compiled content)
+    template.path (the template path) *to be deprecated*
+</code></pre></div>
+          <pre><code class="language-javascript">// Create cache paths and helpers
+var cache = {
+  theme: {
+    path: options.theme.path
+  },
+  bower: {
+    path: Path.join(Path.join(
+        options.theme.path,
+        'bower_components/'),
+      options.theme.name + '/')
+  }
+};
+
+_.extend(cache, {
+  exists: () =&gt; {
+    return Dir.exists(cache.theme.path) &amp;&amp;
+      Dir.exists(cache.bower.path);
+  }
+});
+
+_.extend(cache.theme, {
+  exists: () =&gt; {
+    return Dir.exists(cache.theme.path);
+  }
+});
+
+_.extend(cache.bower, {
+  exists: () =&gt; {
+    return Dir.exists(cache.bower.path);
+  }
+});</code></pre>
           <section id="commands">
             <h1>commands</h1>
             <h5 class="subheader"></h5>
@@ -167,20 +193,20 @@
           <pre><code class="language-javascript">preProcess: () =&gt; {
   let d = when.defer();
 
-  let theme = this.options.theme.name;
+  let theme = options.theme.name;
   // Create short-hands for paths
 
   // Sources
   var src = {
     theme: {
-      path: this.options.theme.path
+      path: options.theme.path
     }
   };
 
   // Destinations
   var dest = {
     theme: {
-      path: this.options.theme.target.path
+      path: options.target.path
     }
   };
 
@@ -269,13 +295,12 @@
           <pre><code class="language-javascript">createDoxxDir: (result) =&gt; {
   let d = when.defer();
 
-  var {
-    src
-  } = result;
-  if (this.options.theme.exists()) {
+  // Check if the source directory exists
+  // Note: This is used for caching
+  if (Dir.exists(cache.theme.exists())) {
     d.resolve(result);
   } else {
-    mkdirp(src.theme.path, (error) =&gt; {
+    mkdirp(cache.theme.path, (error) =&gt; {
       console.log(error);
       if (error) d.reject(error);
       else {
@@ -316,18 +341,18 @@
           <div class="description"><p>Installs the theme through bower</p></div>
           <pre><code class="language-javascript">installTheme: (result) =&gt; {
   var d = when.defer();
-
   var {
-    theme, src
+    theme
   } = result;
-  if (this.options.theme.bower.exists()) {
+  // Check if the cached bower dir exists
+  if (Dir.exists(cache.bower.path)) {
     d.resolve(result);
   } else {
-    this.bower.commands
+    bower.commands
       .install([theme], {
         save: false
       }, {
-        cwd: src.theme.path
+        cwd: cache.theme.path
       }).on('end', () =&gt; {
         d.resolve(result);
       }).on('error', d.reject);
@@ -514,7 +539,7 @@
     else d.resolve({
       dest, src, theme,
       template: data.toString(),
-        isCache: this.isCache
+        isCached: cache.exists()
     });
   });
   return d.promise;
@@ -559,16 +584,16 @@
   });
   return d.promise;
 }
-    };
+      };
 
-    // Check if the template is enabled (legacy)
-    if (this.options.template.isEnabled()) {
+      // Check if the template is enabled (legacy)
+      if (options.template.path) {
 final.resolve({
   template: File.readFileSync(
     Path.resolve(__dirname,
       this.options.template.path)).toString()
 });
-    } else {
+      } else {
 
 ((notify) =&gt; {
 
@@ -576,12 +601,12 @@ final.resolve({
   return commands.preProcess()
     .tap(() =&gt; {
       notify('Preparing to install theme' +
-        (this.isCache ? ' from cache.' : ''));
+        (cache.exists() ? ' from cache.' : ''));
     })
     // Create a temp dir
     .then(commands.createDoxxDir)
     .tap(() =&gt; {
-      if (!this.options.theme.exists())
+      if (!cache.theme.exists())
         notify('Creating home directory');
     })
     // Install the theme using bower
@@ -616,15 +641,24 @@ final.resolve({
     })
     .then(final.resolve);
 })(commands.showProgress);
-    }
-    return final.promise;
-  }
-
+      }
+      return final.promise;
+    }</code></pre>
+          <section id="install">
+            <h1>install</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>install()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Installs the theme and its assets</p></div>
+          <pre><code class="language-javascript">install() {
+  return Theme.staticInstall(this.options);
+}
 }
 
-
 export default (theme) =&gt; {
-  return new Theme(theme);
+return new Theme(theme);
 };</code></pre>
         </div>
       </div>

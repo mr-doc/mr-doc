@@ -73,166 +73,127 @@
           </section>
           <div class="description"><p>Generates the documentations.</p></div>
           <pre><code class="language-javascript">generate() {
-  // Compute all symboles
-  var allSymbols = this.files.reduce(function (m, a) {
-    m = m.concat(a.symbols || []);
-    return m;
-  }, []);
+    // Compute all symboles
+    var allSymbols = this.files.reduce(function (m, a) {
+      m = m.concat(a.symbols || []);
+      return m;
+    }, []);
 
-  var pkg;
-  // Get package.json
-  try {
-    pkg = require(process.cwd() + '/package');
-  } catch (err) {}
+    var pkg;
+    // Get package.json
+    try {
+      pkg = require(process.cwd() + '/package');
+    } catch (err) {}
 
-  var readme = pkg &amp;&amp; pkg.readme,
-    readMeFile = Path.resolve(process.cwd(), this.options.readme ||
-      (pkg &amp;&amp; pkg.readmeFileName) || 'README.md');
+    var readme = pkg &amp;&amp; pkg.readme,
+      readMeFile = Path.resolve(process.cwd(), this.options.readme ||
+        (pkg &amp;&amp; pkg.readmeFileName) || 'README.md');
 
-  if (!readme &amp;&amp; File.existsSync(readMeFile)) {
-    readme = File.readFileSync(readMeFile).toString();
-  } else {
-    console.warn(
-      new Error('Doxx [warn]: No README.md file found at ' + readMeFile));
-  }
-
-  if (!readme) {
-    console.warn(
-      new Error('Doxx [warn]: Empty README.md ' + readMeFile));
-    readme = '';
-  }
-
-  var md = new Markdown();
-  md = md.render.bind(md);
-
-  // Get readme data
-  this.files.unshift({
-    name: 'Main',
-    targetName: 'index.html',
-    readme: md(readme),
-    dox: [],
-    symbols: []
-  });
-
-  // Set title
-  var title = pkg &amp;&amp; pkg.name ? pkg.name :
-    this.options.title;
-
-  // Set description
-  var description = pkg &amp;&amp; pkg.description ?
-    pkg.description : '';
-
-  // Set URLs
-  var url = {
-    github: pkg &amp;&amp; pkg.homepage ?
-      pkg.homepage.indexOf('github') &gt; -1 ?
-      pkg.homepage : false : false,
-    npm: pkg &amp;&amp; pkg.name ?
-      'https://npmjs.com/package/' + pkg.name : false,
-    homepage: pkg &amp;&amp; pkg.homepage ?
-      pkg.homepage.indexOf('github') === -1 ?
-      pkg.homepage : false : false
-  };
-
-  // Make sure the folder structure in target mirrors source
-  var folders = [];
-
-  this.files.forEach(file =&gt; {
-    var folder = file.targetName
-      .substr(0, file.targetName.lastIndexOf(Path.sep));
-
-    if ((folder !== '') &amp;&amp; (folders.indexOf(folder) === -1)) {
-      folders.push(folder);
-      mkdirp.sync(this.options.target + '/' + folder);
+    if (!readme &amp;&amp; File.existsSync(readMeFile)) {
+      readme = File.readFileSync(readMeFile).toString();
+    } else {
+      console.warn(
+        new Error('Doxx [warn]: No README.md file found at ' + readMeFile));
     }
-  });
 
-  // Render and write each file
-  this.files.forEach(file =&gt; {
-    // TEST
-    var targets = [];
+    if (!readme) {
+      console.warn(
+        new Error('Doxx [warn]: Empty README.md ' + readMeFile));
+      readme = '';
+    }
+
+    var md = new Markdown();
+    md = md.render.bind(md);
+
+    // Get readme data
+    this.files.unshift({
+      name: 'Main',
+      targetName: 'index.html',
+      readme: md(readme),
+      dox: [],
+      symbols: []
+    });
+
+    // Set title
+    var title = pkg &amp;&amp; pkg.name ? pkg.name :
+      this.options.title;
+
+    // Set description
+    var description = pkg &amp;&amp; pkg.description ?
+      pkg.description : '';
+
+    // Set URLs
+    var url = {
+      github: pkg &amp;&amp; pkg.homepage ?
+        pkg.homepage.indexOf('github') &gt; -1 ?
+        pkg.homepage : false : false,
+      npm: pkg &amp;&amp; pkg.name ?
+        'https://npmjs.com/package/' + pkg.name : false,
+      homepage: pkg &amp;&amp; pkg.homepage ?
+        pkg.homepage.indexOf('github') === -1 ?
+        pkg.homepage : false : false
+    };
+
+    // Make sure the folder structure in target mirrors source
+    var folders = [];
+
+    this.files.forEach(file =&gt; {
+      var folder = file.targetName
+        .substr(0, file.targetName.lastIndexOf(Path.sep));
+
+      if ((folder !== '') &amp;&amp; (folders.indexOf(folder) === -1)) {
+        folders.push(folder);
+        mkdirp.sync(this.options.target + '/' + folder);
+      }
+    });
 
     // Set each files relName in relation 
     // to where this file is in the directory tree
-    this.files.forEach(function (f) {
+    this.files.forEach(file =&gt; {
+      file.targets = this.getTargets(file);
+    });
 
-      // Count how deep the current file is in relation to base
-      var count = file.name.split('/');
-      count = count === null ? 0 : count.length - 1;
-
-      // relName is equal to targetName at the base dir
-      f.relName = f.targetName;
-      f.relPath = '';
-      // For each directory in depth of current file 
-      // add a ../ to the relative filename of this link
-      while (count &gt; 0) {
-        f.relName = '../' + f.relName;
-        f.relPath += '../';
-        count--;
-      }
-
-      // console.log(file.targetName, f.targetName);
-      // TEST
-      targets.push({
-        name: f.name,
-        target: {
-          name: f.targetName
+    this.files.forEach((file) =&gt; {
+      // Set locals
+      this.locals.push(_.assign({}, file, {
+        project: {
+          title, description, url
         },
-        relative: {
-          name: f.relName,
-          path: f.relPath
+        allSymbols: allSymbols,
+        files: this.files,
+        currentName: file.name,
+        file: {
+          targets: file.targets
         }
-      });
+      }));
     });
-    file.targets = targets;
-  });
 
-  this.files.forEach((file) =&gt; {
-    // console.log(file.relName, this.files);
-    // Set locals
-    this.locals.push(_.assign({}, file, {
-      project: {
-        title, description, url, path: file.relPath
-      },
-      allSymbols: allSymbols,
-      files: this.files,
-      currentName: file.name,
-      file: {
-        targets: file.targets
+    // Install theme
+    theme(this.options).install().then((result) =&gt; {
+      var {
+        isCached, theme
+      } = result;
+
+      if (theme) {
+        console.info('Doxx [info]: Installed theme: ' +
+          theme + (isCached ? ' from cache.' : ''));
       }
-    }));
-  });
-
-  // Install theme
-  theme(this.options).install().then((result) =&gt; {
-    var {
-      isCache, theme
-    } = result;
-
-    if (theme) {
-      console.info('Doxx [info]: Installed theme: ' +
-        theme + (isCache ? ' from cache.' : ''));
-    }
-    _.forEach(this.files, (file, index) =&gt; {
-      // Set template
-      this.setTemplate(result.template);
-      // Compile the template
-      let compiled = this.compile(this.locals[index]);
-      // Write files
-      mkdirp(this.options.target, error =&gt; {
-        if (error) return;
-        else
-          File.writeFileSync(Path.join(
-              this.options.target, file.targetName),
-            compiled);
+      _.forEach(this.files, (file, index) =&gt; {
+        // Set template
+        this.setTemplate(result.template);
+        // Compile the template
+        let compiled = this.compile(this.locals[index]);
+        // Write files
+        mkdirp(this.options.target, error =&gt; {
+          if (error) return;
+          else
+            File.writeFileSync(Path.join(
+                this.options.target, file.targetName),
+              compiled);
+        });
       });
-    });
-  }, console.error);
-}
-}
-export default function (options) {
-return new Doxx(options);
-}</code></pre>
+    }, console.error);
+  }</code></pre>
         </div>
       </div>
     </div>

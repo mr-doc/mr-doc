@@ -22,6 +22,14 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _osenv = require('osenv');
+
+var _osenv2 = _interopRequireDefault(_osenv);
+
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
 require('source-map-support/register');
 
 /**
@@ -61,6 +69,34 @@ var Dir = (function () {
       });
 
       return files;
+    }
+
+    /**
+     * Locates the home directory for the
+     * current operating system.
+     * Credits to @cliftonc
+     * @return {String} The home directory path
+     */
+  }, {
+    key: 'getHomeDir',
+    value: function getHomeDir() {
+      return _osenv2['default'].home() || process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+    }
+
+    /**
+     * Checks if the directory exists
+     * @param  {String} path The path to the directory
+     * @return {Boolean}      The truth value
+     */
+  }, {
+    key: 'exists',
+    value: function exists(path) {
+      try {
+        _fs2['default'].statSync(path);
+        return true;
+      } catch (err) {
+        return !(err && err.code === 'ENOENT');
+      }
     }
   }]);
 
