@@ -197,13 +197,15 @@ var Doxx = (function (_Compiler) {
         count = count === null ? 0 : count.length - 1;
 
         // relName is equal to targetName at the base dir
-        f.relName = f.targetName;
-        f.relPath = '';
+        f.relative = {
+          name: f.targetName,
+          path: ''
+        };
         // For each directory in depth of current file
         // add a ../ to the relative filename of this link
         while (count > 0) {
-          f.relName = '../' + f.relName;
-          f.relPath += '../';
+          f.relative.name = '../' + f.relative.name;
+          f.relative.path += '../';
           count--;
         }
         // Set the target for each folder
@@ -216,10 +218,7 @@ var Doxx = (function (_Compiler) {
           target: {
             name: f.targetName
           },
-          relative: {
-            name: f.relName,
-            path: f.relPath
-          }
+          relative: f.relative
         };
       });
     }
