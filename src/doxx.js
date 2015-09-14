@@ -83,12 +83,11 @@ var Doxx = (function (_Compiler) {
       }, []);
 
       var pkg;
-      // Set the package
+      // Get package.json
       try {
         pkg = require(process.cwd() + '/package');
       } catch (err) {}
 
-      // Set the readme
       var readme = pkg && pkg.readme,
           readMeFile = _path2['default'].resolve(process.cwd(), this.options.readme || pkg && pkg.readmeFileName || 'README.md');
 
@@ -146,15 +145,18 @@ var Doxx = (function (_Compiler) {
         file.targets = _this.getTargets(file);
       });
 
-      // Set the locals for each file
       this.files.forEach(function (file) {
+        // Set locals
         _this.locals.push(_lodash2['default'].assign({}, file, {
           project: {
             title: title, description: description, url: url
           },
           allSymbols: allSymbols,
           files: _this.files,
-          currentName: file.name
+          currentName: file.name,
+          file: {
+            targets: file.targets
+          }
         }));
       });
 
@@ -183,40 +185,40 @@ var Doxx = (function (_Compiler) {
      * Return the targets for the specified file
      * @private
      * @param  {Object} file The file to generate
-     * @return {Array}       The targets 
+     * @return {Object}      The iterator
      */
   }, {
     key: 'getTargets',
     value: function getTargets(file) {
       return _lodash2['default'].map(this.files, function (f) {
+
         // Count how deep the current file is in relation to base
         var count = file.name.split('/');
         count = count === null ? 0 : count.length - 1;
 
-        // name is equal to targetName at the base dir
-        var name = f.targetName;
-        // path is equal to the base dir
-        var path = '';
+        // relName is equal to targetName at the base dir
+        f.relName = f.targetName;
+        f.relPath = '';
         // For each directory in depth of current file
         // add a ../ to the relative filename of this link
         while (count > 0) {
-          name = '../' + name;
-          path += '../';
+          f.relName = '../' + f.relName;
+          f.relPath += '../';
           count--;
         }
         // Set the target for each folder
         // to support nested directories
         // and allow asset files to access the dir
         return {
-          // target.file
           file: {
             name: f.name
           },
-          // target.name
-          name: f.targetName,
-          // target.relative
+          target: {
+            name: f.targetName
+          },
           relative: {
-            name: name, path: path
+            name: f.relName,
+            path: f.relPath
           }
         };
       });
