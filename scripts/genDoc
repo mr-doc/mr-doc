@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+doxx --source lib --theme doxx-theme-cayman --target docs
