@@ -425,9 +425,6 @@ var Theme = (function () {
   return Theme;
 })();
 
-exports['default'] = function (theme) {
-  return new Theme(theme);
-};
-
+exports['default'] = Theme;
 module.exports = exports['default'];
 //# sourceMappingURL=source maps/theme.js.map

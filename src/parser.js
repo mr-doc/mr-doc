@@ -149,9 +149,6 @@ var Parser = (function () {
   return Parser;
 })();
 
-exports['default'] = function (options) {
-  return new Parser(options);
-};
-
+exports['default'] = Parser;
 module.exports = exports['default'];
 //# sourceMappingURL=source maps/parser.js.map

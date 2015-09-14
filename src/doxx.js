@@ -62,7 +62,7 @@ var Doxx = (function (_Compiler) {
   function Doxx(options) {
     _classCallCheck(this, Doxx);
 
-    _get(Object.getPrototypeOf(Doxx.prototype), 'constructor', this).call(this, (0, _parser2['default'])(options));
+    _get(Object.getPrototypeOf(Doxx.prototype), 'constructor', this).call(this, new _parser2['default'](options));
     // Set the locals stack
     this.locals = [];
   }
@@ -83,11 +83,12 @@ var Doxx = (function (_Compiler) {
       }, []);
 
       var pkg;
-      // Get package.json
+      // Set the package
       try {
         pkg = require(process.cwd() + '/package');
       } catch (err) {}
 
+      // Set the readme
       var readme = pkg && pkg.readme,
           readMeFile = _path2['default'].resolve(process.cwd(), this.options.readme || pkg && pkg.readmeFileName || 'README.md');
 
@@ -142,11 +143,11 @@ var Doxx = (function (_Compiler) {
       // Set each files relName in relation
       // to where this file is in the directory tree
       this.files.forEach(function (file) {
-        file.targets = _this.getTargets(file);
+        file.targets = _this.getTargets();
       });
 
+      // Set the locals for each file
       this.files.forEach(function (file) {
-        // Set locals
         _this.locals.push(_lodash2['default'].assign({}, file, {
           project: {
             title: title, description: description, url: url
@@ -161,7 +162,7 @@ var Doxx = (function (_Compiler) {
       });
 
       // Install theme
-      (0, _theme2['default'])(this.options).install().then(function (result) {
+      new _theme2['default'](this.options).install().then(function (result) {
         var isCached = result.isCached;
         var theme = result.theme;
 
@@ -185,46 +186,40 @@ var Doxx = (function (_Compiler) {
      * Return the targets for the specified file
      * @private
      * @param  {Object} file The file to generate
-     * @return {Object}      The iterator
+     * @return {Array}       The targets 
      */
   }, {
     key: 'getTargets',
-    value: function getTargets(file) {
-
-      // Set the target stack
-      var targets = [];
-
-      _lodash2['default'].forEach(this.files, function (f) {
-
+    value: function getTargets() {
+      return _lodash2['default'].map(this.files, function (file) {
         // Count how deep the current file is in relation to base
         var count = file.name.split('/');
         count = count === null ? 0 : count.length - 1;
 
-        // relName is equal to targetName at the base dir
-        f.relName = f.targetName;
-        f.relPath = '';
+        // name is equal to targetName at the base dir
+        var name = file.targetName;
+        // path is equal to the base dir
+        var path = '';
         // For each directory in depth of current file
         // add a ../ to the relative filename of this link
         while (count > 0) {
-          f.relName = '../' + f.relName;
-          f.relPath += '../';
+          name = '../' + name;
+          path += '../';
           count--;
         }
         // Set the target for each folder
         // to support nested directories
         // and allow asset files to access the dir
-        targets.push({
-          name: f.name,
+        return {
+          name: file.name,
           target: {
-            name: f.targetName
+            name: file.targetName
           },
           relative: {
-            name: f.relName,
-            path: f.relPath
+            name: name, path: path
           }
-        });
+        };
       });
-      return targets;
     }
   }]);
 

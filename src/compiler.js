@@ -47,7 +47,7 @@ var Compiler = (function () {
     this.options = parser ? parser.options : {};
     // Sets the files from the parser
     this.files = parser ? parser.files : [];
-    // Set up the compiler
+    // Set up the compiler's code filter
     this.setCodeFilter();
   }
 

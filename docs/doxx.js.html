@@ -29,14 +29,14 @@
       <div class="row">
         <div class="span3 bs-docs-sidebar">
           <ul class="nav nav-list bs-docs-sidenav affix-top">
-            <li><a href="index.html">Main</a></li>
-            <li><a href="compiler.js.html">compiler.js</a></li>
-            <li><a href="dir.js.html">dir.js</a></li>
-            <li class="active"><a href="doxx.js.html">doxx.js</a></li>
-            <li><a href="option.js.html">option.js</a></li>
-            <li><a href="parser.js.html">parser.js</a></li>
-            <li><a href="symbol.js.html">symbol.js</a></li>
-            <li><a href="theme.js.html">theme.js</a></li>
+            <li><a>Main</a></li>
+            <li><a>compiler.js</a></li>
+            <li><a>dir.js</a></li>
+            <li class="active"><a>doxx.js</a></li>
+            <li><a>option.js</a></li>
+            <li><a>parser.js</a></li>
+            <li><a>symbol.js</a></li>
+            <li><a>theme.js</a></li>
           </ul>
           <div class="scrollspy">
             <ul class="nav nav-list bs-docs-sidenav affix-top">
@@ -60,7 +60,7 @@
   // Initialize the compiler
   // and pass the parser.
   constructor(options) {
-      super(parser(options));
+      super(new Parser(options));
       // Set the locals stack
       this.locals = [];
     }</code></pre>
@@ -80,11 +80,12 @@
     }, []);
 
     var pkg;
-    // Get package.json
+    // Set the package
     try {
       pkg = require(process.cwd() + '/package');
     } catch (err) {}
 
+    // Set the readme
     var readme = pkg &amp;&amp; pkg.readme,
       readMeFile = Path.resolve(process.cwd(), this.options.readme ||
         (pkg &amp;&amp; pkg.readmeFileName) || 'README.md');
@@ -150,11 +151,11 @@
     // Set each files relName in relation 
     // to where this file is in the directory tree
     this.files.forEach(file =&gt; {
-      file.targets = this.getTargets(file);
+      file.targets = this.getTargets();
     });
 
+    // Set the locals for each file
     this.files.forEach((file) =&gt; {
-      // Set locals
       this.locals.push(_.assign({}, file, {
         project: {
           title, description, url
@@ -169,7 +170,7 @@
     });
 
     // Install theme
-    theme(this.options).install().then((result) =&gt; {
+    (new Theme(this.options)).install().then((result) =&gt; {
       var {
         isCached, theme
       } = result;
