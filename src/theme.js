@@ -376,9 +376,9 @@ var Theme = (function () {
       };
 
       // Check if the template is enabled (legacy)
-      if (options.template.path) {
+      if (options.template && options.template.path) {
         final.resolve({
-          template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, this.options.template.path)).toString()
+          template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, options.template.path)).toString()
         });
       } else {
 
