@@ -43,6 +43,10 @@ var _mkdirp = require('mkdirp');
 
 var _mkdirp2 = _interopRequireDefault(_mkdirp);
 
+var _theme = require('./theme');
+
+var _theme2 = _interopRequireDefault(_theme);
+
 /**
  * The main class that creates beautiful documentations.
  * @class Doxx
@@ -58,7 +62,9 @@ var Doxx = (function (_Compiler) {
   function Doxx(options) {
     _classCallCheck(this, Doxx);
 
-    _get(Object.getPrototypeOf(Doxx.prototype), 'constructor', this).call(this, (0, _parser2['default'])(options));
+    _get(Object.getPrototypeOf(Doxx.prototype), 'constructor', this).call(this, new _parser2['default'](options));
+    // Set the locals stack
+    this.locals = [];
   }
 
   /**
@@ -88,11 +94,11 @@ var Doxx = (function (_Compiler) {
       if (!readme && _fs2['default'].existsSync(readMeFile)) {
         readme = _fs2['default'].readFileSync(readMeFile).toString();
       } else {
-        console.warn(new Error('No README.md file found at ' + readMeFile));
+        console.warn(new Error('Doxx [warn]: No README.md file found at ' + readMeFile));
       }
 
       if (!readme) {
-        console.warn(new Error('Empty README.md ' + readMeFile));
+        console.warn(new Error('Doxx [warn]: Empty README.md ' + readMeFile));
         readme = '';
       }
 
@@ -108,6 +114,19 @@ var Doxx = (function (_Compiler) {
         symbols: []
       });
 
+      // Set title
+      var title = pkg && pkg.name ? pkg.name : this.options.title;
+
+      // Set description
+      var description = pkg && pkg.description ? pkg.description : '';
+
+      // Set URLs
+      var url = {
+        github: pkg && pkg.homepage ? pkg.homepage.indexOf('github') > -1 ? pkg.homepage : false : false,
+        npm: pkg && pkg.name ? 'https://npmjs.com/package/' + pkg.name : false,
+        homepage: pkg && pkg.homepage ? pkg.homepage.indexOf('github') === -1 ? pkg.homepage : false : false
+      };
+
       // Make sure the folder structure in target mirrors source
       var folders = [];
 
@@ -120,58 +139,89 @@ var Doxx = (function (_Compiler) {
         }
       });
 
-      // Render and write each file
+      // Set each files relName in relation
+      // to where this file is in the directory tree
       this.files.forEach(function (file) {
+        file.targets = _this.getTargets(file);
+      });
 
-        // Set each files relName in relation
-        // to where this file is in the directory tree
-        _this.files.forEach(function (f) {
-
-          // Count how deep the current file is in relation to base
-          var count = file.name.split('/');
-          count = count === null ? 0 : count.length - 1;
-
-          // relName is equal to targetName at the base dir
-          f.relName = f.targetName;
-
-          // For each directory in depth of current file
-          // add a ../ to the relative filename of this link
-          while (count > 0) {
-            f.relName = '../' + f.relName;
-            count--;
-          }
-        });
-
-        // Set title
-        var title = pkg && pkg.name ? pkg.name : _this.options.title;
-
-        // Set description
-        var description = pkg && pkg.description ? pkg.description : '';
-
-        // Set URLs
-        var url = {
-          github: pkg && pkg.homepage ? pkg.homepage.indexOf('github') > -1 ? pkg.homepage : false : false,
-          npm: pkg && pkg.name ? 'https://npmjs.com/package/' + pkg.name : false,
-          homepage: pkg && pkg.homepage ? pkg.homepage.indexOf('github') === -1 ? pkg.homepage : false : false
-        };
-
+      this.files.forEach(function (file) {
         // Set locals
-        var locals = _lodash2['default'].extend({}, file, {
+        _this.locals.push(_lodash2['default'].assign({}, file, {
           project: {
             title: title, description: description, url: url
           },
           allSymbols: allSymbols,
           files: _this.files,
-          currentName: file.name
-        });
+          current: {
+            name: file.name
+          },
+          file: {
+            targets: file.targets
+          }
+        }));
+      });
 
-        // Compile
-        var compiled = _this.compile(locals);
+      // Install theme
+      new _theme2['default'](this.options).install().then(function (result) {
+        var isCached = result.isCached;
+        var theme = result.theme;
 
-        // Write files
-        (0, _mkdirp2['default'])(_this.options.target, function (err) {
-          if (err) return;else _fs2['default'].writeFileSync(_path2['default'].join(_this.options.target, file.targetName), compiled);
+        if (theme) {
+          console.info('Doxx [info]: Installed theme: ' + theme + (isCached ? ' from cache.' : ''));
+        }
+        _lodash2['default'].forEach(_this.files, function (file, index) {
+          // Set template
+          _this.setTemplate(result.template);
+          // Compile the template
+          var compiled = _this.compile(_this.locals[index]);
+          // Write files
+          (0, _mkdirp2['default'])(_this.options.target, function (error) {
+            if (error) return;else _fs2['default'].writeFileSync(_path2['default'].join(_this.options.target, file.targetName), compiled);
+          });
         });
+      }, console.error);
+    }
+
+    /** 
+     * Return the targets for the specified file
+     * @private
+     * @param  {Object} file The file to generate
+     * @return {Object}      The iterator
+     */
+  }, {
+    key: 'getTargets',
+    value: function getTargets(file) {
+      return _lodash2['default'].map(this.files, function (f) {
+
+        // Count how deep the current file is in relation to base
+        var count = file.name.split('/');
+        count = count === null ? 0 : count.length - 1;
+
+        // relName is equal to targetName at the base dir
+        f.relative = {
+          name: f.targetName,
+          path: ''
+        };
+        // For each directory in depth of current file
+        // add a ../ to the relative filename of this link
+        while (count > 0) {
+          f.relative.name = '../' + f.relative.name;
+          f.relative.path += '../';
+          count--;
+        }
+        // Set the target for each folder
+        // to support nested directories
+        // and allow asset files to access the dir
+        return {
+          file: {
+            name: f.name
+          },
+          target: {
+            name: f.targetName
+          },
+          relative: f.relative
+        };
       });
     }
   }]);

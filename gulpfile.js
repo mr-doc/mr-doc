@@ -55,14 +55,17 @@ gulp.task('watch', function () {
 gulp.task('mocha', ['beautify','lib'],function () {
   return gulp.src('./test/**/**/*.js', { read: false })
     .pipe(mocha())
-    .once('end', function () {
-      //process.exit();
-    });
+    .once('end', function () {});
 });
+
+/* Cleans the Doxx cache */
+gulp.task('clean', shell.task([
+  './bin/doxx cache clean',
+]))
 
 /* Runs the doxx command and builds the docs */
 gulp.task('doc', shell.task([
-  './bin/doxx --source lib --target docs',
+  './bin/doxx --source lib --target docs --title Doxx',
 ]));
 
 gulp.task('default', ['beautify', 'lib', 'watch']);

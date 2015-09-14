@@ -30,9 +30,11 @@ var _dox = require('dox');
 
 var _dox2 = _interopRequireDefault(_dox);
 
-var _fs = require('fs');
+var _fsExtra = require('fs-extra');
 
-var _fs2 = _interopRequireDefault(_fs);
+var _fsExtra2 = _interopRequireDefault(_fsExtra);
+
+require('source-map-support/register');
 
 /**
  * The class that parses the dox tags.
@@ -56,15 +58,27 @@ var Parser = (function () {
   _createClass(Parser, [{
     key: 'start',
     value: function start() {
-      var _this = this;
-
       var _options = this.options;
       var source = _options.source;
       var extension = _options.extension;
       var blacklist = _options.blacklist;
 
+      // Parse the files
+      this.files = Parser.parse(source, extension, blacklist);
+    }
+
+    /**
+     * Parses the source
+     * @param  {String|Array} source    The source(s) to parse
+     * @param  {String} extension The file extension
+     * @param  {Array} ignore    The files to ignore
+     * @return {Array}           The parsed files
+     */
+  }], [{
+    key: 'parse',
+    value: function parse(source, extension, ignore) {
       if (_lodash2['default'].isArray(source)) {
-        this.files = source.map(function (doc) {
+        return source.map(function (doc) {
           var targetName = doc.name + '.' + extension;
           if (!doc.targetName) doc.targetName = targetName;
           doc.symbols = _symbol2['default'].structure(doc.dox, doc.targetName);
@@ -72,11 +86,11 @@ var Parser = (function () {
         });
       } else {
         source = _path2['default'].resolve(process.cwd(), source);
-        this.files = _dir2['default'].collectFiles(source, {
-          ignore: blacklist
+        var files = _dir2['default'].collectFiles(source, {
+          ignore: ignore
         });
-        this.files = this.files.map(function (file) {
-          var dox = _this.parse(_path2['default'].join(source, file));
+        return files.map(function (file) {
+          var dox = Parser.parseComments(_path2['default'].join(source, file));
           var targetName = file + '.' + extension;
           return {
             name: file.replace(/\\/g, '/'),
@@ -89,41 +103,25 @@ var Parser = (function () {
     }
 
     /**
-     * Parses the source using dox.
+     * Parses the source's comments using dox.
      * @param {string} filepath The path to the source 
      * @return {object} Returns a JSON representation of the tags as an array
-     * @example
-     * {
-     *	tags:[]
-     *	description:{
-     *	full:""
-     *	summary:""
-     *	body:""
-     * 	}
-     *	ignore:false
-     * 	isPrivate:false
-     * 	ctx:{
-     *	  type:"declaration"
-     * 	  name:""
-     * 		value:[]
-     *		string:""
-     *	}
-     * }
+     * @jsFiddle https://jsfiddle.net/iwatakeshi/8hc50sbc/embedded/
      */
   }, {
-    key: 'parse',
-    value: function parse(filepath) {
+    key: 'parseComments',
+    value: function parseComments(filepath) {
       var json = null;
       try {
-        json = _dox2['default'].parseComments(_fs2['default'].readFileSync(filepath).toString(), {
+        json = _dox2['default'].parseComments(_fsExtra2['default'].readFileSync(filepath).toString(), {
           raw: false
         });
-      } catch (e) {
-        console.error('doxx:', e);
+      } catch (error) {
+        console.error('Doxx [error]:', error);
         return [];
       }
 
-      return json.filter(this.shouldPass).map(_symbol2['default'].map);
+      return json.filter(Parser.shouldPass).map(_symbol2['default'].map);
     }
 
     /**
@@ -151,9 +149,6 @@ var Parser = (function () {
   return Parser;
 })();
 
-exports['default'] = function (options) {
-  return new Parser(options);
-};
-
+exports['default'] = Parser;
 module.exports = exports['default'];
 //# sourceMappingURL=source maps/parser.js.map

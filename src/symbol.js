@@ -14,6 +14,13 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+require('source-map-support/register');
+
+/**
+ * The class that manges symbols.
+ * @class Symbol
+ */
+
 var Symbol = (function () {
   function Symbol() {
     _classCallCheck(this, Symbol);
@@ -103,8 +110,15 @@ var Symbol = (function () {
     value: function map(symbol) {
       symbol.tags = Symbol.compact(symbol.tags);
       var tags = {};
-      ['type', 'description', 'example', 'file', 'fileoverview', 'overview', 'param', 'require', 'jsFiddle', 'return'].forEach(function (tag) {
-        tags[tag.toLowerCase() + 's'] = symbol.tags.filter(Symbol.has(tag));
+      ['type', 'description', 'example', 'file', 'fileoverview', 'overview', 'param', 'require', 'jsfiddle', 'jsFiddle', 'JSFiddle', 'return', 'returns'].forEach(function (tag) {
+        // Handle special cases
+        if (tag.match(/(return|returns)\b/)) tags.returns = symbol.tags.filter(function (s) {
+          return Symbol.has('return')(s) || Symbol.has('returns')(s);
+        });else if (tag.match(/(jsfiddle|jsFiddle|JSFiddle)\b/)) {
+          tags.jsfiddles = symbol.tags.filter(function (s) {
+            return Symbol.has('jsfiddle')(s) || Symbol.has('jsFiddle')(s) || Symbol.has('JSFiddle')(s);
+          });
+        } else tags[tag.toLowerCase() + 's'] = symbol.tags.filter(Symbol.has(tag));
       });
       var types = tags.types;
       var descriptions = tags.descriptions;

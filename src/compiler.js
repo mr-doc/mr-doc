@@ -22,6 +22,12 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+require('source-map-support/register');
+
 /**
  * The class that compiles the Jade template.
  * @class Compiler
@@ -32,64 +38,126 @@ var Compiler = (function () {
     _classCallCheck(this, Compiler);
 
     /**
-     * Gets the options from the parser.
-     * @type {object}
+     * Jade used to compile the documentation
+     * @type {Jade} Jade compiler
      */
-    this.options = parser.options;
-    /**
-     * Gets the parsed files from the parser
-     * @type {Array}
-     */
-    this.files = parser.files;
-    // Set up the compiler
-    this.setup();
+    this.jade = _jade2['default'];
+
+    // Set the options
+    this.options = parser ? parser.options : {};
+    // Sets the files from the parser
+    this.files = parser ? parser.files : [];
+    // Set up the compiler's code filter
+    this.setCodeFilter();
   }
 
-  /**
-   * Compiles the docs.
-   * @param  {Object} locals local variable object
-   * @jsFiddle http://jsfiddle.net/4L6Br/embedded/
-   * @return {String} rendered content
+  /** 
+   * Compiles the docs
+   * @param  {Object} locals   The local variable object
+   * @param  {String} template The template to compile
+   * @jsFiddle https://jsfiddle.net/iwatakeshi/pmp9ygwL/embedded/
+   * @return {String}          The compiled content
    */
 
   _createClass(Compiler, [{
     key: 'compile',
-    value: function compile(locals) {
+    value: function compile(locals, template) {
       // Get the path (alias for filename)
       var path = this.options.template.path;
 
       // Return the compiled template
-      return this.jade.compile(this.template, {
+      return this.jade.compile(template || this.template, {
         pretty: true,
         filename: path
       })(locals);
     }
 
-    /**
-     * Sets up the compiler by initializing jade,
-     * the template, and the filters for jade.
+    /** 
+     * Compiles the docs with a specified path
+     * @param  {Object} path     The path to compile
+     * @param  {Object} locals   The local variable object
+     * @param  {String} template The template to compile
+     * @return {String}          The compiled content
      */
   }, {
-    key: 'setup',
-    value: function setup() {
-      /**
-       * Jade used to compile the documentation
-       * @type {Jade} Jade compiler
-       */
-      this.jade = _jade2['default'];
-      /**
-       * Template used to produce the documentation
-       * @type {String} template string
-       */
-      this.template = _fs2['default'].readFileSync(_path2['default'].resolve(__dirname, this.options.template.path)).toString();
+    key: 'compileWithPath',
+    value: function compileWithPath(path, locals, template) {
+      // Return the compiled template
+      return this.jade.compile(template || this.template, {
+        pretty: true,
+        // Alias for filename
+        filename: path
+      })(locals);
+    }
+
+    /** 
+     * Sets the template
+     * @param {String} template The template
+     * @returns {Compiler} The compiler
+     */
+  }, {
+    key: 'setTemplate',
+    value: function setTemplate(template) {
+      // Template used to produce the documentation
+      this.template = template;
+      return this;
+    }
+
+    /** 
+     * Sets the template
+     * @param {String} path The path to the template
+     * @returns {Compiler} The compiler
+     */
+  }, {
+    key: 'setTemplateWithPath',
+    value: function setTemplateWithPath(path) {
+      // Template used to produce the documentation
+      this.template = _fs2['default'].readFileSync(_path2['default'].resolve(__dirname, path || this.options.template.path)).toString();
+      return this;
+    }
+
+    /** 
+     * Sets custom filter(s)
+     * @param {Array|Object} filters The custom filter(s) to set
+     * @jsFiddle https://jsfiddle.net/iwatakeshi/sbr206cf/embedded/
+     * @returns {Compiler} The compiler
+     */
+  }, {
+    key: 'setFilters',
+    value: function setFilters(filters) {
+      var _this = this;
+
+      // Check if the fitlers is an object
+      if (_lodash2['default'].isPlainObject(filters)) {
+        this.jade.filters[filters.name] = filters.filter;
+      }
+      // Check if the filters is an array
+      if (_lodash2['default'].isArray(filters)) {
+        _lodash2['default'].forEach(filters, function (filter) {
+          _this.jade.filters[filter.name] = filter.filter;
+        });
+      }
+      return this;
+    }
+
+    /**
+     * Sets the code filter for `:code`
+     * @param {Function} filter The code filter to set
+     * @returns {Compiler} The compiler
+     */
+  }, {
+    key: 'setCodeFilter',
+    value: function setCodeFilter(filter) {
       /**
        * Jade support for filter `:code`
        * @param  {String} block
        * @return {String}
        */
-      this.jade.filters.code = function (block) {
+      this.jade.filters.code = filter || function (block) {
         return block.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/#/g, '&#35;').replace(/\\/g, '\\\\').replace(/\n/g, '\\n');
       };
+
+      return this;
     }
   }]);
 
