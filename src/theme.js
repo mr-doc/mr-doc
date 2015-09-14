@@ -107,7 +107,7 @@ var Theme = (function () {
         theme.name    (the name of the theme)
         theme.path    (the path to store the theme)
         target.path   (the path to store the compiled content)
-        template.path (the template path) *to be deprecated*
+        template.path (the template path) *for test purposes only*
        */
 
       // Create cache paths and helpers

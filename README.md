@@ -6,12 +6,9 @@ By default, Doxx uses [doxx-theme-default](https://www.github.com/iwatakeshi/dox
 [Twitter Bootstrap](https://twitter.github.com/bootstrap/) for the frontend framework and [Prism.js](http://prismjs.com/)
 for syntax highlighting.
 
-## Demo
+## Docs
 
-* [doxx/docs/compile.js](http://fgribreau.github.com/doxx/docs/compile.js.html)
-* [doxx/docs/dir.js](http://fgribreau.github.com/doxx/docs/dir.js.html)
-* [doxx/docs/parser.js](http://fgribreau.github.com/doxx/docs/parser.js.html)
-
+The beautifully documentation can be found at [GitHub](http://fgribreau.github.io/doxx/docs/).
 
 
 ## Installation
@@ -55,6 +52,13 @@ collectFiles = (source, options, callback) ->
   ...
 
 ```
+
+***Notes***
+
+* Doxx supports the following variations of `@return` and `@jsFiddle`:
+  * `@return`, `@returns`
+  * `@jsfiddle`, `@jsFiddle`, `@JSFiddle`
+
 
 ## CLI
 ```bash
@@ -122,7 +126,9 @@ If you would like to create your own themes, see
 
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [gulp](https://github.com/gulpjs/gulp) and [mocha](https://github.com/mochajs/mocha).
 
-## [Changelog](/CHANGELOG.md)
+## Changelog
+
+The changes can be viewed [here](/CHANGELOG.md).
 
 ## Donate
 
