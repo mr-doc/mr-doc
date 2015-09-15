@@ -122,6 +122,13 @@ If you would like to create your own themes, see
 * [grunt-doxx](https://github.com/evertton/grunt-doxx) - Doxx grunt plugin automatically generates the documentation for your project.
 * [gulp-doxx](https://github.com/filipovskii/gulp-doxx) - Doxx documentation generator for gulp.
 
+## Roadmap
+
+### 3.0.0
+
+* Switch the backend from bower to npm for themes. [#79](https://github.com/FGRibreau/doxx/issues/79)
+* Re-introduce Doxx with a new name. [#83](https://github.com/FGRibreau/doxx/issues/83)
+
 ## Contributing
 
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [gulp](https://github.com/gulpjs/gulp) and [mocha](https://github.com/mochajs/mocha).
