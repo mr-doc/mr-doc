@@ -57,7 +57,7 @@ var Option = (function () {
 
       if (!options.source) {
         console.error(new Error('Doxx [error]: You must define a source.'));
-        return;
+        process.exit(1);
       } else this.options.source = options.source;
 
       if (options.target) {

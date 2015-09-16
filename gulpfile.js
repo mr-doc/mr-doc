@@ -64,13 +64,12 @@ gulp.task('clean', shell.task([
 ]))
 
 /* Runs the doxx command and builds the docs */
-gulp.task('doc', shell.task([
+gulp.task('doc', ['lib'], shell.task([
   './bin/doxx --source lib --target docs --title Doxx',
 ]));
 
 gulp.task('default', ['beautify', 'lib', 'watch']);
 
 gulp.task('build', ['beautify', 'lib', 'mocha', 'doc']);
-
 
 gulp.task('test', ['mocha', 'doc']);
