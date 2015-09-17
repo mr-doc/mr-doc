@@ -95,13 +95,27 @@ $ doxx --help
 
 ### Usage
 
-With the release of **2.1.0**, you are able to use different themes to ***spice*** up your documentations. To install a theme,
-simply use the `--theme` option followed by the name of the theme:
+With the release of **2.1.0**, you are able to use different themes to ***spice*** up your documentations. To use a specific theme, simply use the `--theme` option followed by the name of the theme:
 
 ```bash
 $ doxx --source lib --target docs --theme cayman
 # or
 $ doxx --source lib --target docs --theme doxx-theme-cayman
+```
+
+### Installing Themes
+
+Themes are just npm modules that can be installed in your application, there is a default theme included with Doxx.
+
+Current available themes:
+
+- [https://github.com/iwatakeshi/doxx-theme-default](doxx-theme-default)
+- [https://github.com/iwatakeshi/doxx-theme-cayman](doxx-theme-cayman)
+
+To install into your project to use as part of the build step, simply:
+
+```
+npm install doxx-theme-cayman --save-dev
 ```
 
 ***Notes***
