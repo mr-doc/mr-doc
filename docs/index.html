@@ -124,11 +124,20 @@ collectFiles = (source, options, callback) -&gt;
 </code></pre>
 <h2>Themes</h2>
 <h3>Usage</h3>
-<p>With the release of <strong>2.1.0</strong>, you are able to use different themes to <strong><em>spice</em></strong> up your documentations. To install a theme,
-simply use the <code>--theme</code> option followed by the name of the theme:</p>
+<p>With the release of <strong>2.1.0</strong>, you are able to use different themes to <strong><em>spice</em></strong> up your documentations. To use a specific theme, simply use the <code>--theme</code> option followed by the name of the theme:</p>
 <pre><code class="language-bash">$ doxx --source lib --target docs --theme cayman
 # or
 $ doxx --source lib --target docs --theme doxx-theme-cayman
+</code></pre>
+<h3>Installing Themes</h3>
+<p>Themes are just npm modules that can be installed in your application, there is a default theme included with Doxx.</p>
+<p>Current available themes:</p>
+<ul>
+<li><a href="doxx-theme-default">https://github.com/iwatakeshi/doxx-theme-default</a></li>
+<li><a href="doxx-theme-cayman">https://github.com/iwatakeshi/doxx-theme-cayman</a></li>
+</ul>
+<p>To install into your project to use as part of the build step, simply:</p>
+<pre><code>npm install doxx-theme-cayman --save-dev
 </code></pre>
 <p><strong><em>Notes</em></strong></p>
 <ul>

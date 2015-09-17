@@ -50,12 +50,14 @@ var Theme = (function () {
   function Theme(options) {
     _classCallCheck(this, Theme);
 
-    var resolvedTheme = this.locateTheme(options.theme);
+    var resolved = {
+      theme: this.locateTheme(options.theme)
+    };
 
     this.options = {
       theme: {
-        name: resolvedTheme.theme,
-        path: resolvedTheme.path
+        name: resolved.theme.name,
+        path: resolved.theme.path
       },
       target: {
         path: options.target
@@ -72,35 +74,39 @@ var Theme = (function () {
     value: function locateTheme(theme) {
 
       var DEFAULT_THEME = 'doxx-theme-default';
-      var doxxBasePath = _path2['default'].resolve(__dirname, '..');
-      var projectBasePath = process.cwd();
-      var doxxBaseModulePath = _path2['default'].join(doxxBasePath, 'node_modules', theme);
-      var projectBaseModulePath = _path2['default'].join(projectBasePath, 'node_modules', theme);
-      var defaultThemePath = _path2['default'].join(doxxBasePath, 'node_modules', DEFAULT_THEME);
 
-      var exists = _fs2['default'].existsSync(doxxBaseModulePath);
+      var doxxPath = _path2['default'].resolve(__dirname, '..');
+      var projectPath = process.cwd();
+
+      var locations = {
+        project: _path2['default'].join(projectPath, 'node_modules', theme),
+        doxx: _path2['default'].join(doxxPath, 'node_modules', theme),
+        'default': _path2['default'].join(doxxPath, 'node_modules', DEFAULT_THEME)
+      };
+
+      var exists = _fs2['default'].existsSync(locations.doxx);
       if (exists) {
-        console.log('Located theme [' + theme + ']: ' + doxxBaseModulePath);
+        console.log('Doxx [info]: Using theme [' + theme + ']');
         return {
-          theme: theme,
-          path: doxxBaseModulePath
+          name: theme,
+          path: locations.doxx
         };
       }
 
-      exists = _fs2['default'].existsSync(projectBaseModulePath);
+      exists = _fs2['default'].existsSync(locations.project);
       if (exists) {
-        console.log('Located theme [' + theme + ']: ' + projectBaseModulePath);
+        console.log('Doxx [info]: Using theme [' + theme + ']');
         return {
-          theme: theme,
-          path: projectBaseModulePath
+          name: theme,
+          path: locations.project
         };
       }
 
-      console.log('WARNING: theme "' + theme + '" not found, reverting to default.');
+      console.log('Doxx [warning]: theme "' + theme + '" not found, reverting to default.');
 
       return {
-        theme: DEFAULT_THEME,
-        path: defaultThemePath
+        name: DEFAULT_THEME,
+        path: locations['default']
       };
     }
 

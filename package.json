@@ -30,6 +30,7 @@
   "dependencies": {
     "commander": "~2.8.1",
     "dox": "^0.8.0",
+    "doxx-theme-default": "^1.0.0",
     "elegant-spinner": "^1.0.0",
     "fs-extra": "^0.24.0",
     "jade": "~1.11.x",
