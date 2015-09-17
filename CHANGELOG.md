@@ -1,326 +1,348 @@
 # Change Log
 
-## [v2.1.0](https://github.com/fgribreau/doxx/tree/v2.1.0) (2015-09-14)
+## [Unreleased](https://github.com/mr-doc/mr-doc/tree/HEAD)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v2.0.0...v2.1.0)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v2.1.1...HEAD)
+
+**Merged pull requests:**
+
+- Move docs out to docs task that pushes to gh-pages branch - wip [\#87](https://github.com/mr-doc/mr-doc/pull/87) ([cliftonc](https://github.com/cliftonc))
+
+- Move of theme to npm modules [\#85](https://github.com/mr-doc/mr-doc/pull/85) ([cliftonc](https://github.com/cliftonc))
+
+## [v2.1.1](https://github.com/mr-doc/mr-doc/tree/v2.1.1) (2015-09-16)
+
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v2.1.0...v2.1.1)
+
+**Merged pull requests:**
+
+- 2.1.1 [\#84](https://github.com/mr-doc/mr-doc/pull/84) ([iwatakeshi](https://github.com/iwatakeshi))
+
+- Fix GitHub Pages [\#82](https://github.com/mr-doc/mr-doc/pull/82) ([iwatakeshi](https://github.com/iwatakeshi))
+
+- Fix Github Pages [\#81](https://github.com/mr-doc/mr-doc/pull/81) ([iwatakeshi](https://github.com/iwatakeshi))
+
+## [v2.1.0](https://github.com/mr-doc/mr-doc/tree/v2.1.0) (2015-09-14)
+
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v2.0.0...v2.1.0)
 
 **Implemented enhancements:**
 
-- Use update-notifier [\#78](https://github.com/FGRibreau/doxx/issues/78)
+- Use update-notifier [\#78](https://github.com/mr-doc/mr-doc/issues/78)
 
-- Generate critical path from CSS [\#43](https://github.com/FGRibreau/doxx/issues/43)
+- Generate critical path from CSS [\#43](https://github.com/mr-doc/mr-doc/issues/43)
 
-- Minify CSS and JS [\#42](https://github.com/FGRibreau/doxx/issues/42)
+- Minify CSS and JS [\#42](https://github.com/mr-doc/mr-doc/issues/42)
 
-- broken when viewed from https server [\#5](https://github.com/FGRibreau/doxx/issues/5)
+- broken when viewed from https server [\#5](https://github.com/mr-doc/mr-doc/issues/5)
 
 **Merged pull requests:**
 
-- Update [\#77](https://github.com/FGRibreau/doxx/pull/77) ([iwatakeshi](https://github.com/iwatakeshi))
+- Update [\#77](https://github.com/mr-doc/mr-doc/pull/77) ([iwatakeshi](https://github.com/iwatakeshi))
 
-- Update [\#76](https://github.com/FGRibreau/doxx/pull/76) ([iwatakeshi](https://github.com/iwatakeshi))
+- Update [\#76](https://github.com/mr-doc/mr-doc/pull/76) ([iwatakeshi](https://github.com/iwatakeshi))
 
-- Update [\#75](https://github.com/FGRibreau/doxx/pull/75) ([iwatakeshi](https://github.com/iwatakeshi))
+- Update [\#75](https://github.com/mr-doc/mr-doc/pull/75) ([iwatakeshi](https://github.com/iwatakeshi))
 
-- Patch [\#74](https://github.com/FGRibreau/doxx/pull/74) ([iwatakeshi](https://github.com/iwatakeshi))
+- Patch [\#74](https://github.com/mr-doc/mr-doc/pull/74) ([iwatakeshi](https://github.com/iwatakeshi))
 
-- Update Doxx [\#72](https://github.com/FGRibreau/doxx/pull/72) ([iwatakeshi](https://github.com/iwatakeshi))
+- Update Doxx [\#72](https://github.com/mr-doc/mr-doc/pull/72) ([iwatakeshi](https://github.com/iwatakeshi))
 
-- 2.1.0 [\#80](https://github.com/FGRibreau/doxx/pull/80) ([iwatakeshi](https://github.com/iwatakeshi))
+- 2.1.0 [\#80](https://github.com/mr-doc/mr-doc/pull/80) ([iwatakeshi](https://github.com/iwatakeshi))
 
-## [v2.0.0](https://github.com/fgribreau/doxx/tree/v2.0.0) (2015-09-03)
+## [v2.0.0](https://github.com/mr-doc/mr-doc/tree/v2.0.0) (2015-09-03)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.5.0...v2.0.0)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.5.0...v2.0.0)
 
 **Closed issues:**
 
-- Using @description tag doubles the description [\#70](https://github.com/FGRibreau/doxx/issues/70)
+- Using @description tag doubles the description [\#70](https://github.com/mr-doc/mr-doc/issues/70)
 
-- TypeLexerSyntaxError [\#69](https://github.com/FGRibreau/doxx/issues/69)
+- TypeLexerSyntaxError [\#69](https://github.com/mr-doc/mr-doc/issues/69)
 
-- Get exception when running doxx --source lib --target docs [\#64](https://github.com/FGRibreau/doxx/issues/64)
-
-**Merged pull requests:**
-
-- Update Doxx [\#71](https://github.com/FGRibreau/doxx/pull/71) ([iwatakeshi](https://github.com/iwatakeshi))
-
-## [v1.5.0](https://github.com/fgribreau/doxx/tree/v1.5.0) (2015-07-21)
-
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.4.0...v1.5.0)
+- Get exception when running doxx --source lib --target docs [\#64](https://github.com/mr-doc/mr-doc/issues/64)
 
 **Merged pull requests:**
 
-- add a space after commas for multiple values [\#68](https://github.com/FGRibreau/doxx/pull/68) ([ForestMist](https://github.com/ForestMist))
+- Update Doxx [\#71](https://github.com/mr-doc/mr-doc/pull/71) ([iwatakeshi](https://github.com/iwatakeshi))
 
-## [v1.4.0](https://github.com/fgribreau/doxx/tree/v1.4.0) (2015-05-30)
+## [v1.5.0](https://github.com/mr-doc/mr-doc/tree/v1.5.0) (2015-07-21)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.3.0...v1.4.0)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.4.0...v1.5.0)
 
 **Merged pull requests:**
 
-- examples and returns [\#67](https://github.com/FGRibreau/doxx/pull/67) ([scottnath](https://github.com/scottnath))
+- add a space after commas for multiple values [\#68](https://github.com/mr-doc/mr-doc/pull/68) ([ForestMist](https://github.com/ForestMist))
 
-## [v1.3.0](https://github.com/fgribreau/doxx/tree/v1.3.0) (2015-05-26)
+## [v1.4.0](https://github.com/mr-doc/mr-doc/tree/v1.4.0) (2015-05-30)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.2.8...v1.3.0)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.3.0...v1.4.0)
 
-## [v1.2.8](https://github.com/fgribreau/doxx/tree/v1.2.8) (2015-05-26)
+**Merged pull requests:**
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.2.7...v1.2.8)
+- examples and returns [\#67](https://github.com/mr-doc/mr-doc/pull/67) ([scottnath](https://github.com/scottnath))
 
-## [v1.2.7](https://github.com/fgribreau/doxx/tree/v1.2.7) (2015-05-26)
+## [v1.3.0](https://github.com/mr-doc/mr-doc/tree/v1.3.0) (2015-05-26)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.2.6...v1.2.7)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.8...v1.3.0)
+
+## [v1.2.8](https://github.com/mr-doc/mr-doc/tree/v1.2.8) (2015-05-26)
+
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.7...v1.2.8)
+
+## [v1.2.7](https://github.com/mr-doc/mr-doc/tree/v1.2.7) (2015-05-26)
+
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.6...v1.2.7)
 
 **Closed issues:**
 
-- Official template - return issue [\#65](https://github.com/FGRibreau/doxx/issues/65)
+- Official template - return issue [\#65](https://github.com/mr-doc/mr-doc/issues/65)
 
-- praise: this is awesome [\#62](https://github.com/FGRibreau/doxx/issues/62)
+- praise: this is awesome [\#62](https://github.com/mr-doc/mr-doc/issues/62)
 
 **Merged pull requests:**
 
-- add return description to symbol object [\#66](https://github.com/FGRibreau/doxx/pull/66) ([scottnath](https://github.com/scottnath))
+- add return description to symbol object [\#66](https://github.com/mr-doc/mr-doc/pull/66) ([scottnath](https://github.com/scottnath))
 
-## [v1.2.6](https://github.com/fgribreau/doxx/tree/v1.2.6) (2015-03-18)
+## [v1.2.6](https://github.com/mr-doc/mr-doc/tree/v1.2.6) (2015-03-18)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.2.5...v1.2.6)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.5...v1.2.6)
 
 **Closed issues:**
 
-- Information in the @return [\#56](https://github.com/FGRibreau/doxx/issues/56)
+- Information in the @return [\#56](https://github.com/mr-doc/mr-doc/issues/56)
 
-- TypeError 'undefined' when @return is empty [\#54](https://github.com/FGRibreau/doxx/issues/54)
+- TypeError 'undefined' when @return is empty [\#54](https://github.com/mr-doc/mr-doc/issues/54)
 
 **Merged pull requests:**
 
-- Fixes issue \#61 [\#63](https://github.com/FGRibreau/doxx/pull/63) ([evertton](https://github.com/evertton))
+- Fixes issue \#61 [\#63](https://github.com/mr-doc/mr-doc/pull/63) ([evertton](https://github.com/evertton))
 
-## [v1.2.5](https://github.com/fgribreau/doxx/tree/v1.2.5) (2015-01-31)
+## [v1.2.5](https://github.com/mr-doc/mr-doc/tree/v1.2.5) (2015-01-31)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.2.4...v1.2.5)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.4...v1.2.5)
 
 **Closed issues:**
 
-- Weird return statement display + markup showing in the output. [\#58](https://github.com/FGRibreau/doxx/issues/58)
+- Weird return statement display + markup showing in the output. [\#58](https://github.com/mr-doc/mr-doc/issues/58)
 
 **Merged pull requests:**
 
-- Add jade != to stop html escape [\#59](https://github.com/FGRibreau/doxx/pull/59) ([forstermatth](https://github.com/forstermatth))
+- Add jade != to stop html escape [\#59](https://github.com/mr-doc/mr-doc/pull/59) ([forstermatth](https://github.com/forstermatth))
 
-- Add condition for return tag [\#60](https://github.com/FGRibreau/doxx/pull/60) ([forstermatth](https://github.com/forstermatth))
+- Add condition for return tag [\#60](https://github.com/mr-doc/mr-doc/pull/60) ([forstermatth](https://github.com/forstermatth))
 
-## [v1.2.4](https://github.com/fgribreau/doxx/tree/v1.2.4) (2015-01-22)
+## [v1.2.4](https://github.com/mr-doc/mr-doc/tree/v1.2.4) (2015-01-22)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.3.4...v1.2.4)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.3.4...v1.2.4)
 
-## [v1.3.4](https://github.com/fgribreau/doxx/tree/v1.3.4) (2015-01-22)
+## [v1.3.4](https://github.com/mr-doc/mr-doc/tree/v1.3.4) (2015-01-22)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.2.3...v1.3.4)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.3...v1.3.4)
 
-## [v1.2.3](https://github.com/fgribreau/doxx/tree/v1.2.3) (2015-01-22)
+## [v1.2.3](https://github.com/mr-doc/mr-doc/tree/v1.2.3) (2015-01-22)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.2.2...v1.2.3)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.2...v1.2.3)
 
-## [v1.2.2](https://github.com/fgribreau/doxx/tree/v1.2.2) (2015-01-22)
+## [v1.2.2](https://github.com/mr-doc/mr-doc/tree/v1.2.2) (2015-01-22)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.2.1...v1.2.2)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.1...v1.2.2)
 
 **Closed issues:**
 
-- TypeError thrown in target option not specified [\#52](https://github.com/FGRibreau/doxx/issues/52)
+- TypeError thrown in target option not specified [\#52](https://github.com/mr-doc/mr-doc/issues/52)
 
 **Merged pull requests:**
 
-- Updated dox version. Still works. [\#57](https://github.com/FGRibreau/doxx/pull/57) ([trusktr](https://github.com/trusktr))
+- Updated dox version. Still works. [\#57](https://github.com/mr-doc/mr-doc/pull/57) ([trusktr](https://github.com/trusktr))
 
-## [v1.2.1](https://github.com/fgribreau/doxx/tree/v1.2.1) (2014-11-21)
+## [v1.2.1](https://github.com/mr-doc/mr-doc/tree/v1.2.1) (2014-11-21)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.2.0...v1.2.1)
-
-**Merged pull requests:**
-
-- \#52 Fixes TypeError thrown if target option not passed. [\#53](https://github.com/FGRibreau/doxx/pull/53) ([gwagroves](https://github.com/gwagroves))
-
-## [v1.2.0](https://github.com/fgribreau/doxx/tree/v1.2.0) (2014-11-19)
-
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.1.1...v1.2.0)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.0...v1.2.1)
 
 **Merged pull requests:**
 
-- Adding the ability to send in pre-compiled dox source [\#51](https://github.com/FGRibreau/doxx/pull/51) ([leejt489](https://github.com/leejt489))
+- \#52 Fixes TypeError thrown if target option not passed. [\#53](https://github.com/mr-doc/mr-doc/pull/53) ([gwagroves](https://github.com/gwagroves))
 
-## [v1.1.1](https://github.com/fgribreau/doxx/tree/v1.1.1) (2014-11-05)
+## [v1.2.0](https://github.com/mr-doc/mr-doc/tree/v1.2.0) (2014-11-19)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.1.0...v1.1.1)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.1.1...v1.2.0)
+
+**Merged pull requests:**
+
+- Adding the ability to send in pre-compiled dox source [\#51](https://github.com/mr-doc/mr-doc/pull/51) ([leejt489](https://github.com/leejt489))
+
+## [v1.1.1](https://github.com/mr-doc/mr-doc/tree/v1.1.1) (2014-11-05)
+
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.1.0...v1.1.1)
 
 **Implemented enhancements:**
 
-- Expose `doxx` as a Node module [\#37](https://github.com/FGRibreau/doxx/issues/37)
+- Expose `doxx` as a Node module [\#37](https://github.com/mr-doc/mr-doc/issues/37)
 
 **Closed issues:**
 
-- Error message when npm installing [\#48](https://github.com/FGRibreau/doxx/issues/48)
+- Error message when npm installing [\#48](https://github.com/mr-doc/mr-doc/issues/48)
 
 **Merged pull requests:**
 
-- Remove error message [\#49](https://github.com/FGRibreau/doxx/pull/49) ([nicolasbrugneaux](https://github.com/nicolasbrugneaux))
+- Remove error message [\#49](https://github.com/mr-doc/mr-doc/pull/49) ([nicolasbrugneaux](https://github.com/nicolasbrugneaux))
 
-## [v1.1.0](https://github.com/fgribreau/doxx/tree/v1.1.0) (2014-11-05)
+## [v1.1.0](https://github.com/mr-doc/mr-doc/tree/v1.1.0) (2014-11-05)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v1.0.0...v1.1.0)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.0.0...v1.1.0)
 
 **Closed issues:**
 
-- Ability to rename module name [\#46](https://github.com/FGRibreau/doxx/issues/46)
+- Ability to rename module name [\#46](https://github.com/mr-doc/mr-doc/issues/46)
 
-- Ability to ignore code blocks [\#45](https://github.com/FGRibreau/doxx/issues/45)
+- Ability to ignore code blocks [\#45](https://github.com/mr-doc/mr-doc/issues/45)
 
-- CSS doesn't load on first load [\#44](https://github.com/FGRibreau/doxx/issues/44)
+- CSS doesn't load on first load [\#44](https://github.com/mr-doc/mr-doc/issues/44)
 
-- Nav flickers when browser height is too short [\#41](https://github.com/FGRibreau/doxx/issues/41)
+- Nav flickers when browser height is too short [\#41](https://github.com/mr-doc/mr-doc/issues/41)
 
-- Whitespace is missing between credits links [\#40](https://github.com/FGRibreau/doxx/issues/40)
+- Whitespace is missing between credits links [\#40](https://github.com/mr-doc/mr-doc/issues/40)
 
-- Displaying @return/@returns [\#35](https://github.com/FGRibreau/doxx/issues/35)
+- Displaying @return/@returns [\#35](https://github.com/mr-doc/mr-doc/issues/35)
 
-- Menu paths are incorrect on Windows [\#33](https://github.com/FGRibreau/doxx/issues/33)
+- Menu paths are incorrect on Windows [\#33](https://github.com/mr-doc/mr-doc/issues/33)
 
-- Doxx don't work with symbolic links [\#32](https://github.com/FGRibreau/doxx/issues/32)
+- Doxx don't work with symbolic links [\#32](https://github.com/mr-doc/mr-doc/issues/32)
 
-- Functions within objects are not handled properly [\#26](https://github.com/FGRibreau/doxx/issues/26)
+- Functions within objects are not handled properly [\#26](https://github.com/mr-doc/mr-doc/issues/26)
 
 **Merged pull requests:**
 
-- Exposing as a node module [\#47](https://github.com/FGRibreau/doxx/pull/47) ([leejt489](https://github.com/leejt489))
+- Exposing as a node module [\#47](https://github.com/mr-doc/mr-doc/pull/47) ([leejt489](https://github.com/leejt489))
 
-- Fixed incorrect file separator [\#34](https://github.com/FGRibreau/doxx/pull/34) ([RogerNoble](https://github.com/RogerNoble))
+- Fixed incorrect file separator [\#34](https://github.com/mr-doc/mr-doc/pull/34) ([RogerNoble](https://github.com/RogerNoble))
 
-- Updating marked dependency [\#36](https://github.com/FGRibreau/doxx/pull/36) ([pdehaan](https://github.com/pdehaan))
+- Updating marked dependency [\#36](https://github.com/mr-doc/mr-doc/pull/36) ([pdehaan](https://github.com/pdehaan))
 
-## [v1.0.0](https://github.com/fgribreau/doxx/tree/v1.0.0) (2014-10-16)
+## [v1.0.0](https://github.com/mr-doc/mr-doc/tree/v1.0.0) (2014-10-16)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v0.6.0...v1.0.0)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.6.0...v1.0.0)
 
 **Fixed bugs:**
 
-- Dollar symbol breaking the UI [\#15](https://github.com/FGRibreau/doxx/issues/15)
+- Dollar symbol breaking the UI [\#15](https://github.com/mr-doc/mr-doc/issues/15)
 
 **Closed issues:**
 
-- gittip image in README is 404ing [\#39](https://github.com/FGRibreau/doxx/issues/39)
+- gittip image in README is 404ing [\#39](https://github.com/mr-doc/mr-doc/issues/39)
 
-- Doxx grunt task [\#31](https://github.com/FGRibreau/doxx/issues/31)
+- Doxx grunt task [\#31](https://github.com/mr-doc/mr-doc/issues/31)
 
-- Functions within objects are not handled properly [\#27](https://github.com/FGRibreau/doxx/issues/27)
+- Functions within objects are not handled properly [\#27](https://github.com/mr-doc/mr-doc/issues/27)
 
-- Doesn't work out-of-the-box [\#24](https://github.com/FGRibreau/doxx/issues/24)
+- Doesn't work out-of-the-box [\#24](https://github.com/mr-doc/mr-doc/issues/24)
 
-- Inline comments break the output HTML [\#23](https://github.com/FGRibreau/doxx/issues/23)
+- Inline comments break the output HTML [\#23](https://github.com/mr-doc/mr-doc/issues/23)
 
-- generating docs on Windows \(MSYSGIT\) does not work [\#6](https://github.com/FGRibreau/doxx/issues/6)
+- generating docs on Windows \(MSYSGIT\) does not work [\#6](https://github.com/mr-doc/mr-doc/issues/6)
 
 **Merged pull requests:**
 
-- Fixes style distruptancies for sidenav on long paths and lists [\#30](https://github.com/FGRibreau/doxx/pull/30) ([wojciak](https://github.com/wojciak))
+- Fixes style distruptancies for sidenav on long paths and lists [\#30](https://github.com/mr-doc/mr-doc/pull/30) ([wojciak](https://github.com/wojciak))
 
-- Dangling text for symbol.name caused jade 1.1.5 to create a html element... [\#29](https://github.com/FGRibreau/doxx/pull/29) ([wojciak](https://github.com/wojciak))
+- Dangling text for symbol.name caused jade 1.1.5 to create a html element... [\#29](https://github.com/mr-doc/mr-doc/pull/29) ([wojciak](https://github.com/wojciak))
 
-- Upgrade to latest version of Jade. [\#28](https://github.com/FGRibreau/doxx/pull/28) ([hiddentao](https://github.com/hiddentao))
+- Upgrade to latest version of Jade. [\#28](https://github.com/mr-doc/mr-doc/pull/28) ([hiddentao](https://github.com/hiddentao))
 
-- Add target\_extension option [\#25](https://github.com/FGRibreau/doxx/pull/25) ([llamerr](https://github.com/llamerr))
+- Add target\_extension option [\#25](https://github.com/mr-doc/mr-doc/pull/25) ([llamerr](https://github.com/llamerr))
 
-- Changed README.md and examples to include new jsFiddle option [\#22](https://github.com/FGRibreau/doxx/pull/22) ([orweinberger](https://github.com/orweinberger))
+- Changed README.md and examples to include new jsFiddle option [\#22](https://github.com/mr-doc/mr-doc/pull/22) ([orweinberger](https://github.com/orweinberger))
 
-- Added an option to include jsFiddle embed links within code comments [\#21](https://github.com/FGRibreau/doxx/pull/21) ([orweinberger](https://github.com/orweinberger))
+- Added an option to include jsFiddle embed links within code comments [\#21](https://github.com/mr-doc/mr-doc/pull/21) ([orweinberger](https://github.com/orweinberger))
 
-- Regenerating docs with unreleased version of doxx [\#20](https://github.com/FGRibreau/doxx/pull/20) ([eddywashere](https://github.com/eddywashere))
+- Regenerating docs with unreleased version of doxx [\#20](https://github.com/mr-doc/mr-doc/pull/20) ([eddywashere](https://github.com/eddywashere))
 
-- Update template.jade for change bootstrap urls [\#19](https://github.com/FGRibreau/doxx/pull/19) ([wondersloth](https://github.com/wondersloth))
+- Update template.jade for change bootstrap urls [\#19](https://github.com/mr-doc/mr-doc/pull/19) ([wondersloth](https://github.com/wondersloth))
 
-- Show README.md in index.html [\#17](https://github.com/FGRibreau/doxx/pull/17) ([ilsken](https://github.com/ilsken))
+- Show README.md in index.html [\#17](https://github.com/mr-doc/mr-doc/pull/17) ([ilsken](https://github.com/ilsken))
 
-- Fixes for Windows support [\#16](https://github.com/FGRibreau/doxx/pull/16) ([itamarro](https://github.com/itamarro))
+- Fixes for Windows support [\#16](https://github.com/mr-doc/mr-doc/pull/16) ([itamarro](https://github.com/itamarro))
 
-## [v0.6.0](https://github.com/fgribreau/doxx/tree/v0.6.0) (2013-04-28)
+## [v0.6.0](https://github.com/mr-doc/mr-doc/tree/v0.6.0) (2013-04-28)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v0.5.9...v0.6.0)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.5.9...v0.6.0)
 
 **Closed issues:**
 
-- doxx breaks, if no package.json exists [\#9](https://github.com/FGRibreau/doxx/issues/9)
+- doxx breaks, if no package.json exists [\#9](https://github.com/mr-doc/mr-doc/issues/9)
 
 **Merged pull requests:**
 
-- Fix --ignore option not being passed to collectFiles correctly [\#11](https://github.com/FGRibreau/doxx/pull/11) ([jharwig](https://github.com/jharwig))
+- Fix --ignore option not being passed to collectFiles correctly [\#11](https://github.com/mr-doc/mr-doc/pull/11) ([jharwig](https://github.com/jharwig))
 
-- Fix for Issue \#9: no package.json breaks it [\#10](https://github.com/FGRibreau/doxx/pull/10) ([philippkemmeter](https://github.com/philippkemmeter))
+- Fix for Issue \#9: no package.json breaks it [\#10](https://github.com/mr-doc/mr-doc/pull/10) ([philippkemmeter](https://github.com/philippkemmeter))
 
-- made CDN links protocol relative [\#4](https://github.com/FGRibreau/doxx/pull/4) ([seangarner](https://github.com/seangarner))
+- made CDN links protocol relative [\#4](https://github.com/mr-doc/mr-doc/pull/4) ([seangarner](https://github.com/seangarner))
 
-## [v0.5.9](https://github.com/fgribreau/doxx/tree/v0.5.9) (2013-02-16)
+## [v0.5.9](https://github.com/mr-doc/mr-doc/tree/v0.5.9) (2013-02-16)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v0.5.8...v0.5.9)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.5.8...v0.5.9)
 
 **Fixed bugs:**
 
-- Doxx doesn't handle well multiple parameters [\#2](https://github.com/FGRibreau/doxx/issues/2)
+- Doxx doesn't handle well multiple parameters [\#2](https://github.com/mr-doc/mr-doc/issues/2)
 
 **Merged pull requests:**
 
-- bugfix for multiple @param tags [\#3](https://github.com/FGRibreau/doxx/pull/3) ([andban](https://github.com/andban))
+- bugfix for multiple @param tags [\#3](https://github.com/mr-doc/mr-doc/pull/3) ([andban](https://github.com/andban))
 
-- Fix crash when subdirs present in source [\#1](https://github.com/FGRibreau/doxx/pull/1) ([seangarner](https://github.com/seangarner))
+- Fix crash when subdirs present in source [\#1](https://github.com/mr-doc/mr-doc/pull/1) ([seangarner](https://github.com/seangarner))
 
-## [v0.5.8](https://github.com/fgribreau/doxx/tree/v0.5.8) (2013-01-13)
+## [v0.5.8](https://github.com/mr-doc/mr-doc/tree/v0.5.8) (2013-01-13)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v0.5.7...v0.5.8)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.5.7...v0.5.8)
 
-## [v0.5.7](https://github.com/fgribreau/doxx/tree/v0.5.7) (2013-01-13)
+## [v0.5.7](https://github.com/mr-doc/mr-doc/tree/v0.5.7) (2013-01-13)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v0.5.6...v0.5.7)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.5.6...v0.5.7)
 
-## [v0.5.6](https://github.com/fgribreau/doxx/tree/v0.5.6) (2013-01-12)
+## [v0.5.6](https://github.com/mr-doc/mr-doc/tree/v0.5.6) (2013-01-12)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v0.5.5...v0.5.6)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.5.5...v0.5.6)
 
-## [v0.5.5](https://github.com/fgribreau/doxx/tree/v0.5.5) (2013-01-12)
+## [v0.5.5](https://github.com/mr-doc/mr-doc/tree/v0.5.5) (2013-01-12)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v0.5.4...v0.5.5)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.5.4...v0.5.5)
 
-## [v0.5.4](https://github.com/fgribreau/doxx/tree/v0.5.4) (2013-01-12)
+## [v0.5.4](https://github.com/mr-doc/mr-doc/tree/v0.5.4) (2013-01-12)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v0.5.3...v0.5.4)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.5.3...v0.5.4)
 
-## [v0.5.3](https://github.com/fgribreau/doxx/tree/v0.5.3) (2013-01-12)
+## [v0.5.3](https://github.com/mr-doc/mr-doc/tree/v0.5.3) (2013-01-12)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v0.5.2...v0.5.3)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.5.2...v0.5.3)
 
-## [v0.5.2](https://github.com/fgribreau/doxx/tree/v0.5.2) (2013-01-12)
+## [v0.5.2](https://github.com/mr-doc/mr-doc/tree/v0.5.2) (2013-01-12)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v0.5.1...v0.5.2)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.5.1...v0.5.2)
 
-## [v0.5.1](https://github.com/fgribreau/doxx/tree/v0.5.1) (2013-01-12)
+## [v0.5.1](https://github.com/mr-doc/mr-doc/tree/v0.5.1) (2013-01-12)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v0.5.0...v0.5.1)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.5.0...v0.5.1)
 
-## [v0.5.0](https://github.com/fgribreau/doxx/tree/v0.5.0) (2013-01-12)
+## [v0.5.0](https://github.com/mr-doc/mr-doc/tree/v0.5.0) (2013-01-12)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v0.3.3...v0.5.0)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.3.3...v0.5.0)
 
-## [v0.3.3](https://github.com/fgribreau/doxx/tree/v0.3.3) (2012-10-19)
+## [v0.3.3](https://github.com/mr-doc/mr-doc/tree/v0.3.3) (2012-10-19)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v0.3.2...v0.3.3)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.3.2...v0.3.3)
 
-## [v0.3.2](https://github.com/fgribreau/doxx/tree/v0.3.2) (2012-10-19)
+## [v0.3.2](https://github.com/mr-doc/mr-doc/tree/v0.3.2) (2012-10-19)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v0.3.1...v0.3.2)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.3.1...v0.3.2)
 
-## [v0.3.1](https://github.com/fgribreau/doxx/tree/v0.3.1) (2012-10-06)
+## [v0.3.1](https://github.com/mr-doc/mr-doc/tree/v0.3.1) (2012-10-06)
 
-[Full Changelog](https://github.com/fgribreau/doxx/compare/v0.2.0...v0.3.1)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.2.0...v0.3.1)
 
-## [v0.2.0](https://github.com/fgribreau/doxx/tree/v0.2.0) (2012-09-29)
+## [v0.2.0](https://github.com/mr-doc/mr-doc/tree/v0.2.0) (2012-09-29)
 
 
 
