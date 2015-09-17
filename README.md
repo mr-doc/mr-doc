@@ -1,8 +1,8 @@
-# Doxx [![Deps](https://david-dm.org/FGRibreau/doxx.png)](https://david-dm.org/FGRibreau/doxx) [![Version](http://badge.fury.io/js/doxx.png)](https://david-dm.org/FGRibreau/doxx) [![Version](https://travis-ci.org/FGRibreau/doxx.svg)](https://travis-ci.org/FGRibreau/doxx)
+# mr-doc [![Deps](https://david-dm.org/mr-doc/mr-doc.png)](https://david-dm.org/mr-doc/mr-doc) [![Version](http://badge.fury.io/js/mr-doc.png)](https://david-dm.org/mr-doc/mr-doc) [![Version](https://travis-ci.org/mr-doc/mr-doc.svg)](https://travis-ci.org/mr-doc/mr-doc)
 
-Doxx is a total refactoring of [dox-foundation](https://github.com/punkave/dox-foundation/)  written in ES6, tranformed to ES5 with [Babel](https://babeljs.io/), and is based on [dox](https://github.com/visionmedia/dox). It can automatically generate beautiful documentations and can further spice up your documentations using themes.
+mr-doc is a total refactoring of [dox-foundation](https://github.com/punkave/dox-foundation/)  written in ES6, tranformed to ES5 with [Babel](https://babeljs.io/), and is based on [dox](https://github.com/visionmedia/dox). It can automatically generate beautiful documentations and can further spice up your documentations using themes.
 
-By default, Doxx uses [doxx-theme-default](https://www.github.com/iwatakeshi/doxx-theme-default) which uses 
+By default, mr-doc uses [mr-doc-theme-default](https://www.github.com/mr-doc/mr-doc-theme-default) which uses 
 [Twitter Bootstrap](https://twitter.github.com/bootstrap/) for the frontend framework and [Prism.js](http://prismjs.com/)
 for syntax highlighting.
 
@@ -15,7 +15,7 @@ The beautifully documentation can be found at [GitHub](http://fgribreau.github.i
 
 ```bash
 # Install the module globally
-$ npm i -g doxx
+$ npm i -g mr-doc
 ```
 
 ## Usage
@@ -55,19 +55,19 @@ collectFiles = (source, options, callback) ->
 
 ***Notes***
 
-* Doxx supports the following variations of `@return` and `@jsFiddle`:
+* mr-doc supports the following variations of `@return` and `@jsFiddle`:
   * `@return`, `@returns`
   * `@jsfiddle`, `@jsFiddle`, `@JSFiddle`
 
 
 ## CLI
 ```bash
-$ doxx --help
+$ mr-doc --help
 
-  Usage: doxx [options]
+  Usage: mr-doc [options]
 
   Commands:
-    cache                         Manages the Doxx cache. The available commands are clean and remove.
+    cache                         Manages the mr-doc cache. The available commands are clean and remove.
 
   Options:
 
@@ -81,14 +81,14 @@ $ doxx --help
     -T, --target <target>         The folder which will contain the results. Default: <CWD>/docs
     -e, --extension <extension>   Target files extension. Default: html
     -j, --template <template>     The Jade template file to use.
-    -b, --theme <theme>           The name of the theme. e.g. doxx-theme-cayman or cayman.
+    -b, --theme <theme>           The name of the theme. e.g. mr-doc-theme-cayman or cayman.
   Examples:
 
     # parse a whole folder
-    $ doxx --source lib --target docs
+    $ mr-doc --source lib --target docs
 
     # parse a whole folder and use a specific template
-    $ doxx --template ./view/myowntpl.jade --source lib --target docs
+    $ mr-doc --template ./view/myowntpl.jade --source lib --target docs
 ```
 
 ## Themes
@@ -98,29 +98,29 @@ $ doxx --help
 With the release of **2.1.0**, you are able to use different themes to ***spice*** up your documentations. To use a specific theme, simply use the `--theme` option followed by the name of the theme:
 
 ```bash
-$ doxx --source lib --target docs --theme cayman
+$ mr-doc --source lib --target docs --theme cayman
 # or
-$ doxx --source lib --target docs --theme doxx-theme-cayman
+$ mr-doc --source lib --target docs --theme mr-doc-theme-cayman
 ```
 
 ### Installing Themes
 
-Themes are just npm modules that can be installed in your application, there is a default theme included with Doxx.
+Themes are just npm modules that can be installed in your application, there is a default theme included with mr-doc.
 
 Current available themes:
 
-- [https://github.com/iwatakeshi/doxx-theme-default](doxx-theme-default)
-- [https://github.com/iwatakeshi/doxx-theme-cayman](doxx-theme-cayman)
+- [https://github.com/mr-doc/mr-doc-theme-default](mr-doc-theme-default)
+- [https://github.com/mr-doc/mr-doc-theme-cayman](mr-doc-theme-cayman)
 
 To install into your project to use as part of the build step, simply:
 
 ```
-npm install doxx-theme-cayman --save-dev
+npm install mr-doc-theme-cayman --save-dev
 ```
 
 ***Notes***
 
-  * The prefix `doxx-theme-` is not necessary except when
+  * The prefix `mr-doc-theme-` is not necessary except when
 publishing your own themes.
   * While it is still possible to use templates, I would advise you
 to use themes instead.
@@ -128,20 +128,20 @@ to use themes instead.
 ### Creating Themes
 
 If you would like to create your own themes, see
-[doxx-theme-starter-kit](https://github.com/iwatakeshi/doxx-theme-starter-kit).
+[mr-doc-theme-starter-kit](https://github.com/mr-doc/mr-doc-theme-starter-kit).
 
 
 ## Related
 
-* [grunt-doxx](https://github.com/evertton/grunt-doxx) - Doxx grunt plugin automatically generates the documentation for your project.
-* [gulp-doxx](https://github.com/filipovskii/gulp-doxx) - Doxx documentation generator for gulp.
+* [grunt-doxx](https://github.com/evertton/grunt-doxx) - mr-doc grunt plugin automatically generates the documentation for your project.
+* [gulp-doxx](https://github.com/filipovskii/gulp-doxx) - mr-doc documentation generator for gulp.
 
 ## Roadmap
 
 ### 3.0.0
 
-* Switch the backend from bower to npm for themes. [#79](https://github.com/FGRibreau/doxx/issues/79)
-* Re-introduce Doxx with a new name. [#83](https://github.com/FGRibreau/doxx/issues/83)
+* Switch the backend from bower to npm for themes. [#79](https://github.com/mr-doc/mr-doc/issues/79)
+* Re-introduce mr-doc with a new name. [#83](https://github.com/mr-doc/mr-doc/issues/83)
 
 ## Contributing
 

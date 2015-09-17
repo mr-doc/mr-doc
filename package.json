@@ -1,25 +1,23 @@
 {
-  "name": "doxx",
+  "name": "mr-doc",
   "description": "Generic, template based, HTML output for Dox documentation generator",
   "version": "2.1.2",
-  "homepage": "https://github.com/FGRibreau/doxx",
+  "homepage": "https://github.com/FGRibreau/mr-doc",
   "author": "Francois-Guillaume Ribreau <npm@fgribreau.com> (http://fgribreau.com)",
   "repository": {
     "type": "git",
-    "url": "git://github.com/FGRibreau/doxx.git"
+    "url": "git://github.com/FGRibreau/mr-doc.git"
   },
   "bugs": {
-    "url": "https://github.com/FGRibreau/doxx/issues"
+    "url": "https://github.com/FGRibreau/mr-doc/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/FGRibreau/doxx/blob/master/LICENSE-MIT"
-    }
-  ],
-  "main": "lib/doxx.js",
+  "licenses": [{
+    "type": "MIT",
+    "url": "https://github.com/FGRibreau/mr-doc/blob/master/LICENSE-MIT"
+  }],
+  "main": "lib/mr-doc.js",
   "bin": {
-    "doxx": "./bin/doxx"
+    "mr-doc": "./bin/mr-doc"
   },
   "scripts": {
     "test": "gulp test"
@@ -30,7 +28,7 @@
   "dependencies": {
     "commander": "~2.8.1",
     "dox": "^0.8.0",
-    "doxx-theme-default": "^1.0.0",
+    "mr-doc-theme-default": "^1.0.0",
     "elegant-spinner": "^1.0.0",
     "fs-extra": "^0.24.0",
     "jade": "~1.11.x",
