@@ -44,12 +44,13 @@ gulp.task('clean-docs', ['gh-pages'], function (cb) {
 });
 
 /*
- * Push to the gh-pages branch
+ * Creat the gh-pages branch - wont push automatically
  */
 gulp.task('gh-pages', ['doc'], function() {
   return gulp.src('./docs/**/*')
-    .pipe(ghPages({force:true}));
+    .pipe(ghPages({push:false}));
 });
+
 
 /* Checks the coding style and builds from ES6 to ES5*/
 gulp.task('lib',['beautify'],function () {
@@ -78,8 +79,7 @@ gulp.task('mocha', ['beautify','lib'],function () {
 /* Runs the doxx command and builds the docs 
  * Install other themes here, generate docs for each.
 */
-gulp.task('doc', ['build'], shell.task([
-  'npm install doxx-theme-default',
+gulp.task('doc', ['build'], shell.task([  
   './bin/doxx --source lib --target docs/themes/doxx-theme-default --title Doxx'  
 ]));
 
