@@ -7,7 +7,7 @@ lib-cov
 *.pid
 *.gz
 /node_modules/
-
+.publish
 .DS_Store
 pids
 logs

@@ -5,6 +5,8 @@ var mocha = require('gulp-mocha');
 var jshint = require('gulp-jshint');
 var beautify = require('gulp-jsbeautify');
 var shell = require('gulp-shell');
+var ghPages = require('gulp-gh-pages');
+var rimraf = require('rimraf');
 
 /* Formats the files */
 gulp.task('beautify', function () {
@@ -34,6 +36,22 @@ gulp.task('beautify', function () {
     .pipe(gulp.dest('./lib'));
 });
 
+/*
+ * Clean the docs themes folder
+ */
+gulp.task('clean-docs', ['gh-pages'], function (cb) {
+  rimraf('./docs/themes', cb);
+});
+
+/*
+ * Creat the gh-pages branch - wont push automatically
+ */
+gulp.task('gh-pages', ['doc'], function() {
+  return gulp.src('./docs/**/*')
+    .pipe(ghPages({push:false}));
+});
+
+
 /* Checks the coding style and builds from ES6 to ES5*/
 gulp.task('lib',['beautify'],function () {
   return gulp.src('./lib/**/**/*.js')
@@ -58,18 +76,17 @@ gulp.task('mocha', ['beautify','lib'],function () {
     .once('end', function () {});
 });
 
-/* Cleans the Doxx cache */
-gulp.task('clean', shell.task([
-  './bin/doxx cache clean',
-]))
-
-/* Runs the doxx command and builds the docs */
-gulp.task('doc', ['lib'], shell.task([
-  './bin/doxx --source lib --target docs --title Doxx',
+/* Runs the doxx command and builds the docs 
+ * Install other themes here, generate docs for each.
+*/
+gulp.task('doc', ['build'], shell.task([  
+  './bin/doxx --source lib --target docs/themes/doxx-theme-default --title Doxx'  
 ]));
 
 gulp.task('default', ['beautify', 'lib', 'watch']);
 
-gulp.task('build', ['beautify', 'lib', 'mocha', 'doc']);
+gulp.task('build', ['beautify', 'lib', 'mocha']);
 
-gulp.task('test', ['mocha', 'doc']);
+gulp.task('docs', ['build', 'doc', 'gh-pages', 'clean-docs']);
+
+gulp.task('test', ['mocha']);

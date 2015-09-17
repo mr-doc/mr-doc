@@ -147,6 +147,16 @@ If you would like to create your own themes, see
 
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [gulp](https://github.com/gulpjs/gulp) and [mocha](https://github.com/mochajs/mocha).
 
+## Updating Docs
+
+To update the docs on the gh-pages branch:
+
+```
+gulp docs
+git checkout gh-pages
+git push origin gh-pages
+```
+
 ## Changelog
 
 The changes can be viewed [here](/CHANGELOG.md).
