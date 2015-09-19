@@ -1,4 +1,5 @@
 'use strict';
+
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
@@ -16,8 +17,8 @@ var _lodash2 = _interopRequireDefault(_lodash);
 require('source-map-support/register');
 
 /**
- * The class that manges symbols.  
- * @class Symbol  
+ * The class that manges symbols.
+ * @class Symbol
  */
 
 var Symbol = (function () {
@@ -25,11 +26,11 @@ var Symbol = (function () {
     _classCallCheck(this, Symbol);
   }
 
-  /**      
-   * Returns the structure of a parsed file      
-   * @param  {Array} symbols  array of symbols      
-   * @param  {String} file    filename      
-   * @return {Array}      
+  /**
+   * Returns the structure of a parsed file
+   * @param  {Array} symbols  array of symbols
+   * @param  {String} file    filename
+   * @return {Array}
    */
 
   _createClass(Symbol, null, [{
@@ -47,11 +48,11 @@ var Symbol = (function () {
       })) || [];
     }
 
-    /**      
-     * Checks if a tag has a specific type      
-     * @param  {string}  val value to check against      
-     * @return {function}  A function that evaluates the truth      
-     * when True if `tag` type is `val`      
+    /**
+     * Checks if a tag has a specific type
+     * @param  {string}  val value to check against
+     * @return {function}  A function that evaluates the truth
+     * when True if `tag` type is `val`
      */
   }, {
     key: 'has',
@@ -61,26 +62,28 @@ var Symbol = (function () {
       };
     }
 
-    /**      
-     * Compacts multi-line expression      
-     * @return {Array}      
+    /**
+     * Compacts multi-line expression
+     * @return {Array}
      */
   }, {
     key: 'compact',
     value: function compact(tags) {
-      // [{"type":"description",    
-      // "string":"Note: if `addClass` is defined at the step level."},   
-      //  {"type":"",   
-      //  "string": "The two defined `addClass`     
-      //  will be taken into account in the popover"},    
-      //  {"type":"type","types":["String"]}]    
+
+      // [{"type":"description",
+      // "string":"Note: if `addClass` is defined at the step level."},
+      //  {"type":"",
+      //  "string": "The two defined `addClass`
+      //  will be taken into account in the popover"},
+      //  {"type":"type","types":["String"]}]
       var compacted = [];
+
       tags.forEach(function (tag, i) {
         if (!tag.type) {
           if (i === 0) {
             return;
           }
-          // Append to previous        
+          // Append to previous
           var prevTag = compacted[compacted.length - 1];
           if (prevTag.description) {
             prevTag.description += ' ' + tag.string;
@@ -89,16 +92,18 @@ var Symbol = (function () {
           }
           return;
         }
+
         compacted.push(tag);
       });
+
       return compacted;
     }
 
-    /**    
-     * Maps symbols    
-     * @private    
-     * @param {Object} symbol    
-     * @return {Object}    
+    /**
+     * Maps symbols
+     * @private
+     * @param {Object} symbol
+     * @return {Object}
      */
   }, {
     key: 'map',
@@ -106,7 +111,7 @@ var Symbol = (function () {
       symbol.tags = Symbol.compact(symbol.tags);
       var tags = {};
       ['type', 'description', 'example', 'file', 'fileoverview', 'overview', 'param', 'require', 'jsfiddle', 'jsFiddle', 'JSFiddle', 'return', 'returns'].forEach(function (tag) {
-        // Handle special cases      
+        // Handle special cases
         if (tag.match(/(return|returns)\b/)) tags.returns = symbol.tags.filter(function (s) {
           return Symbol.has('return')(s) || Symbol.has('returns')(s);
         });else if (tag.match(/(jsfiddle|jsFiddle|JSFiddle)\b/)) {
@@ -126,58 +131,71 @@ var Symbol = (function () {
       var jsfiddles = tags.jsfiddles;
 
       if (symbol.tags.length > 0 && symbol.tags.filter(Symbol.has('param')).length > 0) {
+
         symbol.hasParams = true;
       }
+
       if (!symbol.ctx) {
         symbol.ctx = {};
       }
+
       if (symbol.ctx.type) {
         symbol.gtype = symbol.ctx.type;
       }
+
       if (types.length === 1) {
         symbol.type = types[0].types.join(' | ');
       }
+
       if (files.length === 1) {
         symbol.file = files[0].type;
         symbol.fileString = files[0].string;
         symbol.fileHtml = files[0].html;
       }
+
       if (fileoverviews.length === 1) {
         symbol.files = fileoverviews[0].type;
         symbol.fileString = fileoverviews[0].string;
         symbol.fileHtml = fileoverviews[0].html;
       }
+
       if (overviews.length === 1) {
         symbol.files = overviews[0].type;
         symbol.fileString = overviews[0].string;
         symbol.fileHtml = overviews[0].html;
       }
+
       if (returns.length !== 0) {
         symbol.returns = [];
         returns.forEach(function (returned) {
           symbol.returns.push(returned);
         });
       }
+
       if (examples.length !== 0) {
         symbol.examples = [];
         examples.forEach(function (example) {
           symbol.examples.push(example.string);
         });
       }
+
       if (requires.length !== 0) {
         symbol.requires = [];
         requires.forEach(function (required) {
           symbol.requires.push(required.string);
         });
       }
-      // No idea what this is for but it's there anyways.    
+
+      // No idea what this is for but it's there anyways.
       symbol.description.extra = '';
       if (descriptions.length === 1) {
         symbol.description.extra = '<p>' + descriptions[0].string + '</p>';
       }
+
       if (jsfiddles.length === 1) {
         symbol.jsfiddle = jsfiddles[0].string;
       }
+
       return symbol;
     }
   }]);

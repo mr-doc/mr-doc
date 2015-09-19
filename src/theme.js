@@ -1,4 +1,3 @@
-///*global __dirname, process */
 'use strict';
 Object.defineProperty(exports, '__esModule', {
   value: true
@@ -22,6 +21,10 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
 var _fsExtra = require('fs-extra');
 
 var _fsExtra2 = _interopRequireDefault(_fsExtra);
@@ -34,16 +37,13 @@ var _logUpdate = require('log-update');
 
 var _logUpdate2 = _interopRequireDefault(_logUpdate);
 
-var _dir = require('./dir');
-
-var _dir2 = _interopRequireDefault(_dir);
-
 require('source-map-support/register');
 
 var frame = (0, _elegantSpinner2['default'])();
-/**  
- * The class that locates themes  
- * @class Theme  
+
+/**
+ * The class that locates themes
+ * @class  Theme
  */
 
 var Theme = (function () {
@@ -51,8 +51,9 @@ var Theme = (function () {
     _classCallCheck(this, Theme);
 
     var resolved = {
-      theme: Theme.findTheme(options.theme)
+      theme: this.locateTheme(options.theme)
     };
+
     this.options = {
       theme: {
         name: resolved.theme.name,
@@ -64,69 +65,72 @@ var Theme = (function () {
     };
   }
 
-  /**    
-   * Returns the tasks that install the theme    
-   * @private    
-   * @param options The options to install the themes    
-   * @return {object}    
+  /**
+   * Find the theme specified
    */
 
   _createClass(Theme, [{
-    key: 'install',
+    key: 'locateTheme',
+    value: function locateTheme(theme) {
 
-    /**    
-     * Copies the theme specified (reverting to default)    
-     * over to the target directory. (Async)  
-     * @return {Function} The promise.    
-     */
-    value: function install() {
-      var options = arguments.length <= 0 || arguments[0] === undefined ? this.options : arguments[0];
+      var DEFAULT_THEME = 'doxx-theme-default';
 
-      var final = _when2['default'].defer();
-      // Check if the template is enabled (legacy)      
-      if (options.template && options.template.path) {
-        final.resolve({
-          template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, options.template.path)).toString()
-        });
-      } else {
-        (function () {
-          var tasks = Theme.options(options);
-          return tasks.copyAssets().then(tasks.stringifyTemplate).then(final.resolve);
-        })(Theme.tasks(options).showProgress);
-      }
-      return final.promise;
-    }
+      var doxxPath = _path2['default'].resolve(__dirname, '..');
+      var projectPath = process.cwd();
 
-    /**      
-     * Copies the theme specified (reverting to default)    
-     * over to the target directory. (Sync)
-     * @return The template    
-     */
-  }, {
-    key: 'installSync',
-    value: function installSync() {
-      var options = arguments.length <= 0 || arguments[0] === undefined ? this.options : arguments[0];
+      var locations = {
+        project: _path2['default'].join(projectPath, 'node_modules', theme),
+        doxx: _path2['default'].join(doxxPath, 'node_modules', theme),
+        'default': _path2['default'].join(doxxPath, 'node_modules', DEFAULT_THEME)
+      };
 
-      if (options.template && options.template.path) {
+      var exists = _fs2['default'].existsSync(locations.doxx);
+      if (exists) {
+        console.log('Doxx [info]: Using theme [' + theme + ']');
         return {
-          template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, options.template.path)).toString()
+          name: theme,
+          path: locations.doxx
         };
-      } else {
-        var tasks = Theme.tasks(options);
-        tasks.copyAssetsSync();
-        tasks.showProgress('Copying assets.');
-        tasks.stringifyTemplateSync();
-        tasks.showProgress('Reading template.');
-        tasks.showProgress('Done.');
       }
+
+      exists = _fs2['default'].existsSync(locations.project);
+      if (exists) {
+        console.log('Doxx [info]: Using theme [' + theme + ']');
+        return {
+          name: theme,
+          path: locations.project
+        };
+      }
+
+      console.log('Doxx [warning]: theme "' + theme + '" not found, reverting to default.');
+
       return {
-        template: ''
+        name: DEFAULT_THEME,
+        path: locations['default']
       };
     }
+
+    /** 
+     * Copies the theme specified (reverting to default)
+     * over to the target directory.
+     */
+  }, {
+    key: 'install',
+
+    /** 
+     * Copies the specific theme assets over to the target directory
+     * and returns the     
+     */
+    value: function install() {
+      return Theme.configure(this.options);
+    }
   }], [{
-    key: 'tasks',
-    value: function tasks(options) {
-      // Sources    
+    key: 'configure',
+    value: function configure(options) {
+
+      var final = _when2['default'].defer();
+
+      // Sources
       var config = {
         src: options.theme.path,
         dest: options.target.path,
@@ -141,21 +145,21 @@ var Theme = (function () {
           }
         }
       };
-      return {
-        /**        
-         * Shows the progress for each command        
-         */
-        showProgress: function showProgress(command) {
-          var max = arguments.length <= 1 || arguments[1] === undefined ? 200 : arguments[1];
 
+      /** 
+       * The commands to install the theme
+       * @type {object}
+       */
+      var commands = {
+        showProgress: function showProgress(command) {
           var count = 0;
-          while (count < max) {
-            (0, _logUpdate2['default'])('Mr. Doc [info]: ' + frame() + ' ' + command);
+          while (count < 200) {
+            (0, _logUpdate2['default'])('Doxx [info]: ' + frame() + ' ' + command);
             count++;
           }
         },
         /**
-         * Create necessary paths to destination folder (Async)        
+         * Create necessary paths to destination folder
          */
         copyAssets: function copyAssets() {
           var types = _lodash2['default'].keys(config.paths);
@@ -174,21 +178,8 @@ var Theme = (function () {
           });
           return m;
         },
-        /**        
-         * Create necessary paths to destination folder (Sync)       
-         */
-        copyAssetsSync: function copyAssetsSync() {
-          var types = _lodash2['default'].keys(config.paths);
-          _lodash2['default'].forEach(types, function (type) {
-            var src = _path2['default'].join(config.src, config.paths[type].src);
-            var dest = _path2['default'].join(config.dest, config.paths[type].dest);
-            _fsExtra2['default'].copySync(src, dest, {
-              clobber: true
-            });
-          });
-        },
-        /**        
-         * Reads the template from the source and strigifies it. (Async)        
+        /** 
+         * Reads the template from the source and strigifies it.
          */
         stringifyTemplate: function stringifyTemplate() {
           var d = _when2['default'].defer();
@@ -199,55 +190,20 @@ var Theme = (function () {
             });
           });
           return d.promise;
-        },
-        /**        
-         * Reads the template from the source and strigifies it. (Sync)        
-         */
-        stringifyTemplateSync: function stringifyTemplateSync() {
-          var file = _path2['default'].join(config.src, 'template/index.jade');
-          return _fsExtra2['default'].readFileSync(file);
         }
       };
-    }
 
-    /**    
-     * Find the theme specified    
-     * @param {String} theme The theme to find    
-     * @return {Object} The theme.    
-     */
-  }, {
-    key: 'findTheme',
-    value: function findTheme(theme) {
-      var DEFAULT_THEME = 'mr-doc-theme-default';
-      var mrDocPath = _path2['default'].resolve(__dirname, '..');
-      var projectPath = process.cwd();
-      var locations = {
-        // Path to the project's node_modules dir + theme      
-        project: _path2['default'].join(projectPath, 'node_modules', theme),
-        // Path to Doc's node_modules dir + theme      
-        mrDoc: _path2['default'].join(mrDocPath, 'node_modules', theme),
-        // Path to the Doc's default theme dir      
-        'default': _path2['default'].join(mrDocPath, 'node_modules', DEFAULT_THEME)
-      };
-      if (_dir2['default'].exists(locations.mrDoc)) {
-        console.log('Mr. Doc [info]: Using theme [' + theme + ']');
-        return {
-          name: theme,
-          path: locations.mrDoc
-        };
+      // Check if the template is enabled (legacy)
+      if (options.template && options.template.path) {
+        final.resolve({
+          template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, options.template.path)).toString()
+        });
+      } else {
+        (function () {
+          return commands.copyAssets().then(commands.stringifyTemplate).then(final.resolve);
+        })(commands.showProgress);
       }
-      if (_dir2['default'].exists(locations.project)) {
-        console.log('Mr. Doc [info]: Using theme [' + theme + ']');
-        return {
-          name: theme,
-          path: locations.project
-        };
-      }
-      console.log('Mr. Doc [warn]: theme "' + theme + '" not found, reverting to default.');
-      return {
-        name: DEFAULT_THEME,
-        path: locations['default']
-      };
+      return final.promise;
     }
   }]);
 

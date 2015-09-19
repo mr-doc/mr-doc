@@ -1,5 +1,5 @@
-///*global process */
 'use strict';
+
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
@@ -36,9 +36,9 @@ var _fsExtra2 = _interopRequireDefault(_fsExtra);
 
 require('source-map-support/register');
 
-/**  
- * The class that parses the dox tags.  
- * @class Parser  
+/**
+ * The class that parses the dox tags.
+ * @class Parser
  */
 
 var Parser = (function () {
@@ -51,8 +51,8 @@ var Parser = (function () {
     }
   }
 
-  /**      
-   * Starts the parser.      
+  /**
+   * Starts the parser.
    */
 
   _createClass(Parser, [{
@@ -63,16 +63,16 @@ var Parser = (function () {
       var extension = _options.extension;
       var blacklist = _options.blacklist;
 
-      // Parse the files      
+      // Parse the files
       this.files = Parser.parse(source, extension, blacklist);
     }
 
-    /**      
-     * Parses the source      
-     * @param  {String|Array} source    The source(s) to parse      
-     * @param  {String} extension The file extension      
-     * @param  {Array} ignore    The files to ignore      
-     * @return {Array}           The parsed files      
+    /**
+     * Parses the source
+     * @param  {String|Array} source    The source(s) to parse
+     * @param  {String} extension The file extension
+     * @param  {Array} ignore    The files to ignore
+     * @return {Array}           The parsed files
      */
   }], [{
     key: 'parse',
@@ -102,11 +102,11 @@ var Parser = (function () {
       }
     }
 
-    /**    
-     * Parses the source's comments using dox.   
-     * @param {string} filepath The path to the source   
-     * @return {object} Returns a JSON representation of the tags as an array    
-     * @jsFiddle https://jsfiddle.net/iwatakeshi/8hc50sbc/embedded/    
+    /**
+     * Parses the source's comments using dox.
+     * @param {string} filepath The path to the source 
+     * @return {object} Returns a JSON representation of the tags as an array
+     * @jsFiddle https://jsfiddle.net/iwatakeshi/8hc50sbc/embedded/
      */
   }, {
     key: 'parseComments',
@@ -120,13 +120,14 @@ var Parser = (function () {
         console.error('Doxx [error]:', error);
         return [];
       }
+
       return json.filter(Parser.shouldPass).map(_symbol2['default'].map);
     }
 
-    /**      
-     * Tests if a symbol should be ignored or not.      
-     * @param  {Object} symbol symbol to check against      
-     * @return {Boolean} true if the symbol is not private nor must be ignored      
+    /**
+     * Tests if a symbol should be ignored or not.
+     * @param  {Object} symbol symbol to check against
+     * @return {Boolean} true if the symbol is not private nor must be ignored
      */
   }, {
     key: 'shouldPass',
@@ -136,7 +137,9 @@ var Parser = (function () {
       }
       if (symbol.ignore) {
         return false;
-      } // Only for coffeescript    
+      }
+
+      // Only for coffeescript
       return symbol.tags.filter(function (tag) {
         return tag.type === 'private' || tag.type === 'ignore';
       }).length === 0;
