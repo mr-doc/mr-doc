@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-
-"use strict";
+///*global process*/
+'use strict';
 
 var program = require('commander'),
   version = require('../package').version,
@@ -8,10 +8,7 @@ var program = require('commander'),
   option = require('../src/option'),
   _ = require('lodash'),
   updateNotifier = require('update-notifier'),
-  pkg = require('../package.json'),
-  File = require('fs-extra'),
-  Path = require('path'),
-  osenv = require('osenv');
+  pkg = require('../package.json');
 
 // Checks for available update and returns an instance
 var notifier = updateNotifier({
@@ -28,10 +25,6 @@ if (notifier.update) console.log(notifier.update);
  * Options & Defaults
  */
 var defaults = option().getDefaults();
-/**
- * Variables
- */
-var isCmd = false;
 
 program
   .version(version)
@@ -61,8 +54,6 @@ program.on('--help', showHelp);
 // parse argv
 program.parse(process.argv);
 
-if (!isCmd) {
-  var options = option(program).getOptions();
-  !_.isEmpty(options.source)
+var options = option(program).getOptions();
+if (!_.isEmpty(options.source))
   mrDoc(options).generate();
-}

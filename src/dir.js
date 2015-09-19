@@ -1,5 +1,5 @@
+///*global process */
 'use strict';
-
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
@@ -34,7 +34,7 @@ require('source-map-support/register');
 
 /**
  * The class that manages directories.
- * @class Dir
+ * @class Dir  
  */
 
 var Dir = (function () {
@@ -42,18 +42,18 @@ var Dir = (function () {
     _classCallCheck(this, Dir);
   }
 
-  /**
-   * Create an array of all the right files in the source dir
-   * @param  {String}   source source path
-   * @param  {Object}   options option object
-   * @return {Array}
-   */
-
   _createClass(Dir, null, [{
     key: 'collectFiles',
+
+    /**
+     * Create an array of all the right files in the source dir    
+     * @param  {String}   source source path    
+     * @param  {Object}   options option object    
+     * @return {Array}    
+     */
     value: function collectFiles(source, options) {
       var dirtyFiles = _walkdir2['default'].sync(source),
-          // tee hee!
+          // tee hee!      
       ignore = options.ignore || [],
           files = [];
       dirtyFiles.forEach(function (file) {
@@ -62,20 +62,18 @@ var Dir = (function () {
           // return true if no part of the path is in the ignore/black list
           return file.indexOf(d) === -1;
         });
-
         if (file.substr(-2) === 'js' && doNotIgnore) {
           files.push(file);
         }
       });
-
       return files;
     }
 
     /**
-     * Locates the home directory for the
+     * Locates the home directory for the    
      * current operating system.
      * Credits to @cliftonc
-     * @return {String} The home directory path
+     * @return {String} The home directory path    
      */
   }, {
     key: 'getHomeDir',
@@ -84,9 +82,9 @@ var Dir = (function () {
     }
 
     /**
-     * Checks if the directory exists
-     * @param  {String} path The path to the directory
-     * @return {Boolean}      The truth value
+     * Checks if the directory exists      
+     * @param  {String} path The path to the directory     
+     * @return {Boolean}      The truth value      
      */
   }, {
     key: 'exists',
