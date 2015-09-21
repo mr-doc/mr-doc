@@ -40,15 +40,34 @@ var Option = (function () {
   _createClass(Option, [{
     key: 'setOptions',
     value: function setOptions(options) {
+      var _this = this;
+
       if (options.title) {
         this.options.title = options.title;
       }
       if (options.extension) {
         this.options.extension = options.extension;
       }
+
+      if (options.kit) {
+        if (_lodash2['default'].isString(options.kit)) {
+          if (options.kit.toLowerCase() === 'yes') this.options.kit = true;else if (options.kit.toLowerCase() === 'no') this.options.kit = false;
+        } else this.options.kit = true;
+      }
+
       if (options.template) {
         this.options.template.path = options.template;
       }
+
+      // Option - template helpers
+      this.options.template.isEnabled = function () {
+        return !!options.template;
+      };
+
+      this.options.template.isKit = function () {
+        return _this.options.kit;
+      };
+
       if (!options.source) {
         console.error(new Error('Mr. Doc [error]: You must define a source.'));
         process.exit(1);
@@ -66,12 +85,6 @@ var Option = (function () {
         if (_lodash2['default'].isString(options.theme) && !_lodash2['default'].isEmpty(options.theme)) {
           this.options.theme = options.theme.indexOf('doxx-theme-') > -1 ? options.theme : 'doxx-theme-' + options.theme;
         }
-      }
-
-      if (options.kit) {
-        if (_lodash2['default'].isString(options.kit)) {
-          if (options.kit.toLowerCase() === 'yes') this.options.kit = true;else if (options.kit.toLowerCase() === 'no') this.options.kit = false;
-        } else this.options.kit = true;
       }
     }
 

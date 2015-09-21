@@ -50,25 +50,29 @@ var Theme = (function () {
   function Theme(options) {
     _classCallCheck(this, Theme);
 
-    var resolved = {
-      theme: options.template.path ? undefined : Theme.findTheme(options.theme)
-    };
-    this.options = {
-      theme: {
-        name: resolved.theme ? resolved.theme.name : options.theme.name || options.theme,
-        path: resolved.theme.path
-      },
-      target: {
-        path: options.target
-      },
-      template: {
-        name: options['package'] ? options['package'].name : '',
-        path: options.template.path,
-        isKit: function isKit() {
-          return options.kit;
+    if (options) {
+      // Check if Doc will be installing a theme
+      // or will be rendering a template
+      var resolved = {
+        theme: options.template.path ? undefined : Theme.findTheme(options)
+      };
+      // Set the options
+      this.options = {
+        theme: {
+          name: resolved.theme ? resolved.theme.name : undefined,
+          path: resolved.theme ? resolved.theme.path : undefined
+        },
+        target: {
+          path: options.target
+        },
+        template: {
+          name: options['package'] ? options['package'].name : '',
+          path: options.template.path,
+          isEnabled: options.template.isEnabled,
+          isKit: options.template.isKit
         }
-      }
-    };
+      };
+    }
   }
 
   /**    
@@ -91,12 +95,10 @@ var Theme = (function () {
 
       var final = _when2['default'].defer();
       // Check if the template is enabled (legacy)      
-      if (options.template.isKit && options.template.path && !options.template.isKit()) {
-        if (options.tempate.isKit && !options.template.isKit()) {
-          final.resolve({
-            template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, options.template.path)).toString()
-          });
-        }
+      if (options.template.isEnabled() && !options.template.isKit()) {
+        final.resolve({
+          template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, options.template.path)).toString()
+        });
       } else {
         (function () {
           var tasks = Theme.tasks(options);
@@ -122,7 +124,8 @@ var Theme = (function () {
     value: function installSync() {
       var options = arguments.length <= 0 || arguments[0] === undefined ? this.options : arguments[0];
 
-      if (options.template.isKit && options.template.path && !options.template.isKit()) {
+      var template;
+      if (options.template.isEnabled() && !options.template.isKit()) {
         return {
           template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, options.template.path)).toString()
         };
@@ -130,20 +133,21 @@ var Theme = (function () {
         var tasks = Theme.tasks(options);
         tasks.copyAssetsSync();
         tasks.showProgress('Copying assets.');
-        tasks.stringifyTemplateSync();
+        template = tasks.stringifyTemplateSync();
         tasks.showProgress('Reading template.');
         tasks.showProgress('Done.');
+
+        return {
+          template: template
+        };
       }
-      return {
-        template: ''
-      };
     }
   }], [{
     key: 'tasks',
     value: function tasks(options) {
       // Sources    
       var config = {
-        src: options.template.path ? options.template.path : options.theme.path,
+        src: options.template.isEnabled() ? options.template.path : options.theme.path,
         dest: options.target.path,
         paths: {
           css: {
@@ -232,35 +236,35 @@ var Theme = (function () {
      */
   }, {
     key: 'findTheme',
-    value: function findTheme(theme) {
+    value: function findTheme(options) {
       var DEFAULT_THEME = 'mr-doc-theme-default';
       var mrDocPath = _path2['default'].resolve(__dirname, '..');
       var projectPath = process.cwd();
+      var name = options.theme.name;
       // Plugins may provide a name property
       // so just in case check it
-      theme = theme.name ? theme.name : theme;
       var locations = {
         // Path to the project's node_modules dir + theme      
-        project: _path2['default'].join(projectPath, 'node_modules', theme),
+        project: _path2['default'].join(projectPath, 'node_modules', name),
         // Path to Doc's node_modules dir + theme      
-        mrDoc: _path2['default'].join(mrDocPath, 'node_modules', theme),
+        mrDoc: _path2['default'].join(mrDocPath, 'node_modules', name),
         // Path to the Doc's default theme dir      
         'default': _path2['default'].join(mrDocPath, 'node_modules', DEFAULT_THEME)
       };
       if (_dir2['default'].exists(locations.mrDoc)) {
-        console.log('Mr. Doc [info]: Using theme [' + theme + ']');
+        console.log('Mr. Doc [info]: Using theme [' + name + ']');
         return {
-          name: theme,
+          name: name,
           path: locations.mrDoc
         };
       } else if (_dir2['default'].exists(locations.project)) {
-        console.log('Mr. Doc [info]: Using theme [' + theme + ']');
+        console.log('Mr. Doc [info]: Using theme [' + name + ']');
         return {
-          name: theme,
+          name: name,
           path: locations.project
         };
       } else {
-        console.log('Mr. Doc [warn]: Theme "' + theme + '" not found, reverting to default.');
+        console.log('Mr. Doc [warn]: Theme "' + name + '" not found, reverting to default.');
         return {
           name: DEFAULT_THEME,
           path: locations['default']
