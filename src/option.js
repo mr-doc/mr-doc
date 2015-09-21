@@ -1,4 +1,4 @@
-///*global process */
+/* global process */
 'use strict';
 Object.defineProperty(exports, '__esModule', {
   value: true
@@ -67,6 +67,12 @@ var Option = (function () {
           this.options.theme = options.theme.indexOf('doxx-theme-') > -1 ? options.theme : 'doxx-theme-' + options.theme;
         } else this.options.theme = 'doxx-theme-default';
       }
+
+      if (options.kit) {
+        if (_lodash2['default'].isString(options.kit)) {
+          if (options.kit.toLowerCase() === 'yes') this.options.kit = true;else if (options.kit.toLowerCase() === 'no') this.options.kit = false;
+        } else this.options.kit = true;
+      }
     }
 
     /**      
@@ -104,7 +110,8 @@ var Option = (function () {
         'template': {
           'path': undefined
         },
-        'theme': 'doxx-theme-default'
+        'theme': 'doxx-theme-default',
+        'kit': false
       };
     }
   }]);

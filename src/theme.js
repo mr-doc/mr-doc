@@ -51,18 +51,22 @@ var Theme = (function () {
     _classCallCheck(this, Theme);
 
     var resolved = {
-      theme: options && options.template ? undefined : Theme.findTheme(options.theme)
+      theme: options.template ? undefined : Theme.findTheme(options.theme)
     };
     this.options = {
       theme: {
-        name: resolved.theme.name,
-        path: resolved.theme.path
+        name: !options.template ? resolved.theme.name : undefined,
+        path: !options.template ? resolved.theme.path : undefined
       },
       target: {
         path: options.target
       },
       template: {
-        path: options.template
+        name: options['package'].name,
+        path: options.template,
+        isKit: function isKit() {
+          return options.kit;
+        }
       }
     };
   }
@@ -87,7 +91,7 @@ var Theme = (function () {
 
       var final = _when2['default'].defer();
       // Check if the template is enabled (legacy)      
-      if (options.template && options.template.path) {
+      if (options.template && !options.kit) {
         final.resolve({
           template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, options.template.path)).toString()
         });
@@ -137,7 +141,7 @@ var Theme = (function () {
     value: function tasks(options) {
       // Sources    
       var config = {
-        src: options.theme.path,
+        src: options.template ? options.template.path : options.theme.path,
         dest: options.target.path,
         paths: {
           css: {

@@ -39,7 +39,8 @@ program
   .option('-e, --extension <extension>', 'The target files extension. Default: ' + defaults.extension)
   .option('-j, --template <template>', 'The Jade template file to use')
   .option('-R, --readme <file>', 'The markdown file to use on the main page of the documentations. Checks the current directory for a package.json or README.md by default')
-  .option('-b, --theme <theme>', 'The name of the theme. e.g. mr-doc-theme-cayman or cayman');
+  .option('-b, --theme <theme>', 'The name of the theme. e.g. mr-doc-theme-cayman or cayman.')
+  .option('-k, --kit [kit]', 'Marks the template as a starter-kit with \'yes\' or \'no\' (optional).');
   
 
 function showHelp() {
@@ -57,7 +58,9 @@ program.on('--help', showHelp);
 
 // parse argv
 program.parse(process.argv);
-
+_.extend(options, {
+  'package': pkg
+});
 var options = option(program).getOptions();
 if (!_.isEmpty(options.source))
-  mrDoc(options).generate();
+  mrDoc().generate();
