@@ -83,7 +83,7 @@ var Option = (function () {
       }
       if (options.theme) {
         if (_lodash2['default'].isString(options.theme) && !_lodash2['default'].isEmpty(options.theme)) {
-          this.options.theme = options.theme.indexOf('doxx-theme-') > -1 ? options.theme : 'doxx-theme-' + options.theme;
+          this.options.theme.name = options.theme.indexOf('doxx-theme-') > -1 ? options.theme : 'doxx-theme-' + options.theme;
         }
       }
     }
@@ -129,7 +129,9 @@ var Option = (function () {
         'template': {
           'path': undefined
         },
-        'theme': 'mr-doc-theme-default',
+        'theme': {
+          'name': 'mr-doc-theme-default'
+        },
         'kit': false
       };
     }
