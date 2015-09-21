@@ -236,6 +236,9 @@ var Theme = (function () {
       var DEFAULT_THEME = 'mr-doc-theme-default';
       var mrDocPath = _path2['default'].resolve(__dirname, '..');
       var projectPath = process.cwd();
+      // Plugins may provide a name property
+      // so just in case check it
+      theme = theme.name ? theme.name : theme;
       var locations = {
         // Path to the project's node_modules dir + theme      
         project: _path2['default'].join(projectPath, 'node_modules', theme),
