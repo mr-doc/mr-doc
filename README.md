@@ -79,6 +79,7 @@ $ mr-doc --help
     -e, --extension <extension>   Target files extension. Default: html
     -j, --template <template>     The Jade template file to use.
     -b, --theme <theme>           The name of the theme. e.g. mr-doc-theme-cayman or cayman.
+    -k, --kit [kit]               Marks the template as a starter-kit with a 'yes' or 'no' (optional).
   Examples:
 
     # parse a whole folder
