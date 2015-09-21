@@ -51,7 +51,7 @@ var Theme = (function () {
     _classCallCheck(this, Theme);
 
     var resolved = {
-      theme: Theme.findTheme(options.theme)
+      theme: options && options.template ? undefined : Theme.findTheme(options.theme)
     };
     this.options = {
       theme: {
@@ -60,6 +60,9 @@ var Theme = (function () {
       },
       target: {
         path: options.target
+      },
+      template: {
+        path: options.template
       }
     };
   }
@@ -249,7 +252,7 @@ var Theme = (function () {
           path: locations.project
         };
       }
-      console.log('Mr. Doc [warn]: theme "' + theme + '" not found, reverting to default.');
+      console.log('Mr. Doc [warn]: Theme "' + theme + '" not found, reverting to default.');
       return {
         name: DEFAULT_THEME,
         path: locations['default']
