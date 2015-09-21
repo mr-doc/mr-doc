@@ -116,7 +116,7 @@ var Option = (function () {
         'template': {
           'path': undefined
         },
-        'theme': 'doxx-theme-default',
+        'theme': 'mr-doc-theme-default',
         'kit': false
       };
     }
