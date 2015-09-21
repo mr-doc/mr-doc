@@ -156,7 +156,7 @@ var Theme = (function () {
       // Sources    
       var config = {
         src: (function () {
-          if (options.template.isEnabled() && options.template.isKit()) return options.template.path;else if (options.template.isEnabled()) return process.cwd();else return options.theme.path;
+          if (options.template.isEnabled() && !options.template.isKit()) return options.template.path;else if (options.template.isEnabled()) return process.cwd();else return options.theme.path;
         })(),
         dest: options.target.path,
         paths: {
