@@ -73,10 +73,6 @@ var Option = (function () {
           if (options.kit.toLowerCase() === 'yes') this.options.kit = true;else if (options.kit.toLowerCase() === 'no') this.options.kit = false;
         } else this.options.kit = true;
       }
-
-      if (!this.options['package']) {
-        this.options = require(_path2['default'].join(process.cwd(), '/package.json')) || undefined;
-      }
     }
 
     /**      
@@ -110,7 +106,13 @@ var Option = (function () {
         // The markdown file to use on the main page of the documentations.       
         // Checks the current directory for a package.json or README.md by default     
         'readme': '',
-        'package': undefined,
+        'package': (function () {
+          var pkg = undefined;
+          try {
+            pkg = require(_path2['default'].join(process.cwd(), '/package.json'));
+          } catch (error) {}
+          return pkg;
+        })(),
         'template': {
           'path': undefined
         },
