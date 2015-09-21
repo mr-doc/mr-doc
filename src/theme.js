@@ -55,8 +55,8 @@ var Theme = (function () {
     };
     this.options = {
       theme: {
-        name: !options.template.path ? resolved.theme.name : undefined,
-        path: !options.template.path ? resolved.theme.path : undefined
+        name: resolved.theme.name,
+        path: resolved.theme.path
       },
       target: {
         path: options.target
