@@ -87,10 +87,10 @@ var Doxx = (function (_Compiler) {
       if (!readme && _fs2['default'].existsSync(readMeFile)) {
         readme = _fs2['default'].readFileSync(readMeFile).toString();
       } else {
-        console.warn(new Error('Mr. Doc [warn]: No README.md file found at ' + readMeFile));
+        console.warn('Mr. Doc [warn]: No README.md file found at ' + readMeFile);
       }
       if (!readme) {
-        console.warn(new Error('Mr. Doc [warn]: Empty README.md ' + readMeFile));
+        console.warn('Mr. Doc [warn]: Empty README.md ' + readMeFile);
         readme = '';
       }
       var md = new _markdownIt2['default']();

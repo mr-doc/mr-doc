@@ -63,7 +63,7 @@ var Theme = (function () {
       },
       template: {
         name: options['package'].name,
-        path: options.template,
+        path: options.template.path,
         isKit: function isKit() {
           return options.kit;
         }
