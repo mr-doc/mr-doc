@@ -224,7 +224,7 @@ var Theme = (function () {
          */
         stringifyTemplateSync: function stringifyTemplateSync() {
           var file = _path2['default'].join(config.src, 'template/index.jade');
-          return _fsExtra2['default'].readFileSync(file);
+          return _fsExtra2['default'].readFileSync(file).toString();
         }
       };
     }

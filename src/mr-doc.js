@@ -145,11 +145,10 @@ var Doxx = (function (_Compiler) {
       });
       // Install theme      
       new _theme2['default'](this.options).install().then(function (result) {
-        var isCached = result.isCached;
         var theme = result.theme;
 
         if (theme) {
-          console.info('Mr. Doc [info]: Installed theme: ' + theme + (isCached ? ' from cache.' : ''));
+          console.info('Mr. Doc [info]: Installed theme: ' + theme);
         }
         _lodash2['default'].forEach(_this.files, function (file, index) {
           // Set template          
