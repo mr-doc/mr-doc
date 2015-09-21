@@ -41,6 +41,7 @@ var _dir2 = _interopRequireDefault(_dir);
 require('source-map-support/register');
 
 var frame = (0, _elegantSpinner2['default'])();
+var log = console.log.bind(console);
 /**  
  * The class that locates themes  
  * @class Theme  
@@ -50,6 +51,7 @@ var Theme = (function () {
   function Theme(options) {
     _classCallCheck(this, Theme);
 
+    log('In Theme constructor');
     if (options) {
       // Check if Doc will be installing a theme
       // or will be rendering a template
@@ -93,9 +95,12 @@ var Theme = (function () {
     value: function install() {
       var options = arguments.length <= 0 || arguments[0] === undefined ? this.options : arguments[0];
 
+      log('In install');
       var final = _when2['default'].defer();
       // Check if the template is enabled (legacy)      
       if (options.template.isEnabled() && !options.template.isKit()) {
+        log('install - is template:', options.template.isEnabled(), 'is not a starter-kit:', !options.template.isKit());
+
         final.resolve({
           template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, options.template.path)).toString()
         });
@@ -124,8 +129,10 @@ var Theme = (function () {
     value: function installSync() {
       var options = arguments.length <= 0 || arguments[0] === undefined ? this.options : arguments[0];
 
+      log('In installSync');
       var template;
       if (options.template.isEnabled() && !options.template.isKit()) {
+        log('install - is template:', options.template.isEnabled(), 'is not a starter-kit:', !options.template.isKit());
         return {
           template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, options.template.path)).toString()
         };
@@ -145,6 +152,7 @@ var Theme = (function () {
   }], [{
     key: 'tasks',
     value: function tasks(options) {
+      log('In tasks');
       // Sources    
       var config = {
         src: options.template.isEnabled() ? options.template.path : options.theme.path,
@@ -177,6 +185,7 @@ var Theme = (function () {
          * Create necessary paths to destination folder (Async)        
          */
         copyAssets: function copyAssets() {
+          log('In tasks.copyAssets');
           var types = _lodash2['default'].keys(config.paths);
           var m = _when2['default'].map(types, function (type) {
             var d = _when2['default'].defer();
@@ -197,6 +206,7 @@ var Theme = (function () {
          * Create necessary paths to destination folder (Sync)       
          */
         copyAssetsSync: function copyAssetsSync() {
+          log('In tasks.copyAssetsSync');
           var types = _lodash2['default'].keys(config.paths);
           _lodash2['default'].forEach(types, function (type) {
             var src = _path2['default'].join(config.src, config.paths[type].src);
@@ -210,6 +220,7 @@ var Theme = (function () {
          * Reads the template from the source and strigifies it. (Async)        
          */
         stringifyTemplate: function stringifyTemplate() {
+          log('In tasks.stringifyTemplate');
           var d = _when2['default'].defer();
           var file = _path2['default'].join(config.src, 'template/index.jade');
           _fsExtra2['default'].readFile(file, function (error, data) {
@@ -223,6 +234,7 @@ var Theme = (function () {
          * Reads the template from the source and strigifies it. (Sync)        
          */
         stringifyTemplateSync: function stringifyTemplateSync() {
+          log('In tasks.stringifyTemplateSync');
           var file = _path2['default'].join(config.src, 'template/index.jade');
           return _fsExtra2['default'].readFileSync(file).toString();
         }
@@ -237,10 +249,12 @@ var Theme = (function () {
   }, {
     key: 'findTheme',
     value: function findTheme(options) {
+      log('In findTheme');
       var DEFAULT_THEME = 'mr-doc-theme-default';
       var mrDocPath = _path2['default'].resolve(__dirname, '..');
       var projectPath = process.cwd();
       var name = options.theme.name;
+      log('findTheme - Default:', DEFAULT_THEME, 'Mr. Doc Path:', mrDocPath, 'Project Path:', projectPath, 'Theme name:', name);
       // Plugins may provide a name property
       // so just in case check it
       var locations = {
@@ -251,6 +265,7 @@ var Theme = (function () {
         // Path to the Doc's default theme dir      
         'default': _path2['default'].join(mrDocPath, 'node_modules', DEFAULT_THEME)
       };
+      log('findTheme - Locations:', locations);
       if (_dir2['default'].exists(locations.mrDoc)) {
         console.log('Mr. Doc [info]: Using theme [' + name + ']');
         return {
