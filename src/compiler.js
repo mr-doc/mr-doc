@@ -60,13 +60,11 @@ var Compiler = (function () {
   _createClass(Compiler, [{
     key: 'compile',
     value: function compile(locals, template) {
-      // Get the path (alias for filename)      
-      var path = this.options.template.path;
-
       // Return the compiled template      
       return this.jade.compile(template || this.template, {
         pretty: true,
-        filename: path
+        // Get the path (alias for filename)
+        filename: this.options.template ? this.options.template.path || 'index.jade' : 'index.jade'
       })(locals);
     }
 
