@@ -63,4 +63,4 @@ _.extend(options, {
 });
 var options = option(program).getOptions();
 if (!_.isEmpty(options.source))
-  mrDoc().generate();
+  mrDoc(options).generate();
