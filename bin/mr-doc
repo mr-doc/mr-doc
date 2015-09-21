@@ -25,6 +25,10 @@ if (notifier.update) console.log(notifier.update);
  * Options & Defaults
  */
 var defaults = option().getDefaults();
+
+/**
+ * Setup program
+ */
 program
   .version(version)
   .option('-d, --debug', 'Output parsed comments for debugging')
