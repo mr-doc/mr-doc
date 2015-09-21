@@ -58,9 +58,9 @@ program.on('--help', showHelp);
 
 // parse argv
 program.parse(process.argv);
-_.extend(options, {
-  'package': pkg
-});
+// Set package
+options.package = pkg;
+
 var options = option(program).getOptions();
 if (!_.isEmpty(options.source))
   mrDoc(options).generate();

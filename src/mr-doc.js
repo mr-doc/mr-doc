@@ -79,11 +79,9 @@ var Doxx = (function (_Compiler) {
         m = m.concat(a.symbols || []);
         return m;
       }, []);
-      var pkg;
-      // Get package.json      
-      try {
-        pkg = require(process.cwd() + '/package');
-      } catch (err) {}
+      // Set package
+      var pkg = this.options['package'];
+      // Set readme
       var readme = pkg && pkg.readme,
           readMeFile = _path2['default'].resolve(process.cwd(), this.options.readme || pkg && pkg.readmeFileName || 'README.md');
       if (!readme && _fs2['default'].existsSync(readMeFile)) {
