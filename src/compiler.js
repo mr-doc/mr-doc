@@ -1,5 +1,5 @@
 'use strict';
-
+/* global __dirname */
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
@@ -28,44 +28,42 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 require('source-map-support/register');
 
-/**
- * The class that compiles the Jade template.
- * @class Compiler
- */
+/**  
+ * The class that compiles the Jade template.  
+ * @class Compiler  
+ * */
 
 var Compiler = (function () {
   function Compiler(parser) {
     _classCallCheck(this, Compiler);
 
     /**
-     * Jade used to compile the documentation
-     * @type {Jade} Jade compiler
-     */
+     * Jade used to compile the documentation        
+     * @type {Jade} Jade compiler        
+     **/
     this.jade = _jade2['default'];
-
-    // Set the options
+    // Set the options      
     this.options = parser ? parser.options : {};
-    // Sets the files from the parser
+    // Sets the files from the parser      
     this.files = parser ? parser.files : [];
-    // Set up the compiler's code filter
+    // Set up the compiler's code filter      
     this.setCodeFilter();
   }
 
-  /** 
-   * Compiles the docs
-   * @param  {Object} locals   The local variable object
-   * @param  {String} template The template to compile
-   * @jsFiddle https://jsfiddle.net/iwatakeshi/pmp9ygwL/embedded/
-   * @return {String}          The compiled content
-   */
+  /**  
+   * Compiles the docs      
+   * @param  {Object} locals   The local variable object      
+   * @param  {String} template The template to compile      
+   * @jsFiddle https://jsfiddle.net/iwatakeshi/pmp9ygwL/embedded/      
+   * @return {String}          The compiled content      */
 
   _createClass(Compiler, [{
     key: 'compile',
     value: function compile(locals, template) {
-      // Get the path (alias for filename)
+      // Get the path (alias for filename)      
       var path = this.options.template.path;
 
-      // Return the compiled template
+      // Return the compiled template      
       return this.jade.compile(template || this.template, {
         pretty: true,
         filename: path
@@ -73,65 +71,64 @@ var Compiler = (function () {
     }
 
     /** 
-     * Compiles the docs with a specified path
-     * @param  {Object} path     The path to compile
-     * @param  {Object} locals   The local variable object
-     * @param  {String} template The template to compile
-     * @return {String}          The compiled content
+     * Compiles the docs with a specified path      
+     * @param  {Object} path     The path to compile     
+     * @param  {Object} locals   The local variable object      
+     * @param  {String} template The template to compile      
+     * @return {String}          The compiled content      
      */
   }, {
     key: 'compileWithPath',
     value: function compileWithPath(path, locals, template) {
-      // Return the compiled template
+      // Return the compiled template      
       return this.jade.compile(template || this.template, {
         pretty: true,
-        // Alias for filename
+        // Alias for filename        
         filename: path
       })(locals);
     }
 
-    /** 
-     * Sets the template
-     * @param {String} template The template
+    /**
+     * Sets the template      
+     * @param {String} template The template      
      * @returns {Compiler} The compiler
      */
   }, {
     key: 'setTemplate',
     value: function setTemplate(template) {
-      // Template used to produce the documentation
+      // Template used to produce the documentation    
       this.template = template;
       return this;
     }
 
-    /** 
-     * Sets the template
-     * @param {String} path The path to the template
-     * @returns {Compiler} The compiler
+    /**     
+     * Sets the template    
+     * @param {String} path The path to the template    
+     * @returns {Compiler} The compiler    
      */
   }, {
     key: 'setTemplateWithPath',
     value: function setTemplateWithPath(path) {
-      // Template used to produce the documentation
+      // Template used to produce the documentation    
       this.template = _fs2['default'].readFileSync(_path2['default'].resolve(__dirname, path || this.options.template.path)).toString();
       return this;
     }
 
     /** 
-     * Sets custom filter(s)
-     * @param {Array|Object} filters The custom filter(s) to set
-     * @jsFiddle https://jsfiddle.net/iwatakeshi/sbr206cf/embedded/
-     * @returns {Compiler} The compiler
-     */
+     * Sets custom filter(s)    
+     * @param {Array|Object} filters The custom filter(s) to set    
+     * @jsFiddle https://jsfiddle.net/iwatakeshi/sbr206cf/embedded/    
+     * @returns {Compiler} The compiler    */
   }, {
     key: 'setFilters',
     value: function setFilters(filters) {
       var _this = this;
 
-      // Check if the fitlers is an object
+      // Check if the fitlers is an object    
       if (_lodash2['default'].isPlainObject(filters)) {
         this.jade.filters[filters.name] = filters.filter;
       }
-      // Check if the filters is an array
+      // Check if the filters is an array    
       if (_lodash2['default'].isArray(filters)) {
         _lodash2['default'].forEach(filters, function (filter) {
           _this.jade.filters[filter.name] = filter.filter;
@@ -140,23 +137,22 @@ var Compiler = (function () {
       return this;
     }
 
-    /**
-     * Sets the code filter for `:code`
+    /**    
+     * Sets the code filter for `:code`    
      * @param {Function} filter The code filter to set
      * @returns {Compiler} The compiler
      */
   }, {
     key: 'setCodeFilter',
     value: function setCodeFilter(filter) {
-      /**
-       * Jade support for filter `:code`
-       * @param  {String} block
-       * @return {String}
+      /**      
+       * Jade support for filter `:code`      
+       * @param  {String} block      
+       * @return {String}      
        */
       this.jade.filters.code = filter || function (block) {
         return block.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/#/g, '&#35;').replace(/\\/g, '\\\\').replace(/\n/g, '\\n');
       };
-
       return this;
     }
   }]);

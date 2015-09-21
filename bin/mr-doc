@@ -1,17 +1,14 @@
 #!/usr/bin/env node
+/* global process */
+'use strict';
 
-"use strict";
-
-var program = require('commander'),
-  version = require('../package').version,
-  mrDoc = require('../src/mr-doc'),
-  option = require('../src/option'),
-  _ = require('lodash'),
-  updateNotifier = require('update-notifier'),
-  pkg = require('../package.json'),
-  File = require('fs-extra'),
-  Path = require('path'),
-  osenv = require('osenv');
+var program         = require('commander'),
+    version         = require('../package').version,
+    mrDoc           = require('../src/mr-doc'),
+    option          = require('../src/option'),
+    _               = require('lodash'),
+    updateNotifier  = require('update-notifier'),
+    pkg             = require('../package.json');
 
 // Checks for available update and returns an instance
 var notifier = updateNotifier({
@@ -28,11 +25,6 @@ if (notifier.update) console.log(notifier.update);
  * Options & Defaults
  */
 var defaults = option().getDefaults();
-/**
- * Variables
- */
-var isCmd = false;
-
 program
   .version(version)
   .option('-d, --debug', 'Output parsed comments for debugging')
@@ -44,6 +36,7 @@ program
   .option('-j, --template <template>', 'The Jade template file to use')
   .option('-R, --readme <file>', 'The markdown file to use on the main page of the documentations. Checks the current directory for a package.json or README.md by default')
   .option('-b, --theme <theme>', 'The name of the theme. e.g. mr-doc-theme-cayman or cayman');
+  
 
 function showHelp() {
   console.log('  Examples:\n');
@@ -61,8 +54,6 @@ program.on('--help', showHelp);
 // parse argv
 program.parse(process.argv);
 
-if (!isCmd) {
-  var options = option(program).getOptions();
-  !_.isEmpty(options.source)
+var options = option(program).getOptions();
+if (!_.isEmpty(options.source))
   mrDoc(options).generate();
-}
