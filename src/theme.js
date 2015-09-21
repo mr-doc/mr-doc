@@ -91,7 +91,7 @@ var Theme = (function () {
 
       var final = _when2['default'].defer();
       // Check if the template is enabled (legacy)      
-      if (options.template.isKit && !options.template.isKit()) {
+      if (options.template.isKit && options.template.path && !options.template.isKit()) {
         if (options.tempate.isKit && !options.template.isKit()) {
           final.resolve({
             template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, options.template.path)).toString()
@@ -122,7 +122,7 @@ var Theme = (function () {
     value: function installSync() {
       var options = arguments.length <= 0 || arguments[0] === undefined ? this.options : arguments[0];
 
-      if (options.template.isKit && !options.template.isKit()) {
+      if (options.template.isKit && options.template.path && !options.template.isKit()) {
         return {
           template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, options.template.path)).toString()
         };
