@@ -1,4 +1,4 @@
-/* global process */
+/* global process, require, console */
 'use strict';
 Object.defineProperty(exports, '__esModule', {
   value: true
@@ -72,6 +72,10 @@ var Option = (function () {
         if (_lodash2['default'].isString(options.kit)) {
           if (options.kit.toLowerCase() === 'yes') this.options.kit = true;else if (options.kit.toLowerCase() === 'no') this.options.kit = false;
         } else this.options.kit = true;
+      }
+
+      if (!this.options['package']) {
+        this.options = require(_path2['default'].join(process.cwd(), '/package.json')) || undefined;
       }
     }
 

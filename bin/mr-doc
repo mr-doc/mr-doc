@@ -60,7 +60,6 @@ program.on('--help', showHelp);
 program.parse(process.argv);
 
 var options = option(program).getOptions();
-// Set package
-options.package = pkg;
+
 if (!_.isEmpty(options.source))
   mrDoc(options).generate();

@@ -1,4 +1,4 @@
-/* global __dirname, process */
+/* global __dirname, process, console */
 'use strict';
 Object.defineProperty(exports, '__esModule', {
   value: true
