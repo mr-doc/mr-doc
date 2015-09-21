@@ -51,7 +51,7 @@ var Theme = (function () {
     _classCallCheck(this, Theme);
 
     var resolved = {
-      theme: options.template ? undefined : Theme.findTheme(options.theme)
+      theme: options.template.path ? undefined : Theme.findTheme(options.theme)
     };
     this.options = {
       theme: {
