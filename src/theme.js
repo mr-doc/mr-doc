@@ -97,7 +97,7 @@ var Theme = (function () {
             }).then(tasks.stringifyTemplate).tap(function () {
               notify('Rendering template.');
             }).then(final.resolve);
-          })().then(tasks.showProgress);
+          })(tasks.showProgress);
         })();
       }
       return final.promise;
