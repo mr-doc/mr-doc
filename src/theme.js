@@ -155,7 +155,9 @@ var Theme = (function () {
       log('In tasks');
       // Sources    
       var config = {
-        src: options.template.isEnabled() ? options.template.path : options.theme.path,
+        src: (function () {
+          if (options.template.isEnabled() && options.template.isKit()) return options.template.path;else if (options.template.isEnabled()) return process.cwd();else return options.theme.path;
+        })(),
         dest: options.target.path,
         paths: {
           css: {
