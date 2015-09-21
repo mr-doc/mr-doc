@@ -63,7 +63,7 @@ var Theme = (function () {
           path: resolved.theme ? resolved.theme.path : undefined
         },
         target: {
-          path: options.target
+          path: options.target.path ? options.target.path : options.target
         },
         template: {
           name: options['package'] ? options['package'].name : '',
