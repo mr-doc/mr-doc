@@ -78,7 +78,7 @@ $ mr-doc --help
     -T, --target <target>         The folder which will contain the results. Default: <CWD>/docs
     -e, --extension <extension>   Target files extension. Default: html
     -j, --template <template>     The Jade template file to use.
-    -b, --theme <theme>           The name of the theme. e.g. mr-doc-theme-cayman or cayman.
+    -b, --theme <theme>           The name of the theme to select. e.g. mr-doc-theme-cayman or cayman.
     -k, --kit [kit]               Marks the template as a starter-kit with a 'yes' or 'no' (optional).
   Examples:
 

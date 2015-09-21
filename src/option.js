@@ -65,7 +65,7 @@ var Option = (function () {
       if (options.theme) {
         if (_lodash2['default'].isString(options.theme) && !_lodash2['default'].isEmpty(options.theme)) {
           this.options.theme = options.theme.indexOf('doxx-theme-') > -1 ? options.theme : 'doxx-theme-' + options.theme;
-        } else this.options.theme = 'doxx-theme-default';
+        }
       }
 
       if (options.kit) {
