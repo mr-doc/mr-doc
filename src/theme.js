@@ -55,14 +55,14 @@ var Theme = (function () {
     };
     this.options = {
       theme: {
-        name: resolved.theme.name,
+        name: resolved.theme ? resolved.theme.name : options.theme.name || options.theme,
         path: resolved.theme.path
       },
       target: {
         path: options.target
       },
       template: {
-        name: options['package'].name,
+        name: options['package'] ? options['package'].name : '',
         path: options.template.path,
         isKit: function isKit() {
           return options.kit;
@@ -143,7 +143,7 @@ var Theme = (function () {
     value: function tasks(options) {
       // Sources    
       var config = {
-        src: options.template ? options.template.path : options.theme.path,
+        src: options.template.path ? options.template.path : options.theme.path,
         dest: options.target.path,
         paths: {
           css: {
@@ -253,19 +253,19 @@ var Theme = (function () {
           name: theme,
           path: locations.mrDoc
         };
-      }
-      if (_dir2['default'].exists(locations.project)) {
+      } else if (_dir2['default'].exists(locations.project)) {
         console.log('Mr. Doc [info]: Using theme [' + theme + ']');
         return {
           name: theme,
           path: locations.project
         };
+      } else {
+        console.log('Mr. Doc [warn]: Theme "' + theme + '" not found, reverting to default.');
+        return {
+          name: DEFAULT_THEME,
+          path: locations['default']
+        };
       }
-      console.log('Mr. Doc [warn]: Theme "' + theme + '" not found, reverting to default.');
-      return {
-        name: DEFAULT_THEME,
-        path: locations['default']
-      };
     }
   }]);
 
