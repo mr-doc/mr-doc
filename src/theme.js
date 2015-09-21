@@ -90,9 +90,15 @@ var Theme = (function () {
         });
       } else {
         (function () {
-          var tasks = Theme.options(options);
-          return tasks.copyAssets().then(tasks.stringifyTemplate).then(final.resolve);
-        })(Theme.tasks(options).showProgress);
+          var tasks = Theme.tasks(options);
+          (function (notify) {
+            return tasks.copyAssets().tap(function () {
+              notify('Copying Assets.');
+            }).then(tasks.stringifyTemplate).tap(function () {
+              notify('Rendering template.');
+            }).then(final.resolve);
+          })().then(tasks.showProgress);
+        })();
       }
       return final.promise;
     }
