@@ -4,7 +4,7 @@
 
 var program         = require('commander'),
     version         = require('../package').version,
-    mrDoc           = require('../src/mr-doc'),
+    doc             = require('../src/mr-doc'),
     option          = require('../src/option'),
     _               = require('lodash'),
     updateNotifier  = require('update-notifier'),
@@ -62,4 +62,4 @@ program.parse(process.argv);
 var options = option(program).getOptions();
 
 if (!_.isEmpty(options.source))
-  mrDoc(options).generate();
+  doc(options).generate();

@@ -153,23 +153,21 @@ var Symbol = (function () {
         symbol.fileHtml = overviews[0].html;
       }
       if (returns.length !== 0) {
-        symbol.returns = [];
-        returns.forEach(function (returned) {
-          symbol.returns.push(returned);
+        symbol.returns = returns.map(function (r) {
+          return r.string;
         });
       }
       if (examples.length !== 0) {
-        symbol.examples = [];
-        examples.forEach(function (example) {
-          symbol.examples.push(example.string);
+        symbol.examples = examples.map(function (e) {
+          return e.string;
         });
       }
       if (requires.length !== 0) {
-        symbol.requires = [];
-        requires.forEach(function (required) {
-          symbol.requires.push(required.string);
+        symbol.requires = requires.map(function (r) {
+          return r.string;
         });
       }
+
       // No idea what this is for but it's there anyways.    
       symbol.description.extra = '';
       if (descriptions.length === 1) {

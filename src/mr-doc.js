@@ -48,19 +48,19 @@ var _theme2 = _interopRequireDefault(_theme);
 
 /**  
  * The main class that creates beautiful documentations.  
- * @class Doxx  * @extend Compiler  
+ * @class Doc  * @extend Compiler  
  */
 
-var Doxx = (function (_Compiler) {
-  _inherits(Doxx, _Compiler);
+var Doc = (function (_Compiler) {
+  _inherits(Doc, _Compiler);
 
   // Initialize the compiler  
   // and pass the parser.  
 
-  function Doxx(options) {
-    _classCallCheck(this, Doxx);
+  function Doc(options) {
+    _classCallCheck(this, Doc);
 
-    _get(Object.getPrototypeOf(Doxx.prototype), 'constructor', this).call(this, new _parser2['default'](options));
+    _get(Object.getPrototypeOf(Doc.prototype), 'constructor', this).call(this, new _parser2['default'](options));
     // Set the locals stack      
     this.locals = [];
   }
@@ -69,7 +69,7 @@ var Doxx = (function (_Compiler) {
    * Generates the documentations.      
    */
 
-  _createClass(Doxx, [{
+  _createClass(Doc, [{
     key: 'generate',
     value: function generate() {
       var _this = this;
@@ -192,11 +192,10 @@ var Doxx = (function (_Compiler) {
         // to support nested directories      
         // and allow asset files to access the dir      
         return {
+          name: f.targetName,
+          path: f.relative.path + f.targetName,
           file: {
             name: f.name
-          },
-          target: {
-            name: f.targetName
           },
           relative: f.relative
         };
@@ -204,11 +203,11 @@ var Doxx = (function (_Compiler) {
     }
   }]);
 
-  return Doxx;
+  return Doc;
 })(_compiler2['default']);
 
 exports['default'] = function (options) {
-  return new Doxx(options);
+  return new Doc(options);
 };
 
 module.exports = exports['default'];
