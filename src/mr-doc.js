@@ -104,7 +104,7 @@ var Doc = (function (_Compiler) {
         symbols: []
       });
       // Set title      
-      var title = pkg && pkg.name ? pkg.name : this.options.title;
+      var title = this.options.name ? this.options.name : pkg ? pkg.name : 'No title';
       // Set description      
       var description = pkg && pkg.description ? pkg.description : '';
       // Set URLs      
@@ -156,8 +156,8 @@ var Doc = (function (_Compiler) {
           // Compile the template          
           var compiled = _this.compile(_this.locals[index]);
           // Write files          
-          (0, _mkdirp2['default'])(_this.options.target, function (error) {
-            if (error) return;else _fs2['default'].writeFileSync(_path2['default'].join(_this.options.target, file.targetName), compiled);
+          (0, _mkdirp2['default'])(_this.options.output, function (error) {
+            if (error) return;else _fs2['default'].writeFileSync(_path2['default'].join(_this.options.output, file.targetName), compiled);
           });
         });
       }, console.error);

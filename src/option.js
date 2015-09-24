@@ -42,8 +42,8 @@ var Option = (function () {
     value: function setOptions(options) {
       var _this = this;
 
-      if (options.title) {
-        this.options.title = options.title;
+      if (options.name) {
+        this.options.name = options.name;
       }
       if (options.extension) {
         this.options.extension = options.extension;
@@ -72,8 +72,8 @@ var Option = (function () {
         console.error(new Error('Mr. Doc [error]: You must define a source.'));
         process.exit(1);
       } else this.options.source = options.source;
-      if (options.target) {
-        this.options.target = _path2['default'].resolve(process.cwd(), options.target) || process.cwd();
+      if (options.output) {
+        this.options.output = _path2['default'].resolve(process.cwd(), options.output) || process.cwd();
       }
       if (options.ignore) {
         this.options.blacklist = options.ignore.trim().replace(' ', '').split(',');
@@ -107,12 +107,12 @@ var Option = (function () {
     value: function getDefaults() {
       return {
         // The title for the page produced      
-        'title': undefined,
+        'name': undefined,
         // The folder which should get parsed      
         'source': '',
         // The folder which will contain the results.      
-        'target': '',
-        // The target files extension.      
+        'output': '',
+        // The output files extension.      
         'extension': 'html',
         // The comma seperated list of directories to ignore. (alias for ignore)      
         'blacklist': ['test', 'public', 'static', 'view', 'views', 'template', 'templates'],

@@ -62,8 +62,8 @@ var Theme = (function () {
           name: resolved.theme ? resolved.theme.name : undefined,
           path: resolved.theme ? resolved.theme.path : undefined
         },
-        target: {
-          path: options.target.path ? options.target.path : options.target
+        output: {
+          path: options.output.path ? options.output.path : options.output
         },
         template: {
           name: options['package'] ? options['package'].name : '',
@@ -87,7 +87,7 @@ var Theme = (function () {
 
     /**    
      * Copies the theme specified (reverting to default)    
-     * over to the target directory. (Async)  
+     * over to the output directory. (Async)  
      * @return {Function} The promise.    
      */
     value: function install() {
@@ -116,7 +116,7 @@ var Theme = (function () {
 
     /**      
      * Copies the theme specified (reverting to default)    
-     * over to the target directory. (Sync)
+     * over to the output directory. (Sync)
      * @return The template    
      */
   }, {
@@ -150,7 +150,7 @@ var Theme = (function () {
         src: (function () {
           if (options.template.isEnabled() && !options.template.isKit()) return options.template.path;else if (options.template.isEnabled()) return process.cwd();else return options.theme.path;
         })(),
-        dest: options.target.path,
+        dest: options.output.path,
         paths: {
           css: {
             src: 'assets/css',
