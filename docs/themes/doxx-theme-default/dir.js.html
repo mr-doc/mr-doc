@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width" charset="utf-8">
+    <title>Mr.</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/cayman.min.css">
+    <link rel="stylesheet" href="css/prism.min.css">
+    <link rel="stylesheet" href="css/index.min.css">
+    <link rel="stylesheet" href="css/docs.min.css">
+    <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+  </head>
+  <body data-spy="scroll" data-target=".scrollspy">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container"><a class="brand">Doxx</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav pull-right sponsored"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <header id="overview" class="jumbotron subhead">
+      <div class="container">
+        <h1>Mr.</h1>
+        <p class="lead"></p>
+      </div>
+    </header>
+    <div class="container">
+      <div class="row">
+        <div class="span3 bs-docs-sidebar">
+          <ul class="nav nav-list bs-docs-sidenav affix-top">
+            <li><a href="index.html">Main</a></li>
+            <li><a href="compiler.js.html">compiler.js</a></li>
+            <li class="active"><a href="dir.js.html">dir.js</a></li>
+            <li><a href="mr-doc.js.html">mr-doc.js</a></li>
+            <li><a href="option.js.html">option.js</a></li>
+            <li><a href="parser.js.html">parser.js</a></li>
+            <li><a href="symbol.js.html">symbol.js</a></li>
+            <li><a href="theme.js.html">theme.js</a></li>
+          </ul>
+          <div class="scrollspy">
+            <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#Dir"><i class="alert alert-success"></i><span>Dir</span></a>
+              </li>
+              <li><a href="#collectFiles"><i class="alert alert-info"></i><span>collectFiles</span></a>
+              </li>
+              <li><a href="#getHomeDir"><i class="alert alert-info"></i><span>getHomeDir</span></a>
+              </li>
+              <li><a href="#exists"><i class="alert alert-info"></i><span>exists</span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="span9">
+          <div class="description"><p>global process</p></div>
+          <pre><code class="language-javascript">'use strict';
+import Path from 'path';
+import walkdir from 'walkdir';
+import _ from 'lodash';
+import osenv from 'osenv';
+import fs from 'fs';
+import 'source-map-support/register';</code></pre>
+          <section id="Dir">
+            <h1>Dir</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">class</div><span>&nbsp;</span><span>new Dir()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>The class that manages directories.</p></div>
+          <pre><code class="language-javascript">class Dir {</code></pre>
+          <section id="collectFiles">
+            <h1>collectFiles</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Dir.collectFiles()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>source</td>
+                <td>String</td>
+                <td><p>source path</p></td>
+              </tr>
+              <tr>
+                <td>options</td>
+                <td>Object</td>
+                <td><p>option object</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Array</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Create an array of all the right files in the source dir    </p></div>
+          <pre><code class="language-javascript">static collectFiles(source, options) {
+    var dirtyFiles = walkdir.sync(source), // tee hee!       
+      ignore = options.ignore || [],
+      files = [];
+    dirtyFiles.forEach(function(file) {
+      file = Path.relative(source, file);
+      var doNotIgnore = _.all(ignore, function(d) {
+        // return true if no part of the path is in the ignore/black list
+        return (file.indexOf(d) === -1);
+      });
+      if ((file.substr(-2) === 'js') &amp;&amp; doNotIgnore) {
+        files.push(file);
+      }
+    });
+    return files;
+  }</code></pre>
+          <section id="getHomeDir">
+            <h1>getHomeDir</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Dir.getHomeDir()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Locates the home directory for the<br />current operating system.<br />Credits to @cliftonc</p></div>
+          <pre><code class="language-javascript">static getHomeDir() {
+    return osenv.home() ||
+      process.env.HOME ||
+      process.env.HOMEPATH ||
+      process.env.USERPROFILE;
+  }</code></pre>
+          <section id="exists">
+            <h1>exists</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Dir.exists()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>path</td>
+                <td>String</td>
+                <td><p>The path to the directory</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Boolean</td>
+                <td><p>The truth value</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Checks if the directory exists      </p></div>
+          <pre><code class="language-javascript">static exists(path) {
+  try {
+    fs.statSync(path);
+    return true;
+  } catch (err) {
+    return !(err &amp;&amp; err.code === 'ENOENT');
+  }
+}
+}
+export default Dir;</code></pre>
+        </div>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <p>Documentation generated with <a href="https://github.com/FGRibreau/doxx">Doxx </a> created by <a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau </a></p>
+        <p>Doxx is sponsored by <a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr </a> and <a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
+        <p>Theme borrowed from Twitter Bootstrap</p>
+      </div>
+    </footer>
+    <script src="js/twitter-widget.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap-transition.min.js"></script>
+    <script src="js/bootstrap-scrollspy.min.js"></script>
+    <script src="js/bootstrap-dropdown.min.js"></script>
+    <script src="js/bootstrap-collapse.min.js"></script>
+    <script src="js/bootstrap-affix.min.js"></script>
+    <script src="js/prism.min.js"></script>
+    <script src="js/index.min.js"></script>
+  </body>
+</html>
