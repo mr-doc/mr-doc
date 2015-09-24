@@ -15,7 +15,7 @@ The beautifully documentation can be found at [GitHub](http://fgribreau.github.i
 
 ```bash
 # Install the module globally
-$ npm i -g mr-doc
+$ npm install -g mr-doc
 ```
 
 ## Usage
