@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width" charset="utf-8">
+    <title>Mr.</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/cayman.min.css">
+    <link rel="stylesheet" href="css/prism.min.css">
+    <link rel="stylesheet" href="css/index.min.css">
+    <link rel="stylesheet" href="css/docs.min.css">
+    <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+  </head>
+  <body data-spy="scroll" data-target=".scrollspy">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container"><a class="brand">Doxx</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav pull-right sponsored"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <header id="overview" class="jumbotron subhead">
+      <div class="container">
+        <h1>Mr.</h1>
+        <p class="lead"></p>
+      </div>
+    </header>
+    <div class="container">
+      <div class="row">
+        <div class="span3 bs-docs-sidebar">
+          <ul class="nav nav-list bs-docs-sidenav affix-top">
+            <li><a href="index.html">Main</a></li>
+            <li><a href="compiler.js.html">compiler.js</a></li>
+            <li><a href="dir.js.html">dir.js</a></li>
+            <li><a href="mr-doc.js.html">mr-doc.js</a></li>
+            <li><a href="option.js.html">option.js</a></li>
+            <li><a href="parser.js.html">parser.js</a></li>
+            <li><a href="symbol.js.html">symbol.js</a></li>
+            <li class="active"><a href="theme.js.html">theme.js</a></li>
+          </ul>
+          <div class="scrollspy">
+            <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#Theme"><i class="alert alert-success"></i><span>Theme</span></a>
+              </li>
+              <li><a href="#showProgress"><i class="alert alert-success"></i><span>showProgress</span></a>
+              </li>
+              <li><a href="#copyAssets"><i class="alert alert-success"></i><span>copyAssets</span></a>
+              </li>
+              <li><a href="#copyAssetsSync"><i class="alert alert-success"></i><span>copyAssetsSync</span></a>
+              </li>
+              <li><a href="#stringifyTemplate"><i class="alert alert-success"></i><span>stringifyTemplate</span></a>
+              </li>
+              <li><a href="#stringifyTemplateSync"><i class="alert alert-success"></i><span>stringifyTemplateSync</span></a>
+              </li>
+              <li><a href="#findTheme"><i class="alert alert-info"></i><span>findTheme</span></a>
+              </li>
+              <li><a href="#install"><i class="alert alert-info"></i><span>install</span></a>
+              </li>
+              <li><a href="#installSync"><i class="alert alert-info"></i><span>installSync</span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="span9">
+          <div class="description"><p>global __dirname, process, console</p></div>
+          <pre><code class="language-javascript">'use strict';
+import when from 'when';
+import Path from 'path';
+import _ from 'lodash';
+import File from 'fs-extra';
+import elegantSpinner from 'elegant-spinner';
+import logUpdate from 'log-update';
+import Dir from './dir';
+import 'source-map-support/register';
+let frame = elegantSpinner();</code></pre>
+          <section id="Theme">
+            <h1>Theme</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">class</div><span>&nbsp;</span><span>new Theme()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>The class that locates themes  </p></div>
+          <pre><code class="language-javascript">class Theme {
+  constructor(options) {
+      if (options) {
+        // Check if Doc will be installing a theme
+        // or will be rendering a template
+        let resolved = {
+          theme: options.template.path ? undefined : Theme.findTheme(options)
+        };
+        // Set the options
+        this.options = {
+          theme: {
+            name: resolved.theme ?
+              resolved.theme.name : undefined,
+            path: resolved.theme ?
+              resolved.theme.path : undefined
+          },
+          output: {
+            path: options.output.path ?
+              options.output.path : options.output
+          },
+          template: {
+            name: options.package ?
+              options.package.name : '',
+            path: options.template.path,
+            isEnabled: options.template.isEnabled,
+            isKit: options.template.isKit
+          }
+        };
+      }
+    }</code></pre>
+          <section id="showProgress">
+            <h1>showProgress</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>Theme.showProgress</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Shows the progress for each command</p></div>
+          <pre><code class="language-javascript">showProgress: (command, max = 200) =&gt; {
+  var count = 0;
+  while (count &lt; max) {
+    logUpdate('Mr. Doc [info]: ' + frame() + ' ' + command);
+    count++;
+  }
+},</code></pre>
+          <section id="copyAssets">
+            <h1>copyAssets</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>Theme.copyAssets</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Create necessary paths to destination folder (Async)</p></div>
+          <pre><code class="language-javascript">copyAssets: () =&gt; {
+  let types = _.keys(config.paths);
+  let m = when.map(types, function(type) {
+    let d = when.defer();
+    let src = Path.join(config.src, config.paths[type].src);
+    let dest = Path.join(config.dest, config.paths[type].dest);
+    File.copy(src, dest, {
+      clobber: true
+    }, error =&gt; {
+      if (error) d.reject(error);
+      else {
+        d.resolve();
+      }
+    });
+    return d.promise;
+  });
+  return m;
+},</code></pre>
+          <section id="copyAssetsSync">
+            <h1>copyAssetsSync</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>Theme.copyAssetsSync</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Create necessary paths to destination folder (Sync)</p></div>
+          <pre><code class="language-javascript">copyAssetsSync: () =&gt; {
+  let types = _.keys(config.paths);
+  _.forEach(types, type =&gt; {
+    let src = Path.join(config.src, config.paths[type].src);
+    let dest = Path.join(config.dest, config.paths[type].dest);
+    File.copySync(src, dest, {
+      clobber: true
+    });
+  });
+},</code></pre>
+          <section id="stringifyTemplate">
+            <h1>stringifyTemplate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>Theme.stringifyTemplate</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Reads the template from the source and strigifies it. (Async)</p></div>
+          <pre><code class="language-javascript">stringifyTemplate: () =&gt; {
+  let d = when.defer();
+  let file = Path.join(config.src, 'template/index.jade');
+  File.readFile(file, (error, data) =&gt; {
+    if (error) d.reject(error);
+    else d.resolve({
+      template: data.toString()
+    });
+  });
+  return d.promise;
+},</code></pre>
+          <section id="stringifyTemplateSync">
+            <h1>stringifyTemplateSync</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">property</div><span>&nbsp;</span><span>Theme.stringifyTemplateSync</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Reads the template from the source and strigifies it. (Sync)</p></div>
+          <pre><code class="language-javascript">stringifyTemplateSync: () =&gt; {
+  let file = Path.join(config.src, 'template/index.jade');
+  return File.readFileSync(file).toString();
+}
+      };
+    }</code></pre>
+          <section id="findTheme">
+            <h1>findTheme</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Theme.findTheme()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>theme</td>
+                <td>String</td>
+                <td><p>The theme to find</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Object</td>
+                <td><p>The theme.</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Find the theme specified    </p></div>
+          <pre><code class="language-javascript">static findTheme(options) {
+    const DEFAULT_THEME = 'mr-doc-theme-default';
+    const mrDocPath = Path.resolve(__dirname, '..');
+    const projectPath = process.cwd();
+    const name = options.theme.name;
+    // Plugins may provide a name property
+    // so just in case check it
+    const locations = {
+      // Path to the project's node_modules dir + theme       
+      project: Path.join(projectPath, 'node_modules', name),
+      // Path to Doc's node_modules dir + theme       
+      mrDoc: Path.join(mrDocPath, 'node_modules', name),
+      // Path to the Doc's default theme dir       
+      default: Path.join(mrDocPath, 'node_modules', DEFAULT_THEME)
+    };
+    if (Dir.exists(locations.mrDoc)) {
+      console.log('Mr. Doc [info]: Using theme [' + name + ']');
+      return {
+        name,
+        path: locations.mrDoc
+      };
+    } else if (Dir.exists(locations.project)) {
+      console.log('Mr. Doc [info]: Using theme [' + name + ']');
+      return {
+        name,
+        path: locations.project
+      };
+    } else {
+      console.log('Mr. Doc [warn]: Theme &quot;' + name + '&quot; not found, reverting to default.');
+      return {
+        name: DEFAULT_THEME,
+        path: locations.default
+      };
+    }
+  }</code></pre>
+          <section id="install">
+            <h1>install</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Theme.prototype.install()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Copies the theme specified (reverting to default)<br />over to the output directory. (Async)  </p></div>
+          <pre><code class="language-javascript">install(options = this.options) {
+    let final = when.defer();
+    // Check if the template is enabled (legacy)       
+    if (options.template.isEnabled() &amp;&amp;
+      !options.template.isKit()) {
+      final.resolve({
+        template: File.readFileSync(Path.resolve(__dirname, options.template.path)).toString()
+      });
+
+    } else {
+      let tasks = Theme.tasks(options);
+      ((notify) =&gt; {
+        return tasks.copyAssets()
+          .tap(() =&gt; {
+            notify('Copying Assets.');
+          })
+          .then(tasks.stringifyTemplate)
+          .tap(() =&gt; {
+            notify('Rendering template.');
+          })
+          .then(final.resolve);
+      })(tasks.showProgress);
+    }
+    return final.promise;
+  }</code></pre>
+          <section id="installSync">
+            <h1>installSync</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Theme.prototype.installSync()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Copies the theme specified (reverting to default)<br />over to the output directory. (Sync)</p></div>
+          <pre><code class="language-javascript">installSync(options = this.options) {
+  var template;
+  if (options.template.isEnabled() &amp;&amp;
+    !options.template.isKit()) {
+    return {
+      template: File.readFileSync(Path.resolve(__dirname, options.template.path)).toString()
+    };
+  } else {
+    let tasks = Theme.tasks(options);
+    tasks.copyAssetsSync();
+    tasks.showProgress('Copying assets.');
+    template = tasks.stringifyTemplateSync();
+    tasks.showProgress('Reading template.');
+    tasks.showProgress('Done.');
+
+    return {
+      template
+    };
+  }
+}
+}
+export default Theme;</code></pre>
+        </div>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <p>Documentation generated with <a href="https://github.com/FGRibreau/doxx">Doxx </a> created by <a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau </a></p>
+        <p>Doxx is sponsored by <a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr </a> and <a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
+        <p>Theme borrowed from Twitter Bootstrap</p>
+      </div>
+    </footer>
+    <script src="js/twitter-widget.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap-transition.min.js"></script>
+    <script src="js/bootstrap-scrollspy.min.js"></script>
+    <script src="js/bootstrap-dropdown.min.js"></script>
+    <script src="js/bootstrap-collapse.min.js"></script>
+    <script src="js/bootstrap-affix.min.js"></script>
+    <script src="js/prism.min.js"></script>
+    <script src="js/index.min.js"></script>
+  </body>
+</html>

@@ -19,3 +19,5 @@ npm-debug.log
 
 jsconfig.json
 .vscode/settings.json
+
+.backup/

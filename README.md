@@ -1,8 +1,8 @@
-# mr-doc [![Deps](https://david-dm.org/mr-doc/mr-doc.png)](https://david-dm.org/mr-doc/mr-doc) [![Version](http://badge.fury.io/js/mr-doc.png)](https://david-dm.org/mr-doc/mr-doc) [![Version](https://travis-ci.org/mr-doc/mr-doc.svg)](https://travis-ci.org/mr-doc/mr-doc)
+# Mr. Doc [![Deps](https://david-dm.org/mr-doc/mr-doc.png)](https://david-dm.org/mr-doc/mr-doc) [![Version](http://badge.fury.io/js/mr-doc.png)](https://david-dm.org/mr-doc/mr-doc) [![Version](https://travis-ci.org/mr-doc/mr-doc.svg)](https://travis-ci.org/mr-doc/mr-doc)
 
-mr-doc is a total refactoring of [dox-foundation](https://github.com/punkave/dox-foundation/)  written in ES6, tranformed to ES5 with [Babel](https://babeljs.io/), and is based on [dox](https://github.com/visionmedia/dox). It can automatically generate beautiful documentations and can further spice up your documentations using themes.
+Mr. Doc is a total refactoring of [dox-foundation](https://github.com/punkave/dox-foundation/)  written in ES6, tranformed to ES5 with [Babel](https://babeljs.io/), and is based on [dox](https://github.com/visionmedia/dox). He can automatically generate beautiful documentations and can further spice up your documentations using themes.
 
-By default, mr-doc uses [mr-doc-theme-default](https://www.github.com/mr-doc/mr-doc-theme-default) which uses 
+By default, Mr. Doc uses [mr-doc-theme-default](https://www.github.com/mr-doc/mr-doc-theme-default) which uses 
 [Twitter Bootstrap](https://twitter.github.com/bootstrap/) for the frontend framework and [Prism.js](http://prismjs.com/)
 for syntax highlighting.
 
@@ -15,7 +15,7 @@ The beautifully documentation can be found at [GitHub](http://fgribreau.github.i
 
 ```bash
 # Install the module globally
-$ npm i -g mr-doc
+$ npm install -g mr-doc
 ```
 
 ## Usage
@@ -55,7 +55,7 @@ collectFiles = (source, options, callback) ->
 
 ***Notes***
 
-* mr-doc supports the following variations of `@return` and `@jsFiddle`:
+* Mr. Doc supports the following variations of `@return` and `@jsFiddle`:
   * `@return`, `@returns`
   * `@jsfiddle`, `@jsFiddle`, `@JSFiddle`
 
@@ -66,29 +66,19 @@ $ mr-doc --help
 
   Usage: mr-doc [options]
 
-  Commands:
-    cache                         Manages the mr-doc cache. The available commands are clean and remove.
-
   Options:
 
     -h, --help                    Outputs usage information.
     -V, --version                 Outputs the version number.
-    -r, --raw                     Outputs "raw" comments, leaving the markdown intact.
-    -d, --debug                   Outputs parsed comments for debugging.
-    -t, --title <string>          The title for the page produced.
-    -s, --source <source>         The folder which should get parsed.
-    -i, --ignore <directories>    Comma seperated list of directories to ignore. Default: test, public, static, view, views, templates.
-    -T, --target <target>         The folder which will contain the results. Default: <CWD>/docs
-    -e, --extension <extension>   Target files extension. Default: html
-    -j, --template <template>     The Jade template file to use.
-    -b, --theme <theme>           The name of the theme. e.g. mr-doc-theme-cayman or cayman.
-  Examples:
-
-    # parse a whole folder
-    $ mr-doc --source lib --target docs
-
-    # parse a whole folder and use a specific template
-    $ mr-doc --template ./view/myowntpl.jade --source lib --target docs
+    -e, --extension <extension>  The output files extension. Default: html
+    -i, --ignore <directories>   The comma seperated list of directories to ignore. Default: test,public,static,view,views,template,templates
+    -j, --template <template>    The Jade template file to use.
+    -k, --kit [kit]              Marks the template as a starter-kit with a 'yes' or 'no' (optional).
+    -n, --name <string>          The name of your project.
+    -o, --output <output>        The directory for the generated docs. Default: <CWD>/docs
+    -r, --readme <file>          The markdown file to use on the main page of the documentations. Checks the current directory for a package.json or README.md by default
+    -s, --source <source>        The directory to your source.
+    -t, --theme <theme>          The name of the theme to select. e.g. mr-doc-theme-cayman or cayman.
 ```
 
 ## Themes
@@ -98,6 +88,7 @@ $ mr-doc --help
 With the release of **2.1.0**, you are able to use different themes to ***spice*** up your documentations. To use a specific theme, simply use the `--theme` option followed by the name of the theme:
 
 ```bash
+# Generate the docs
 $ mr-doc --source lib --target docs --theme cayman
 # or
 $ mr-doc --source lib --target docs --theme mr-doc-theme-cayman
@@ -141,7 +132,7 @@ If you would like to create your own themes, see
 ### 3.0.0
 
 * Switch the backend from bower to npm for themes. [#79](https://github.com/mr-doc/mr-doc/issues/79)
-* Re-introduce mr-doc with a new name. [#83](https://github.com/mr-doc/mr-doc/issues/83)
+* Introduce Mr. Doc. [#83](https://github.com/mr-doc/mr-doc/issues/83)
 
 ## Contributing
 

@@ -1,6 +1,5 @@
-/*! global process */
+/* global process, console */
 'use strict';
-
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
@@ -47,65 +46,56 @@ var _theme = require('./theme');
 
 var _theme2 = _interopRequireDefault(_theme);
 
-/**
- * The main class that creates beautiful documentations.
- * @class Doxx
- * @extend Compiler
+/**  
+ * The main class that creates beautiful documentations.  
+ * @class Doc  * @extend Compiler  
  */
 
-var Doxx = (function (_Compiler) {
-  _inherits(Doxx, _Compiler);
+var Doc = (function (_Compiler) {
+  _inherits(Doc, _Compiler);
 
-  // Initialize the compiler
-  // and pass the parser.
+  // Initialize the compiler  
+  // and pass the parser.  
 
-  function Doxx(options) {
-    _classCallCheck(this, Doxx);
+  function Doc(options) {
+    _classCallCheck(this, Doc);
 
-    _get(Object.getPrototypeOf(Doxx.prototype), 'constructor', this).call(this, new _parser2['default'](options));
-    // Set the locals stack
+    _get(Object.getPrototypeOf(Doc.prototype), 'constructor', this).call(this, new _parser2['default'](options));
+    // Set the locals stack      
     this.locals = [];
   }
 
-  /**
-   * Generates the documentations.
+  /** 
+   * Generates the documentations.      
    */
 
-  _createClass(Doxx, [{
+  _createClass(Doc, [{
     key: 'generate',
     value: function generate() {
       var _this = this;
 
-      // Compute all symboles
+      // Compute all symboles      
       var allSymbols = this.files.reduce(function (m, a) {
         m = m.concat(a.symbols || []);
         return m;
       }, []);
-
-      var pkg;
-      // Get package.json
-      try {
-        pkg = require(process.cwd() + '/package');
-      } catch (err) {}
-
+      // Set package
+      var pkg = this.options['package'];
+      // Set readme
       var readme = pkg && pkg.readme,
           readMeFile = _path2['default'].resolve(process.cwd(), this.options.readme || pkg && pkg.readmeFileName || 'README.md');
-
       if (!readme && _fs2['default'].existsSync(readMeFile)) {
         readme = _fs2['default'].readFileSync(readMeFile).toString();
       } else {
-        console.warn(new Error('Doxx [warn]: No README.md file found at ' + readMeFile));
+        console.warn('Mr. Doc [warn]: No README.md file found at ' + readMeFile);
       }
-
       if (!readme) {
-        console.warn(new Error('Doxx [warn]: Empty README.md ' + readMeFile));
+        console.warn('Mr. Doc [warn]: Empty README.md ' + readMeFile);
         readme = '';
       }
-
       var md = new _markdownIt2['default']();
       md = md.render.bind(md);
-
-      // Get readme data
+      // Get readme data      
       this.files.unshift({
         name: 'Main',
         targetName: 'index.html',
@@ -113,40 +103,32 @@ var Doxx = (function (_Compiler) {
         dox: [],
         symbols: []
       });
-
-      // Set title
-      var title = pkg && pkg.name ? pkg.name : this.options.title;
-
-      // Set description
+      // Set title      
+      var title = this.options.name ? this.options.name : pkg ? pkg.name : 'No title';
+      // Set description      
       var description = pkg && pkg.description ? pkg.description : '';
-
-      // Set URLs
+      // Set URLs      
       var url = {
         github: pkg && pkg.homepage ? pkg.homepage.indexOf('github') > -1 ? pkg.homepage : false : false,
         npm: pkg && pkg.name ? 'https://npmjs.com/package/' + pkg.name : false,
         homepage: pkg && pkg.homepage ? pkg.homepage.indexOf('github') === -1 ? pkg.homepage : false : false
       };
-
-      // Make sure the folder structure in target mirrors source
+      // Make sure the folder structure in target mirrors source      
       var folders = [];
-
       this.files.forEach(function (file) {
         var folder = file.targetName.substr(0, file.targetName.lastIndexOf(_path2['default'].sep));
-
         if (folder !== '' && folders.indexOf(folder) === -1) {
           folders.push(folder);
-          _mkdirp2['default'].sync(_this.options.target + '/' + folder);
+          _mkdirp2['default'].sync(_this.options.output + '/' + folder);
         }
       });
-
-      // Set each files relName in relation
-      // to where this file is in the directory tree
+      // Set each files relName in relation       
+      // to where this file is in the directory tree      
       this.files.forEach(function (file) {
         file.targets = _this.getTargets(file);
       });
-
       this.files.forEach(function (file) {
-        // Set locals
+        // Set locals        
         _this.locals.push(_lodash2['default'].assign({}, file, {
           project: {
             title: title, description: description, url: url
@@ -161,64 +143,59 @@ var Doxx = (function (_Compiler) {
           }
         }));
       });
-
-      // Install theme
+      // Install theme      
       new _theme2['default'](this.options).install().then(function (result) {
-        var isCached = result.isCached;
         var theme = result.theme;
 
         if (theme) {
-          console.info('Doxx [info]: Installed theme: ' + theme + (isCached ? ' from cache.' : ''));
+          console.info('Mr. Doc [info]: Installed theme: ' + theme);
         }
         _lodash2['default'].forEach(_this.files, function (file, index) {
-          // Set template
+          // Set template          
           _this.setTemplate(result.template);
-          // Compile the template
+          // Compile the template          
           var compiled = _this.compile(_this.locals[index]);
-          // Write files
-          (0, _mkdirp2['default'])(_this.options.target, function (error) {
-            if (error) return;else _fs2['default'].writeFileSync(_path2['default'].join(_this.options.target, file.targetName), compiled);
+          // Write files          
+          (0, _mkdirp2['default'])(_this.options.output + '/', function (error) {
+            if (error) return;else _fs2['default'].writeFileSync(_path2['default'].join(_this.options.output, file.targetName), compiled);
           });
         });
       }, console.error);
     }
 
-    /** 
-     * Return the targets for the specified file
-     * @private
-     * @param  {Object} file The file to generate
-     * @return {Object}      The iterator
+    /**       
+     * Return the targets for the specified file      
+     * @private      
+     * @param  {Object} file The file to generate      
+     * @return {Object}      The iterator      
      */
   }, {
     key: 'getTargets',
     value: function getTargets(file) {
       return _lodash2['default'].map(this.files, function (f) {
-
-        // Count how deep the current file is in relation to base
+        // Count how deep the current file is in relation to base      
         var count = file.name.split('/');
         count = count === null ? 0 : count.length - 1;
-
-        // relName is equal to targetName at the base dir
+        // relName is equal to targetName at the base dir      
         f.relative = {
           name: f.targetName,
           path: ''
         };
-        // For each directory in depth of current file
-        // add a ../ to the relative filename of this link
+        // For each directory in depth of current file       
+        // add a ../ to the relative filename of this link      
         while (count > 0) {
           f.relative.name = '../' + f.relative.name;
           f.relative.path += '../';
           count--;
         }
-        // Set the target for each folder
-        // to support nested directories
-        // and allow asset files to access the dir
+        // Set the target for each folder       
+        // to support nested directories      
+        // and allow asset files to access the dir      
         return {
+          name: f.targetName,
+          path: f.relative.path + f.targetName,
           file: {
             name: f.name
-          },
-          target: {
-            name: f.targetName
           },
           relative: f.relative
         };
@@ -226,12 +203,12 @@ var Doxx = (function (_Compiler) {
     }
   }]);
 
-  return Doxx;
+  return Doc;
 })(_compiler2['default']);
 
 exports['default'] = function (options) {
-  return new Doxx(options);
+  return new Doc(options);
 };
 
 module.exports = exports['default'];
-//# sourceMappingURL=source maps/doxx.js.map
+//# sourceMappingURL=source maps/mr-doc.js.map
