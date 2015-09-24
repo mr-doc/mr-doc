@@ -72,9 +72,11 @@ var Option = (function () {
         console.error(new Error('Mr. Doc [error]: You must define a source.'));
         process.exit(1);
       } else this.options.source = options.source;
+
       if (options.output) {
         this.options.output = _path2['default'].resolve(process.cwd(), options.output) || process.cwd();
       }
+
       if (options.ignore) {
         this.options.blacklist = options.ignore.trim().replace(' ', '').split(',');
       }
@@ -109,9 +111,9 @@ var Option = (function () {
         // The title for the page produced      
         'name': undefined,
         // The folder which should get parsed      
-        'source': '',
+        'source': 'lib/',
         // The folder which will contain the results.      
-        'output': '',
+        'output': 'docs/',
         // The output files extension.      
         'extension': 'html',
         // The comma seperated list of directories to ignore. (alias for ignore)      

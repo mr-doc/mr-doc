@@ -119,7 +119,7 @@ var Doc = (function (_Compiler) {
         var folder = file.targetName.substr(0, file.targetName.lastIndexOf(_path2['default'].sep));
         if (folder !== '' && folders.indexOf(folder) === -1) {
           folders.push(folder);
-          _mkdirp2['default'].sync(_this.options.target + '/' + folder);
+          _mkdirp2['default'].sync(_this.options.output + '/' + folder);
         }
       });
       // Set each files relName in relation       
@@ -156,7 +156,7 @@ var Doc = (function (_Compiler) {
           // Compile the template          
           var compiled = _this.compile(_this.locals[index]);
           // Write files          
-          (0, _mkdirp2['default'])(_this.options.output, function (error) {
+          (0, _mkdirp2['default'])(_this.options.output + '/', function (error) {
             if (error) return;else _fs2['default'].writeFileSync(_path2['default'].join(_this.options.output, file.targetName), compiled);
           });
         });
