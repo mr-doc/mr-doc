@@ -35,7 +35,7 @@ gulp.task('beautify', ['backup'],function () {
  * Clean the docs themes folder
  */
 gulp.task('clean-docs', ['gh-pages'], function (cb) {
-  rimraf('./docs/themes', cb);
+  rimraf('./docs/', cb);
 });
 
 /*
@@ -76,7 +76,7 @@ gulp.task('mocha', ['beautify','lib'],function () {
 * Install other themes here, generate docs for each.
 */
 gulp.task('doc', ['build'], shell.task([  
-  './bin/mr-doc -s lib/ -o docs/ -n Mr. Doc'  
+  './bin/mr-doc -s lib/ -o docs/ -n "Mr. Doc"'  
 ]));
 
 gulp.task('default', ['backup','beautify', 'lib', 'watch']);

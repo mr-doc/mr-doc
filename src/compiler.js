@@ -1,5 +1,4 @@
 'use strict';
-/* global __dirname */
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
