@@ -43,7 +43,7 @@ gulp.task('clean-docs', ['gh-pages'], function (cb) {
  */
 gulp.task('gh-pages', ['doc'], function() {
   return gulp.src('./docs/**/*')
-    .pipe(ghPages({push:false}));
+    .pipe(ghPages());
 });
 
 
@@ -76,7 +76,7 @@ gulp.task('mocha', ['beautify','lib'],function () {
 * Install other themes here, generate docs for each.
 */
 gulp.task('doc', ['build'], shell.task([  
-  './bin/mr-doc --source lib --output docs/themes/doxx-theme-default --name Mr. Doc'  
+  './bin/mr-doc -s lib/ -o docs/ -n Mr. Doc'  
 ]));
 
 gulp.task('default', ['backup','beautify', 'lib', 'watch']);
