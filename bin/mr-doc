@@ -36,7 +36,7 @@ program
   .option('-i, --ignore <directories>', 'The comma seperated list of directories to ignore. Default: ' + defaults.blacklist.toString())
   .option('-j, --template <template>', 'The Jade template file to use.')
   .option('-k, --kit [kit]', 'Marks the template as a starter-kit with a \'yes\' or \'no\' (optional).')
-  .option('-n, --name <string>', 'The name of your project.')
+  .option('-n, --name <name>', 'The name of your project.')
   .option('-o, --output <output>', 'The directory for the generated docs. Default: <CWD>/docs')
   .option('-r, --readme <file>', 'The markdown file to use on the main page of the documentations. Checks the current directory for a package.json or README.md by default')
   .option('-s, --source <source>', 'The directory to your source.')

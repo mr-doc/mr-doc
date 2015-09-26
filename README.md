@@ -80,7 +80,7 @@ $ mr-doc --help
     -i, --ignore <directories>   The comma seperated list of directories to ignore. Default: test,public,static,view,views,template,templates
     -j, --template <template>    The Jade template file to use.
     -k, --kit [kit]              Marks the template as a starter-kit with a 'yes' or 'no' (optional).
-    -n, --name <string>          The name of your project.
+    -n, --name <name>            The name of your project.
     -o, --output <output>        The directory for the generated docs. Default: <CWD>/docs
     -r, --readme <file>          The markdown file to use on the main page of the documentations. Checks the current directory for a package.json or README.md by default
     -s, --source <source>        The directory to your source.
