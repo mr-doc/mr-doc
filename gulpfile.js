@@ -76,7 +76,7 @@ gulp.task('mocha', ['beautify','lib'],function () {
 * Install other themes here, generate docs for each.
 */
 gulp.task('doc', ['build'], shell.task([  
-  './bin/mr-doc -s lib/ -o docs/ -n "Mr. Doc"'  
+  './bin/mr-doc -s lib/ -o docs/ -n "Mr. Doc" -t cayman'  
 ]));
 
 gulp.task('default', ['backup','beautify', 'lib', 'watch']);
