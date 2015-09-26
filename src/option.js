@@ -42,7 +42,10 @@ var Option = (function () {
       var _this = this;
 
       if (options.name) {
-        this.options.name = options.name;
+        this.options.name =
+        // Because of a known bug: https://github.com/tj/commander.js/issues/283
+        // we'll have to check if it's a function
+        _lodash2['default'].isFunction(options.name) ? options.name() : options.name;
       }
       if (options.extension) {
         this.options.extension = options.extension;
