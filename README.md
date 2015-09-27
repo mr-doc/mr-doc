@@ -12,19 +12,10 @@ By default, Mr. Doc uses [mr-doc-theme-default](https://www.github.com/mr-doc/mr
 [Twitter Bootstrap](https://twitter.github.com/bootstrap/) for the frontend framework and [Prism.js](http://prismjs.com/)
 for syntax highlighting.
 
-## Docs
-
-The beautifully documentation can be found at [GitHub](http://fgribreau.github.io/doxx/docs/).
+Visit the [official site](https://www.mr-doc.github.io/) to install Mr. Doc and other themes.
 
 
-## Installation
-
-```bash
-# Install the module globally
-$ npm install -g mr-doc
-```
-
-## Usage
+## Documentation Style
 
 JavaScript JavaDoc style
 
@@ -87,47 +78,6 @@ $ mr-doc --help
     -t, --theme <theme>          The name of the theme to select. e.g. mr-doc-theme-cayman or cayman.
 ```
 
-## Themes
-
-### Usage
-
-With the release of **2.1.0**, you are able to use different themes to ***spice*** up your documentations. To use a specific theme, simply use the `--theme` option followed by the name of the theme:
-
-```bash
-# Generate the docs
-$ mr-doc --source lib --target docs --theme cayman
-# or
-$ mr-doc --source lib --target docs --theme mr-doc-theme-cayman
-```
-
-### Installing Themes
-
-Themes are just npm modules that can be installed in your application, there is a default theme included with mr-doc.
-
-Current available themes:
-
-- [https://github.com/mr-doc/mr-doc-theme-default](mr-doc-theme-default)
-- [https://github.com/mr-doc/mr-doc-theme-cayman](mr-doc-theme-cayman)
-
-To install into your project to use as part of the build step, simply:
-
-```
-npm install mr-doc-theme-cayman --save-dev
-```
-
-***Notes***
-
-  * The prefix `mr-doc-theme-` is not necessary except when
-publishing your own themes.
-  * While it is still possible to use templates, I would advise you
-to use themes instead.
-
-### Creating Themes
-
-If you would like to create your own themes, see
-[mr-doc-theme-starter-kit](https://github.com/mr-doc/mr-doc-theme-starter-kit).
-
-
 ## Related
 
 * [grunt-doxx](https://github.com/evertton/grunt-doxx) - mr-doc grunt plugin automatically generates the documentation for your project.
@@ -148,10 +98,8 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 To update the docs on the gh-pages branch:
 
-```
+```bash
 gulp docs
-git checkout gh-pages
-git push origin gh-pages
 ```
 
 ## Changelog
