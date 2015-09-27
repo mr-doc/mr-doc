@@ -12,7 +12,7 @@ By default, Mr. Doc uses [mr-doc-theme-default](https://www.github.com/mr-doc/mr
 [Twitter Bootstrap](https://twitter.github.com/bootstrap/) for the frontend framework and [Prism.js](http://prismjs.com/)
 for syntax highlighting.
 
-Visit the [official site](https://www.mr-doc.github.io/) for instructions to install Mr. Doc and other themes.
+Visit the [official site](https://mr-doc.github.io/) for instructions to install Mr. Doc and other themes.
 
 
 ## Documentation Style
