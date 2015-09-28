@@ -87,6 +87,7 @@ var Theme = (function () {
     /**    
      * Copies the theme specified (reverting to default)    
      * over to the output directory. (Async)  
+     * @jsfiddle https://jsfiddle.net/iwatakeshi/k5xsvoez/embedded/
      * @return {Function} The promise.    
      */
     value: function install() {
@@ -116,7 +117,8 @@ var Theme = (function () {
     /**      
      * Copies the theme specified (reverting to default)    
      * over to the output directory. (Sync)
-     * @return The template    
+     * @jsfiddle https://jsfiddle.net/iwatakeshi/nLvz3g89/embedded/
+     * @return {String} The template    
      */
   }, {
     key: 'installSync',
