@@ -17,7 +17,7 @@
       "url": "https://github.com/FGRibreau/mr-doc/blob/master/LICENSE-MIT"
     }
   ],
-  "main": "lib/mr-doc.js",
+  "main": "src/mr-doc.js",
   "bin": {
     "mr-doc": "./bin/mr-doc"
   },
