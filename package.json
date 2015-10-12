@@ -51,7 +51,7 @@
     "chai": "^3.3.0",
     "gulp": "^3.9.0",
     "gulp-babel": "^5.2.1",
-    "gulp-gh-pages": "^0.5.2",
+    "gulp-gh-pages": "^0.5.3",
     "gulp-jsbeautify": "^0.1.1",
     "gulp-jshint": "^1.11.2",
     "gulp-mocha": "^2.1.3",

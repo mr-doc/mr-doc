@@ -8,7 +8,6 @@ var _               = require('lodash'),
     option          = require('../src/option'),
     pkg             = require('../package.json'),
     updateNotifier  = require('update-notifier'),
-    version         = require('../package').version,
     program         = require('commander');
 
 // Checks for available update and returns an instance
@@ -31,7 +30,7 @@ var defaults = option().getDefaults();
  * Setup program
  */
 program
-  .version(version)
+  .version(pkg.version)
   .option('-e, --extension <extension>', 'The output files extension. Default: ' + defaults.extension)
   .option('-i, --ignore <directories>', 'The comma seperated list of directories to ignore. Default: ' + defaults.blacklist.toString())
   .option('-j, --template <template>', 'The Jade template file to use.')
@@ -53,7 +52,7 @@ function showHelp() {
   console.log(comments('\t  # parse a whole folder and use a specific template'));
   console.log('\t  $ mr-doc --template ./view/myowntpl.jade --source lib --output docs\n');
   console.log(comments('\t  # parse a whole folder and use a theme.'));
-  console.log('\t  $ npm install --save mr-doc-theme-cayman')
+  console.log('\t  $ npm install --save mr-doc-theme-cayman');
   console.log('\t  $ mr-doc --source ./lib --output ./docs --theme cayman\n');
 }
 
