@@ -1,4 +1,4 @@
-<img src="http://cl.ly/image/0x3g3I3c460q/content" width="35%" alt="Mr. Doc by Ben Matsuya">
+<img src="http://cl.ly/image/0x3g3I3c460q/content" width="40%" alt="Mr. Doc by Ben Matsuya">
 
 Artwork by [Ben Matsuya](http://www.matsuyacreative.com/about/).
 
