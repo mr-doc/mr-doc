@@ -1,4 +1,6 @@
-# Mr. Doc 
+<img src="http://cl.ly/image/0x3g3I3c460q/content" width="35%" alt="Mr. Doc by Ben Matsuya">
+
+Artwork by [Ben Matsuya](http://www.matsuyacreative.com/about/).
 
 [![Deps](https://david-dm.org/mr-doc/mr-doc.svg)](https://david-dm.org/mr-doc/mr-doc) 
 [![npm](https://img.shields.io/npm/v/mr-doc.svg)](https://www.npmjs.com/package/mr-doc)
@@ -31,22 +33,6 @@ JavaScript JavaDoc style
 function collectFiles(source, options, callback) {
   ...
 }
-
-```
-
-CoffeeScript JavaDoc style
-
-```coffeescript
-###*
- * Create an array of all the right files in the source dir
- * @param      {String}   source path
- * @param      {Object}   options
- * @param      {Function} callback
- * @jsFiddle   A jsFiddle embed URL
- * @return     {Array} an array of string path
-###
-collectFiles = (source, options, callback) ->
-  ...
 
 ```
 
@@ -85,10 +71,9 @@ $ mr-doc --help
 
 ## Roadmap
 
-### 3.0.0
+### Next
 
-* Switch the backend from bower to npm for themes. [#79](https://github.com/mr-doc/mr-doc/issues/79)
-* Introduce Mr. Doc. [#83](https://github.com/mr-doc/mr-doc/issues/83)
+See issue [#94](https://github.com/mr-doc/mr-doc/issues/94).
 
 ## Contributing
 
