@@ -7,7 +7,7 @@ lib-cov
 *.pid
 *.gz
 /node_modules/
-.publish
+.publish/
 .DS_Store
 pids
 logs
@@ -21,3 +21,4 @@ jsconfig.json
 .vscode/settings.json
 
 .backup/
+.backup

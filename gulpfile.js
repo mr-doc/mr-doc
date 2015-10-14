@@ -34,7 +34,7 @@ gulp.task('beautify', ['backup'],function () {
 /*
  * Clean the docs themes folder
  */
-gulp.task('clean-docs', ['gh-pages'], function (cb) {
+gulp.task('clean:docs', ['gh-pages'], function (cb) {
   rimraf('./docs/', cb);
 });
 
@@ -83,6 +83,6 @@ gulp.task('default', ['backup','beautify', 'lib', 'watch']);
 
 gulp.task('build', ['backup','beautify', 'lib', 'mocha']);
 
-gulp.task('docs', ['build', 'doc', 'gh-pages', 'clean-docs']);
+gulp.task('docs', ['build', 'doc', 'gh-pages', 'clean:docs']);
 
 gulp.task('test', ['mocha']);
