@@ -100,4 +100,4 @@ The changes can be viewed [here](/CHANGELOG.md).
 
 MIT License
 
-Copyright (c) 2013 Francois-Guillaume Ribreau
+Copyright (c) 2015 Francois-Guillaume Ribreau
