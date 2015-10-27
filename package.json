@@ -6,15 +6,15 @@
   "author": "Francois-Guillaume Ribreau <npm@fgribreau.com> (http://fgribreau.com)",
   "repository": {
     "type": "git",
-    "url": "git://github.com/FGRibreau/mr-doc.git"
+    "url": "git://github.com/mr-doc/mr-doc.git"
   },
   "bugs": {
-    "url": "https://github.com/FGRibreau/mr-doc/issues"
+    "url": "https://github.com/mr-doc/mr-doc/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/FGRibreau/mr-doc/blob/master/LICENSE-MIT"
+      "url": "https://github.com/mr-doc/mr-doc/blob/master/LICENSE-MIT"
     }
   ],
   "main": "src/mr-doc.js",
