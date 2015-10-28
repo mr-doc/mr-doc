@@ -10,16 +10,10 @@ var _               = require('lodash'),
     updateNotifier  = require('update-notifier'),
     program         = require('commander');
 
-// Checks for available update and returns an instance
-var notifier = updateNotifier({
-  pkg: pkg
-});
-
-// Notify using the built-in convenience method
-notifier.notify();
-
-// Show the update if it exists
-if (notifier.update) console.log(notifier.update);
+// Check if a new version of mr-doc is available
+// and print an update notification
+updateNotifier({pkg: pkg})
+    .notify({defer: false});
 
 /**
  * Options & Defaults
@@ -56,10 +50,10 @@ function showHelp() {
   console.log('\t  $ mr-doc --source ./lib --output ./docs --theme cayman\n');
 }
 
-// examples
+// Examples
 program.on('--help', showHelp);
 
-// parse argv
+// Parse argv
 program.parse(process.argv);
 
 var options = option(program).getOptions();
