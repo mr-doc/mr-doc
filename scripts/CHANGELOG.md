@@ -2,12 +2,14 @@
 
 ## [Unreleased](https://github.com/mr-doc/mr-doc/tree/HEAD)
 
-[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v3.0.0-alpha.1...HEAD)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v3.0.0-alpha.2...HEAD)
 
-**Implemented enhancements:**
+**Closed issues:**
 
-- Theme output in docs folder [\#93](https://github.com/mr-doc/mr-doc/issues/93)
-- Setup themes through npm instead of bower [\#79](https://github.com/mr-doc/mr-doc/issues/79)
+- nvm breaks mr-doc cli [\#96](https://github.com/mr-doc/mr-doc/issues/96)
+
+## [v3.0.0-alpha.2](https://github.com/mr-doc/mr-doc/tree/v3.0.0-alpha.2) (2015-10-19)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v3.0.0-alpha.1...v3.0.0-alpha.2)
 
 ## [v3.0.0-alpha.1](https://github.com/mr-doc/mr-doc/tree/v3.0.0-alpha.1) (2015-10-18)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v2.1.1...v3.0.0-alpha.1)
@@ -15,11 +17,16 @@
 **Implemented enhancements:**
 
 - New name for Doxx [\#83](https://github.com/mr-doc/mr-doc/issues/83)
+- Additional Enhancements for Doxx [\#73](https://github.com/mr-doc/mr-doc/issues/73)
+- Adding additional markdown docs [\#55](https://github.com/mr-doc/mr-doc/issues/55)
 
 **Closed issues:**
 
-- nvm breaks mr-doc cli [\#96](https://github.com/mr-doc/mr-doc/issues/96)
 - Error each time running mr-doc [\#92](https://github.com/mr-doc/mr-doc/issues/92)
+
+**Merged pull requests:**
+
+- Move docs out to docs task that pushes to gh-pages branch - wip [\#87](https://github.com/mr-doc/mr-doc/pull/87) ([cliftonc](https://github.com/cliftonc))
 
 ## [v2.1.1](https://github.com/mr-doc/mr-doc/tree/v2.1.1) (2015-09-16)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v2.1.0...v2.1.1)
@@ -40,8 +47,7 @@
 
 **Closed issues:**
 
-- Using @description tag doubles the description [\#70](https://github.com/mr-doc/mr-doc/issues/70)
-- TypeLexerSyntaxError [\#69](https://github.com/mr-doc/mr-doc/issues/69)
+- Get exception when running doxx --source lib --target docs [\#64](https://github.com/mr-doc/mr-doc/issues/64)
 
 ## [v1.5.0](https://github.com/mr-doc/mr-doc/tree/v1.5.0) (2015-07-21)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.4.0...v1.5.0)
@@ -58,12 +64,12 @@
 ## [v1.2.7](https://github.com/mr-doc/mr-doc/tree/v1.2.7) (2015-05-26)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.6...v1.2.7)
 
-## [v1.2.6](https://github.com/mr-doc/mr-doc/tree/v1.2.6) (2015-03-18)
-[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.5...v1.2.6)
-
 **Closed issues:**
 
-- TypeError 'undefined' when @return is empty [\#54](https://github.com/mr-doc/mr-doc/issues/54)
+- Official template - return issue [\#65](https://github.com/mr-doc/mr-doc/issues/65)
+
+## [v1.2.6](https://github.com/mr-doc/mr-doc/tree/v1.2.6) (2015-03-18)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.5...v1.2.6)
 
 ## [v1.2.5](https://github.com/mr-doc/mr-doc/tree/v1.2.5) (2015-01-31)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.4...v1.2.5)
@@ -89,6 +95,10 @@
 ## [v1.1.1](https://github.com/mr-doc/mr-doc/tree/v1.1.1) (2014-11-05)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.1.0...v1.1.1)
 
+**Implemented enhancements:**
+
+- Expose `doxx` as a Node module [\#37](https://github.com/mr-doc/mr-doc/issues/37)
+
 ## [v1.1.0](https://github.com/mr-doc/mr-doc/tree/v1.1.0) (2014-11-05)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.0.0...v1.1.0)
 
@@ -96,6 +106,9 @@
 
 - Ability to rename module name [\#46](https://github.com/mr-doc/mr-doc/issues/46)
 - Ability to ignore code blocks [\#45](https://github.com/mr-doc/mr-doc/issues/45)
+- Menu paths are incorrect on Windows [\#33](https://github.com/mr-doc/mr-doc/issues/33)
+- Doxx don't work with symbolic links [\#32](https://github.com/mr-doc/mr-doc/issues/32)
+- Functions within objects are not handled properly [\#26](https://github.com/mr-doc/mr-doc/issues/26)
 
 ## [v1.0.0](https://github.com/mr-doc/mr-doc/tree/v1.0.0) (2014-10-16)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.6.0...v1.0.0)
