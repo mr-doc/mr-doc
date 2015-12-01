@@ -58,7 +58,8 @@
     "gulp-shell": "^0.5.0",
     "gulp-sourcemaps": "^1.6.0",
     "mocha": "^2.3.3",
-    "mr-doc-theme-cayman": "git+https://github.com/mr-doc/mr-doc-theme-cayman.git"
+    "mr-doc-theme-cayman": "git+https://github.com/mr-doc/mr-doc-theme-cayman.git",
+    "source-map-support": "^0.3.3"
   },
   "keywords": [
     "dox",
