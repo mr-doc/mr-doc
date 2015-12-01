@@ -13,9 +13,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var _fs = require('fs');
+var _fsExtra = require('fs-extra');
 
-var _fs2 = _interopRequireDefault(_fs);
+var _fsExtra2 = _interopRequireDefault(_fsExtra);
 
 var _path = require('path');
 
@@ -44,6 +44,10 @@ var _mkdirp2 = _interopRequireDefault(_mkdirp);
 var _theme = require('./theme');
 
 var _theme2 = _interopRequireDefault(_theme);
+
+var _dir = require('./dir');
+
+var _dir2 = _interopRequireDefault(_dir);
 
 /**  
  * The main class that creates beautiful documentations.  
@@ -83,8 +87,8 @@ var Doc = (function (_Compiler) {
       // Set readme
       var readme = pkg && pkg.readme,
           readMeFile = _path2['default'].resolve(process.cwd(), this.options.readme || pkg && pkg.readmeFileName || 'README.md');
-      if (!readme && _fs2['default'].existsSync(readMeFile)) {
-        readme = _fs2['default'].readFileSync(readMeFile).toString();
+      if (!readme && _fsExtra2['default'].existsSync(readMeFile)) {
+        readme = _fsExtra2['default'].readFileSync(readMeFile).toString();
       } else {
         console.warn('Mr. Doc [warn]: No README.md file found at ' + readMeFile);
       }
@@ -118,9 +122,10 @@ var Doc = (function (_Compiler) {
         var folder = file.targetName.substr(0, file.targetName.lastIndexOf(_path2['default'].sep));
         if (folder !== '' && folders.indexOf(folder) === -1) {
           folders.push(folder);
-          _mkdirp2['default'].sync(_this.options.output + '/' + folder);
+          _mkdirp2['default'].sync(_path2['default'].normalize(_this.options.output + '/' + folder));
         }
       });
+
       // Set each files relName in relation       
       // to where this file is in the directory tree      
       this.files.forEach(function (file) {
@@ -149,14 +154,20 @@ var Doc = (function (_Compiler) {
         if (theme) {
           console.info('Mr. Doc [info]: Installed theme: ' + theme);
         }
+        // Make sure the sub dirs that are not blacklisted exist.
+        _dir2['default'].getDirs(_this.options.source).filter(function (folder) {
+          return _this.options.blacklist.indexOf(folder) < 0;
+        }).forEach(function (folder) {
+          return _fsExtra2['default'].ensureDirSync(_path2['default'].join(_this.options.output, folder));
+        });
         _lodash2['default'].forEach(_this.files, function (file, index) {
           // Set template          
           _this.setTemplate(result.template);
           // Compile the template          
           var compiled = _this.compile(_this.locals[index]);
           // Write files          
-          (0, _mkdirp2['default'])(_this.options.output + '/', function (error) {
-            if (error) return;else _fs2['default'].writeFileSync(_path2['default'].join(_this.options.output, file.targetName), compiled);
+          (0, _mkdirp2['default'])(_path2['default'].normalize(_this.options.output + '/'), function (error) {
+            if (error) return;else _fsExtra2['default'].writeFileSync(_path2['default'].join(_this.options.output, file.targetName), compiled);
           });
         });
       }, console.error);
@@ -173,7 +184,8 @@ var Doc = (function (_Compiler) {
     value: function getTargets(file) {
       return _lodash2['default'].map(this.files, function (f) {
         // Count how deep the current file is in relation to base      
-        var count = file.name.split('/');
+        var count = file.name.split(_path2['default'].sep);
+        console.log(count > 1);
         count = count === null ? 0 : count.length - 1;
         // relName is equal to targetName at the base dir      
         f.relative = {

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width" charset="utf-8">
+    <title>&quot;Mr. Doc&quot;</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/cayman.min.css">
+    <link rel="stylesheet" href="css/prism.min.css">
+    <link rel="stylesheet" href="css/index.min.css">
+    <link rel="stylesheet" href="css/docs.min.css">
+    <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+  </head>
+  <body data-spy="scroll" data-target=".scrollspy">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container"><a class="brand">Mr. Doc</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav pull-right sponsored"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <header id="overview" class="jumbotron subhead">
+      <div class="container">
+        <h1>&quot;Mr. Doc&quot;</h1>
+        <p class="lead"></p>
+      </div>
+    </header>
+    <div class="container">
+      <div class="row">
+        <div class="span3 bs-docs-sidebar">
+          <ul class="nav nav-list bs-docs-sidenav affix-top">
+            <li><a href="index.html">Main</a></li>
+            <li><a href="compiler.js.html">compiler.js</a></li>
+            <li><a href="dir.js.html">dir.js</a></li>
+            <li class="active"><a href="mr-doc.js.html">mr-doc.js</a></li>
+            <li><a href="option.js.html">option.js</a></li>
+            <li><a href="parser.js.html">parser.js</a></li>
+            <li><a href="subdir/blah.js.html">subdir/blah.js</a></li>
+            <li><a href="symbol.js.html">symbol.js</a></li>
+            <li><a href="theme.js.html">theme.js</a></li>
+          </ul>
+          <div class="scrollspy">
+            <ul class="nav nav-list bs-docs-sidenav affix-top">
+              <li><a href="#Doc"><i class="alert alert-success"></i><span>Doc</span></a>
+              </li>
+              <li><a href="#generate"><i class="alert alert-info"></i><span>generate</span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="span9">
+          <section id="Doc">
+            <h1>Doc</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-success radius ctx-type">class</div><span>&nbsp;</span><span>new Doc()</span><span>&nbsp;</span><span>&nbsp;</span><span class="label label-default">extends</span><span>&nbsp;</span><span>Compiler</span>
+            </p>
+          </section>
+          <div class="description"><p>The main class that creates beautiful documentations.  </p></div>
+          <pre><code class="language-javascript">class Doc extends Compiler {
+  // Initialize the compiler   
+  // and pass the parser.   
+  constructor(options) {
+      super(new Parser(options));
+      // Set the locals stack       
+      this.locals = [];
+    }</code></pre>
+          <section id="generate">
+            <h1>generate</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Doc.prototype.generate()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <div class="description"><p>Generates the documentations.</p></div>
+          <pre><code class="language-javascript">generate() {
+    // Compute all symboles       
+    var allSymbols = this.files.reduce(function(m, a) {
+      m = m.concat(a.symbols || []);
+      return m;
+    }, []);
+    // Set package
+    var pkg = this.options.package;
+    // Set readme
+    var readme = pkg &amp;&amp; pkg.readme,
+      readMeFile = Path.resolve(process.cwd(), this.options.readme ||
+        (pkg &amp;&amp; pkg.readmeFileName) || 'README.md');
+    if (!readme &amp;&amp; File.existsSync(readMeFile)) {
+      readme = File.readFileSync(readMeFile).toString();
+    } else {
+      console.warn('Mr. Doc [warn]: No README.md file found at ' + readMeFile);
+    }
+    if (!readme) {
+      console.warn('Mr. Doc [warn]: Empty README.md ' + readMeFile);
+      readme = '';
+    }
+    var md = new Markdown();
+    md = md.render.bind(md);
+    // Get readme data       
+    this.files.unshift({
+      name: 'Main',
+      targetName: 'index.html',
+      readme: md(readme),
+      dox: [],
+      symbols: []
+    });
+    // Set title       
+    var title = this.options.name ? this.options.name : pkg ? pkg.name : 'No title';
+    // Set description       
+    var description = pkg &amp;&amp; pkg.description ? pkg.description : '';
+    // Set URLs       
+    var url = {
+      github: pkg &amp;&amp; pkg.homepage ?
+        pkg.homepage.indexOf('github') &gt; -1 ?
+        pkg.homepage : false : false,
+      npm: pkg &amp;&amp; pkg.name ? 'https://npmjs.com/package/' + pkg.name : false,
+      homepage: pkg &amp;&amp; pkg.homepage ? pkg.homepage.indexOf('github') === -1 ? pkg.homepage : false : false
+    };
+    // Make sure the folder structure in target mirrors source       
+    let folders = [];
+    this.files.forEach(file =&gt; {
+      var folder = file.targetName
+        .substr(0, file.targetName.lastIndexOf(Path.sep));
+      if ((folder !== '') &amp;&amp; (folders.indexOf(folder) === -1)) {
+        folders.push(folder);
+        mkdirp.sync(Path.normalize(this.options.output + '/' + folder));
+      }
+    });
+
+    // Set each files relName in relation        
+    // to where this file is in the directory tree       
+    this.files.forEach(file =&gt; {
+      file.targets = this.getTargets(file);
+    });
+    this.files.forEach((file) =&gt; {
+      // Set locals         
+      this.locals.push(_.assign({}, file, {
+        project: {
+          title, description, url
+        },
+        allSymbols: allSymbols,
+        files: this.files,
+        current: {
+          name: file.name
+        },
+        file: {
+          targets: file.targets
+        }
+      }));
+    });
+    // Install theme       
+    (new Theme(this.options)).install().then((result) =&gt; {
+      var {
+        theme
+      } = result;
+      if (theme) {
+        console.info('Mr. Doc [info]: Installed theme: ' + theme);
+      }
+      // Make sure the sub dirs that are not blacklisted exist.
+      Dir
+        .getDirs(this.options.source)
+        .filter(folder =&gt; this.options.blacklist.indexOf(folder) &lt; 0)
+        .forEach(folder =&gt; File.ensureDirSync(Path.join(this.options.output, folder)));
+      _.forEach(this.files, (file, index) =&gt; {
+        // Set template           
+        this.setTemplate(result.template);
+        // Compile the template           
+        let compiled = this.compile(this.locals[index]);
+        // Write files           
+        mkdirp(Path.normalize(this.options.output + '/'), error =&gt; {
+          if (error) return;
+          else File.writeFileSync(Path.join(this.options.output, file.targetName), compiled);
+
+        });
+      });
+    }, console.error);
+  }</code></pre>
+        </div>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <p>Documentation generated with <a href="https://github.com/mr-doc/mr-doc">Mr. Doc </a> created by <a href="https://twitter.com/FGRibreau" data-show-count="false" class="twitter-follow-button">Francois-Guillaume Ribreau </a></p>
+        <p>Mr. Doc is sponsored by <a href="http://bringr.net/?btt" title="Outil d'analyse des réseaux sociaux" class="bringr">Bringr </a> and <a href="https://redsmin.com/?btt" title="Full Redis GUI" class="redsmin">Redsmin</a></p>
+        <p>Theme borrowed from Twitter Bootstrap</p>
+      </div>
+    </footer>
+    <script src="js/twitter-widget.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap-transition.min.js"></script>
+    <script src="js/bootstrap-scrollspy.min.js"></script>
+    <script src="js/bootstrap-dropdown.min.js"></script>
+    <script src="js/bootstrap-collapse.min.js"></script>
+    <script src="js/bootstrap-affix.min.js"></script>
+    <script src="js/prism.min.js"></script>
+    <script src="js/index.min.js"></script>
+  </body>
+</html>

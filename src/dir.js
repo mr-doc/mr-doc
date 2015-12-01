@@ -56,7 +56,7 @@ var Dir = (function () {
       ignore = options.ignore || [],
           files = [];
       dirtyFiles.forEach(function (file) {
-        file = _path2['default'].relative(source, file);
+        file = _path2['default'].normalize(_path2['default'].relative(source, file));
         var doNotIgnore = _lodash2['default'].all(ignore, function (d) {
           // return true if no part of the path is in the ignore/black list
           return file.indexOf(d) === -1;
@@ -81,7 +81,7 @@ var Dir = (function () {
     }
 
     /**
-     * Checks if the directory exists      
+     * Determines if the directory exists      
      * @param  {String} path The path to the directory     
      * @return {Boolean}      The truth value      
      */
@@ -89,11 +89,24 @@ var Dir = (function () {
     key: 'exists',
     value: function exists(path) {
       try {
-        _fs2['default'].statSync(path);
+        _fs2['default'].statSync(_path2['default'].normalize(path));
         return true;
       } catch (err) {
         return !(err && err.code === 'ENOENT');
       }
+    }
+
+    /**
+     * Returns a list of directories from a given path
+     * @param {String} path The path to parse.
+     * @return {Array} The list of directories.
+     */
+  }, {
+    key: 'getDirs',
+    value: function getDirs(path) {
+      return _fs2['default'].readdirSync(path).filter(function (file) {
+        return _fs2['default'].statSync(_path2['default'].join(path, file)).isDirectory();
+      });
     }
   }]);
 

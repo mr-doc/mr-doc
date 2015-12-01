@@ -22,3 +22,6 @@ jsconfig.json
 
 .backup/
 .backup
+jsconfig.json
+.vscode/
+Code
