@@ -81,7 +81,9 @@
       console.warn('Mr. Doc [warn]: Empty README.md ' + readMeFile);
       readme = '';
     }
-    var md = new Markdown();
+    var md = new Markdown({
+      html: true
+    });
     md = md.render.bind(md);
     // Get readme data       
     this.files.unshift({
@@ -103,16 +105,7 @@
       npm: pkg &amp;&amp; pkg.name ? 'https://npmjs.com/package/' + pkg.name : false,
       homepage: pkg &amp;&amp; pkg.homepage ? pkg.homepage.indexOf('github') === -1 ? pkg.homepage : false : false
     };
-    // Make sure the folder structure in target mirrors source       
-    var folders = [];
-    this.files.forEach(file =&gt; {
-      var folder = file.targetName
-        .substr(0, file.targetName.lastIndexOf(Path.sep));
-      if ((folder !== '') &amp;&amp; (folders.indexOf(folder) === -1)) {
-        folders.push(folder);
-        mkdirp.sync(this.options.output + '/' + folder);
-      }
-    });
+
     // Set each files relName in relation        
     // to where this file is in the directory tree       
     this.files.forEach(file =&gt; {
@@ -142,15 +135,21 @@
       if (theme) {
         console.info('Mr. Doc [info]: Installed theme: ' + theme);
       }
+      // Make sure the sub dirs that are not blacklisted exist.
+      Dir
+        .getDirs(this.options.source)
+        .filter(folder =&gt; this.options.blacklist.indexOf(folder) &lt; 0)
+        .forEach(folder =&gt; File.ensureDirSync(Path.join(this.options.output, folder)));
       _.forEach(this.files, (file, index) =&gt; {
         // Set template           
         this.setTemplate(result.template);
         // Compile the template           
         let compiled = this.compile(this.locals[index]);
         // Write files           
-        mkdirp(this.options.output + '/', error =&gt; {
+        mkdirp(Path.normalize(this.options.output + '/'), error =&gt; {
           if (error) return;
           else File.writeFileSync(Path.join(this.options.output, file.targetName), compiled);
+
         });
       });
     }, console.error);

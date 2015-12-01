@@ -120,12 +120,12 @@
         return doc;
       });
     } else {
-      source = path.resolve(process.cwd(), source);
+      source = Path.resolve(process.cwd(), source);
       let files = Dir.collectFiles(source, {
         ignore
       });
       return files.map(file =&gt; {
-        var dox = Parser.parseComments(path.join(source, file));
+        var dox = Parser.parseComments(Path.join(source, file));
         var targetName = file + '.' + extension;
         return {
           name: file.replace(/\\/g, '/'),

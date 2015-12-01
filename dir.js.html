@@ -31,6 +31,8 @@
                   </li>
                   <li><a href="#exists"><i class="alert alert-info"></i><span>exists</span></a>
                   </li>
+                  <li><a href="#getDirs"><i class="alert alert-info"></i><span>getDirs</span></a>
+                  </li>
                 </ul></a></li>
             <li><a href="mr-doc.js.html">mr-doc.js</a></li>
             <li><a href="option.js.html">option.js</a></li>
@@ -88,7 +90,7 @@
       ignore = options.ignore || [],
       files = [];
     dirtyFiles.forEach(function(file) {
-      file = Path.relative(source, file);
+      file = Path.normalize(Path.relative(source, file));
       var doNotIgnore = _.all(ignore, function(d) {
         // return true if no part of the path is in the ignore/black list
         return (file.indexOf(d) === -1);
@@ -141,14 +143,47 @@
               </tr>
             </tbody>
           </table>
-          <div class="description"><p>Checks if the directory exists      </p></div>
+          <div class="description"><p>Determines if the directory exists      </p></div>
           <pre><code class="language-javascript">static exists(path) {
-  try {
-    fs.statSync(path);
-    return true;
-  } catch (err) {
-    return !(err &amp;&amp; err.code === 'ENOENT');
-  }
+    try {
+      fs.statSync(Path.normalize(path));
+      return true;
+    } catch (err) {
+      return !(err &amp;&amp; err.code === 'ENOENT');
+    }
+  }</code></pre>
+          <section id="getDirs">
+            <h1>getDirs</h1>
+            <h5 class="subheader"></h5>
+            <p>
+              <div class="label label-info radius ctx-type">method</div><span>&nbsp;</span><span>Dir.getDirs()</span><span>&nbsp;</span>
+            </p>
+          </section>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th style="width:20%">Option name</th>
+                <th style="width:20%">Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>path</td>
+                <td>String</td>
+                <td><p>The path to parse.</p></td>
+              </tr>
+              <tr>
+                <td>return</td>
+                <td>Array</td>
+                <td><p>The list of directories.</p></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="description"><p>Returns a list of directories from a given path</p></div>
+          <pre><code class="language-javascript">static getDirs(path) {
+  return fs.readdirSync(path)
+    .filter(file =&gt; fs.statSync(Path.join(path, file)).isDirectory());
 }
 }
 export default Dir;</code></pre>
