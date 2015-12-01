@@ -1,12 +1,15 @@
 'use strict';
+/*global process*/
+
 /* Dev-Dependencies */
 var gulp        = require('gulp'),
     sourcemaps  = require('gulp-sourcemaps'),
+    Path        = require('path'),
     babel       = require('gulp-babel'),
     mocha       = require('gulp-mocha'),
     jshint      = require('gulp-jshint'),
     beautify    = require('gulp-jsbeautify'),
-    shell       = require('gulp-shell'),
+    exec        = require('child_process').exec,
     ghPages     = require('gulp-gh-pages'),
     rimraf      = require('rimraf'),
     config      = require('./config');
@@ -75,9 +78,18 @@ gulp.task('mocha', ['beautify','lib'],function () {
  * Runs the doxx command and builds the docs 
 * Install other themes here, generate docs for each.
 */
-gulp.task('doc', ['build'], shell.task([  
-  './bin/mr-doc -s lib/ -o docs/ -n "Mr. Doc" -t cayman'  
-]));
+var doc = {
+  bin: Path.normalize('./bin/mr-doc'),
+  source: ' -s ' + Path.normalize('lib/'),
+  output: ' -o ' + Path.normalize('docs/'),
+  name:   ' -n ' + '"Mr. Doc"',
+  theme:  ' -t ' + '"cayman"'
+};
+var isWin32 = process.platform === 'win32';
+gulp.task('doc', ['build'], function(cb){
+  var command = doc.bin + doc.source + doc.output + doc.name + doc.theme;
+  exec(isWin32 ? 'node ' + command : command, cb);
+});
 
 gulp.task('default', ['backup','beautify', 'lib', 'watch']);
 
