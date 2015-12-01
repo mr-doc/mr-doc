@@ -96,7 +96,9 @@ var Doc = (function (_Compiler) {
         console.warn('Mr. Doc [warn]: Empty README.md ' + readMeFile);
         readme = '';
       }
-      var md = new _markdownIt2['default']();
+      var md = new _markdownIt2['default']({
+        html: true
+      });
       md = md.render.bind(md);
       // Get readme data      
       this.files.unshift({
@@ -116,15 +118,6 @@ var Doc = (function (_Compiler) {
         npm: pkg && pkg.name ? 'https://npmjs.com/package/' + pkg.name : false,
         homepage: pkg && pkg.homepage ? pkg.homepage.indexOf('github') === -1 ? pkg.homepage : false : false
       };
-      // Make sure the folder structure in target mirrors source      
-      var folders = [];
-      this.files.forEach(function (file) {
-        var folder = file.targetName.substr(0, file.targetName.lastIndexOf(_path2['default'].sep));
-        if (folder !== '' && folders.indexOf(folder) === -1) {
-          folders.push(folder);
-          _mkdirp2['default'].sync(_path2['default'].normalize(_this.options.output + '/' + folder));
-        }
-      });
 
       // Set each files relName in relation       
       // to where this file is in the directory tree      
@@ -183,9 +176,8 @@ var Doc = (function (_Compiler) {
     key: 'getTargets',
     value: function getTargets(file) {
       return _lodash2['default'].map(this.files, function (f) {
-        // Count how deep the current file is in relation to base      
-        var count = file.name.split(_path2['default'].sep);
-        console.log(count > 1);
+        // Count how deep the current file is in relation to base
+        var count = file.name.split('/');
         count = count === null ? 0 : count.length - 1;
         // relName is equal to targetName at the base dir      
         f.relative = {
