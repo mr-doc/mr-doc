@@ -17,10 +17,6 @@ var _walkdir = require('walkdir');
 
 var _walkdir2 = _interopRequireDefault(_walkdir);
 
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
 var _osenv = require('osenv');
 
 var _osenv2 = _interopRequireDefault(_osenv);
@@ -56,15 +52,21 @@ var Dir = (function () {
       ignore = options.ignore || [],
           files = [];
       dirtyFiles.forEach(function (file) {
-        file = _path2['default'].normalize(_path2['default'].relative(source, file));
-        var doNotIgnore = _lodash2['default'].all(ignore, function (d) {
-          // return true if no part of the path is in the ignore/black list
-          return file.indexOf(d) === -1;
-        });
-        if (file.substr(-2) === 'js' && doNotIgnore) {
+        // Parse the file's path
+        file = _path2['default'].parse(file);
+        // Get the file name or subdirectories + file name
+        file = file.dir.replace(source, '') + _path2['default'].sep + file.base;
+        // Remove the first path seperator
+        file = file.replace(file[0], '');
+        if (ignore.some(function (folder) {
+          return file.indexOf(folder) < 0;
+        }) && _path2['default'].parse(file).ext === '.js') {
+          console.log(file);
           files.push(file);
         }
       });
+
+      console.log(files);
       return files;
     }
 
