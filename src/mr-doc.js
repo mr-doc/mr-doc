@@ -45,10 +45,7 @@ var _theme = require('./theme');
 
 var _theme2 = _interopRequireDefault(_theme);
 
-var _dir = require('./dir');
-
-var _dir2 = _interopRequireDefault(_dir);
-
+// import Dir from './dir';
 /**  
  * The main class that creates beautiful documentations.  
  * @class Doc  * @extend Compiler  
@@ -148,19 +145,34 @@ var Doc = (function (_Compiler) {
           console.info('Mr. Doc [info]: Installed theme: ' + theme);
         }
         // Make sure the sub dirs that are not blacklisted exist.
-        _dir2['default'].getDirs(_this.options.source).filter(function (folder) {
-          return _this.options.blacklist.indexOf(folder) < 0;
-        }).forEach(function (folder) {
-          return _fsExtra2['default'].ensureDirSync(_path2['default'].join(_this.options.output, folder));
-        });
-        _lodash2['default'].forEach(_this.files, function (file, index) {
-          // Set template          
-          _this.setTemplate(result.template);
-          // Compile the template          
-          var compiled = _this.compile(_this.locals[index]);
-          // Write files          
-          (0, _mkdirp2['default'])(_path2['default'].normalize(_this.options.output + '/'), function (error) {
-            if (error) return;else _fsExtra2['default'].writeFileSync(_path2['default'].join(_this.options.output, file.targetName), compiled);
+        var _options = _this.options;
+        var source = _options.source;
+        var output = _options.output;
+        var blacklist = _options.blacklist;
+
+        _fsExtra2['default'].walk(_this.options.source).on('readable', function () {
+          var item = undefined;
+          while (item = this.read()) {
+            if (item.stats.isDirectory()) {
+              (function () {
+                var path = item.path.replace(_path2['default'].parse(source).base, _path2['default'].parse(output).base);
+                console.log(_path2['default'].parse(path));
+                if (blacklist.some(function (folder) {
+                  return path.indexOf(folder) < 0;
+                })) _fsExtra2['default'].ensureDirSync(path);
+              })();
+            }
+          }
+        }).on('end', function () {
+          _lodash2['default'].forEach(_this.files, function (file, index) {
+            // Set template          
+            _this.setTemplate(result.template);
+            // Compile the template          
+            var compiled = _this.compile(_this.locals[index]);
+            // Write files          
+            (0, _mkdirp2['default'])(_path2['default'].normalize(_this.options.output + '/'), function (error) {
+              if (error) return;else _fsExtra2['default'].writeFileSync(_path2['default'].join(_this.options.output, file.targetName), compiled);
+            });
           });
         });
       }, console.error);

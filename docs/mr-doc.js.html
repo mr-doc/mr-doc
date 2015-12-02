@@ -136,22 +136,37 @@
         console.info('Mr. Doc [info]: Installed theme: ' + theme);
       }
       // Make sure the sub dirs that are not blacklisted exist.
-      Dir
-        .getDirs(this.options.source)
-        .filter(folder =&gt; this.options.blacklist.indexOf(folder) &lt; 0)
-        .forEach(folder =&gt; File.ensureDirSync(Path.join(this.options.output, folder)));
-      _.forEach(this.files, (file, index) =&gt; {
-        // Set template           
-        this.setTemplate(result.template);
-        // Compile the template           
-        let compiled = this.compile(this.locals[index]);
-        // Write files           
-        mkdirp(Path.normalize(this.options.output + '/'), error =&gt; {
-          if (error) return;
-          else File.writeFileSync(Path.join(this.options.output, file.targetName), compiled);
-
+      const {
+        source, output, blacklist
+      } = this.options;
+      File.walk(this.options.source)
+        .on('readable', function() {
+          let item;
+          while ((item = this.read())) {
+            if (item.stats.isDirectory()) {
+              const path = item
+                .path
+                .replace(Path.parse(source).base, Path.parse(output).base);
+              console.log(Path.parse(path));
+              if (blacklist.some(folder =&gt; path.indexOf(folder) &lt; 0))
+                File.ensureDirSync(path);
+            }
+          }
+        }).on('end', () =&gt; {
+          _.forEach(this.files, (file, index) =&gt; {
+            // Set template           
+            this.setTemplate(result.template);
+            // Compile the template           
+            let compiled = this.compile(this.locals[index]);
+            // Write files           
+            mkdirp(Path.normalize(this.options.output + '/'), error =&gt; {
+              if (error) return;
+              else File.writeFileSync(Path.join(this.options.output, file.targetName), compiled);
+            });
+          });
         });
-      });
+
+
     }, console.error);
   }</code></pre>
           <div class="footer site-footer">
