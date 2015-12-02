@@ -1,7 +1,7 @@
 {
   "name": "mr-doc",
   "description": "A personal source documenter at your service",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "homepage": "https://github.com/mr-doc/mr-doc",
   "author": "Francois-Guillaume Ribreau <npm@fgribreau.com> (http://fgribreau.com)",
   "repository": {
@@ -59,7 +59,8 @@
     "gulp-shell": "^0.5.0",
     "gulp-sourcemaps": "^1.6.0",
     "mocha": "^2.3.3",
-    "mr-doc-theme-cayman": "git+https://github.com/mr-doc/mr-doc-theme-cayman.git"
+    "mr-doc-theme-cayman": "git+https://github.com/mr-doc/mr-doc-theme-cayman.git",
+    "source-map-support": "^0.4.0"
   },
   "keywords": [
     "dox",
