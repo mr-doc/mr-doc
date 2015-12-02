@@ -45,31 +45,28 @@ var _theme = require('./theme');
 
 var _theme2 = _interopRequireDefault(_theme);
 
-var _dir = require('./dir');
-
-var _dir2 = _interopRequireDefault(_dir);
-
-/**  
- * The main class that creates beautiful documentations.  
- * @class Doc  * @extend Compiler  
+// import Dir from './dir';
+/**
+ * The main class that creates beautiful documentations.
+ * @class Doc  * @extend Compiler
  */
 
 var Doc = (function (_Compiler) {
   _inherits(Doc, _Compiler);
 
-  // Initialize the compiler  
-  // and pass the parser.  
+  // Initialize the compiler
+  // and pass the parser.
 
   function Doc(options) {
     _classCallCheck(this, Doc);
 
     _get(Object.getPrototypeOf(Doc.prototype), 'constructor', this).call(this, new _parser2['default'](options));
-    // Set the locals stack      
+    // Set the locals stack
     this.locals = [];
   }
 
-  /** 
-   * Generates the documentations.      
+  /**
+   * Generates the documentations.
    */
 
   _createClass(Doc, [{
@@ -77,7 +74,7 @@ var Doc = (function (_Compiler) {
     value: function generate() {
       var _this = this;
 
-      // Compute all symboles      
+      // Compute all symboles
       var allSymbols = this.files.reduce(function (m, a) {
         m = m.concat(a.symbols || []);
         return m;
@@ -100,7 +97,7 @@ var Doc = (function (_Compiler) {
         html: true
       });
       md = md.render.bind(md);
-      // Get readme data      
+      // Get readme data
       this.files.unshift({
         name: 'Main',
         targetName: 'index.html',
@@ -108,24 +105,24 @@ var Doc = (function (_Compiler) {
         dox: [],
         symbols: []
       });
-      // Set title      
+      // Set title
       var title = this.options.name ? this.options.name : pkg ? pkg.name : 'No title';
-      // Set description      
+      // Set description
       var description = pkg && pkg.description ? pkg.description : '';
-      // Set URLs      
+      // Set URLs
       var url = {
         github: pkg && pkg.homepage ? pkg.homepage.indexOf('github') > -1 ? pkg.homepage : false : false,
         npm: pkg && pkg.name ? 'https://npmjs.com/package/' + pkg.name : false,
         homepage: pkg && pkg.homepage ? pkg.homepage.indexOf('github') === -1 ? pkg.homepage : false : false
       };
 
-      // Set each files relName in relation       
-      // to where this file is in the directory tree      
+      // Set each files relName in relation
+      // to where this file is in the directory tree
       this.files.forEach(function (file) {
         file.targets = _this.getTargets(file);
       });
       this.files.forEach(function (file) {
-        // Set locals        
+        // Set locals
         _this.locals.push(_lodash2['default'].assign({}, file, {
           project: {
             title: title, description: description, url: url
@@ -140,7 +137,7 @@ var Doc = (function (_Compiler) {
           }
         }));
       });
-      // Install theme      
+      // Install theme
       new _theme2['default'](this.options).install().then(function (result) {
         var theme = result.theme;
 
@@ -148,29 +145,43 @@ var Doc = (function (_Compiler) {
           console.info('Mr. Doc [info]: Installed theme: ' + theme);
         }
         // Make sure the sub dirs that are not blacklisted exist.
-        _dir2['default'].getDirs(_this.options.source).filter(function (folder) {
-          return _this.options.blacklist.indexOf(folder) < 0;
-        }).forEach(function (folder) {
-          return _fsExtra2['default'].ensureDirSync(_path2['default'].join(_this.options.output, folder));
-        });
-        _lodash2['default'].forEach(_this.files, function (file, index) {
-          // Set template          
-          _this.setTemplate(result.template);
-          // Compile the template          
-          var compiled = _this.compile(_this.locals[index]);
-          // Write files          
-          (0, _mkdirp2['default'])(_path2['default'].normalize(_this.options.output + '/'), function (error) {
-            if (error) return;else _fsExtra2['default'].writeFileSync(_path2['default'].join(_this.options.output, file.targetName), compiled);
+        var _options = _this.options;
+        var source = _options.source;
+        var output = _options.output;
+        var blacklist = _options.blacklist;
+
+        _fsExtra2['default'].walk(_this.options.source).on('readable', function () {
+          var item = undefined;
+          while (item = this.read()) {
+            if (item.stats.isDirectory()) {
+              (function () {
+                var path = item.path.replace(_path2['default'].parse(source).base, _path2['default'].parse(output).base);
+                if (blacklist.some(function (folder) {
+                  return path.indexOf(folder) < 0;
+                })) _fsExtra2['default'].ensureDirSync(path);
+              })();
+            }
+          }
+        }).on('end', function () {
+          _lodash2['default'].forEach(_this.files, function (file, index) {
+            // Set template
+            _this.setTemplate(result.template);
+            // Compile the template
+            var compiled = _this.compile(_this.locals[index]);
+            // Write files
+            (0, _mkdirp2['default'])(_path2['default'].normalize(_this.options.output + '/'), function (error) {
+              if (error) return;else _fsExtra2['default'].writeFileSync(_path2['default'].join(_this.options.output, file.targetName), compiled);
+            });
           });
         });
       }, console.error);
     }
 
-    /**       
-     * Return the targets for the specified file      
-     * @private      
-     * @param  {Object} file The file to generate      
-     * @return {Object}      The iterator      
+    /**
+     * Return the targets for the specified file
+     * @private
+     * @param  {Object} file The file to generate
+     * @return {Object}      The iterator
      */
   }, {
     key: 'getTargets',
@@ -179,21 +190,21 @@ var Doc = (function (_Compiler) {
         // Count how deep the current file is in relation to base
         var count = file.name.split('/');
         count = count === null ? 0 : count.length - 1;
-        // relName is equal to targetName at the base dir      
+        // relName is equal to targetName at the base dir
         f.relative = {
           name: f.targetName,
           path: ''
         };
-        // For each directory in depth of current file       
-        // add a ../ to the relative filename of this link      
+        // For each directory in depth of current file
+        // add a ../ to the relative filename of this link
         while (count > 0) {
           f.relative.name = '../' + f.relative.name;
           f.relative.path += '../';
           count--;
         }
-        // Set the target for each folder       
-        // to support nested directories      
-        // and allow asset files to access the dir      
+        // Set the target for each folder
+        // to support nested directories
+        // and allow asset files to access the dir
         return {
           name: f.targetName,
           path: f.relative.path + f.targetName,
