@@ -149,13 +149,14 @@ var Doc = (function (_Compiler) {
         var source = _options.source;
         var output = _options.output;
         var blacklist = _options.blacklist;
+        var outputDir = output.substring(process.cwd().length);
 
         _fsExtra2['default'].walk(_this.options.source).on('readable', function () {
           var item = undefined;
           while (item = this.read()) {
             if (item.stats.isDirectory()) {
               (function () {
-                var path = item.path.replace(_path2['default'].parse(source).base, _path2['default'].parse(output).base);
+                var path = _path2['default'].normalize(item.path.replace(_path2['default'].join(source), outputDir));
                 if (blacklist.some(function (folder) {
                   return path.indexOf(folder) < 0;
                 })) _fsExtra2['default'].ensureDirSync(path);
