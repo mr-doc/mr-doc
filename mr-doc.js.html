@@ -137,18 +137,18 @@
       }
       // Make sure the sub dirs that are not blacklisted exist.
       const {
-        source, output, blacklist
+        output, blacklist
       } = this.options,
-        outputDir = output.substring(process.cwd().length);
+        sourcePath = Path.normalize(process.cwd() + '/' + this.options.source);
 
-      File.walk(this.options.source)
+      File.walk(sourcePath)
         .on('readable', function() {
           let item;
           while ((item = this.read())) {
             if (item.stats.isDirectory()) {
               const path = Path.normalize(item
                 .path
-                .replace(Path.join(source), outputDir));
+                .replace(sourcePath, output));
               if (blacklist.some(folder =&gt; path.indexOf(folder) &lt; 0))
                 File.ensureDirSync(path);
             }
