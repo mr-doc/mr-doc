@@ -1,5 +1,8 @@
 # Change Log
 
+## [v3.0.6](https://github.com/mr-doc/mr-doc/tree/v3.0.6) (2015-12-07)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v3.0.5...v3.0.6)
+
 ## [v3.0.5](https://github.com/mr-doc/mr-doc/tree/v3.0.5) (2015-12-04)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v3.0.4...v3.0.5)
 
@@ -28,17 +31,16 @@
 **Implemented enhancements:**
 
 - Theme output in docs folder [\#93](https://github.com/mr-doc/mr-doc/issues/93)
+- Setup themes through npm instead of bower [\#79](https://github.com/mr-doc/mr-doc/issues/79)
 
 ## [v3.0.0-alpha.1](https://github.com/mr-doc/mr-doc/tree/v3.0.0-alpha.1) (2015-10-18)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v2.1.1...v3.0.0-alpha.1)
 
-**Closed issues:**
+**Implemented enhancements:**
 
-- Error each time running mr-doc [\#92](https://github.com/mr-doc/mr-doc/issues/92)
-
-**Merged pull requests:**
-
-- fix\(cli\): rename doxx to mr-doc in src [\#89](https://github.com/mr-doc/mr-doc/pull/89) ([eddywashere](https://github.com/eddywashere))
+- New name for Doxx [\#83](https://github.com/mr-doc/mr-doc/issues/83)
+- Additional Enhancements for Doxx [\#73](https://github.com/mr-doc/mr-doc/issues/73)
+- Adding additional markdown docs [\#55](https://github.com/mr-doc/mr-doc/issues/55)
 
 ## [v2.1.1](https://github.com/mr-doc/mr-doc/tree/v2.1.1) (2015-09-16)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v2.1.0...v2.1.1)
@@ -57,6 +59,11 @@
 ## [v2.0.0](https://github.com/mr-doc/mr-doc/tree/v2.0.0) (2015-09-03)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.5.0...v2.0.0)
 
+**Closed issues:**
+
+- Using @description tag doubles the description [\#70](https://github.com/mr-doc/mr-doc/issues/70)
+- Get exception when running doxx --source lib --target docs [\#64](https://github.com/mr-doc/mr-doc/issues/64)
+
 ## [v1.5.0](https://github.com/mr-doc/mr-doc/tree/v1.5.0) (2015-07-21)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.4.0...v1.5.0)
 
@@ -72,16 +79,19 @@
 ## [v1.2.7](https://github.com/mr-doc/mr-doc/tree/v1.2.7) (2015-05-26)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.6...v1.2.7)
 
-**Closed issues:**
-
-- Official template - return issue [\#65](https://github.com/mr-doc/mr-doc/issues/65)
-- praise: this is awesome [\#62](https://github.com/mr-doc/mr-doc/issues/62)
-
 ## [v1.2.6](https://github.com/mr-doc/mr-doc/tree/v1.2.6) (2015-03-18)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.5...v1.2.6)
 
+**Closed issues:**
+
+- Information in the @return [\#56](https://github.com/mr-doc/mr-doc/issues/56)
+
 ## [v1.2.5](https://github.com/mr-doc/mr-doc/tree/v1.2.5) (2015-01-31)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.4...v1.2.5)
+
+**Closed issues:**
+
+- Weird return statement display + markup showing in the output. [\#58](https://github.com/mr-doc/mr-doc/issues/58)
 
 ## [v1.2.4](https://github.com/mr-doc/mr-doc/tree/v1.2.4) (2015-01-22)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.3.4...v1.2.4)
@@ -110,6 +120,7 @@
 **Closed issues:**
 
 - Ability to ignore code blocks [\#45](https://github.com/mr-doc/mr-doc/issues/45)
+- Doxx don't work with symbolic links [\#32](https://github.com/mr-doc/mr-doc/issues/32)
 
 ## [v1.0.0](https://github.com/mr-doc/mr-doc/tree/v1.0.0) (2014-10-16)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.6.0...v1.0.0)

@@ -146,17 +146,16 @@ var Doc = (function (_Compiler) {
         }
         // Make sure the sub dirs that are not blacklisted exist.
         var _options = _this.options;
-        var source = _options.source;
         var output = _options.output;
         var blacklist = _options.blacklist;
-        var outputDir = output.substring(process.cwd().length);
+        var sourcePath = _path2['default'].normalize(process.cwd() + '/' + _this.options.source);
 
-        _fsExtra2['default'].walk(_this.options.source).on('readable', function () {
+        _fsExtra2['default'].walk(sourcePath).on('readable', function () {
           var item = undefined;
           while (item = this.read()) {
             if (item.stats.isDirectory()) {
               (function () {
-                var path = _path2['default'].normalize(item.path.replace(_path2['default'].join(source), outputDir));
+                var path = _path2['default'].normalize(item.path.replace(sourcePath, output));
                 if (blacklist.some(function (folder) {
                   return path.indexOf(folder) < 0;
                 })) _fsExtra2['default'].ensureDirSync(path);
