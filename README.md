@@ -66,7 +66,7 @@ $ mr-doc --help
 
 ## Related
 
-* [grunt-doxx](https://github.com/evertton/grunt-doxx) - mr-doc grunt plugin automatically generates the documentation for your project.
+* [grunt-mrdoc](https://github.com/evertton/grunt-mrdoc) - mr-doc grunt plugin automatically generates the documentation for your project.
 * [gulp-doxx](https://github.com/filipovskii/gulp-doxx) - mr-doc documentation generator for gulp.
 
 ## Roadmap
