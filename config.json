@@ -1,5 +1,5 @@
 {
-	"beautify":{
+  "beautify":{
     "indent_size": 2,
     "indent_char": " ",
     "eol": "\n",
@@ -20,8 +20,8 @@
     "wrap_attributes": "auto",
     "wrap_attributes_indent_size": 4,
     "end_with_newline": false
-	},
-	"jshint":{
+  },
+  "jshint":{
     "browser": false,
     "jquery": false,
     "node": true,
