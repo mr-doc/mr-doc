@@ -113,8 +113,14 @@
   if (options.readme) {
     this.options.readme = options.readme;
   }
+  if (options.private) {
+    this.options.private = options.private;
+  }
+
   if (options.theme) {
-    if (_.isString(options.theme) &amp;&amp; !_.isEmpty(options.theme)) {
+    if (options.private) {
+      this.options.theme.name = options.theme;
+    } else if (_.isString(options.theme) &amp;&amp; !_.isEmpty(options.theme)) {
       this.options.theme.name = options.theme.indexOf('doxx-theme-') &gt; -1 ?
         options.theme : 'mr-doc-theme-' + options.theme;
     }

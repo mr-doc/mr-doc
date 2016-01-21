@@ -39,7 +39,7 @@
 <a href="https://travis-ci.org/mr-doc/mr-doc"><img src="https://travis-ci.org/mr-doc/mr-doc.svg" alt="Build"></a>
 <a href="https://raw.githubusercontent.com/mr-doc/mr-doc/master/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license"></a>
 <a href="https://www.npmjs.com/package/mr-doc"><img src="https://img.shields.io/npm/dt/mr-doc.svg" alt="npm"></a></p>
-<p>Mr. Doc is a total refactoring of <a href="https://github.com/punkave/dox-foundation/">dox-foundation</a>  written in ES6, tranformed to ES5 with <a href="https://babeljs.io/">Babel</a>, and is based on <a href="https://github.com/visionmedia/dox">dox</a>. He can automatically generate beautiful documentations and can further spice up your documentations using themes.</p>
+<p>Mr. Doc is a total refactoring of <a href="https://github.com/punkave/dox-foundation/">dox-foundation</a>  written in ES6, transformed to ES5 with <a href="https://babeljs.io/">Babel</a>, and is based on <a href="https://github.com/visionmedia/dox">dox</a>. He can automatically generate beautiful documentations and can further spice up your documentations using themes.</p>
 <p>By default, Mr. Doc uses <a href="https://www.github.com/mr-doc/mr-doc-theme-default">mr-doc-theme-default</a> which uses
 <a href="https://twitter.github.com/bootstrap/">Twitter Bootstrap</a> for the frontend framework and <a href="http://prismjs.com/">Prism.js</a>
 for syntax highlighting.</p>
@@ -86,6 +86,7 @@ function collectFiles(source, options, callback) {
     -r, --readme &lt;file&gt;          The markdown file to use on the main page of the documentations. Checks the current directory for a package.json or README.md by default
     -s, --source &lt;source&gt;        The directory to your source.
     -t, --theme &lt;theme&gt;          The name of the theme to select. e.g. mr-doc-theme-cayman or cayman.
+    -p, --private &lt;private&gt;      Marks the theme as private and located relative to the project.
 </code></pre>
 <h2>Related</h2>
 <ul>
@@ -96,7 +97,7 @@ function collectFiles(source, options, callback) {
 <h3>Next</h3>
 <p>See issue <a href="https://github.com/mr-doc/mr-doc/issues/94">#94</a>.</p>
 <h2>Contributing</h2>
-<p>In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using <a href="https://github.com/gulpjs/gulp">gulp</a> and <a href="https://github.com/mochajs/mocha">mocha</a>.</p>
+<p>In lieu of a formal style guide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using <a href="https://github.com/gulpjs/gulp">gulp</a> and <a href="https://github.com/mochajs/mocha">mocha</a>.</p>
 <h2>Updating Docs</h2>
 <p>To update the docs on the gh-pages branch:</p>
 <pre><code class="language-bash">gulp docs
@@ -110,7 +111,7 @@ function collectFiles(source, options, callback) {
 </ul>
 <h2>License</h2>
 <p>MIT License</p>
-<p>Copyright (c) 2015 Francois-Guillaume Ribreau</p>
+<p>Copyright (c) 2016 Francois-Guillaume Ribreau</p>
 </section>
           <div class="footer site-footer">
             <div class="span site-footer-owner"><a href="https://github.com/mr-doc/mr-doc-theme-cayman">Cayman</a> is maintained by <a href="https://github.com/iwatakeshi">iwatakeshi</a>.</div>
