@@ -251,10 +251,19 @@ var Theme = (function () {
         project: _path2['default'].join(projectPath, 'node_modules', name),
         // Path to Doc's node_modules dir + theme      
         mrDoc: _path2['default'].join(mrDocPath, 'node_modules', name),
+        // Path to the theme relative to the calling process for use with a private theme
+        'private': _path2['default'].join(projectPath, name),
         // Path to the Doc's default theme dir      
         'default': _path2['default'].join(mrDocPath, 'node_modules', DEFAULT_THEME)
       };
-      if (_dir2['default'].exists(locations.mrDoc)) {
+
+      if (options['private'] && _dir2['default'].exists(locations['private'])) {
+        console.log('Mr. Doc [info]: Using private theme [' + name + ']');
+        return {
+          name: name,
+          path: locations['private']
+        };
+      } else if (_dir2['default'].exists(locations.mrDoc)) {
         console.log('Mr. Doc [info]: Using theme [' + name + ']');
         return {
           name: name,
