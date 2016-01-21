@@ -7,6 +7,7 @@ describe('Option', function () {
       var options = new Option();
       options.setOptions({
         source: './',
+        private: true,
         theme: './themes/mr-doc'
       });
       assert.equal(options.options.theme.name, './themes/mr-doc');

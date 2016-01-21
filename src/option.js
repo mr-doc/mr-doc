@@ -85,9 +85,15 @@ var Option = (function () {
       if (options.readme) {
         this.options.readme = options.readme;
       }
+      if (options['private']) {
+        this.options['private'] = options['private'];
+      }
+
       if (options.theme) {
-        if (_lodash2['default'].isString(options.theme) && !_lodash2['default'].isEmpty(options.theme)) {
-          this.options.theme.name = options.theme.indexOf('doxx-theme-') > -1 || options.theme.indexOf('./') > -1 ? options.theme : 'mr-doc-theme-' + options.theme;
+        if (options['private']) {
+          this.options.theme.name = options.theme;
+        } else if (_lodash2['default'].isString(options.theme) && !_lodash2['default'].isEmpty(options.theme)) {
+          this.options.theme.name = options.theme.indexOf('doxx-theme-') > -1 ? options.theme : 'mr-doc-theme-' + options.theme;
         }
       }
     }
