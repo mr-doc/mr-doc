@@ -150,7 +150,7 @@ var Doc = (function (_Compiler) {
         var _options = _this.options;
         var output = _options.output;
         var blacklist = _options.blacklist;
-        var sourcePath = _path2['default'].normalize(process.cwd() + '/' + _this.options.source);
+        var sourcePath = _path2['default'].normalize(_path2['default'].resolve(process.cwd(), _this.options.source));
 
         _fsExtra2['default'].walk(sourcePath).on('readable', function () {
           var item = undefined;

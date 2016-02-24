@@ -61,12 +61,9 @@ var Dir = (function () {
         if (!ignore.some(function (folder) {
           return file.indexOf(folder) >= 0;
         }) && _path2['default'].parse(file).ext === '.js') {
-          console.log(file);
           files.push(file);
         }
       });
-
-      console.log(files);
       return files;
     }
 
