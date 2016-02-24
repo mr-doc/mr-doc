@@ -139,7 +139,7 @@
       const {
         output, blacklist
       } = this.options,
-        sourcePath = Path.normalize(process.cwd() + '/' + this.options.source);
+        sourcePath = Path.normalize(Path.resolve(process.cwd(), this.options.source));
 
       File.walk(sourcePath)
         .on('readable', function() {

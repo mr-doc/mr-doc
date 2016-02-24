@@ -98,12 +98,9 @@
       // Remove the first path seperator
       file = file.replace(file[0], '');
       if (!ignore.some(folder =&gt; file.indexOf(folder) &gt;= 0) &amp;&amp; Path.parse(file).ext === '.js') {
-        console.log(file);
         files.push(file);
       }
     });
-
-    console.log(files);
     return files;
   }</code></pre>
           <section id="getHomeDir">
