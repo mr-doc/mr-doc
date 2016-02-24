@@ -1,7 +1,7 @@
 {
   "name": "mr-doc",
   "description": "A personal source documenter at your service",
-  "version": "3.1.2",
+  "version": "3.1.3",
   "homepage": "https://github.com/mr-doc/mr-doc",
   "author": "Francois-Guillaume Ribreau <npm@fgribreau.com> (http://fgribreau.com)",
   "repository": {
