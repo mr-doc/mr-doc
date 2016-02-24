@@ -58,8 +58,8 @@ var Dir = (function () {
         file = file.dir.replace(source, '') + _path2['default'].sep + file.base;
         // Remove the first path seperator
         file = file.replace(file[0], '');
-        if (ignore.some(function (folder) {
-          return file.indexOf(folder) < 0;
+        if (!ignore.some(function (folder) {
+          return file.indexOf(folder) >= 0;
         }) && _path2['default'].parse(file).ext === '.js') {
           console.log(file);
           files.push(file);
