@@ -1,5 +1,23 @@
 # Change Log
 
+## [v3.1.5](https://github.com/mr-doc/mr-doc/tree/v3.1.5) (2016-02-25)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v3.1.4...v3.1.5)
+
+## [v3.1.4](https://github.com/mr-doc/mr-doc/tree/v3.1.4) (2016-02-24)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v3.1.3...v3.1.4)
+
+## [v3.1.3](https://github.com/mr-doc/mr-doc/tree/v3.1.3) (2016-02-24)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v3.1.2...v3.1.3)
+
+## [v3.1.2](https://github.com/mr-doc/mr-doc/tree/v3.1.2) (2016-01-21)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v3.1.1...v3.1.2)
+
+## [v3.1.1](https://github.com/mr-doc/mr-doc/tree/v3.1.1) (2016-01-21)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v3.1.0...v3.1.1)
+
+## [v3.1.0](https://github.com/mr-doc/mr-doc/tree/v3.1.0) (2016-01-21)
+[Full Changelog](https://github.com/mr-doc/mr-doc/compare/v3.0.7...v3.1.0)
+
 ## [v3.0.7](https://github.com/mr-doc/mr-doc/tree/v3.0.7) (2015-12-07)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v3.0.6...v3.0.7)
 
@@ -24,20 +42,15 @@
 ## [v3.0.0](https://github.com/mr-doc/mr-doc/tree/v3.0.0) (2015-10-28)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v3.0.0-alpha.2...v3.0.0)
 
+**Closed issues:**
+
+- nvm breaks mr-doc cli [\#96](https://github.com/mr-doc/mr-doc/issues/96)
+
 ## [v3.0.0-alpha.2](https://github.com/mr-doc/mr-doc/tree/v3.0.0-alpha.2) (2015-10-19)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v3.0.0-alpha.1...v3.0.0-alpha.2)
 
-**Implemented enhancements:**
-
-- Theme output in docs folder [\#93](https://github.com/mr-doc/mr-doc/issues/93)
-- Setup themes through npm instead of bower [\#79](https://github.com/mr-doc/mr-doc/issues/79)
-
 ## [v3.0.0-alpha.1](https://github.com/mr-doc/mr-doc/tree/v3.0.0-alpha.1) (2015-10-18)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v2.1.1...v3.0.0-alpha.1)
-
-**Implemented enhancements:**
-
-- New name for Doxx [\#83](https://github.com/mr-doc/mr-doc/issues/83)
 
 ## [v2.1.1](https://github.com/mr-doc/mr-doc/tree/v2.1.1) (2015-09-16)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v2.1.0...v2.1.1)
@@ -59,7 +72,6 @@
 **Closed issues:**
 
 - Using @description tag doubles the description [\#70](https://github.com/mr-doc/mr-doc/issues/70)
-- TypeLexerSyntaxError [\#69](https://github.com/mr-doc/mr-doc/issues/69)
 
 ## [v1.5.0](https://github.com/mr-doc/mr-doc/tree/v1.5.0) (2015-07-21)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.4.0...v1.5.0)
@@ -79,7 +91,6 @@
 **Closed issues:**
 
 - Official template - return issue [\#65](https://github.com/mr-doc/mr-doc/issues/65)
-- praise: this is awesome [\#62](https://github.com/mr-doc/mr-doc/issues/62)
 
 ## [v1.2.6](https://github.com/mr-doc/mr-doc/tree/v1.2.6) (2015-03-18)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.5...v1.2.6)
@@ -103,10 +114,6 @@
 ## [v1.2.2](https://github.com/mr-doc/mr-doc/tree/v1.2.2) (2015-01-22)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.1...v1.2.2)
 
-**Closed issues:**
-
-- TypeError thrown in target option not specified [\#52](https://github.com/mr-doc/mr-doc/issues/52)
-
 ## [v1.2.1](https://github.com/mr-doc/mr-doc/tree/v1.2.1) (2014-11-21)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.2.0...v1.2.1)
 
@@ -116,13 +123,16 @@
 ## [v1.1.1](https://github.com/mr-doc/mr-doc/tree/v1.1.1) (2014-11-05)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.1.0...v1.1.1)
 
+**Closed issues:**
+
+- Error message when npm installing [\#48](https://github.com/mr-doc/mr-doc/issues/48)
+
 ## [v1.1.0](https://github.com/mr-doc/mr-doc/tree/v1.1.0) (2014-11-05)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v1.0.0...v1.1.0)
 
 **Closed issues:**
 
 - Ability to ignore code blocks [\#45](https://github.com/mr-doc/mr-doc/issues/45)
-- CSS doesn't load on first load [\#44](https://github.com/mr-doc/mr-doc/issues/44)
 
 ## [v1.0.0](https://github.com/mr-doc/mr-doc/tree/v1.0.0) (2014-10-16)
 [Full Changelog](https://github.com/mr-doc/mr-doc/compare/v0.6.0...v1.0.0)
