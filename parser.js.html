@@ -67,7 +67,9 @@
           <div class="description"><p>Starts the parser.</p></div>
           <pre><code class="language-javascript">start() {
     var {
-      source, extension, blacklist
+      source,
+      extension,
+      blacklist
     } = this.options;
     // Parse the files       
     this.files = Parser.parse(source, extension, blacklist);
