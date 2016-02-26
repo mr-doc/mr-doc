@@ -39,7 +39,7 @@
     "log-update": "^1.0.2",
     "markdown-it": "^6.0.0",
     "mkdirp": "~0.5.1",
-    "mr-doc-theme-default": "^1.4.0",
+    "mr-doc-theme-default": "^1.2.0",
     "osenv": "^0.1.3",
     "rimraf": "^2.5.2",
     "source-map-support": "^0.4.0",

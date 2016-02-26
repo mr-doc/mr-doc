@@ -127,7 +127,9 @@ var Doc = (function (_Compiler) {
         // Set locals
         _this.locals.push(_lodash2['default'].assign({}, file, {
           project: {
-            title: title, description: description, url: url
+            title: title,
+            description: description,
+            url: url
           },
           allSymbols: allSymbols,
           files: _this.files,
