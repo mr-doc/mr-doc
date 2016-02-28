@@ -61,13 +61,16 @@
           </section>
           <div class="description"><p>Generates the documentations.</p></div>
           <pre><code class="language-javascript">generate() {
+    // Prepare promise
+    let d = when.defer();
+
     // Compute all symboles
-    var allSymbols = this.files.reduce(function(m, a) {
+    let allSymbols = this.files.reduce(function(m, a) {
       m = m.concat(a.symbols || []);
       return m;
     }, []);
     // Set package
-    var pkg = this.options.package;
+    let pkg = this.options.package;
     // Set readme
     var readme = pkg &amp;&amp; pkg.readme,
       readMeFile = Path.resolve(process.cwd(), this.options.readme ||
@@ -81,10 +84,11 @@
       console.warn('Mr. Doc [warn]: Empty README.md ' + readMeFile);
       readme = '';
     }
-    var md = new Markdown({
+    let md = new Markdown({
       html: true
     });
     md = md.render.bind(md);
+
     // Get readme data
     this.files.unshift({
       name: 'Main',
@@ -94,11 +98,11 @@
       symbols: []
     });
     // Set title
-    var title = this.options.name ? this.options.name : pkg ? pkg.name : 'No title';
+    let title = this.options.name ? this.options.name : pkg ? pkg.name : 'No title';
     // Set description
-    var description = pkg &amp;&amp; pkg.description ? pkg.description : '';
+    let description = pkg &amp;&amp; pkg.description ? pkg.description : '';
     // Set URLs
-    var url = {
+    let url = {
       github: pkg &amp;&amp; pkg.homepage ?
         pkg.homepage.indexOf('github') &gt; -1 ?
         pkg.homepage : false : false,
@@ -168,10 +172,11 @@
               else File.writeFileSync(Path.join(this.options.output, file.targetName), compiled);
             });
           });
+
+          d.resolve();
         });
-
-
     }, console.error);
+    return d.promise;
   }</code></pre>
           <div class="footer site-footer">
             <div class="span site-footer-owner"><a href="https://github.com/mr-doc/mr-doc-theme-cayman">Cayman</a> is maintained by <a href="https://github.com/iwatakeshi">iwatakeshi</a>.</div>
