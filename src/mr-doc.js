@@ -47,6 +47,10 @@ var _theme = require('./theme');
 
 var _theme2 = _interopRequireDefault(_theme);
 
+var _when = require('when');
+
+var _when2 = _interopRequireDefault(_when);
+
 // import Dir from './dir';
 /**
  * The main class that creates beautiful documentations.
@@ -76,6 +80,9 @@ var Doc = (function (_Compiler) {
     value: function generate() {
       var _this = this;
 
+      // Prepare promise
+      var d = _when2['default'].defer();
+
       // Compute all symboles
       var allSymbols = this.files.reduce(function (m, a) {
         m = m.concat(a.symbols || []);
@@ -99,6 +106,7 @@ var Doc = (function (_Compiler) {
         html: true
       });
       md = md.render.bind(md);
+
       // Get readme data
       this.files.unshift({
         name: 'Main',
@@ -177,8 +185,11 @@ var Doc = (function (_Compiler) {
               if (error) return;else _fsExtra2['default'].writeFileSync(_path2['default'].join(_this.options.output, file.targetName), compiled);
             });
           });
+
+          d.resolve();
         });
       }, console.error);
+      return d.promise;
     }
 
     /**

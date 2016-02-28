@@ -60,4 +60,6 @@ program.parse(process.argv);
 var options = option(program).getOptions();
 
 if (!_.isEmpty(options.source))
-  doc(options).generate();
+  doc(options).generate().then(function () {
+    console.log('Mr. Doc [info]: Documentation is complete!');
+  });
