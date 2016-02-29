@@ -22,17 +22,22 @@
     "mr-doc": "./bin/mr-doc"
   },
   "scripts": {
-    "test": "gulp test"
+    "test": ""
   },
   "engines": {
     "node": ">= 0.10.0"
   },
   "dependencies": {
+    "acorn": "^3.0.4",
     "chai": "^3.5.0",
     "colors": "^1.1.2",
     "commander": "~2.9.0",
+    "doctrine": "^1.2.0",
     "dox": "^0.8.0",
     "elegant-spinner": "^1.0.1",
+    "escodegen": "^1.8.0",
+    "estraverse": "^4.1.1",
+    "extend": "^3.0.0",
     "fs-extra": "^0.26.5",
     "jade": "~1.11.x",
     "lodash": "^4.x.x",

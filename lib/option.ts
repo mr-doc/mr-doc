@@ -1,4 +1,9 @@
-"use strict";
+
+export interface ParserOption {
+    language?: string;
+    version?: string;
+}
+
 // /**  
 //  * The class that sets the options.  
 //  * @class Option  
@@ -22,6 +27,7 @@
 //     if (options.extension) {
 //       this.options.extension = options.extension;
 //     }
+
 //     if (options.kit) {
 //       if (_.isString(options.kit)) {
 //         if (options.kit.toLowerCase() === 'yes')
@@ -30,25 +36,31 @@
 //           this.options.kit = false;
 //       } else this.options.kit = true;
 //     }
+
 //     if (options.template) {
 //       this.options.template.path = options.template;
 //     }
+
 //     // Option - template helpers
 //     this.options.template.isEnabled = () => {
 //       return !!options.template;
 //     };
+
 //     this.options.template.isKit = () => {
 //       return this.options.kit;
 //     };
+
 //     if (!options.source) {
 //       console.error(new Error('Mr. Doc [error]: You must define a source.'));
 //       process.exit(1);
 //     } else
 //       this.options.source = options.source;
+
 //     if (options.output) {
 //       this.options.output = Path.resolve(process.cwd(), options.output) ||
 //         process.cwd();
 //     }
+
 //     if (options.ignore) {
 //       this.options.blacklist = options.ignore
 //         .trim().replace(' ', '').split(',');
@@ -59,6 +71,7 @@
 //     if (options.private) {
 //       this.options.private = options.private;
 //     }
+
 //     if (options.theme) {
 //       if (options.private) {
 //         this.options.theme.name = options.theme;
@@ -68,6 +81,7 @@
 //       }
 //     }
 //   }
+
 //   /**      
 //    * Returns the current options.      
 //    * @return {object} The current options      
@@ -113,4 +127,4 @@
 // }
 // export default (options) => {
 //   return new Option(options);
-// }; 
+// };
