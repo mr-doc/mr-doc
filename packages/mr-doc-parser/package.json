@@ -1,0 +1,36 @@
+{
+  "name": "mr-doc-parser",
+  "version": "1.0.0",
+  "description": "The documenter parser that powers Mr. Doc",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mr-doc/mr-doc.git"
+  },
+  "keywords": [
+    "dox",
+    "jsdox",
+    "documenter",
+    "documentation",
+    "coffeescript",
+    "javascript"
+  ],
+  "author": "iwatakeshi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mr-doc/mr-doc/issues"
+  },
+  "homepage": "https://github.com/mr-doc/mr-doc/packages/mr-doc-parser#readme",
+  "dependencies": {
+    "acorn": "^3.0.4",
+    "babel-traverse": "^6.6.3",
+    "babylon": "^6.6.0",
+    "doctrine": "^1.2.0",
+    "escodegen": "^1.8.0",
+    "estraverse": "^4.1.1",
+    "lodash": "^4.5.1"
+  }
+}

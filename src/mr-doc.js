@@ -1,100 +1,48 @@
 /*jshint loopfunc: true */
 
 'use strict';
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var _fsExtra = require('fs-extra');
-
-var _fsExtra2 = _interopRequireDefault(_fsExtra);
-
-var _path = require('path');
-
-var _path2 = _interopRequireDefault(_path);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _compiler = require('./compiler');
-
-var _compiler2 = _interopRequireDefault(_compiler);
-
-var _parser = require('./parser');
-
-var _parser2 = _interopRequireDefault(_parser);
-
-var _markdownIt = require('markdown-it');
-
-var _markdownIt2 = _interopRequireDefault(_markdownIt);
-
-var _mkdirp = require('mkdirp');
-
-var _mkdirp2 = _interopRequireDefault(_mkdirp);
-
-var _theme = require('./theme');
-
-var _theme2 = _interopRequireDefault(_theme);
-
-var _when = require('when');
-
-var _when2 = _interopRequireDefault(_when);
-
+import File from 'fs-extra';
+import Path from 'path';
+import _ from 'lodash';
+import Compiler from './compiler';
+import Parser from './parser';
+import Markdown from 'markdown-it';
+import mkdirp from 'mkdirp';
+import Theme from './theme';
+import when from 'when';
 // import Dir from './dir';
 /**
  * The main class that creates beautiful documentations.
  * @class Doc  * @extend Compiler
  */
-
-var Doc = (function (_Compiler) {
-  _inherits(Doc, _Compiler);
-
+class Doc extends Compiler {
   // Initialize the compiler
   // and pass the parser.
-
-  function Doc(options) {
-    _classCallCheck(this, Doc);
-
-    _get(Object.getPrototypeOf(Doc.prototype), 'constructor', this).call(this, new _parser2['default'](options));
-    // Set the locals stack
-    this.locals = [];
-  }
-
-  /**
-   * Generates the documentations.
-   */
-
-  _createClass(Doc, [{
-    key: 'generate',
-    value: function generate() {
-      var _this = this;
-
+  constructor(options) {
+      super(new Parser(options));
+      // Set the locals stack
+      this.locals = [];
+    }
+    /**
+     * Generates the documentations.
+     */
+  generate() {
       // Prepare promise
-      var d = _when2['default'].defer();
+      let d = when.defer();
 
       // Compute all symboles
-      var allSymbols = this.files.reduce(function (m, a) {
+      let allSymbols = this.files.reduce(function(m, a) {
         m = m.concat(a.symbols || []);
         return m;
       }, []);
       // Set package
-      var pkg = this.options['package'];
+      let pkg = this.options.package;
       // Set readme
       var readme = pkg && pkg.readme,
-          readMeFile = _path2['default'].resolve(process.cwd(), this.options.readme || pkg && pkg.readmeFileName || 'README.md');
-      if (!readme && _fsExtra2['default'].existsSync(readMeFile)) {
-        readme = _fsExtra2['default'].readFileSync(readMeFile).toString();
+        readMeFile = Path.resolve(process.cwd(), this.options.readme ||
+          (pkg && pkg.readmeFileName) || 'README.md');
+      if (!readme && File.existsSync(readMeFile)) {
+        readme = File.readFileSync(readMeFile).toString();
       } else {
         console.warn('Mr. Doc [warn]: No README.md file found at ' + readMeFile);
       }
@@ -102,7 +50,7 @@ var Doc = (function (_Compiler) {
         console.warn('Mr. Doc [warn]: Empty README.md ' + readMeFile);
         readme = '';
       }
-      var md = new _markdownIt2['default']({
+      let md = new Markdown({
         html: true
       });
       md = md.render.bind(md);
@@ -116,31 +64,33 @@ var Doc = (function (_Compiler) {
         symbols: []
       });
       // Set title
-      var title = this.options.name ? this.options.name : pkg ? pkg.name : 'No title';
+      let title = this.options.name ? this.options.name : pkg ? pkg.name : 'No title';
       // Set description
-      var description = pkg && pkg.description ? pkg.description : '';
+      let description = pkg && pkg.description ? pkg.description : '';
       // Set URLs
-      var url = {
-        github: pkg && pkg.homepage ? pkg.homepage.indexOf('github') > -1 ? pkg.homepage : false : false,
+      let url = {
+        github: pkg && pkg.homepage ?
+          pkg.homepage.indexOf('github') > -1 ?
+          pkg.homepage : false : false,
         npm: pkg && pkg.name ? 'https://npmjs.com/package/' + pkg.name : false,
         homepage: pkg && pkg.homepage ? pkg.homepage.indexOf('github') === -1 ? pkg.homepage : false : false
       };
 
       // Set each files relName in relation
       // to where this file is in the directory tree
-      this.files.forEach(function (file) {
-        file.targets = _this.getTargets(file);
+      this.files.forEach(file => {
+        file.targets = this.getTargets(file);
       });
-      this.files.forEach(function (file) {
+      this.files.forEach((file) => {
         // Set locals
-        _this.locals.push(_lodash2['default'].assign({}, file, {
+        this.locals.push(_.assign({}, file, {
           project: {
-            title: title,
-            description: description,
-            url: url
+            title,
+            description,
+            url
           },
           allSymbols: allSymbols,
-          files: _this.files,
+          files: this.files,
           current: {
             name: file.name
           },
@@ -150,94 +100,87 @@ var Doc = (function (_Compiler) {
         }));
       });
       // Install theme
-      new _theme2['default'](this.options).install().then(function (result) {
-        var theme = result.theme;
-
+      (new Theme(this.options)).install().then((result) => {
+        var {
+          theme
+        } = result;
         if (theme) {
           console.info('Mr. Doc [info]: Installed theme: ' + theme);
         }
         // Make sure the sub dirs that are not blacklisted exist.
-        var _options = _this.options;
-        var output = _options.output;
-        var blacklist = _options.blacklist;
-        var sourcePath = _path2['default'].normalize(_path2['default'].resolve(process.cwd(), _this.options.source));
+        const {
+          output,
+          blacklist
+        } = this.options,
+          sourcePath = Path.normalize(Path.resolve(process.cwd(), this.options.source));
 
-        _fsExtra2['default'].walk(sourcePath).on('readable', function () {
-          var item = undefined;
-          while (item = this.read()) {
-            if (item.stats.isDirectory()) {
-              (function () {
-                var path = _path2['default'].normalize(item.path.replace(sourcePath, output));
-                if (blacklist.some(function (folder) {
-                  return path.indexOf(folder) < 0;
-                })) _fsExtra2['default'].ensureDirSync(path);
-              })();
+        File.walk(sourcePath)
+          .on('readable', function() {
+            let item;
+            while ((item = this.read())) {
+              if (item.stats.isDirectory()) {
+                const path = Path.normalize(item
+                  .path
+                  .replace(sourcePath, output));
+                if (blacklist.some(folder => path.indexOf(folder) < 0))
+                  File.ensureDirSync(path);
+              }
             }
-          }
-        }).on('end', function () {
-          _lodash2['default'].forEach(_this.files, function (file, index) {
-            // Set template
-            _this.setTemplate(result.template);
-            // Compile the template
-            var compiled = _this.compile(_this.locals[index]);
-            // Write files
-            (0, _mkdirp2['default'])(_path2['default'].normalize(_this.options.output + '/'), function (error) {
-              if (error) return;else _fsExtra2['default'].writeFileSync(_path2['default'].join(_this.options.output, file.targetName), compiled);
+          }).on('end', () => {
+            _.forEach(this.files, (file, index) => {
+              // Set template
+              this.setTemplate(result.template);
+              // Compile the template
+              let compiled = this.compile(this.locals[index]);
+              // Write files
+              mkdirp(Path.normalize(this.options.output + '/'), error => {
+                if (error) return;
+                else File.writeFileSync(Path.join(this.options.output, file.targetName), compiled);
+              });
             });
-          });
 
-          d.resolve();
-        });
+            d.resolve();
+          });
       }, console.error);
       return d.promise;
     }
-
     /**
      * Return the targets for the specified file
      * @private
      * @param  {Object} file The file to generate
      * @return {Object}      The iterator
      */
-  }, {
-    key: 'getTargets',
-    value: function getTargets(file) {
-      return _lodash2['default'].map(this.files, function (f) {
-        // Count how deep the current file is in relation to base
-        var count = file.name.split('/');
-        count = count === null ? 0 : count.length - 1;
-        // relName is equal to targetName at the base dir
-        f.relative = {
-          name: f.targetName,
-          path: ''
-        };
-        // For each directory in depth of current file
-        // add a ../ to the relative filename of this link
-        while (count > 0) {
-          f.relative.name = '../' + f.relative.name;
-          f.relative.path += '../';
-          count--;
-        }
-        // Set the target for each folder
-        // to support nested directories
-        // and allow asset files to access the dir
-        return {
-          name: f.targetName,
-          path: f.relative.path + f.targetName,
-          file: {
-            name: f.name
-          },
-          relative: f.relative
-        };
-      });
-    }
-  }]);
-
-  return Doc;
-})(_compiler2['default']);
-
-exports['default'] = function (options) {
+  getTargets(file) {
+    return _.map(this.files, (f) => {
+      // Count how deep the current file is in relation to base
+      var count = file.name.split('/');
+      count = count === null ? 0 : count.length - 1;
+      // relName is equal to targetName at the base dir
+      f.relative = {
+        name: f.targetName,
+        path: ''
+      };
+      // For each directory in depth of current file
+      // add a ../ to the relative filename of this link
+      while (count > 0) {
+        f.relative.name = '../' + f.relative.name;
+        f.relative.path += '../';
+        count--;
+      }
+      // Set the target for each folder
+      // to support nested directories
+      // and allow asset files to access the dir
+      return {
+        name: f.targetName,
+        path: f.relative.path + f.targetName,
+        file: {
+          name: f.name
+        },
+        relative: f.relative
+      };
+    });
+  }
+}
+export default function(options) {
   return new Doc(options);
-};
-
-module.exports = exports['default'];
-//# sourceMappingURL=source maps/mr-doc.js.map
+}

@@ -1,0 +1,18 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "typings",
+  "bundle": "typings/tsd.d.ts",
+  "installed": {
+    "lodash/lodash.d.ts": {
+      "commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
+    },
+    "estree/estree.d.ts": {
+      "commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
+    },
+    "acorn/acorn.d.ts": {
+      "commit": "55c750ace821f85e6643bbdb249dbd0b15a3df78"
+    }
+  }
+}

@@ -1,155 +1,62 @@
 'use strict';
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _when = require('when');
-
-var _when2 = _interopRequireDefault(_when);
-
-var _path = require('path');
-
-var _path2 = _interopRequireDefault(_path);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _fsExtra = require('fs-extra');
-
-var _fsExtra2 = _interopRequireDefault(_fsExtra);
-
-var _elegantSpinner = require('elegant-spinner');
-
-var _elegantSpinner2 = _interopRequireDefault(_elegantSpinner);
-
-var _logUpdate = require('log-update');
-
-var _logUpdate2 = _interopRequireDefault(_logUpdate);
-
-var _dir = require('./dir');
-
-var _dir2 = _interopRequireDefault(_dir);
-
-require('source-map-support/register');
-
-var frame = (0, _elegantSpinner2['default'])();
+import when from 'when';
+import Path from 'path';
+import _ from 'lodash';
+import File from 'fs-extra';
+import elegantSpinner from 'elegant-spinner';
+import logUpdate from 'log-update';
+import Dir from './dir';
+import 'source-map-support/register';
+let frame = elegantSpinner();
 /**  
  * The class that locates themes  
  * @class Theme  
  */
-
-var Theme = (function () {
-  function Theme(options) {
-    _classCallCheck(this, Theme);
-
-    if (options) {
-      // Check if Doc will be installing a theme
-      // or will be rendering a template
-      var resolved = {
-        theme: options.template.path ? undefined : Theme.findTheme(options)
-      };
-      // Set the options
-      this.options = {
-        theme: {
-          name: resolved.theme ? resolved.theme.name : undefined,
-          path: resolved.theme ? resolved.theme.path : undefined
-        },
-        output: {
-          path: options.output.path ? options.output.path : options.output
-        },
-        template: {
-          name: options['package'] ? options['package'].name : '',
-          path: options.template.path,
-          isEnabled: options.template.isEnabled,
-          isKit: options.template.isKit
-        }
-      };
+class Theme {
+  constructor(options) {
+      if (options) {
+        // Check if Doc will be installing a theme
+        // or will be rendering a template
+        let resolved = {
+          theme: options.template.path ? undefined : Theme.findTheme(options)
+        };
+        // Set the options
+        this.options = {
+          theme: {
+            name: resolved.theme ?
+              resolved.theme.name : undefined,
+            path: resolved.theme ?
+              resolved.theme.path : undefined
+          },
+          output: {
+            path: options.output.path ?
+              options.output.path : options.output
+          },
+          template: {
+            name: options.package ?
+              options.package.name : '',
+            path: options.template.path,
+            isEnabled: options.template.isEnabled,
+            isKit: options.template.isKit
+          }
+        };
+      }
     }
-  }
-
-  /**    
-   * Returns the tasks that install the theme    
-   * @private    
-   * @param options The options to install the themes    
-   * @return {object}    
-   */
-
-  _createClass(Theme, [{
-    key: 'install',
-
     /**    
-     * Copies the theme specified (reverting to default)    
-     * over to the output directory. (Async)  
-     * @jsfiddle https://jsfiddle.net/iwatakeshi/k5xsvoez/embedded/
-     * @return {Function} The promise.    
+     * Returns the tasks that install the theme    
+     * @private    
+     * @param options The options to install the themes    
+     * @return {object}    
      */
-    value: function install() {
-      var options = arguments.length <= 0 || arguments[0] === undefined ? this.options : arguments[0];
-
-      var final = _when2['default'].defer();
-      // Check if the template is enabled (legacy)      
-      if (options.template.isEnabled() && !options.template.isKit()) {
-        final.resolve({
-          template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, options.template.path)).toString()
-        });
-      } else {
-        (function () {
-          var tasks = Theme.tasks(options);
-          (function (notify) {
-            return tasks.copyAssets().tap(function () {
-              notify('Copying Assets.');
-            }).then(tasks.stringifyTemplate).tap(function () {
-              notify('Rendering template.');
-            }).then(final.resolve);
-          })(tasks.showProgress);
-        })();
-      }
-      return final.promise;
-    }
-
-    /**      
-     * Copies the theme specified (reverting to default)    
-     * over to the output directory. (Sync)
-     * @jsfiddle https://jsfiddle.net/iwatakeshi/nLvz3g89/embedded/
-     * @return {String} The template    
-     */
-  }, {
-    key: 'installSync',
-    value: function installSync() {
-      var options = arguments.length <= 0 || arguments[0] === undefined ? this.options : arguments[0];
-
-      var template;
-      if (options.template.isEnabled() && !options.template.isKit()) {
-        return {
-          template: _fsExtra2['default'].readFileSync(_path2['default'].resolve(__dirname, options.template.path)).toString()
-        };
-      } else {
-        var tasks = Theme.tasks(options);
-        tasks.copyAssetsSync();
-        tasks.showProgress('Copying assets.');
-        template = tasks.stringifyTemplateSync();
-        tasks.showProgress('Reading template.');
-        tasks.showProgress('Done.');
-
-        return {
-          template: template
-        };
-      }
-    }
-  }], [{
-    key: 'tasks',
-    value: function tasks(options) {
-      // Sources    
-      var config = {
-        src: (function () {
-          if (options.template.isEnabled() && !options.template.isKit()) return options.template.path;else if (options.template.isEnabled()) return process.cwd();else return options.theme.path;
+  static tasks(options) {
+      // Sources     
+      let config = {
+        src: (() => {
+          if (options.template.isEnabled() && !options.template.isKit())
+            return options.template.path;
+          else if (options.template.isEnabled())
+            return process.cwd();
+          else return options.theme.path;
         })(),
         dest: options.output.path,
         paths: {
@@ -167,28 +74,27 @@ var Theme = (function () {
         /**        
          * Shows the progress for each command        
          */
-        showProgress: function showProgress(command) {
-          var max = arguments.length <= 1 || arguments[1] === undefined ? 200 : arguments[1];
-
+        showProgress: (command, max = 200) => {
           var count = 0;
           while (count < max) {
-            (0, _logUpdate2['default'])('Mr. Doc [info]: ' + frame() + ' ' + command);
+            logUpdate('Mr. Doc [info]: ' + frame() + ' ' + command);
             count++;
           }
         },
         /**
          * Create necessary paths to destination folder (Async)        
          */
-        copyAssets: function copyAssets() {
-          var types = _lodash2['default'].keys(config.paths);
-          var m = _when2['default'].map(types, function (type) {
-            var d = _when2['default'].defer();
-            var src = _path2['default'].join(config.src, config.paths[type].src);
-            var dest = _path2['default'].join(config.dest, config.paths[type].dest);
-            _fsExtra2['default'].copy(src, dest, {
+        copyAssets: () => {
+          let types = _.keys(config.paths);
+          let m = when.map(types, function(type) {
+            let d = when.defer();
+            let src = Path.join(config.src, config.paths[type].src);
+            let dest = Path.join(config.dest, config.paths[type].dest);
+            File.copy(src, dest, {
               clobber: true
-            }, function (error) {
-              if (error) d.reject(error);else {
+            }, error => {
+              if (error) d.reject(error);
+              else {
                 d.resolve();
               }
             });
@@ -199,12 +105,12 @@ var Theme = (function () {
         /**        
          * Create necessary paths to destination folder (Sync)       
          */
-        copyAssetsSync: function copyAssetsSync() {
-          var types = _lodash2['default'].keys(config.paths);
-          _lodash2['default'].forEach(types, function (type) {
-            var src = _path2['default'].join(config.src, config.paths[type].src);
-            var dest = _path2['default'].join(config.dest, config.paths[type].dest);
-            _fsExtra2['default'].copySync(src, dest, {
+        copyAssetsSync: () => {
+          let types = _.keys(config.paths);
+          _.forEach(types, type => {
+            let src = Path.join(config.src, config.paths[type].src);
+            let dest = Path.join(config.dest, config.paths[type].dest);
+            File.copySync(src, dest, {
               clobber: true
             });
           });
@@ -212,11 +118,12 @@ var Theme = (function () {
         /**        
          * Reads the template from the source and strigifies it. (Async)        
          */
-        stringifyTemplate: function stringifyTemplate() {
-          var d = _when2['default'].defer();
-          var file = _path2['default'].join(config.src, 'template/index.jade');
-          _fsExtra2['default'].readFile(file, function (error, data) {
-            if (error) d.reject(error);else d.resolve({
+        stringifyTemplate: () => {
+          let d = when.defer();
+          let file = Path.join(config.src, 'template/index.jade');
+          File.readFile(file, (error, data) => {
+            if (error) d.reject(error);
+            else d.resolve({
               template: data.toString()
             });
           });
@@ -225,69 +132,117 @@ var Theme = (function () {
         /**        
          * Reads the template from the source and strigifies it. (Sync)        
          */
-        stringifyTemplateSync: function stringifyTemplateSync() {
-          var file = _path2['default'].join(config.src, 'template/index.jade');
-          return _fsExtra2['default'].readFileSync(file).toString();
+        stringifyTemplateSync: () => {
+          let file = Path.join(config.src, 'template/index.jade');
+          return File.readFileSync(file).toString();
         }
       };
     }
-
     /**    
      * Find the theme specified    
      * @param {String} theme The theme to find    
      * @return {Object} The theme.    
      */
-  }, {
-    key: 'findTheme',
-    value: function findTheme(options) {
-      var DEFAULT_THEME = 'mr-doc-theme-default';
-      var mrDocPath = _path2['default'].resolve(__dirname, '..');
-      var projectPath = process.cwd();
-      var name = options.theme.name;
+  static findTheme(options) {
+      const DEFAULT_THEME = 'mr-doc-theme-default';
+      const mrDocPath = Path.resolve(__dirname, '..');
+      const projectPath = process.cwd();
+      const name = options.theme.name;
       // Plugins may provide a name property
       // so just in case check it
-      var locations = {
-        // Path to the project's node_modules dir + theme      
-        project: _path2['default'].join(projectPath, 'node_modules', name),
-        // Path to Doc's node_modules dir + theme      
-        mrDoc: _path2['default'].join(mrDocPath, 'node_modules', name),
+      const locations = {
+        // Path to the project's node_modules dir + theme       
+        project: Path.join(projectPath, 'node_modules', name),
+        // Path to Doc's node_modules dir + theme       
+        mrDoc: Path.join(mrDocPath, 'node_modules', name),
         // Path to the theme relative to the calling process for use with a private theme
-        'private': _path2['default'].join(projectPath, name),
-        // Path to the Doc's default theme dir      
-        'default': _path2['default'].join(mrDocPath, 'node_modules', DEFAULT_THEME)
+        private: Path.join(projectPath, name),
+        // Path to the Doc's default theme dir       
+        default: Path.join(mrDocPath, 'node_modules', DEFAULT_THEME)
       };
 
-      if (options['private'] && _dir2['default'].exists(locations['private'])) {
+      if (options.private && Dir.exists(locations.private)) {
         console.log('Mr. Doc [info]: Using private theme [' + name + ']');
         return {
-          name: name,
-          path: locations['private']
+          name,
+          path: locations.private
         };
-      } else if (_dir2['default'].exists(locations.mrDoc)) {
+      } else if (Dir.exists(locations.mrDoc)) {
         console.log('Mr. Doc [info]: Using theme [' + name + ']');
         return {
-          name: name,
+          name,
           path: locations.mrDoc
         };
-      } else if (_dir2['default'].exists(locations.project)) {
+      } else if (Dir.exists(locations.project)) {
         console.log('Mr. Doc [info]: Using theme [' + name + ']');
         return {
-          name: name,
+          name,
           path: locations.project
         };
       } else {
         console.log('Mr. Doc [warn]: Theme "' + name + '" not found, reverting to default.');
         return {
           name: DEFAULT_THEME,
-          path: locations['default']
+          path: locations.default
         };
       }
     }
-  }]);
+    /**    
+     * Copies the theme specified (reverting to default)    
+     * over to the output directory. (Async)  
+     * @jsfiddle https://jsfiddle.net/iwatakeshi/k5xsvoez/embedded/
+     * @return {Function} The promise.    
+     */
+  install(options = this.options) {
+      let final = when.defer();
+      // Check if the template is enabled (legacy)       
+      if (options.template.isEnabled() &&
+        !options.template.isKit()) {
+        final.resolve({
+          template: File.readFileSync(Path.resolve(__dirname, options.template.path)).toString()
+        });
 
-  return Theme;
-})();
+      } else {
+        let tasks = Theme.tasks(options);
+        ((notify) => {
+          return tasks.copyAssets()
+            .tap(() => {
+              notify('Copying Assets.');
+            })
+            .then(tasks.stringifyTemplate)
+            .tap(() => {
+              notify('Rendering template.');
+            })
+            .then(final.resolve);
+        })(tasks.showProgress);
+      }
+      return final.promise;
+    }
+    /**      
+     * Copies the theme specified (reverting to default)    
+     * over to the output directory. (Sync)
+     * @jsfiddle https://jsfiddle.net/iwatakeshi/nLvz3g89/embedded/
+     * @return {String} The template    
+     */
+  installSync(options = this.options) {
+    var template;
+    if (options.template.isEnabled() &&
+      !options.template.isKit()) {
+      return {
+        template: File.readFileSync(Path.resolve(__dirname, options.template.path)).toString()
+      };
+    } else {
+      let tasks = Theme.tasks(options);
+      tasks.copyAssetsSync();
+      tasks.showProgress('Copying assets.');
+      template = tasks.stringifyTemplateSync();
+      tasks.showProgress('Reading template.');
+      tasks.showProgress('Done.');
 
-exports['default'] = Theme;
-module.exports = exports['default'];
-//# sourceMappingURL=source maps/theme.js.map
+      return {
+        template
+      };
+    }
+  }
+}
+export default Theme;

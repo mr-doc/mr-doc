@@ -1,5 +1,5 @@
-const Parser = require('./lib/parsers/');
-const parser = (new Parser({language:'javascript', parser:'acorn'})).factory();
+const Parser = require('./packages/mr-doc-parser');
+const parser = (new Parser({language:'javascript', parser:'babylon'})).factory();
 var results = parser.parse({
   source:`
  /**

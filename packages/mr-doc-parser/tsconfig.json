@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "target": "es6"
+    },
+    "files": [
+      "src/option.ts",
+      "./index.ts",
+      "src/interface.ts",
+      "src/parsers/javascript.ts",
+      "src/utils/javascript/index.ts",
+      "src/utils/javascript/flatteners.ts",
+      "src/utils/javascript/synonyms.ts"
+    ]
+}
