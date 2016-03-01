@@ -2,6 +2,7 @@
 export interface ParserOption {
     language?: string;
     version?: string;
+    parser?: string;
 }
 
 // /**  

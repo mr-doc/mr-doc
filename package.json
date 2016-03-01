@@ -29,6 +29,8 @@
   },
   "dependencies": {
     "acorn": "^3.0.4",
+    "babel-traverse": "^6.5.0",
+    "babylon": "^6.5.2",
     "chai": "^3.5.0",
     "colors": "^1.1.2",
     "commander": "~2.9.0",

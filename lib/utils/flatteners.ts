@@ -1,4 +1,18 @@
-import Extend = require('extend');
+/* 
+ * Copyright (c) 
+ * 2016, mr-doc
+ * 2015, documentationjs <>
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
 
 function flattenName(result, tag) {
   result[tag.title] = tag.name;
@@ -106,59 +120,5 @@ var flatteners = {
   }
 };
 
-/**
- * Flattens tags in an opinionated way.
- *
- * The following tags are assumed to be singletons, and are flattened
- * to a top-level property on the result whose value is extracted from
- * the tag:
- *
- *  * `@name`
- *  * `@memberof`
- *  * `@classdesc`
- *  * `@kind`
- *  * `@class`
- *  * `@constant`
- *  * `@event`
- *  * `@external`
- *  * `@file`
- *  * `@function`
- *  * `@member`
- *  * `@mixin`
- *  * `@module`
- *  * `@namespace`
- *  * `@typedef`
- *  * `@access`
- *  * `@lends`
- *
- * The following tags are flattened to a top-level array-valued property:
- *
- *  * `@param` (to `params` property)
- *  * `@property` (to `properties` property)
- *  * `@returns` (to `returns` property)
- *  * `@augments` (to `augments` property)
- *  * `@example` (to `examples` property)
- *  * `@throws` (to `throws` property)
- *
- * The `@global`, `@static`, `@instance`, and `@inner` tags are flattened
- * to a `scope` property whose value is `"global"`, `"static"`, `"instance"`,
- * or `"inner"`.
- *
- * The `@access`, `@public`, `@protected`, and `@private` tags are flattened
- * to an `access` property whose value is `"protected"` or `"private"`.
- * The assumed default value is `"public"`, so `@access public` or `@public`
- * tags result in no `access` property.
- *
- * @name flatten
- * @param {Object} comment a parsed comment
- * @return {Object} comment with tags flattened
- */
-export = function (comment) {
-  var result = Extend({}, comment);
 
-  comment.tags.forEach(function (tag) {
-    (flatteners[tag.title] || function () {})(result, tag);
-  });
-
-  return result;
-};
+export = flatteners;
