@@ -15,6 +15,8 @@ Currently supported parsers:
 * JavaScript
   * Acorn
   * Babylon
+  * Espree
+    * JSX
 
 ### Contribute
 

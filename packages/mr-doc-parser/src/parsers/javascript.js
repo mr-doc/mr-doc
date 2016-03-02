@@ -1,17 +1,18 @@
 "use strict";
 const Utils = require('../utils/javascript/index');
+const _ = require('lodash');
 const Babylon = require('babylon');
 const BabelTraverse = require('babel-traverse');
 const Acorn = require('acorn');
+const Espree = require('espree');
 const ESCodeGen = require('escodegen');
 const ESTraverse = require('estraverse');
 const Doctrine = require('doctrine');
-const _ = require('lodash');
 const traverse = BabelTraverse.default;
 class JavaScript {
     constructor(version, parser) {
-        this.version = version;
-        this.parser = parser;
+        this.version = _.isEmpty(version) ? "6" : version;
+        this.parser = _.isEmpty(parser) ? "espree" : parser;
         this.file = {};
         this.visited = {};
     }
@@ -58,6 +59,24 @@ class JavaScript {
                 ESCodeGen.attachComments(ast, comments, tokens);
                 return ast;
             }
+            case 'espree': {
+                let comments = [], tokens = [], ast = Espree.parse(file.source, {
+                    range: true,
+                    loc: true,
+                    comment: true,
+                    attachComment: true,
+                    tokens: true,
+                    ecmaVersion: parseInt(this.version),
+                    sourceType: "module",
+                    ecmaFeatures: {
+                        jsx: true,
+                        globalReturn: true,
+                        impliedStrict: true,
+                        experimentalObjectRestSpread: true
+                    }
+                });
+                return ast;
+            }
         }
     }
     walkComments(ast, type, includeContext, results) {
@@ -73,7 +92,7 @@ class JavaScript {
                     }
                 });
                 break;
-            case 'acorn': {
+            default:
                 ESTraverse.traverse(ast, {
                     enter: (node) => {
                         if (node.type === 'Program') {
@@ -85,7 +104,7 @@ class JavaScript {
                                 .forEach(this.parseComment(node, results, includeContext, this.file));
                     }
                 });
-            }
+                break;
         }
     }
     parseComment(node, results, includeContext, file) {

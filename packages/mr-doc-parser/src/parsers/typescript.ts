@@ -13,23 +13,15 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-/// <reference path="../../typings/acorn/acorn" />
 /// <reference path="../../typings/escodegen/escodegen" />
 /// <reference path="../../typings/lodash/lodash" />
-/// <reference path="../../typings/babylon/babylon" />
-/// <reference path="../../typings/babylon/traverse" />
 /// <reference path="../../typings/eslint/doctrine" />
 
 import Option = require('../option');
 import Utils = require('../utils/javascript/index');
 import _ = require('lodash');
-// Babylon
-import Babylon = require('babylon');
-import BabelTraverse = require('babel-traverse');
-// Acorn
-import Acorn = require('acorn');
-// Espree
-import Espree = require('espree');
+// TypeScript
+import TS = require('typescript-eslint-parser');
 //ESTools
 import ESCodeGen = require('escodegen');
 import ESTraverse = require('estraverse');
@@ -37,128 +29,73 @@ import Doctrine = require('doctrine');
 // Interface
 import IParser = require('../interface');
 
-const traverse = BabelTraverse.default;
 
 
 /**
  * JavaScript parser
  */
-class JavaScript implements IParser {
+class TypeScript implements IParser {
   version: string;
-  parser: string;
   private file: any;
   private visited: any;
-  constructor(version: any, parser: string) {
-    this.version = _.isEmpty(version) ? "6" : version;
-    this.parser = _.isEmpty(parser) ? "espree": parser;
+  constructor(version: any) {
+    this.version = (version === "" ? "6" : version);
     this.file = {};
     this.visited = {};
   }
   parse(file: Option.File): any[] {
     this.file = file;
     var results: any[] = [];
-    var ast = this.getAST(file)
+    var ast = this.getAST(file);
+    console.log(ast);
     this.walkComments(ast, 'leadingComments', true, results);
     this.walkComments(ast, 'innerComments', false, results);
     this.walkComments(ast, 'trailingComments', false, results);
     return results;
   }
   private getAST(file: Option.File): any {
-    switch (this.parser) {
-      case 'babylon': {
-        return Babylon.parse(file.source, {
-          allowImportExportEverywhere: true,
-          sourceType: 'module',
-          plugins: [
-            'jsx',
-            'flow',
-            'asyncFunctions',
-            'classConstructorCall',
-            'doExpressions',
-            'trailingFunctionCommas',
-            'objectRestSpread',
-            'decorators',
-            'classProperties',
-            'exportExtensions',
-            'exponentiationOperator',
-            'asyncGenerators',
-            'functionBind',
-            'functionSent'
-          ]
-        });
-      }
-      case 'acorn': {
-        let comments: any[] = [], tokens: any[] = [], ast = Acorn.parse(file.source, {
-          // collect ranges for each node
-          ranges: true,
-          // collect locations for each node
-          locations: true,
-          // collect comments in Esprima's format
-          onComment: comments,
-          // collect token ranges
-          onToken: tokens
-        });
-        ESCodeGen.attachComments(ast, comments, tokens);
-        return ast;
-      }
-      case 'espree': {
-        let comments: any[] = [], tokens: any[] = [], ast = Espree.parse(file.source, {
-          // attach range information to each node
-          range: true,
-          // attach line/column location information to each node
-          loc: true,
-          // create a top-level comments array containing all comments
-          comment: true,
-          // attach comments to the closest relevant node as leadingComments and
-          // trailingComments
-          attachComment: true,
-          // create a top-level tokens array containing all tokens
-          tokens: true,
-          // specify the language version (3, 5, 6, or 7, default is 5)
-          ecmaVersion: parseInt(this.version),
-          // specify which type of script you're parsing (script or module, default is script)
-          sourceType: "module",
-          // specify additional language features
-          ecmaFeatures: {
-            // enable JSX parsing
-            jsx: true,
-            // enable return in global scope
-            globalReturn: true,
-            // enable implied strict mode (if ecmaVersion >= 5)
-            impliedStrict: true,
-            // allow experimental object rest/spread
-            experimentalObjectRestSpread: true
-          }
-        });
-        return ast;
-      }
-    }
+   let comments: any[] = [], tokens: any[] = [], ast = TS.parse(file.source, {
+     // attach range information to each node
+     range: true,
+     // attach line/column location information to each node
+     loc: true,
+     // create a top-level comments array containing all comments
+     comment: true,
+     // attach comments to the closest relevant node as leadingComments and
+     // trailingComments
+     attachComment: true,
+     // create a top-level tokens array containing all tokens
+     tokens: true,
+     // specify the language version (3, 5, 6, or 7, default is 5)
+     ecmaVersion: parseInt(this.version),
+     // specify which type of script you're parsing (script or module, default is script)
+     sourceType: "module",
+     // specify additional language features
+     ecmaFeatures: {
+       // enable JSX parsing
+       jsx: true,
+       // enable return in global scope
+       globalReturn: true,
+       // enable implied strict mode (if ecmaVersion >= 5)
+       impliedStrict: true,
+       // allow experimental object rest/spread
+       experimentalObjectRestSpread: true
+     }
+   });
+   return ast;
   }
   private walkComments(ast: any, type: string, includeContext: boolean, results: any[]) {
-    switch (this.parser) {
-      case 'babylon':
-        traverse(ast, {
-          enter: (path: any) => {
-            var node = path.node;
-            if (node && node[type]) node[type]
-              .filter(this.isJSDocComment)
-              .forEach(this.parseComment(node, results, includeContext, this.file));
-          }
-        });
-        break;
-      default:
-        ESTraverse.traverse(ast, {
+    ESTraverse.traverse(ast, {
           enter: (node: any) => {
             if (node.type === 'Program') {
               node = node.body[0];
             }
+            console.log('node', node);
             if (node && node[type]) node[type]
               .filter(this.isJSDocComment)
               .forEach(this.parseComment(node, results, includeContext, this.file));
           }
         });
-        break;
-    }
   }
   private parseComment(node: any, results: any[], includeContext: boolean, file: any) {
     /**
@@ -194,7 +131,8 @@ class JavaScript implements IParser {
       }
     }
   }
-  private parseJSDoc(comment: any, loc: any, context: any): any {
+
+  private parseJSDoc(comment: any, loc: any, context: any) {
     var result = Doctrine.parse(comment, {
       // have doctrine itself remove the comment asterisks from content
       unwrap: true,
@@ -224,7 +162,7 @@ class JavaScript implements IParser {
     }
     return Utils.flatten(Utils.normalize(result));
   }
-  private isJSDocComment(comment: any): boolean {
+  private isJSDocComment(comment: any) {
     var asterisks = comment.value.match(/^(\*+)/);
     return (comment.type === 'CommentBlock' || // estree
       comment.type === 'Block') // get-comments / traditional
@@ -232,4 +170,4 @@ class JavaScript implements IParser {
   }
 }
 
-export = JavaScript;
+export = TypeScript;
