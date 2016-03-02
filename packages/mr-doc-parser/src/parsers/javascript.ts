@@ -89,6 +89,7 @@ class JavaScript implements IParser {
       }
       case 'acorn': {
         let comments: any[] = [], tokens: any[] = [], ast = Acorn.parse(file.source, {
+          ecmaVersion: parseInt(this.version),
           // collect ranges for each node
           ranges: true,
           // collect locations for each node

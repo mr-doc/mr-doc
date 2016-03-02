@@ -51,6 +51,7 @@ class JavaScript {
             }
             case 'acorn': {
                 let comments = [], tokens = [], ast = Acorn.parse(file.source, {
+                    ecmaVersion: parseInt(this.version),
                     ranges: true,
                     locations: true,
                     onComment: comments,
