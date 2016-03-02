@@ -44,10 +44,12 @@ class JavaScript implements IParser {
   version: string;
   parser: string;
   private file: any;
+  private visited: any;
   constructor(version:any, parser: string) {
     this.version = version;
     this.parser = parser;
     this.file = {};
+    this.visited = {};
   }
   parse(file: Option.File): any[] {
     this.file = file;
@@ -99,7 +101,6 @@ class JavaScript implements IParser {
     }
   }
   private walkComments(ast: any, type: string, includeContext: boolean, results: any[]) {
-    var visited = {};
     switch (this.parser) {
       case 'babylon':
         traverse(ast, {
@@ -107,7 +108,7 @@ class JavaScript implements IParser {
             var node = path.node;
             if (node && node[type]) node[type]
               .filter(this.isJSDocComment)
-              .forEach(this.parseComment(node, results, includeContext, visited, this.file));
+              .forEach(this.parseComment(node, results, includeContext, this.file));
           }
         });
         break;
@@ -119,13 +120,13 @@ class JavaScript implements IParser {
             }
             if (node && node[type]) node[type]
               .filter(this.isJSDocComment)
-              .forEach(this.parseComment(node, results, includeContext, visited, this.file));
+              .forEach(this.parseComment(node, results, includeContext, this.file));
           }
         })
       }
     }
   }
-  private parseComment(node: any, results: any[], includeContext: boolean, visited:any, file: any) {
+  private parseComment(node: any, results: any[], includeContext: boolean, file: any) {
     /**
         * Parse a comment with doctrine and decorate the result with file position and code context.
         *
@@ -140,9 +141,9 @@ class JavaScript implements IParser {
     return (comment:any) => {
       // Avoid visiting the same comment twice as a leading
       // and trailing node
-      var key = JSON.stringify(comment.loc);
-      if (!visited[key]) {
-        visited[key] = true;
+      var key = JSON.stringify({loc: comment.loc, range: comment.range});
+      if (!this.visited[key]) {
+        this.visited[key] = true;
         if (includeContext) {
           // This is non-enumerable so that it doesn't get stringified in
           // output; e.g. by the documentation binary.
@@ -150,16 +151,10 @@ class JavaScript implements IParser {
             enumerable: false,
             value: node
           });
-          if (node.parent && node.parent.node) {
-            context.code = file.source.substring
-              .apply(file.source, node.parent.range);
-          } else if (node.range) {
-            context.code = file.source.substring
-              .apply(file.source, node.range);
-          } else if(node.start && node.end) {
-            context.code = file.source.substring
-            .apply(file.source, [node.start, node.end]);
-          }
+          let range = (node.parent && node.parent) ? node.parent.range : [node.start, node.end];
+          range = !range ? node.range : range;
+          range = !range ? [node.start, node.end] : range;
+          context.code = file.source.substring.apply(file.source, range);
         }
         results.push(this.parseJSDoc(comment.value, comment.loc, context));
       }

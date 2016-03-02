@@ -1,5 +1,5 @@
 const Parser = require('./packages/mr-doc-parser');
-const parser = (new Parser({language:'javascript', parser:'babylon'})).factory();
+const parser = (new Parser({language:'javascript', parser:'acorn'})).factory();
 var results = parser.parse({
   source:`
  /**
@@ -9,11 +9,19 @@ var results = parser.parse({
   * let honda = new Car('Honda');
   */
   class Car {
-    
+
   }
+  /**
+   * Greets the user
+   * @return {string} The greeting messsage
+   */
+  function greet(user) {
+    return \`Hello \${user}!\`;
+  }
+
  `,
  path: './',
  name: 'index'
 });
- 
-results.forEach(console.log);
+
+console.log(results.length);

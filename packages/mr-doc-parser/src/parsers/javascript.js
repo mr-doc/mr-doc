@@ -13,6 +13,7 @@ class JavaScript {
         this.version = version;
         this.parser = parser;
         this.file = {};
+        this.visited = {};
     }
     parse(file) {
         this.file = file;
@@ -60,7 +61,6 @@ class JavaScript {
         }
     }
     walkComments(ast, type, includeContext, results) {
-        var visited = {};
         switch (this.parser) {
             case 'babylon':
                 traverse(ast, {
@@ -69,7 +69,7 @@ class JavaScript {
                         if (node && node[type])
                             node[type]
                                 .filter(this.isJSDocComment)
-                                .forEach(this.parseComment(node, results, includeContext, visited, this.file));
+                                .forEach(this.parseComment(node, results, includeContext, this.file));
                     }
                 });
                 break;
@@ -82,39 +82,31 @@ class JavaScript {
                         if (node && node[type])
                             node[type]
                                 .filter(this.isJSDocComment)
-                                .forEach(this.parseComment(node, results, includeContext, visited, this.file));
+                                .forEach(this.parseComment(node, results, includeContext, this.file));
                     }
                 });
             }
         }
     }
-    parseComment(node, results, includeContext, visited, file) {
+    parseComment(node, results, includeContext, file) {
         var context = {
             loc: _.extend({}, JSON.parse(JSON.stringify(node.loc))),
             file: file,
             code: undefined
         };
         return (comment) => {
-            var key = JSON.stringify(comment.loc);
-            if (!visited[key]) {
-                visited[key] = true;
+            var key = JSON.stringify({ loc: comment.loc, range: comment.range });
+            if (!this.visited[key]) {
+                this.visited[key] = true;
                 if (includeContext) {
                     Object.defineProperty(context, 'ast', {
                         enumerable: false,
                         value: node
                     });
-                    if (node.parent && node.parent.node) {
-                        context.code = file.source.substring
-                            .apply(file.source, node.parent.range);
-                    }
-                    else if (node.range) {
-                        context.code = file.source.substring
-                            .apply(file.source, node.range);
-                    }
-                    else if (node.start && node.end) {
-                        context.code = file.source.substring
-                            .apply(file.source, [node.start, node.end]);
-                    }
+                    let range = (node.parent && node.parent) ? node.parent.range : [node.start, node.end];
+                    range = !range ? node.range : range;
+                    range = !range ? [node.start, node.end] : range;
+                    context.code = file.source.substring.apply(file.source, range);
                 }
                 results.push(this.parseJSDoc(comment.value, comment.loc, context));
             }
