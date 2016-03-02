@@ -17,6 +17,7 @@ Currently supported parsers:
   * Babylon
   * Espree
     * JSX
+* Typescript (Experimental)
 
 ### Contribute
 
