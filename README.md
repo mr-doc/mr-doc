@@ -21,7 +21,7 @@ Both the parser and compiler will use the factory pattern and will be written in
 
 So far, there is a Javascript parser that can use different backends (acorn, espree, bablyon) and a Compiler that writes to JSON. Both are in a working state, however, they need your help to become better.
 
-Specifically, there is no standard on how the array of parsed source/comments should look like to support different compilers. Most of the code is refactored version of [document.js](https://github.com/documentationjs/documentation)'s and the credit goes towards them for an awesome project.
+Specifically, there is no standard on how the array of parsed source/comments should look like to support different compilers. Most of the code is refactored version of [document.js](https://github.com/documentationjs/documentation)' and the credit goes towards them for an awesome project.
 
 By no means does Mr. Doc want to be the same as [document.js](https://github.com/documentationjs/documentation). Mr. Doc will be unique, experiment to improvement, and serve developers in it's best possible way.
 
