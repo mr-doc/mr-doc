@@ -2,7 +2,7 @@ declare module Option {
   export interface Parser {
       language?: string;
       version?: string;
-      parser?: string;
+      engine?: string;
   }
   export interface File {
     name: string;

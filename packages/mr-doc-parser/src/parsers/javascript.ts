@@ -45,12 +45,12 @@ const traverse = BabelTraverse.default;
  */
 class JavaScript implements IParser {
   version: string;
-  parser: string;
+  engine: string;
   private file: any;
   private visited: any;
-  constructor(version: any, parser: string) {
-    this.version = _.isEmpty(version) ? "6" : version;
-    this.parser = _.isEmpty(parser) ? "espree": parser;
+  constructor(options: Option.Parser) {
+    this.version = _.isEmpty(options.version) ? "6" : options.version;
+    this.engine = _.isEmpty(options.engine) ? "espree": options.engine;
     this.file = {};
     this.visited = {};
   }
@@ -64,7 +64,7 @@ class JavaScript implements IParser {
     return results;
   }
   private getAST(file: Option.File): any {
-    switch (this.parser) {
+    switch (this.engine) {
       case 'babylon': {
         return Babylon.parse(file.source, {
           allowImportExportEverywhere: true,
@@ -136,7 +136,7 @@ class JavaScript implements IParser {
     }
   }
   private walkComments(ast: any, type: string, includeContext: boolean, results: any[]) {
-    switch (this.parser) {
+    switch (this.engine) {
       case 'babylon':
         traverse(ast, {
           enter: (path: any) => {

@@ -5,8 +5,8 @@ const TS = require('typescript-eslint-parser');
 const ESTraverse = require('estraverse');
 const Doctrine = require('doctrine');
 class TypeScript {
-    constructor(version) {
-        this.version = (_.isEmpty(version) ? "6" : version);
+    constructor(options) {
+        this.version = (options.version === "" ? "6" : options.version);
         this.file = {};
         this.visited = {};
     }

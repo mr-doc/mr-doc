@@ -10,9 +10,9 @@ const ESTraverse = require('estraverse');
 const Doctrine = require('doctrine');
 const traverse = BabelTraverse.default;
 class JavaScript {
-    constructor(version, parser) {
-        this.version = _.isEmpty(version) ? "6" : version;
-        this.parser = _.isEmpty(parser) ? "espree" : parser;
+    constructor(options) {
+        this.version = _.isEmpty(options.version) ? "6" : options.version;
+        this.engine = _.isEmpty(options.engine) ? "espree" : options.engine;
         this.file = {};
         this.visited = {};
     }
@@ -26,7 +26,7 @@ class JavaScript {
         return results;
     }
     getAST(file) {
-        switch (this.parser) {
+        switch (this.engine) {
             case 'babylon': {
                 return Babylon.parse(file.source, {
                     allowImportExportEverywhere: true,
@@ -81,7 +81,7 @@ class JavaScript {
         }
     }
     walkComments(ast, type, includeContext, results) {
-        switch (this.parser) {
+        switch (this.engine) {
             case 'babylon':
                 traverse(ast, {
                     enter: (path) => {

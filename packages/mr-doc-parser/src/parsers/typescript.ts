@@ -29,8 +29,6 @@ import Doctrine = require('doctrine');
 // Interface
 import IParser = require('../interface');
 
-
-
 /**
  * JavaScript parser
  */
@@ -38,8 +36,8 @@ class TypeScript implements IParser {
   version: string;
   private file: any;
   private visited: any;
-  constructor(version: any) {
-    this.version = (version === "" ? "6" : version);
+  constructor(options: Option.Parser) {
+    this.version = (options.version === "" ? "6" : options.version);
     this.file = {};
     this.visited = {};
   }
