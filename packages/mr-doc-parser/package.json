@@ -1,7 +1,7 @@
 {
   "name": "mr-doc-parser",
   "version": "1.0.0",
-  "description": "The documenter parser that powers Mr. Doc",
+  "description": "The source parser that powers Mr. Doc",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

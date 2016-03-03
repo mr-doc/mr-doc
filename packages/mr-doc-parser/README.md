@@ -23,7 +23,6 @@ Currently supported parsers:
 
 Creating a parser is simple. Because the source is written in TypeScript, you can use the parser interface (`interface.ts`) and implement the members of the interface. Then take a look at the parser for JavaScript and see how it's done!
 
-
 #### Example
 
 ```ts

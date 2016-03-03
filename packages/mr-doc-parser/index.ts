@@ -14,9 +14,9 @@ class Parser {
   factory(): IParser {
     switch (this.config.language) {
       case 'javascript':
-        return new JavaScript(this.config.version, this.config.parser);
+        return new JavaScript(this.config);
       case 'typescript':
-        return new TypeScript(this.config.version);
+        return new TypeScript(this.config);
     }
   }
 }

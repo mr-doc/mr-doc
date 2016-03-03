@@ -17,8 +17,6 @@
 import _ = require('lodash');
 import flatteners = require('./flatteners');
 import synonyms = require('./synonyms');
-
-module Utils {
   /**
  * Flattens tags in an opinionated way.
  *
@@ -124,6 +122,3 @@ module Utils {
       })
     });
   };
-}
-
-export = Utils;
