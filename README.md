@@ -33,6 +33,17 @@ At the moment, discussions will be most helpful to get Mr. Doc into the right pa
 
 Finally, thank you. It means a lot to receive your contributions. :)
 
+### Notes:
+
+* Mr. Doc is a monolithic repo
+  * The parsers and compilers are located under `packages/`
+  * None of the packages have been published on npm...*yet*
+* Technically, a Typescript parser does exist
+  * It's using ESlint's typescript parser and the output does not seem correct.
+    * If you're a typescript AST guru, please [contribute](https://github.com/eslint/typescript-eslint-parser) to improve it! I would like to support TypeScript!
+* There other parsers I would like to support such as CoffeScript
+  * Please start a discussion about creating a parser for CoffeeScript if interested.
+
 ~~Mr. Doc is a total refactoring of [dox-foundation](https://github.com/punkave/dox-foundation/)  written in ES6, transformed to ES5 with [Babel](https://babeljs.io/), and is based on [dox](https://github.com/visionmedia/dox). He can automatically generate beautiful documentations and can further spice up your documentations using themes.~~
 
 ~~By default, Mr. Doc uses [mr-doc-theme-default](https://www.github.com/mr-doc/mr-doc-theme-default) which uses
