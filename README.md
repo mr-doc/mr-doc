@@ -8,11 +8,36 @@ Artwork by [Ben Matsuya](http://www.matsuyacreative.com/about/).
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/mr-doc/mr-doc/master/LICENSE.md)
 [![npm](https://img.shields.io/npm/dt/mr-doc.svg)](https://www.npmjs.com/package/mr-doc)
 
-Mr. Doc is a total refactoring of [dox-foundation](https://github.com/punkave/dox-foundation/)  written in ES6, transformed to ES5 with [Babel](https://babeljs.io/), and is based on [dox](https://github.com/visionmedia/dox). He can automatically generate beautiful documentations and can further spice up your documentations using themes.
 
-By default, Mr. Doc uses [mr-doc-theme-default](https://www.github.com/mr-doc/mr-doc-theme-default) which uses
+# Mr. Doc 4.0.0 (Work In Progress)
+
+Mr. Doc is an active and a "work in progress" project that seeks to improve the way we document our code. 4.0.0 is starting point for Mr. Doc to become a language agnostic documenter.
+
+## So what's going on?
+
+The parser will depart from dox and become even more modular than before as well as the compiler become somewhat un-opinionated.
+
+Both the parser and compiler will use the factory pattern and will be written in Typescript. Thanks to Typescript, we can implement a simple interface and create different parsers and compilers.
+
+So far, there is a Javascript parser that can use different backends (acorn, espree, bablyon) and a Compiler that writes to JSON. Both are in a working state, however, they need your help to become better.
+
+Specifically, there is no standard on how the array of parsed source/comments should look like to support different compilers. Most of the code is refactored version of [document.js](https://github.com/documentationjs/documentation)'s and the credit goes towards them for an awesome project.
+
+By no means does Mr. Doc want to be the same as [document.js](https://github.com/documentationjs/documentation). Mr. Doc will be unique, experiment to improvement, and serve developers in it's best possible way.
+
+## Cool! How can I help?
+
+Mr. Doc is nothing without you. If you would like to contribute, I (@iwatakeshi) will be willing take suggestions, pull requests, and any form of contributions that may improve Mr. Doc.
+
+At the moment, discussions will be most helpful to get Mr. Doc into the right path. Just check out the issues that are flagged as `4.0.0` or `help wanted`.
+
+Finally, thank you. It means a lot to receive your contributions. :)
+
+~~Mr. Doc is a total refactoring of [dox-foundation](https://github.com/punkave/dox-foundation/)  written in ES6, transformed to ES5 with [Babel](https://babeljs.io/), and is based on [dox](https://github.com/visionmedia/dox). He can automatically generate beautiful documentations and can further spice up your documentations using themes.~~
+
+~~By default, Mr. Doc uses [mr-doc-theme-default](https://www.github.com/mr-doc/mr-doc-theme-default) which uses
 [Twitter Bootstrap](https://twitter.github.com/bootstrap/) for the frontend framework and [Prism.js](http://prismjs.com/)
-for syntax highlighting.
+for syntax highlighting.~~
 
 Visit the [official site](https://mr-doc.github.io/) for instructions to install Mr. Doc and other themes.
 
