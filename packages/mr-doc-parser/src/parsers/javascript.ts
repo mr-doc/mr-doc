@@ -30,7 +30,7 @@ import BabelTraverse = require('babel-traverse');
 import Acorn = require('acorn');
 // Espree
 import Espree = require('espree');
-//ESTools
+// ESTools
 import ESCodeGen = require('escodegen');
 import ESTraverse = require('estraverse');
 import Doctrine = require('doctrine');
@@ -44,20 +44,20 @@ const traverse = BabelTraverse.default;
  * JavaScript parser
  */
 class JavaScript implements IParser {
-  version: string;
-  engine: string;
+  public version: string;
+  public engine: string;
   private file: any;
   private visited: any;
   constructor(options: Option.Parser) {
-    this.version = _.isEmpty(options.version) ? "6" : options.version;
-    this.engine = _.isEmpty(options.engine) ? "espree": options.engine;
+    this.version = _.isEmpty(options.version) ? '6' : options.version;
+    this.engine = _.isEmpty(options.engine) ? 'espree' : options.engine;
     this.file = {};
     this.visited = {};
   }
-  parse(file: Option.File): any[] {
+  public parse(file: Option.File): any[] {
     this.file = file;
-    var results: any[] = [];
-    var ast = this.getAST(file)
+    let results: any[] = [];
+    let ast = this.getAST(file);
     this.walkComments(ast, 'leadingComments', true, results);
     this.walkComments(ast, 'innerComments', false, results);
     this.walkComments(ast, 'trailingComments', false, results);
@@ -68,7 +68,6 @@ class JavaScript implements IParser {
       case 'babylon': {
         return Babylon.parse(file.source, {
           allowImportExportEverywhere: true,
-          sourceType: 'module',
           plugins: [
             'jsx',
             'flow',
@@ -83,53 +82,37 @@ class JavaScript implements IParser {
             'exponentiationOperator',
             'asyncGenerators',
             'functionBind',
-            'functionSent'
-          ]
+            'functionSent',
+          ],
+          sourceType: 'module',
         });
       }
       case 'acorn': {
         let comments: any[] = [], tokens: any[] = [], ast = Acorn.parse(file.source, {
-          ecmaVersion: parseInt(this.version),
-          // collect ranges for each node
-          ranges: true,
-          // collect locations for each node
+          ecmaVersion: parseInt(this.version, 10),
           locations: true,
-          // collect comments in Esprima's format
           onComment: comments,
-          // collect token ranges
-          onToken: tokens
+          onToken: tokens,
+          ranges: true,
         });
         ESCodeGen.attachComments(ast, comments, tokens);
         return ast;
       }
       case 'espree': {
-        let comments: any[] = [], tokens: any[] = [], ast = Espree.parse(file.source, {
-          // attach range information to each node
-          range: true,
-          // attach line/column location information to each node
-          loc: true,
-          // create a top-level comments array containing all comments
-          comment: true,
-          // attach comments to the closest relevant node as leadingComments and
-          // trailingComments
+        let ast = Espree.parse(file.source, {
           attachComment: true,
-          // create a top-level tokens array containing all tokens
-          tokens: true,
-          // specify the language version (3, 5, 6, or 7, default is 5)
-          ecmaVersion: parseInt(this.version),
-          // specify which type of script you're parsing (script or module, default is script)
-          sourceType: "module",
-          // specify additional language features
+          comment: true,
           ecmaFeatures: {
-            // enable JSX parsing
+           experimentalObjectRestSpread: true,
+           globalReturn: true,
+           impliedStrict: true,
             jsx: true,
-            // enable return in global scope
-            globalReturn: true,
-            // enable implied strict mode (if ecmaVersion >= 5)
-            impliedStrict: true,
-            // allow experimental object rest/spread
-            experimentalObjectRestSpread: true
-          }
+          },
+          ecmaVersion: parseInt(this.version, 10),
+          loc: true,
+          range: true,
+          sourceType: 'module',
+          tokens: true,
         });
         return ast;
       }
@@ -140,12 +123,13 @@ class JavaScript implements IParser {
       case 'babylon':
         traverse(ast, {
           enter: (path: any) => {
-            var node = path.node;
-            if (node && node[type]) node[type]
-              .filter(this.isJSDocComment)
-              .forEach(this.parseComment(node, results, includeContext, this.file));
-          }
-        });
+            let node = path.node;
+            if (node && node[type]) {
+             node[type]
+               .filter(this.isJSDocComment)
+               .forEach(this.parseComment(node, results, includeContext, this.file));
+            }
+          }, });
         break;
       default:
         ESTraverse.traverse(ast, {
@@ -153,11 +137,12 @@ class JavaScript implements IParser {
             if (node.type === 'Program') {
               node = node.body[0];
             }
-            if (node && node[type]) node[type]
-              .filter(this.isJSDocComment)
-              .forEach(this.parseComment(node, results, includeContext, this.file));
-          }
-        });
+            if (node && node[type]) {
+             node[type]
+               .filter(this.isJSDocComment)
+               .forEach(this.parseComment(node, results, includeContext, this.file));
+            }
+          }, });
         break;
     }
   }
@@ -168,15 +153,15 @@ class JavaScript implements IParser {
         * @param {Object} comment the current state of the parsed JSDoc comment
         * @return {undefined} this emits data
         */
-    var context = {
-      loc: _.extend({}, JSON.parse(JSON.stringify(node.loc))),
+    let context = {
+      code: undefined as any,
       file: file,
-      code: undefined as any
+      loc: _.extend({}, JSON.parse(JSON.stringify(node.loc))),
     };
     return (comment: any) => {
       // Avoid visiting the same comment twice as a leading
       // and trailing node
-      var key = JSON.stringify({ loc: comment.loc, range: comment.range });
+      let key = JSON.stringify({ loc: comment.loc, range: comment.range });
       if (!this.visited[key]) {
         this.visited[key] = true;
         if (includeContext) {
@@ -184,7 +169,7 @@ class JavaScript implements IParser {
           // output; e.g. by the documentation binary.
           Object.defineProperty(context, 'ast', {
             enumerable: false,
-            value: node
+            value: node,
           });
           let range = (node.parent && node.parent) ? node.parent.range : [node.start, node.end];
           range = !range ? node.range : range;
@@ -193,29 +178,25 @@ class JavaScript implements IParser {
         }
         results.push(this.parseJSDoc(comment.value, comment.loc, context));
       }
-    }
+    };
   }
   private parseJSDoc(comment: any, loc: any, context: any): any {
-    var result = Doctrine.parse(comment, {
-      // have doctrine itself remove the comment asterisks from content
-      unwrap: true,
-      // enable parsing of optional parameters in brackets, JSDoc3 style
-      sloppy: true,
-      // `recoverable: true` is the only way to get error information out
+    let result = Doctrine.parse(comment, {
+      lineNumbers: true,
       recoverable: true,
-      // include line numbers
-      lineNumbers: true
+      sloppy: true,
+      unwrap: true,
     });
 
     result.loc = loc;
     result.context = context;
     result.errors = [];
 
-    var i = 0;
+    let i = 0;
     while (i < result.tags.length) {
-      var tag = result.tags[i];
+      let tag = result.tags[i];
       if (tag.errors) {
-        for (var j = 0; j < tag.errors.length; j++) {
+        for (let j = 0; j < tag.errors.length; j++) {
           result.errors.push({ message: tag.errors[j] });
         }
         result.tags.splice(i, 1);
@@ -226,7 +207,7 @@ class JavaScript implements IParser {
     return Utils.flatten(Utils.normalize(result));
   }
   private isJSDocComment(comment: any): boolean {
-    var asterisks = comment.value.match(/^(\*+)/);
+    let asterisks = comment.value.match(/^(\*+)/);
     return (comment.type === 'CommentBlock' || // estree
       comment.type === 'Block') // get-comments / traditional
       && asterisks && asterisks[1].length === 1;

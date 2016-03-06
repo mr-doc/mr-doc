@@ -34,5 +34,6 @@
     "estraverse": "^4.1.1",
     "lodash": "^4.5.1",
     "typescript-eslint-parser": "0.1.0-alpha-1"
-  }
+  },
+  "devDependencies": {}
 }

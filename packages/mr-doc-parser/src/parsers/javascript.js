@@ -11,15 +11,15 @@ const Doctrine = require('doctrine');
 const traverse = BabelTraverse.default;
 class JavaScript {
     constructor(options) {
-        this.version = _.isEmpty(options.version) ? "6" : options.version;
-        this.engine = _.isEmpty(options.engine) ? "espree" : options.engine;
+        this.version = _.isEmpty(options.version) ? '6' : options.version;
+        this.engine = _.isEmpty(options.engine) ? 'espree' : options.engine;
         this.file = {};
         this.visited = {};
     }
     parse(file) {
         this.file = file;
-        var results = [];
-        var ast = this.getAST(file);
+        let results = [];
+        let ast = this.getAST(file);
         this.walkComments(ast, 'leadingComments', true, results);
         this.walkComments(ast, 'innerComments', false, results);
         this.walkComments(ast, 'trailingComments', false, results);
@@ -30,7 +30,6 @@ class JavaScript {
             case 'babylon': {
                 return Babylon.parse(file.source, {
                     allowImportExportEverywhere: true,
-                    sourceType: 'module',
                     plugins: [
                         'jsx',
                         'flow',
@@ -45,36 +44,37 @@ class JavaScript {
                         'exponentiationOperator',
                         'asyncGenerators',
                         'functionBind',
-                        'functionSent'
-                    ]
+                        'functionSent',
+                    ],
+                    sourceType: 'module',
                 });
             }
             case 'acorn': {
                 let comments = [], tokens = [], ast = Acorn.parse(file.source, {
-                    ecmaVersion: parseInt(this.version),
-                    ranges: true,
+                    ecmaVersion: parseInt(this.version, 10),
                     locations: true,
                     onComment: comments,
-                    onToken: tokens
+                    onToken: tokens,
+                    ranges: true,
                 });
                 ESCodeGen.attachComments(ast, comments, tokens);
                 return ast;
             }
             case 'espree': {
-                let comments = [], tokens = [], ast = Espree.parse(file.source, {
-                    range: true,
-                    loc: true,
-                    comment: true,
+                let ast = Espree.parse(file.source, {
                     attachComment: true,
-                    tokens: true,
-                    ecmaVersion: parseInt(this.version),
-                    sourceType: "module",
+                    comment: true,
                     ecmaFeatures: {
-                        jsx: true,
+                        experimentalObjectRestSpread: true,
                         globalReturn: true,
                         impliedStrict: true,
-                        experimentalObjectRestSpread: true
-                    }
+                        jsx: true,
+                    },
+                    ecmaVersion: parseInt(this.version, 10),
+                    loc: true,
+                    range: true,
+                    sourceType: 'module',
+                    tokens: true,
                 });
                 return ast;
             }
@@ -85,13 +85,13 @@ class JavaScript {
             case 'babylon':
                 traverse(ast, {
                     enter: (path) => {
-                        var node = path.node;
-                        if (node && node[type])
+                        let node = path.node;
+                        if (node && node[type]) {
                             node[type]
                                 .filter(this.isJSDocComment)
                                 .forEach(this.parseComment(node, results, includeContext, this.file));
-                    }
-                });
+                        }
+                    }, });
                 break;
             default:
                 ESTraverse.traverse(ast, {
@@ -99,29 +99,29 @@ class JavaScript {
                         if (node.type === 'Program') {
                             node = node.body[0];
                         }
-                        if (node && node[type])
+                        if (node && node[type]) {
                             node[type]
                                 .filter(this.isJSDocComment)
                                 .forEach(this.parseComment(node, results, includeContext, this.file));
-                    }
-                });
+                        }
+                    }, });
                 break;
         }
     }
     parseComment(node, results, includeContext, file) {
-        var context = {
-            loc: _.extend({}, JSON.parse(JSON.stringify(node.loc))),
+        let context = {
+            code: undefined,
             file: file,
-            code: undefined
+            loc: _.extend({}, JSON.parse(JSON.stringify(node.loc))),
         };
         return (comment) => {
-            var key = JSON.stringify({ loc: comment.loc, range: comment.range });
+            let key = JSON.stringify({ loc: comment.loc, range: comment.range });
             if (!this.visited[key]) {
                 this.visited[key] = true;
                 if (includeContext) {
                     Object.defineProperty(context, 'ast', {
                         enumerable: false,
-                        value: node
+                        value: node,
                     });
                     let range = (node.parent && node.parent) ? node.parent.range : [node.start, node.end];
                     range = !range ? node.range : range;
@@ -133,20 +133,20 @@ class JavaScript {
         };
     }
     parseJSDoc(comment, loc, context) {
-        var result = Doctrine.parse(comment, {
-            unwrap: true,
-            sloppy: true,
+        let result = Doctrine.parse(comment, {
+            lineNumbers: true,
             recoverable: true,
-            lineNumbers: true
+            sloppy: true,
+            unwrap: true,
         });
         result.loc = loc;
         result.context = context;
         result.errors = [];
-        var i = 0;
+        let i = 0;
         while (i < result.tags.length) {
-            var tag = result.tags[i];
+            let tag = result.tags[i];
             if (tag.errors) {
-                for (var j = 0; j < tag.errors.length; j++) {
+                for (let j = 0; j < tag.errors.length; j++) {
                     result.errors.push({ message: tag.errors[j] });
                 }
                 result.tags.splice(i, 1);
@@ -158,7 +158,7 @@ class JavaScript {
         return Utils.flatten(Utils.normalize(result));
     }
     isJSDocComment(comment) {
-        var asterisks = comment.value.match(/^(\*+)/);
+        let asterisks = comment.value.match(/^(\*+)/);
         return (comment.type === 'CommentBlock' ||
             comment.type === 'Block')
             && asterisks && asterisks[1].length === 1;

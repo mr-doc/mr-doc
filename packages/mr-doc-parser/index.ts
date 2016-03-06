@@ -6,12 +6,12 @@ import Option = require('./src/option');
  * Parser
  */
 class Parser {
-  config: Option.Parser;
+  private config: Option.Parser;
   constructor(config: Option.Parser) {
     this.config = config;
   }
 
-  factory(): IParser {
+  public factory(): IParser {
     switch (this.config.language) {
       case 'javascript':
         return new JavaScript(this.config);
