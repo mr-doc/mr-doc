@@ -16,6 +16,10 @@ for syntax highlighting.
 
 Visit the [official site](https://mr-doc.github.io/) for instructions to install Mr. Doc and other themes.
 
+## Project Status
+
+Mr. Doc is getting ready for a new version (v4.0.0) and is looking for contributors! If you are interested in helping out, please see [#111](https://github.com/mr-doc/mr-doc/issues/111).
+
 
 ## Documentation Style
 
@@ -72,9 +76,9 @@ $ mr-doc --help
 
 ## Roadmap
 
-### Next
+### 4.0.0
 
-See issue [#94](https://github.com/mr-doc/mr-doc/issues/94).
+See issue [#111](https://github.com/mr-doc/mr-doc/issues/111).
 
 ## Contributing
 
