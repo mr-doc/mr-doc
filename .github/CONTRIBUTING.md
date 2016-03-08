@@ -25,6 +25,33 @@ The IDE used frequently to develop Mr. Doc. are:
 * Visual Studio Code
 * Atom
 
+## Commiting and Versioning
+
+Write your commit summary as :strawberry: Patch, :candy: Minor, or :cake: Major. In the extended description, write your tested changes in past test. If you are unsure whether the changes you have made has fixed the issue, write your changes in present test.
+
+**Example**
+
+In the commit summary:
+```
+:candy: Minor
+```
+In the extended description:
+```
+Added Hakata Ramen to the menu [: Some optional description of the changes of what it does].
+Updated my life.
+Fix #12.
+```
+
+If you are unsure which version you are to commit, see the summary below from [semver.org](https://semver.org):
+
+```
+Given a version number MAJOR.MINOR.PATCH, increment the:
+
+MAJOR version when you make incompatible API changes,
+MINOR version when you add functionality in a backwards-compatible manner, and
+PATCH version when you make backwards-compatible bug fixes.
+Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
+```
 
 ## Contributor Code of Conduct
 
