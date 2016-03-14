@@ -4,7 +4,7 @@ This is a monolithic repo containing Mr. Doc's comment parser.
 
 ### Purpose
 
-Takes the parsed comments and returns viewable output.
+Takes the parsed comments and returns a viewable output.
 
 ### Compiler
 
