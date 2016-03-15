@@ -118,17 +118,16 @@ class JavaScript implements IParser {
       }
     }
   }
-  private walkComments(ast: any, type: string, includeContext: boolean, results: any[]) {
+  private walkComments(ast: any, type: string, includeContext: boolean, results: any[]): any[] {
+   console.log('current engine:', this.engine);
     switch (this.engine) {
       case 'babylon':
         traverse(ast, {
           enter: (path: any) => {
             let node = path.node;
-            if (node && node[type]) {
-             node[type]
+             (node[type] || [])
                .filter(this.isJSDocComment)
                .forEach(this.parseComment(node, results, includeContext, this.file));
-            }
           }, });
         break;
       default:
@@ -137,26 +136,33 @@ class JavaScript implements IParser {
             if (node.type === 'Program') {
               node = node.body[0];
             }
-            if (node && node[type]) {
-             node[type]
+             (node[type] || [])
                .filter(this.isJSDocComment)
                .forEach(this.parseComment(node, results, includeContext, this.file));
-            }
           }, });
         break;
     }
+    return results;
   }
+  /**
+   * Parse a comment with doctrine and decorate the result with file position and code context.
+   *
+   * @param {Object} comment the current state of the parsed JSDoc comment
+   * @return {undefined} this emits data
+   */
   private parseComment(node: any, results: any[], includeContext: boolean, file: any) {
-    /**
-        * Parse a comment with doctrine and decorate the result with file position and code context.
-        *
-        * @param {Object} comment the current state of the parsed JSDoc comment
-        * @return {undefined} this emits data
-        */
+   let range = (node.parent && node.parent) ? node.parent.range : [node.start, node.end];
+   range = !range ? node.range : range;
+   range = !range ? [node.start, node.end] : range;
+
     let context = {
-      code: undefined as any,
+      code: null as any,
       file: file,
       loc: _.extend({}, JSON.parse(JSON.stringify(node.loc))),
+      range: {
+       column: [node.loc.start.column, node.loc.end.column],
+       line: [node.loc.start.line, node.loc.end.line],
+      },
     };
     return (comment: any) => {
       // Avoid visiting the same comment twice as a leading
@@ -171,9 +177,7 @@ class JavaScript implements IParser {
             enumerable: false,
             value: node,
           });
-          let range = (node.parent && node.parent) ? node.parent.range : [node.start, node.end];
-          range = !range ? node.range : range;
-          range = !range ? [node.start, node.end] : range;
+
           context.code = file.source.substring.apply(file.source, range);
         }
         results.push(this.parseJSDoc(comment.value, comment.loc, context));
@@ -192,6 +196,7 @@ class JavaScript implements IParser {
     result.context = context;
     result.errors = [];
 
+    // Add the errors to the result
     let i = 0;
     while (i < result.tags.length) {
       let tag = result.tags[i];
@@ -204,7 +209,8 @@ class JavaScript implements IParser {
         i++;
       }
     }
-    return Utils.flatten(Utils.normalize(result));
+
+    return Utils.normalize(result);
   }
   private isJSDocComment(comment: any): boolean {
     let asterisks = comment.value.match(/^(\*+)/);

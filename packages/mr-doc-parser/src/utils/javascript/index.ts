@@ -15,110 +15,64 @@
  */
 
 import _ = require('lodash');
-import flatteners = require('./flatteners');
 import synonyms = require('./synonyms');
-  /**
- * Flattens tags in an opinionated way.
- *
- * The following tags are assumed to be singletons, and are flattened
- * to a top-level property on the result whose value is extracted from
- * the tag:
- *
- *  * `@name`
- *  * `@memberof`
- *  * `@classdesc`
- *  * `@kind`
- *  * `@class`
- *  * `@constant`
- *  * `@event`
- *  * `@external`
- *  * `@file`
- *  * `@function`
- *  * `@member`
- *  * `@mixin`
- *  * `@module`
- *  * `@namespace`
- *  * `@typedef`
- *  * `@access`
- *  * `@lends`
- *
- * The following tags are flattened to a top-level array-valued property:
- *
- *  * `@param` (to `params` property)
- *  * `@property` (to `properties` property)
- *  * `@returns` (to `returns` property)
- *  * `@augments` (to `augments` property)
- *  * `@example` (to `examples` property)
- *  * `@throws` (to `throws` property)
- *
- * The `@global`, `@static`, `@instance`, and `@inner` tags are flattened
- * to a `scope` property whose value is `"global"`, `"static"`, `"instance"`,
- * or `"inner"`.
- *
- * The `@access`, `@public`, `@protected`, and `@private` tags are flattened
- * to an `access` property whose value is `"protected"` or `"private"`.
- * The assumed default value is `"public"`, so `@access public` or `@public`
- * tags result in no `access` property.
- *
- * @name flatten
- * @param {Object} comment a parsed comment
- * @return {Object} comment with tags flattened
- */
-  export function flatten(comment: any): any {
-    let result = _.extend({}, comment);
 
-    comment.tags.forEach(function(tag: any) {
-      (flatteners[tag.title] || function() { })(result, tag);
-    });
-
-    return result;
-  };
-
-  /**
- * Normalizes synonymous tags to the canonical tag type listed on http://usejsdoc.org/.
- *
- * For example, given the input object:
- *
- *     { tags: [
- *       { title: "virtual" },
- *       { title: "return", ... }
- *     ]}
- *
- * The output object will be:
- *
- *     { tags: [
- *       { title: "abstract" },
- *       { title: "returns", ... }
- *     ]}
- *
- * The following synonyms are normalized:
- *
- *  * virtual -> abstract
- *  * extends -> augments
- *  * constructor -> class
- *  * const -> constant
- *  * defaultvalue -> default
- *  * desc -> description
- *  * host -> external
- *  * fileoverview, overview -> file
- *  * emits -> fires
- *  * func, method -> function
- *  * var -> member
- *  * arg, argument -> param
- *  * prop -> property
- *  * return -> returns
- *  * exception -> throws
- *  * linkcode, linkplain -> link
- *
- * @name normalize
- * @param {Object} comment parsed comment
- * @return {Object} comment with normalized properties
- */
-  export function normalize(comment:any) {
+ /**
+  * Normalizes synonymous tags to the canonical tag type listed on http://usejsdoc.org/
+  * and transforms a few plural tags to singular form and visa-versa.
+  *
+  * For example, given the input object:
+  *
+  *     { tags: [
+  *       { title: "virtual" },
+  *       { title: "return", ... }
+  *     ]}
+  *
+  * The output object will be:
+  *
+  *     { tags: [
+  *       { title: "abstract" },
+  *       { title: "returns", ... }
+  *     ]}
+  *
+  * The following synonyms are normalized:
+  *
+  *  * virtual -> abstract
+  *  * constructor -> class
+  *  * const -> constant
+  *  * defaultvalue -> default
+  *  * desc -> description
+  *  * host -> external
+  *  * fileoverview, overview -> file
+  *  * emits -> fires
+  *  * func, method -> function
+  *  * var -> member
+  *  * arg, argument -> param
+  *  * prop -> property
+  *  * return -> returns
+  *  * exception -> throws
+  *  * linkcode, linkplain -> link
+  *
+  * @name normalize
+  * @param {Object} comment parsed comment
+  * @return {Object} comment with normalized properties
+  */
+  export function normalize(comment: any) {
     return _.assignIn({}, comment, {
-      tags: comment.tags.map((tag:any) => {
-        let canonical = synonyms[tag.title];
+      tags: comment.tags.map((tag: any) => {
+       let title = tag.title.toLowerCase();
+        let canonical = synonyms[title];
+        if (!canonical) {
+         switch (title[0]) {
+          case 'e':
+           if (title === 'extend') title = 'extends';
+          break;
+          case 'j':
+           if (title === 'jsfiddles') title = 'jsfiddle';
+          break;
+         }
+        }
         return canonical ? _.extend({}, tag, { title: canonical }) : tag;
-      })
+      }),
     });
   };

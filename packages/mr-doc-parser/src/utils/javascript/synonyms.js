@@ -1,7 +1,6 @@
 "use strict";
 const synonyms = {
     'virtual': 'abstract',
-    'extends': 'augments',
     'constructor': 'class',
     'const': 'constant',
     'defaultvalue': 'default',
@@ -19,7 +18,7 @@ const synonyms = {
     'return': 'returns',
     'exception': 'throws',
     'linkcode': 'link',
-    'linkplain': 'link'
+    'linkplain': 'link',
 };
 module.exports = synonyms;
 //# sourceMappingURL=synonyms.js.map

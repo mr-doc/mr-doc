@@ -30,7 +30,6 @@
     "packages/mr-doc-parser/src/parsers/javascript.ts",
     "packages/mr-doc-parser/src/parsers/typescript.ts",
     "packages/mr-doc-parser/src/utils/javascript/index.ts",
-    "packages/mr-doc-parser/src/utils/javascript/flatteners.ts",
     "packages/mr-doc-parser/src/utils/javascript/synonyms.ts",
     // Compiler (mr-doc-compiler)
     "packages/mr-doc-compiler/index.ts",

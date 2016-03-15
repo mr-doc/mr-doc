@@ -81,16 +81,15 @@ class JavaScript {
         }
     }
     walkComments(ast, type, includeContext, results) {
+        console.log('current engine:', this.engine);
         switch (this.engine) {
             case 'babylon':
                 traverse(ast, {
                     enter: (path) => {
                         let node = path.node;
-                        if (node && node[type]) {
-                            node[type]
-                                .filter(this.isJSDocComment)
-                                .forEach(this.parseComment(node, results, includeContext, this.file));
-                        }
+                        (node[type] || [])
+                            .filter(this.isJSDocComment)
+                            .forEach(this.parseComment(node, results, includeContext, this.file));
                     }, });
                 break;
             default:
@@ -99,20 +98,26 @@ class JavaScript {
                         if (node.type === 'Program') {
                             node = node.body[0];
                         }
-                        if (node && node[type]) {
-                            node[type]
-                                .filter(this.isJSDocComment)
-                                .forEach(this.parseComment(node, results, includeContext, this.file));
-                        }
+                        (node[type] || [])
+                            .filter(this.isJSDocComment)
+                            .forEach(this.parseComment(node, results, includeContext, this.file));
                     }, });
                 break;
         }
+        return results;
     }
     parseComment(node, results, includeContext, file) {
+        let range = (node.parent && node.parent) ? node.parent.range : [node.start, node.end];
+        range = !range ? node.range : range;
+        range = !range ? [node.start, node.end] : range;
         let context = {
-            code: undefined,
+            code: null,
             file: file,
             loc: _.extend({}, JSON.parse(JSON.stringify(node.loc))),
+            range: {
+                column: [node.loc.start.column, node.loc.end.column],
+                line: [node.loc.start.line, node.loc.end.line],
+            },
         };
         return (comment) => {
             let key = JSON.stringify({ loc: comment.loc, range: comment.range });
@@ -123,9 +128,6 @@ class JavaScript {
                         enumerable: false,
                         value: node,
                     });
-                    let range = (node.parent && node.parent) ? node.parent.range : [node.start, node.end];
-                    range = !range ? node.range : range;
-                    range = !range ? [node.start, node.end] : range;
                     context.code = file.source.substring.apply(file.source, range);
                 }
                 results.push(this.parseJSDoc(comment.value, comment.loc, context));
@@ -155,7 +157,7 @@ class JavaScript {
                 i++;
             }
         }
-        return Utils.flatten(Utils.normalize(result));
+        return Utils.normalize(result);
     }
     isJSDocComment(comment) {
         let asterisks = comment.value.match(/^(\*+)/);

@@ -1,22 +1,25 @@
 "use strict";
 const _ = require('lodash');
-const flatteners = require('./flatteners');
 const synonyms = require('./synonyms');
-function flatten(comment) {
-    let result = _.extend({}, comment);
-    comment.tags.forEach(function (tag) {
-        (flatteners[tag.title] || function () { })(result, tag);
-    });
-    return result;
-}
-exports.flatten = flatten;
-;
 function normalize(comment) {
     return _.assignIn({}, comment, {
         tags: comment.tags.map((tag) => {
-            let canonical = synonyms[tag.title];
+            let title = tag.title.toLowerCase();
+            let canonical = synonyms[title];
+            if (!canonical) {
+                switch (title[0]) {
+                    case 'e':
+                        if (title === 'extend')
+                            title = 'extends';
+                        break;
+                    case 'j':
+                        if (title === 'jsfiddles')
+                            title = 'jsfiddle';
+                        break;
+                }
+            }
             return canonical ? _.extend({}, tag, { title: canonical }) : tag;
-        })
+        }),
     });
 }
 exports.normalize = normalize;

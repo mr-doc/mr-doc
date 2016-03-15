@@ -1,5 +1,5 @@
-/* 
- * Copyright (c) 
+/*
+ * Copyright (c)
  * 2016, mr-doc
  * 2015, documentationjs <>
  * Permission to use, copy, modify, and/or distribute this software for any
@@ -15,7 +15,6 @@
  */
 const synonyms = {
   'virtual': 'abstract',
-  'extends': 'augments',
   'constructor': 'class',
   'const': 'constant',
   'defaultvalue': 'default',
@@ -33,7 +32,7 @@ const synonyms = {
   'return': 'returns',
   'exception': 'throws',
   'linkcode': 'link',
-  'linkplain': 'link'
+  'linkplain': 'link',
 };
 
 export = synonyms;
