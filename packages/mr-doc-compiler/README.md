@@ -8,7 +8,7 @@ Takes the parsed comments and returns a viewable output.
 
 ### Compiler
 
-The compiler is using the Factory Pattern to simply the task of creating a front-end agnostic documenter. By simply passing the compiler's options such as the `format` and `template`, the factory will create an instance of a compiler based on those criteria. This instance will have a unified `compile` method.
+The compiler is using the Factory Pattern to simplify the task of creating a front-end agnostic documenter. By simply passing the compiler's options such as the `format` and `template`, the factory will create an instance of a compiler based on those criteria. This instance will have a unified `compile` method.
 
 Currently supported compilers:
 
@@ -26,10 +26,8 @@ import ICompiler = require('../interface');
 import Option = require('../option');
 
 class MyCompiler implements ICompiler {
- // A compiler may support different format i.e. JSON, HTML, etc (optional)
- format?: string,
- // A parser may have different templates i.e. Jade, Mustache, etc (optional)
- template?: string
+ // Options for the compiler defined by Options.Compiler
+ options: Options.Compiler;
  // A constructor that takes an option (required)
  constructor(options: Option.Compiler);
  // A compile function that compiles the comments (required)

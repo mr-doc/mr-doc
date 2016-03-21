@@ -44,13 +44,11 @@ const traverse = BabelTraverse.default;
  * JavaScript parser
  */
 class JavaScript implements IParser {
-  public version: string;
-  public engine: string;
+  public options: Option.Parser;
   private file: any;
   private visited: any;
   constructor(options: Option.Parser) {
-    this.version = _.isEmpty(options.version) ? '6' : options.version;
-    this.engine = _.isEmpty(options.engine) ? 'espree' : options.engine;
+    this.options = options;
     this.file = {};
     this.visited = {};
   }
@@ -64,7 +62,7 @@ class JavaScript implements IParser {
     return results;
   }
   private getAST(file: Option.File): any {
-    switch (this.engine) {
+    switch (this.options.engine) {
       case 'babylon': {
         return Babylon.parse(file.source, {
           allowImportExportEverywhere: true,
@@ -89,7 +87,7 @@ class JavaScript implements IParser {
       }
       case 'acorn': {
         let comments: any[] = [], tokens: any[] = [], ast = Acorn.parse(file.source, {
-          ecmaVersion: parseInt(this.version, 10),
+          ecmaVersion: parseInt(this.options.version, 10),
           locations: true,
           onComment: comments,
           onToken: tokens,
@@ -108,7 +106,7 @@ class JavaScript implements IParser {
            impliedStrict: true,
             jsx: true,
           },
-          ecmaVersion: parseInt(this.version, 10),
+          ecmaVersion: parseInt(this.options.version, 10),
           loc: true,
           range: true,
           sourceType: 'module',
@@ -119,8 +117,7 @@ class JavaScript implements IParser {
     }
   }
   private walkComments(ast: any, type: string, includeContext: boolean, results: any[]): any[] {
-   console.log('current engine:', this.engine);
-    switch (this.engine) {
+    switch (this.options.engine) {
       case 'babylon':
         traverse(ast, {
           enter: (path: any) => {
@@ -150,7 +147,7 @@ class JavaScript implements IParser {
    * @param {Object} comment the current state of the parsed JSDoc comment
    * @return {undefined} this emits data
    */
-  private parseComment(node: any, results: any[], includeContext: boolean, file: any) {
+  private parseComment(node: any, results: any[], includeContext: boolean, file: Option.File) {
    let range = (node.parent && node.parent) ? node.parent.range : [node.start, node.end];
    range = !range ? node.range : range;
    range = !range ? [node.start, node.end] : range;

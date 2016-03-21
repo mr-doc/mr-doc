@@ -1,0 +1,257 @@
+[
+  {
+    "description": "",
+    "tags": [
+      {
+        "title": "header",
+        "description": null,
+        "lineNumber": 1
+      },
+      {
+        "title": "file",
+        "description": "Does something",
+        "lineNumber": 2
+      },
+      {
+        "title": "module",
+        "description": null,
+        "lineNumber": 3,
+        "type": null,
+        "name": "Vehicles"
+      },
+      {
+        "title": "version",
+        "description": "${version}",
+        "lineNumber": 4
+      }
+    ],
+    "loc": {
+      "start": {
+        "line": 2,
+        "column": 0
+      },
+      "end": {
+        "line": 7,
+        "column": 3
+      }
+    },
+    "context": {
+      "code": "class Vehicle {\n\n  }",
+      "file": {
+        "source": "\n/**\n * @header\n * @file Does something\n * @module Vehicles\n * @version ${version}\n */\n\n /**\n  * @interface Vehicle\n  * @class Vehicle\n  */\n  class Vehicle {\n\n  }\n\n /**\n  * Creates a new instance of a car.\n  * @class Car\n  * @extends vehicle\n  * @example\n  * let honda = new Car('Honda');\n  */\n  class Car extends Vehicle {\n\n  }\n  /**\n   * Greets the user\n   * @jsfiddles greet\n   * @return {string} The greeting messsage\n   */\n  export function greet(user) {\n    return 'hello' + user;\n  }\n ",
+        "path": "./",
+        "name": "test.js",
+        "id": "V1adLEB6l"
+      },
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 2
+        },
+        "end": {
+          "line": 15,
+          "column": 3
+        }
+      },
+      "range": {
+        "column": [
+          2,
+          3
+        ],
+        "line": [
+          13,
+          15
+        ]
+      }
+    },
+    "map": {
+      "./test.js": "V1adLEB6l"
+    }
+  },
+  {
+    "description": "",
+    "tags": [
+      {
+        "title": "interface",
+        "description": "Vehicle",
+        "lineNumber": 1
+      },
+      {
+        "title": "class",
+        "description": null,
+        "lineNumber": 2,
+        "type": null,
+        "name": "Vehicle"
+      }
+    ],
+    "loc": {
+      "start": {
+        "line": 9,
+        "column": 1
+      },
+      "end": {
+        "line": 12,
+        "column": 4
+      }
+    },
+    "context": {
+      "code": "class Vehicle {\n\n  }",
+      "file": {
+        "source": "\n/**\n * @header\n * @file Does something\n * @module Vehicles\n * @version ${version}\n */\n\n /**\n  * @interface Vehicle\n  * @class Vehicle\n  */\n  class Vehicle {\n\n  }\n\n /**\n  * Creates a new instance of a car.\n  * @class Car\n  * @extends vehicle\n  * @example\n  * let honda = new Car('Honda');\n  */\n  class Car extends Vehicle {\n\n  }\n  /**\n   * Greets the user\n   * @jsfiddles greet\n   * @return {string} The greeting messsage\n   */\n  export function greet(user) {\n    return 'hello' + user;\n  }\n ",
+        "path": "./",
+        "name": "test.js",
+        "id": "V1adLEB6l"
+      },
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 2
+        },
+        "end": {
+          "line": 15,
+          "column": 3
+        }
+      },
+      "range": {
+        "column": [
+          2,
+          3
+        ],
+        "line": [
+          13,
+          15
+        ]
+      }
+    },
+    "map": {
+      "./test.js": "V1adLEB6l"
+    }
+  },
+  {
+    "description": "Creates a new instance of a car.",
+    "tags": [
+      {
+        "title": "class",
+        "description": null,
+        "lineNumber": 2,
+        "type": null,
+        "name": "Car"
+      },
+      {
+        "title": "extends",
+        "description": null,
+        "lineNumber": 3,
+        "type": null,
+        "name": "vehicle"
+      },
+      {
+        "title": "example",
+        "description": "let honda = new Car('Honda');",
+        "lineNumber": 4
+      }
+    ],
+    "loc": {
+      "start": {
+        "line": 17,
+        "column": 1
+      },
+      "end": {
+        "line": 23,
+        "column": 4
+      }
+    },
+    "context": {
+      "code": "class Car extends Vehicle {\n\n  }",
+      "file": {
+        "source": "\n/**\n * @header\n * @file Does something\n * @module Vehicles\n * @version ${version}\n */\n\n /**\n  * @interface Vehicle\n  * @class Vehicle\n  */\n  class Vehicle {\n\n  }\n\n /**\n  * Creates a new instance of a car.\n  * @class Car\n  * @extends vehicle\n  * @example\n  * let honda = new Car('Honda');\n  */\n  class Car extends Vehicle {\n\n  }\n  /**\n   * Greets the user\n   * @jsfiddles greet\n   * @return {string} The greeting messsage\n   */\n  export function greet(user) {\n    return 'hello' + user;\n  }\n ",
+        "path": "./",
+        "name": "test.js",
+        "id": "V1adLEB6l"
+      },
+      "loc": {
+        "start": {
+          "line": 24,
+          "column": 2
+        },
+        "end": {
+          "line": 26,
+          "column": 3
+        }
+      },
+      "range": {
+        "column": [
+          2,
+          3
+        ],
+        "line": [
+          24,
+          26
+        ]
+      }
+    },
+    "map": {
+      "./test.js": "V1adLEB6l"
+    }
+  },
+  {
+    "description": "Greets the user",
+    "tags": [
+      {
+        "title": "jsfiddles",
+        "description": "greet",
+        "lineNumber": 2
+      },
+      {
+        "title": "returns",
+        "description": "The greeting messsage",
+        "lineNumber": 3,
+        "type": {
+          "type": "NameExpression",
+          "name": "string"
+        }
+      }
+    ],
+    "loc": {
+      "start": {
+        "line": 27,
+        "column": 2
+      },
+      "end": {
+        "line": 31,
+        "column": 5
+      }
+    },
+    "context": {
+      "code": "export function greet(user) {\n    return 'hello' + user;\n  }",
+      "file": {
+        "source": "\n/**\n * @header\n * @file Does something\n * @module Vehicles\n * @version ${version}\n */\n\n /**\n  * @interface Vehicle\n  * @class Vehicle\n  */\n  class Vehicle {\n\n  }\n\n /**\n  * Creates a new instance of a car.\n  * @class Car\n  * @extends vehicle\n  * @example\n  * let honda = new Car('Honda');\n  */\n  class Car extends Vehicle {\n\n  }\n  /**\n   * Greets the user\n   * @jsfiddles greet\n   * @return {string} The greeting messsage\n   */\n  export function greet(user) {\n    return 'hello' + user;\n  }\n ",
+        "path": "./",
+        "name": "test.js",
+        "id": "V1adLEB6l"
+      },
+      "loc": {
+        "start": {
+          "line": 32,
+          "column": 2
+        },
+        "end": {
+          "line": 34,
+          "column": 3
+        }
+      },
+      "range": {
+        "column": [
+          2,
+          3
+        ],
+        "line": [
+          32,
+          34
+        ]
+      }
+    },
+    "map": {
+      "./test.js": "V1adLEB6l"
+    }
+  }
+]

@@ -12,6 +12,7 @@
       "src/option.ts",
       "src/interface.ts",
       "src/compilers/json.ts",
+      "src/compilers/html.ts",
       "src/utils/json/index.ts",
       "src/utils/json/walk.ts"
     ]

@@ -4,8 +4,7 @@
  */
 import Option = require('./option');
 interface IParser {
-  version?: string;
-  engine?: string;
+  options: Option.Parser;
   parse(file: Option.File): Object;
 }
 

@@ -4,28 +4,28 @@
 import ICompiler = require('../interface');
 import Option = require('../option');
 import Stringify = require('json-stringify-safe');
-import File = require('fs-extra');
-import _ = require('lodash');
-import Path = require('path');
+import Promise = require('bluebird');
 
 class JSON implements ICompiler {
- private path: string;
- private file: any;
- private config: Option.Compiler;
+ public options: Option.Compiler;
  constructor(config: Option.Compiler) {
-  this.config = config;
+  this.options = config;
 }
- public compile(result: any[], path?: string) {
-  this.path = path;
-  this.file = result.length > 0 ? result[0].context.file : {};
+public compile(result: any[], path?: string) {
   this.walk(result, function (comments: any) {
     delete comments.errors;
   });
-
   return Stringify(result, null, 2);
+}
+ public compileAsync(result: any[], path?: string) {
+  return new Promise((resolve: Function) => {
+    this.walk(result, function (comments: any) {
+      delete comments.errors;
+    });
+    resolve(Stringify(result, null, 2));
+  });
  }
  private walk(comments: any, fn: Function, options?: any) {
-  let name: string = _.isEmpty(this.file.name) ? '' : this.file.name;
    comments.forEach(function (comment: any) {
      fn(comment, options);
      for (let scope in comment.members) {
@@ -34,9 +34,7 @@ class JSON implements ICompiler {
       }
      }
    });
-   return _.isEmpty(this.path) ? comments : File.writeJSONSync(Path.join(this.path, name + '.json'), comments);
  }
 }
-
 
 export = JSON;

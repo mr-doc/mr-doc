@@ -8,7 +8,7 @@ Parses the source and returns an array containing the parsed comments.
 
 ### Parsers
 
-The parser is using the Factory Pattern to simply the task of creating a language agnostic parser. By simply passing the parser's options such as the `language` and `version`, the factory will create an instance of a parser based on those criteria. This instance will have a unified `parse` method.
+The parser is using the Factory Pattern to simplify the task of creating a language agnostic parser. By simply passing the parser's options such as the `language` and `version`, the factory will create an instance of a parser based on those criteria. This instance will have a unified `parse` method.
 
 Currently supported parsers:
 
@@ -31,10 +31,8 @@ import IParser = require('../interface');
 import Option = require('../option');
 
 class MyParser implements IParser {
- // A parser may support different engine (optional)
- engine: string,
- // A parser may have different versions i.e. ES3 - ES7 (optional)
- version: string
+  // Options for the parser defined by Options.Parser
+ options: Option.Parser;
  // A constructor that takes an option (required)
  constructor(options: Option.Parser);
  // A parse function to parse the source and comments (required)

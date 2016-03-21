@@ -1,22 +1,25 @@
 "use strict";
 const Stringify = require('json-stringify-safe');
-const File = require('fs-extra');
-const _ = require('lodash');
-const Path = require('path');
+const Promise = require('bluebird');
 class JSON {
     constructor(config) {
-        this.config = config;
+        this.options = config;
     }
     compile(result, path) {
-        this.path = path;
-        this.file = result.length > 0 ? result[0].context.file : {};
         this.walk(result, function (comments) {
             delete comments.errors;
         });
         return Stringify(result, null, 2);
     }
+    compileAsync(result, path) {
+        return new Promise((resolve) => {
+            this.walk(result, function (comments) {
+                delete comments.errors;
+            });
+            resolve(Stringify(result, null, 2));
+        });
+    }
     walk(comments, fn, options) {
-        let name = _.isEmpty(this.file.name) ? '' : this.file.name;
         comments.forEach(function (comment) {
             fn(comment, options);
             for (let scope in comment.members) {
@@ -25,7 +28,6 @@ class JSON {
                 }
             }
         });
-        return _.isEmpty(this.path) ? comments : File.writeJSONSync(Path.join(this.path, name + '.json'), comments);
     }
 }
 module.exports = JSON;

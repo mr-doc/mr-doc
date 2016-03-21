@@ -11,8 +11,7 @@ const Doctrine = require('doctrine');
 const traverse = BabelTraverse.default;
 class JavaScript {
     constructor(options) {
-        this.version = _.isEmpty(options.version) ? '6' : options.version;
-        this.engine = _.isEmpty(options.engine) ? 'espree' : options.engine;
+        this.options = options;
         this.file = {};
         this.visited = {};
     }
@@ -26,7 +25,7 @@ class JavaScript {
         return results;
     }
     getAST(file) {
-        switch (this.engine) {
+        switch (this.options.engine) {
             case 'babylon': {
                 return Babylon.parse(file.source, {
                     allowImportExportEverywhere: true,
@@ -51,7 +50,7 @@ class JavaScript {
             }
             case 'acorn': {
                 let comments = [], tokens = [], ast = Acorn.parse(file.source, {
-                    ecmaVersion: parseInt(this.version, 10),
+                    ecmaVersion: parseInt(this.options.version, 10),
                     locations: true,
                     onComment: comments,
                     onToken: tokens,
@@ -70,7 +69,7 @@ class JavaScript {
                         impliedStrict: true,
                         jsx: true,
                     },
-                    ecmaVersion: parseInt(this.version, 10),
+                    ecmaVersion: parseInt(this.options.version, 10),
                     loc: true,
                     range: true,
                     sourceType: 'module',
@@ -81,8 +80,7 @@ class JavaScript {
         }
     }
     walkComments(ast, type, includeContext, results) {
-        console.log('current engine:', this.engine);
-        switch (this.engine) {
+        switch (this.options.engine) {
             case 'babylon':
                 traverse(ast, {
                     enter: (path) => {

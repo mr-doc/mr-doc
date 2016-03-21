@@ -8,6 +8,7 @@ declare module Option {
     name: string;
     path: string;
     source: string;
+    id?: string;
   }
 }
 export = Option;

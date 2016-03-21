@@ -1,7 +1,13 @@
 declare module Option {
  export interface Compiler {
-  format?: string;
-  template?: string;
+  file?: {
+    name: string,
+    format: string
+  };
+  template?: {
+    path: string,
+    engine: string
+  };
  }
 }
 

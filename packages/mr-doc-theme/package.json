@@ -1,0 +1,18 @@
+{
+  "name": "mr-doc-theme",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "iwatakeshi",
+  "license": "MIT",
+  "devDependencies": {
+    "mr-doc-theme-starter-kit": "git+https://github.com/iwatakeshi/mr-doc-theme-starter-kit.git"
+  },
+  "dependencies": {
+    "bluebird": "^3.3.4",
+    "sync": "^0.2.5"
+  }
+}

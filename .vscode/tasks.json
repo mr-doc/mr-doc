@@ -35,6 +35,7 @@
     "packages/mr-doc-compiler/index.ts",
     "packages/mr-doc-compiler/interface.ts",
     "packages/mr-doc-compiler/compilers/json.ts",
+    "packages/mr-doc-compiler/compilers/html.ts",
     "packages/mr-doc-compiler/utils/index.ts",
     "packages/mr-doc-compiler/utils/walk.ts"
   ],

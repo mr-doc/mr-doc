@@ -1,0 +1,32 @@
+{
+  "name": "gulp-mr-doc",
+  "version": "1.0.0",
+  "description": "The official gulp plugin for Mr. Doc",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gulp",
+    "mr.",
+    "doc",
+    "documentation",
+    "docs"
+  ],
+  "author": "iwatakeshi",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.3.4",
+    "fs-extra": "^0.26.7",
+    "gulp": "^3.9.1",
+    "gulp-util": "^3.0.7",
+    "mr-doc": "git+https://github.com/mr-doc/mr-doc.git#4.0.0",
+    "rc": "^1.1.6",
+    "shortid": "^2.2.4",
+    "through2": "^2.0.1",
+    "vinyl": "^1.1.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0"
+  }
+}
