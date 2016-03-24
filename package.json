@@ -20,10 +20,10 @@
   ],
   "main": "index.js",
   "bin": {
-    "mrdoc": "./bin/mrdoc.js"
+    "mrdoc": "./bin/mrdoc"
   },
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp"
   },
   "engines": {
     "node": ">= 5.0.0"

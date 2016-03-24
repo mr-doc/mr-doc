@@ -1,23 +1,24 @@
 /* eslint-env node */
 'use strict';
 
-const log = require('../utils/log');
+const Log = require('../utils/log');
 // const Path = require('path');
 const pkg = require('../../package.json');
 const rc = require('rc');
-const Options = require('../utils/options');
+const Option = require('mr-doc-utils').Option;
 const Yargs = require('yargs');
 const isGlob = require('is-glob');
 const _ = require('lodash');
 const Path = require('path');
 const Liftoff = require('liftoff');
 const gstream = require('glob-stream');
+const log = Log.global();
 
 class CLI {
   static parse() {
     // Parse the Arguments!
     return Yargs
-    .usage('Usage: mrdoc [options]', Options.cli())
+    .usage('Usage: mrdoc [options]', Option.cli())
     .showHelpOnFail(false, 'Specify --help for available options')
     .help('help', log.color.gray('Show help.'))
     .alias('help', 'h')
@@ -48,7 +49,7 @@ class CLI {
       process.exit();
     }
     // Get the options.
-    const opts = rc('mrdoc', Options.join(options));
+    const opts = rc('mrdoc', Option.merge(options));
     // Split the string if it contains commas.
     let sources = opts.mrdoc.source.indexOf(',') > -1 ?
     opts.mrdoc.source.split(',') : opts.mrdoc.source;
