@@ -15,6 +15,8 @@ const log = new Log(Option.log({
   silent: level === 'silent',
 }));
 // DEBUG: Launch.
-log.debug(log.color.blue('Launching Mr. Doc CLI.'));
+log.debug(log.color.blue('Launching CLI.'));
 // Launch the CLI.
 CLI.launch(argv);
+// DEBUG: Land
+log.debug(log.color.blue('Landed CLI'));
