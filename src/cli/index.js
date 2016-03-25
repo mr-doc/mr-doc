@@ -65,12 +65,13 @@ class CLI {
         // Check if the path is not in glob pattern.
         if (!isGlob(path)) {
           // Make sure the path is resolved.
-          let str = Path.resolve(opts.mrdoc.cwd, path);
+          let str = Path.resolve(opts.mrdoc.cwd, path)
+          .replace('/', Path.sep);
           // Check if the path is a file or directory.
           if (_.isEmpty(Path.parse(path).ext)) {
             // Check if the path has a '/' at the end.
-            str = str[str.length - 1] === '/' ?
-            str : `${str}/`;
+            str = str[str.length - 1] === Path.sep ?
+            str : `${str}${Path.sep}`;
           }
           // Make sure the file or directory exists;
           if (File.existsSync(str)) {
@@ -82,7 +83,7 @@ class CLI {
             const extension = Extension.find(opts.parser.language);
             // Set the glob pattern based on 'hasSubDirs'.
             str = hasSubDirs ?
-            `${str}**${Path.sep}${extension}` : `${str}*${extension}`;
+            `${str}**${Path.sep}*${extension}` : `${str}*${extension}`;
           } else return null;
           return str;
         }
