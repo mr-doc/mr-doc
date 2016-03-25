@@ -3,6 +3,7 @@
 'use strict';
 const Option = require('mr-doc-utils').Option;
 const Log = require('../src/utils/log');
+// TODO: Write tests for CLI.
 const CLI = require('../src/cli');
 
 // Parse the arguments.
@@ -14,9 +15,18 @@ const log = new Log(Option.log({
   level: level !== 'silent' ? level : ['info', 'warn'],
   silent: level === 'silent',
 }));
-// DEBUG: Launch.
-log.debug(log.color.blue('Launching CLI.'));
+// DEBUG: Launch
+log.debug(log.color.blue('Launching CLI'));
 // Launch the CLI.
-CLI.launch(argv);
-// DEBUG: Land
-log.debug(log.color.blue('Landed CLI'));
+CLI.launch(argv)
+.then(stream => {
+  stream.on('data', file => {
+    log.info(file);
+  });
+  // DEBUG: Land (with success)
+  log.debug(log.color.blue('Landed CLI with success'));
+}).catch(error => {
+  log[error.level](error.message);
+  // DEBUG: Land (with failure)
+  log.debug(log.color.blue('Landed CLI with failure'));
+});
