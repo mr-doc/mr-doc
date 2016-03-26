@@ -6,6 +6,7 @@ class Extension {
   }
   static extensions() {
     return {
+      js: '.js',
       javascript: '.js',
       json: '.json',
       html: '.html',

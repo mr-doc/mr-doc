@@ -5,6 +5,7 @@ const Option = require('mr-doc-utils').Option;
 const Log = require('../src/utils/log');
 // TODO: Write tests for CLI.
 const CLI = require('../src/cli');
+const MrDoc = require('../');
 
 // Parse the arguments.
 const argv = CLI.parse();
@@ -20,13 +21,11 @@ log.debug(log.color.blue('Launching CLI'));
 // Launch the CLI.
 CLI.launch(argv)
 .then(stream => {
-  stream.on('data', file => {
-    log.info(file);
-  });
+  MrDoc.cli(stream);
   // DEBUG: Land (with success)
   log.debug(log.color.blue('Landed CLI with success'));
 }).catch(error => {
-  log[error.level](error.message);
+  if (error.level) log[error.level](error.message);
   // DEBUG: Land (with failure)
   log.debug(log.color.blue('Landed CLI with failure'));
 });
