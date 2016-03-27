@@ -16,6 +16,10 @@ class JavaScript extends IParser {
     this.comments = [];
     this.results = [];
   }
+  /**
+   * Parse the file.
+   * @param {Object} - The file to parse.
+   */
   parse(file) {
     this.file = file;
     this.ast = this.engine.parse(this.file);
@@ -28,12 +32,20 @@ class JavaScript extends IParser {
     ].forEach(comment => this.walkComments(comment));
     return this.results;
   }
-
+  /**
+   * Walk the comments.
+   * @param {Object} - The comment type and context to walk.
+   */
   walkComments(comment) {
     Engine.traverse(this.options, this.ast, node => (node[comment.type] || [])
         .filter(this.isJSDocComment)
         .forEach(this.parseComment(node, comment.context)));
   }
+  /**
+   * Parse the comment.
+   * @param {Node} - The current node.
+   * @param {Boolean} - The truth value on whether to include the context.
+   */
   parseComment(node, includeContext) {
     let range = (node.parent && node.parent) ? node.parent.range : [node.start, node.end];
     range = !range ? node.range : range;
@@ -62,6 +74,12 @@ class JavaScript extends IParser {
       }
     };
   }
+  /**
+   * Parse the JSDoc comment.
+   * @param {String} - The comment to parse.
+   * @param {Location} - The comment location.
+   * @param {Boolean} - The truth value on whether to include the context.
+   */
   parseJSDoc(comment, loc, context) {
     const result = Doctrine.parse(comment, {
       lineNumbers: true,
@@ -84,12 +102,22 @@ class JavaScript extends IParser {
     }
     return JavaScript.normalize(result);
   }
+  /**
+   * Determine whether the comment is normalized.
+   * @param {String} - The comment to determine.
+   * @return {Boolean} - The truth value.
+   */
   isJSDocComment(comment) {
     const asterisks = comment.value.match(/^(\*+)/);
     return (comment.type === 'CommentBlock' ||
       comment.type === 'Block')
       && asterisks && asterisks[1].length === 1;
   }
+  /**
+   * Normalize the comment tags.
+   * @param {Array} - The comment to normalize.
+   * @return {Array} - The comment containing normalized tags.
+   */
   static normalize(comment) {
     return _.assignIn({}, comment, {
       tags: comment.tags.map(tag => {

@@ -9,7 +9,7 @@ const Option = require('mr-doc-utils').Option;
 const Path = require('path');
 const Promise = require('bluebird');
 const Yargs = require('yargs');
-const gstream = require('glob-stream');
+const ViynlFS = require('vinyl-fs');
 const isGlob = require('is-glob');
 const log = Log.global();
 const pkg = require('../../package.json');
@@ -17,8 +17,11 @@ const rc = require('rc');
 const _ = require('lodash');
 
 class CLI {
+  /**
+   * Parse the CLI arguments.
+   * @static
+   */
   static parse() {
-    // Parse the Arguments!
     return Yargs
     .usage('Usage: mrdoc [options]', Option.cli())
     .showHelpOnFail(false, 'Specify --help for available options')
@@ -26,6 +29,11 @@ class CLI {
     .alias('help', 'h')
     .argv;
   }
+  /**
+   * Create the CLI.
+   * @static
+   * @return {Liftoff} - An instance of Liftoff.
+   */
   static get rocket() {
     // Create the CLI.
     return new Liftoff({
@@ -34,6 +42,12 @@ class CLI {
       v8flags: require('v8flags'),
     });
   }
+  /**
+   * Launch the cli.
+   * @static
+   * @param {Object} - The parsed CLI arguments.
+   * @return {Promise<Stream>} - A promise to the stream.
+   */
   static launch(argv) {
     return new Promise((resolve, reject) => {
       // Launch the CLI!
@@ -45,6 +59,10 @@ class CLI {
       .catch(error => reject(error)));
     });
   }
+  /**
+   * Handles the result from the CLI.
+   * @static
+   */
   static handler(env, options) {
     const version = options.version || options.v;
     const source = options.source || options.s;
@@ -65,8 +83,7 @@ class CLI {
         // Check if the path is not in glob pattern.
         if (!isGlob(path)) {
           // Make sure the path is resolved.
-          let str = Path.resolve(opts.mrdoc.cwd, path)
-          .replace('/', Path.sep);
+          let str = Path.resolve(opts.mrdoc.cwd, path).replace('/', Path.sep);
           // Check if the path is a file or directory.
           if (_.isEmpty(Path.parse(path).ext)) {
             // Check if the path has a '/' at the end.
@@ -93,7 +110,7 @@ class CLI {
       log.debug(log.color.blue('Sources:'), sources);
       if (sources.indexOf(null) > -1) {
         reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);
-      } else resolve({ stream: gstream.create(sources, { cwd: opts.mrdoc.cwd }), options: opts });
+      } else resolve({ stream: ViynlFS.src(sources, { cwd: opts.mrdoc.cwd }), options: opts });
     });
   }
 }

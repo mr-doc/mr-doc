@@ -1,31 +1,33 @@
 'use strict';
+
 const Log = require('mr-doc-utils').Log;
-const Stream = require('./src/utils/stream');
-const Source = require('./src/utils/source');
-const Parser = require('./src/parser/');
+const Output = require('./src/utils/output');
 const Promise = require('bluebird');
+const Through = require('through2');
+
+const VinylFS = require('vinyl-fs');
 const log = new Log();
+
 class MrDoc {
   static cli(stream, options) {
-    return new Promise((resolve, reject) => {
-      const parser = (new Parser(options.parser)).factory();
-      Stream.toArray(stream)
-        .then(result => {
-          const files = Source.create(result);
-          // DEBUG: Files
-          log.debug(Log.color.blue('Number of files: '), files.length);
-          try {
-            files.forEach(file => parser.parse(file));
-            resolve();
-          } catch (error) {
-            reject(error);
-          }
+    return new Promise(resolve => {
+      stream
+        .pipe(MrDoc.gulp(options))
+        .pipe(VinylFS.dest(options.mrdoc.output))
+        .on('end', () => {
+          log.debug(Log.color.blue('Mr. Doc compiled successfully'));
+          resolve();
         });
     });
   }
-  // static gulp(files) {
-  //   //
-  // }
+  static gulp(options) {
+    const buffer = [];
+    return Through.obj((file, enc, callback) => {
+      // Store the files in a buffer
+      buffer.push(file);
+      callback();
+    }, Output.handler(options, buffer));
+  }
   // static grunt() {
   //   //
   // }

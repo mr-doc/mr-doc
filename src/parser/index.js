@@ -6,7 +6,7 @@ class Parser {
     this.options = options;
   }
   factory() {
-    switch (this.options.language) {
+    switch (this.options.parser().language) {
       case 'js':
       case 'javascript':
         return (new JavaScript(this.options));

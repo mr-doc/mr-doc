@@ -33,7 +33,7 @@ class IParser {
   /**
    * Parses the sources' comments into the desired output.
    * @param  {Array<Object>} results - The files to parse.
-   * @return {Promise<Array<Object>>} - The promise to the parsed sources.
+   * @return {Array<Object>} - The parsed comments.
    */
   parse(sources) {
     // ...
