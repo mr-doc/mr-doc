@@ -20,12 +20,13 @@ const log = new Log(Option.log({
 log.debug(log.color.blue('Launching CLI'));
 // Launch the CLI.
 CLI.launch(argv)
-.then(stream => {
-  MrDoc.cli(stream);
+.then(result => {
+  MrDoc.cli(result.stream, result.options)
   // DEBUG: Land (with success)
-  log.debug(log.color.blue('Landed CLI with success'));
+  .then(() => log.debug(log.color.blue('Landed CLI with success')))
+  .error(error => log.error(error));
 }).catch(error => {
-  if (error.level) log[error.level](error.message);
+  log.error(error);
   // DEBUG: Land (with failure)
   log.debug(log.color.blue('Landed CLI with failure'));
 });

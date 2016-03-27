@@ -29,7 +29,7 @@ class Log {
       /* eslint-disable no-console */
       const args = Array.prototype.slice.call(arguments);
       args.unshift(log.color.cyan('mrdoc'));
-      console.log.apply(console, _.map(arguments, args));
+      console.log.apply(console, args.map(i => log.color.red(i)));
       /* eslint-enable no-console */
     });
   }

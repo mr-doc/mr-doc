@@ -92,9 +92,8 @@ class CLI {
       // DEBUG: Sources
       log.debug(log.color.blue('Sources:'), sources);
       if (sources.indexOf(null) > -1) {
-        reject({ level: 'warn', message: log.color.yellow(
-          `${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`) });
-      } else resolve(gstream.create(sources, { cwd: opts.mrdoc.cwd }));
+        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);
+      } else resolve({ stream: gstream.create(sources, { cwd: opts.mrdoc.cwd }), options: opts });
     });
   }
 }

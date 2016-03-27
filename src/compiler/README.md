@@ -1,17 +1,19 @@
-# Mr. Doc Compiler
+# Compiler
 
-This a mono repo for Mr. Doc Compiler. There are a few things to cover
+This directory contains the source file for compiler. There are a few things to cover
 in order to understand how the compiler works.
 
 ## Specification
 
+The compiler in `index.js`, uses the Factory Pattern to create different compilers for the specified format.
+
 There are three main formats that the compiler will output:
-* HTML
+* HTML (including themes)
 * JSON
 * Markdown
 
 However, the compiler should not write any files to a path.
-It should only produce a string that is ready to be written down.
+It should only produce a string that is ready to be piped down the stream.
 
 ### Interface
 
