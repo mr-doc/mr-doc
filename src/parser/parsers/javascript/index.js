@@ -2,7 +2,7 @@
 
 const Doctrine = require('doctrine');
 const IParser = require('../interface');
-const Engine = require('../../engines/javascript.engine.js');
+const Engine = require('../../engines/javascript');
 const _ = require('lodash');
 const Log = require('mr-doc-utils').Log;
 const log = new Log();

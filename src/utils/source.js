@@ -2,6 +2,7 @@
 const ShortID = require('shortid');
 const File = require('fs-extra');
 const _ = require('lodash');
+const Path = require('path');
 
 class Source {
   static create(files) {
@@ -19,8 +20,8 @@ class Source {
     return {
       id: ShortID.generate(),
       cwd: file.cwd,
-      base: file.base,
-      path: file.path,
+      base: file.base.replace(file.cwd + Path.sep, ''),
+      path: Path.parse(file.path.replace(file.cwd + Path.sep, '')),
       source: File.readFileSync(file.path, 'utf8'),
       comments: undefined,
     };

@@ -33,17 +33,9 @@ class ICompiler {
   /**
    * Compiles the parsed comments into the desired output.
    * @param  {Array<Object>} results The parsed comments.
-   * @return {String | Object}         The compiled output.
+   * @return {*}         The compiled output.
    */
   compile(results) {
-    // ...
-  }
-  /**
-   * Compiles the parsed comments into the desired output synchronously.
-   * @param  {Array<Object>} results The parsed comments.
-   * @return {String | Object}         The compiled output.
-   */
-  compileSync(results) {
     // ...
   }
 }

@@ -49,6 +49,7 @@
     "through2": "^2.0.1",
     "v8flags": "^2.0.11",
     "vinyl": "^1.1.1",
+    "vinyl-fs": "^2.4.3",
     "yargs": "^4.3.2"
   },
   "devDependencies": {

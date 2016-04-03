@@ -82,6 +82,8 @@ class CLI {
       .map(path => {
         // Check if the path is not in glob pattern.
         if (!isGlob(path)) {
+          // Assume that Glob is used.
+          let isFile = false;
           // Make sure the path is resolved.
           let str = Path.resolve(opts.mrdoc.cwd, path).replace('/', Path.sep);
           // Check if the path is a file or directory.
@@ -89,18 +91,21 @@ class CLI {
             // Check if the path has a '/' at the end.
             str = str[str.length - 1] === Path.sep ?
             str : `${str}${Path.sep}`;
-          }
+          } else isFile = true;
           // Make sure the file or directory exists;
           if (File.existsSync(str)) {
-            // Check if the directory has sub-directories.
-            const hasSubDirs = File.readdirSync(str)
-            .filter(file =>
-              File.statSync(Path.join(str, file)).isDirectory()).length > 1;
-            // Get the file extension.
-            const extension = Extension.find(opts.parser.language);
-            // Set the glob pattern based on 'hasSubDirs'.
-            str = hasSubDirs ?
-            `${str}**${Path.sep}*${extension}` : `${str}*${extension}`;
+            if(isFile) return str;
+            else {
+              // Check if the directory has sub-directories.
+              const hasSubDirs = File.readdirSync(str)
+              .filter(file =>
+                File.statSync(Path.join(str, file)).isDirectory()).length > 1;
+              // Get the file extension.
+              const extension = Extension.find(opts.parser.language);
+              // Set the glob pattern based on 'hasSubDirs'.
+              str = hasSubDirs ?
+              `${str}**${Path.sep}*${extension}` : `${str}*${extension}`;
+            }
           } else return null;
           return str;
         }
