@@ -94,8 +94,7 @@ class CLI {
           } else isFile = true;
           // Make sure the file or directory exists;
           if (File.existsSync(str)) {
-            if(isFile) return str;
-            else {
+            if (!isFile) {
               // Check if the directory has sub-directories.
               const hasSubDirs = File.readdirSync(str)
               .filter(file =>

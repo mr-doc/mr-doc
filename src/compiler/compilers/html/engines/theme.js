@@ -1,10 +1,12 @@
 'use strict';
 
 class Theme {
-  constructor () {
-
-  }
-  compile () {
+  // constructor() {
+  //
+  // }
+  compile() {
 
   }
 }
+
+module.exports = Theme;

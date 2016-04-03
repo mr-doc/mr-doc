@@ -7,8 +7,7 @@ class HTML extends ICompiler {
     this.results = [];
   }
   compile(comments) {
-
+    this.comments = comments;
   }
 }
-
-module.exports = JSON;
+module.exports = HTML;

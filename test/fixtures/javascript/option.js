@@ -6,7 +6,7 @@
  * @param {String} options.name    A person's name
  * @param {String} options.feature A person's property
  */
-function flatter (options) {
-  options = options || {};
-  console.log('%s, loving your %s!', options.name, options.feature);
-}
+// function flatter (options) {
+//   options = options || {};
+//   console.log('%s, loving your %s!', options.name, options.feature);
+// }
