@@ -12,16 +12,16 @@ const argv = CLI.parse();
 // Get log level.
 const level = argv.level || argv.l;
 // Set up the logger.
-const log = new Log(Option.log({
-  level: level !== 'silent' ? level : ['info', 'warn'],
+const log = new Log({
+  level: level !== 'silent' ? level : Option.defaults.log.level,
   silent: level === 'silent',
-}));
+});
 // DEBUG: Launch
 log.debug(log.color.blue('Launching CLI'));
 // Launch the CLI.
 CLI.launch(argv)
 .then(result => {
-  MrDoc.cli(result.stream, result.options)
+  MrDoc.cli(result.stream, Option.merge(result.options, true))
   // DEBUG: Land (with success)
   .then(() => log.debug(log.color.blue('Landed CLI with success')))
   .error(error => log.error(error));
