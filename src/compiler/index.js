@@ -1,5 +1,7 @@
 'use strict';
 const JSONC = require('./compilers/json/');
+const Log = require('mr-doc-utils').Log;
+const log = new Log();
 // const HTML = require('./compilers/html');
 
 class Compiler {
@@ -7,7 +9,10 @@ class Compiler {
     this.options = options;
   }
   factory() {
-    switch (this.options.compiler.file.format) {
+    const format = this.options.compiler.file.format;
+    // DEBUG: Compiler format
+    log.debug(Log.color.blue('Compiler format:'), format);
+    switch (format) {
       case 'json':
         return (new JSONC(this.options));
       case 'html':

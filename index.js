@@ -11,9 +11,10 @@ const log = new Log();
 class MrDoc {
   static cli(stream, options) {
     return new Promise(resolve => {
+      const output = options.output || options.o || Option.defaults.mrdoc.output;
       stream
         .pipe(MrDoc.gulp(options))
-        .pipe(VinylFS.dest(options.mrdoc.output))
+        .pipe(VinylFS.dest(output))
         .on('end', () => {
           log.debug(Log.color.blue('Mr. Doc compiled successfully'));
           resolve();

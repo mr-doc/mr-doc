@@ -21,7 +21,7 @@ log.debug(log.color.blue('Launching CLI'));
 // Launch the CLI.
 CLI.launch(argv)
 .then(result => {
-  MrDoc.cli(result.stream, Option.merge(result.options, true))
+  MrDoc.cli(result.stream, result.options)
   // DEBUG: Land (with success)
   .then(() => log.debug(log.color.blue('Landed CLI with success')))
   .error(error => log.error(error));
