@@ -9,22 +9,41 @@ const Promise = require('bluebird');
 const Yargs = require('yargs');
 const ViynlFS = require('vinyl-fs');
 const _ = require('lodash');
-const log = Log.global();
 const pkg = require('../../package.json');
 const rc = require('rc');
+const log = new Log();
 
+// TODO: Write tests for CLI.
 class CLI {
   /**
    * Parse the CLI arguments.
    * @static
    */
   static parse() {
-    return Yargs
+    // console.log(Option.cli());
+    return Promise.resolve(Yargs
     .usage('Usage: mrdoc [options]', Option.cli)
     .showHelpOnFail(false, 'Specify --help for available options')
-    .help('help', log.color.gray('Show help.'))
+    .help('help', Log.color.gray('Show help.'))
     .alias('help', 'h')
-    .argv;
+    .argv);
+  }
+  /**
+   * Setup the logger.
+   * @param  {Object} options - The parsed CLI arguments.
+   * @return {Promise<options>} - A promise to the options.
+   */
+  static log(options) {
+    return Promise.resolve((() => {
+      // Get log level.
+      const level = options.level || options.l || Option.defaults.log.level;
+      // Set up the logger.
+      Log.setup({
+        level: level !== 'silent' ? level : '',
+        silent: level === 'silent',
+      });
+      return options;
+    })());
   }
   /**
    * Create the CLI.
@@ -40,35 +59,37 @@ class CLI {
     });
   }
   /**
-   * Launch the cli.
+   * Launch the CLI.
    * @static
-   * @param {Object} - The parsed CLI arguments.
+   * @param {Object} options - The parsed CLI arguments.
    * @return {Promise<Stream>} - A promise to the stream.
    */
-  static launch(argv) {
+  static launch(options) {
+    // DEBUG: Launch
+    log.debug(Log.color.blue('Launching CLI'));
     return new Promise((resolve, reject) => {
       // Launch the CLI!
       CLI.rocket.launch({
-        cwd: argv.cwd,
-        configPath: argv.mrdocrc,
-      }, env => CLI.handler(env, argv)
+        cwd: options.cwd,
+        configPath: options.mrdocrc,
+      }, env => CLI.handler(env, options)
       .then(stream => resolve(stream))
       .catch(error => reject(error)));
     });
   }
   /**
-   * Handles the result from the CLI.
+   * Handle the result from the CLI.
    * @static
    */
   static handler(env, options) {
     const version = options.version || options.v;
     const source = options.source || options.s;
     if (version) {
-      log.info(`${log.color.blue('version:')} ${pkg.version}`);
+      log.info(`${Log.color.blue('version:')} ${pkg.version}`);
       process.exit();
     }
     if (_.isEmpty(source) && version === false) {
-      log.warn(`${log.color.yellow('No source specified!')} See --help for usage.`);
+      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);
       process.exit();
     }
     return new Promise((resolve, reject) => {
@@ -77,7 +98,7 @@ class CLI {
       .map(path => path.trim())
       .map(path => FS.normalize(path, rc('mrdoc', options)));
       // DEBUG: Sources
-      log.debug(log.color.blue('Sources:'), sources);
+      log.debug(Log.color.blue('Sources:'), sources);
       if (sources.indexOf(null) > -1) {
         reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);
       } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });

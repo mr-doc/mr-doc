@@ -7,48 +7,43 @@ const log = new Utils.Log();
 const _ = require('lodash');
 
 class Log {
-  constructor(options) {
-    if (options.silent) {
-      log.on('error', () => { /* NOOP */});
-      return log;
-    }
-    this.levels(options.level)
-    .forEach(level => {
-      if (level === 'error') this.error();
-      else this.other(level);
-    });
+  constructor() {
     return log;
   }
-  levels(level) {
-    const levels = _.isString(level) ? level.split(',') : level;
-    return levels
-    .map(i => i.replace(/\s/g, ''));
+  static setup(options) {
+    if (options.silent) {
+      log.on('error', () => { /* NOOP */});
+    }
+    Log.levels(options.level)
+    .forEach(level => {
+      if (level === 'error') Log.error();
+      else Log.other(level);
+    });
   }
-  error() {
+  static levels(level) {
+    const levels = _.isString(level) ? level.split(',') : level;
+    return levels.map(i => i.replace(/\s/g, ''));
+  }
+  static error() {
     log.on('error', function error() {
       /* eslint-disable no-console */
       const args = Array.prototype.slice.call(arguments);
-      args.unshift(log.color.cyan('mrdoc'));
-      console.log.apply(console, args.map(i => log.color.red(i)));
+      args.unshift(Log.color.cyan('mrdoc'));
+      console.log.apply(console, args.map(i => Log.color.red(i)));
       /* eslint-enable no-console */
     });
   }
-  other(level) {
+  static other(level) {
     log.on(level, function logger() {
       /* eslint-disable no-console */
       const args = Array.prototype.slice.call(arguments);
-      args.unshift(log.color.cyan('mrdoc'));
+      args.unshift(Log.color.cyan('mrdoc'));
       console.log.apply(console, args);
       /* eslint-enable no-console */
     });
   }
-  /**
-   * Get the global instance of Log.
-   * @return {Log} - An instance of Log.
-   */
-  static global() {
-    log.color = Utils.Log.color;
-    return log;
+  static get color() {
+    return Utils.Log.color;
   }
 }
 
