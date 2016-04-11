@@ -1,7 +1,7 @@
 /* eslint-env node */
 'use strict';
 
-const FS = require('../utils/fs');
+const Source = require('../utils/source');
 const Log = require('../utils/log');
 const Liftoff = require('liftoff');
 const Option = require('mr-doc-utils').Option;
@@ -23,7 +23,6 @@ class CLI {
     // console.log(Option.cli());
     return Promise.resolve(Yargs
     .usage('Usage: mrdoc [options]', Option.cli)
-    .showHelpOnFail(false, 'Specify --help for available options')
     .help('help', Log.color.gray('Show help.'))
     .alias('help', 'h')
     .argv);
@@ -93,10 +92,8 @@ class CLI {
       process.exit();
     }
     return new Promise((resolve, reject) => {
-      // Get the options.
-      const sources = source.split(',')
-      .map(path => path.trim())
-      .map(path => FS.normalize(path, rc('mrdoc', options)));
+      // Normalize the source's path(s).
+      const sources = Source.normalize(source, rc('mrdoc', options));
       // DEBUG: Sources
       log.debug(Log.color.blue('Sources:'), sources);
       if (sources.indexOf(null) > -1) {

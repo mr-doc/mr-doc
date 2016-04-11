@@ -8,8 +8,11 @@ const log = new Log();
 
 // Parse the arguments.
 CLI.parse()
+// Setup Log.
 .then(options => CLI.log(options))
+// Launch the CLI.
 .then(options => CLI.launch(options))
+// Start documentation.
 .then(result => MrDoc.cli(result.stream, result.options))
 // DEBUG: Land (with success)
 .then(() => log.debug(Log.color.blue('Landed CLI with success')))

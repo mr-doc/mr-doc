@@ -1,7 +1,6 @@
 /* eslint-env node */
 'use strict';
 
-/* eslint-env node */
 const Utils = require('mr-doc-utils');
 const log = new Utils.Log();
 const _ = require('lodash');

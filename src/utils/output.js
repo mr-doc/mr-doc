@@ -2,26 +2,31 @@
 const Source = require('./source');
 const Log = require('mr-doc-utils').Log;
 const log = new Log();
-const Parser = require('../parser/');
-const Compiler = require('../compiler/');
 const Vinyl = require('vinyl');
+const Through = require('through2');
+const Option = require('mr-doc-utils').Option;
+
 class Output {
-  static handler(buffer, options) {
+  static handler(buffer, parser, compiler, options) {
+    const file = options.compiler.file;
     return function (callback) {
-      Output.format(buffer, options).forEach(Output.toStream(this, options));
+      Output.format(buffer, parser, compiler, options).forEach(function (f) {
+        if (file.format === 'json' || file.format === 'md') {
+          this.push(new Vinyl({
+            path: `${file.name}.${file.format}`,
+            contents: new Buffer(f),
+          }));
+        } else if (file.format === 'html') {
+          this.push(f);
+        }
+      }.bind(this));
       callback();
     };
   }
-  static format(buffer, options) {
-    const files = Source.create(buffer);
-    // Initalize Parser and Compiler
-    const parser = (new Parser(options)).factory();
-    const compiler = (new Compiler(options)).factory();
-    // DEBUG: Parser and Compiler
-    log.debug(Log.color.blue('Parser and compiler initialized:'), !!parser && !!compiler);
+  static format(buffer, parser, compiler, options) {
+    const files = Source.generateReferences(buffer);
     // DEBUG: Files
     log.debug(Log.color.blue('Number of files: '), files.length);
-
     const format = options.compiler.file.format;
     if (format === 'md' || format === 'json') {
       return files
@@ -36,18 +41,10 @@ class Output {
       callback();
     };
   }
-  static toStream(context, options) {
-    const file = options.compiler.file;
-    return function (f) {
-      if (file.format === 'json' || file.format === 'md') {
-        this.push(new Vinyl({
-          path: `${file.name}.${file.format}`,
-          contents: new Buffer(f),
-        }));
-      } else if (file.format === 'html') {
-        this.push(f);
-      }
-    }.bind(context);
+  static toStream(parser, compiler, options) {
+    const buffer = [];
+    return Through.obj(Output.toBuffer(buffer),
+      Output.handler(buffer, parser, compiler, Option.merge(options)));
   }
 }
 
