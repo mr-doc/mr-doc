@@ -17,6 +17,7 @@ class Compiler {
         return (new JSONC(this.options));
       case 'html':
         // return (new HTML(this.options));
+        return null;
       default:
         return null;
     }
