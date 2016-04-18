@@ -1,7 +1,7 @@
 /* eslint-env node */
 'use strict';
 
-const Source = require('../utils/source');
+const Source = require('mr-doc-utils').Source;
 const Log = require('../utils/log');
 const Liftoff = require('liftoff');
 const Option = require('mr-doc-utils').Option;
@@ -93,7 +93,7 @@ class CLI {
     }
     return new Promise((resolve, reject) => {
       // Normalize the source's path(s).
-      const sources = Source.normalize(source, rc('mrdoc', options));
+      const sources = Source.normalizePath(source, rc('mrdoc', options));
       // DEBUG: Sources
       log.debug(Log.color.blue('Sources:'), sources);
       if (sources.indexOf(null) > -1) {

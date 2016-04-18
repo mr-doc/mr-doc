@@ -2,7 +2,7 @@
 
 const Log = require('mr-doc-utils').Log;
 const Option = require('mr-doc-utils').Option;
-const Output = require('./src/utils/output');
+const Output = require('mr-doc-utils').Output;
 const Promise = require('bluebird');
 const VinylFS = require('vinyl-fs');
 const Parser = require('./src/parser/');
@@ -23,7 +23,10 @@ class MrDoc {
     });
   }
   static gulp(options) {
-    return Output.toStream(MrDoc.parser(options), MrDoc.compiler(options), options);
+    return (new Output(options))
+    .use(MrDoc.parser)
+    .use(MrDoc.compiler)
+    .toStream();
   }
   // static grunt() {
   //   //
