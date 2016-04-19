@@ -93,7 +93,7 @@ class CLI {
     }
     return new Promise((resolve, reject) => {
       // Normalize the source's path(s).
-      const sources = Source.normalizePath(source, rc('mrdoc', options));
+      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));
       // DEBUG: Sources
       log.debug(Log.color.blue('Sources:'), sources);
       if (sources.indexOf(null) > -1) {
