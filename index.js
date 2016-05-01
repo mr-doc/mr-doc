@@ -5,7 +5,7 @@ const Option = require('mr-doc-utils').Option;
 const Output = require('mr-doc-utils').Output;
 const Promise = require('bluebird');
 const VinylFS = require('vinyl-fs');
-const Parser = require('./src/parser/');
+const Parser = require('parser');
 const Compiler = require('./src/compiler/');
 const log = new Log();
 
@@ -32,7 +32,6 @@ class MrDoc {
   //   //
   // }
   static parser(options) {
-    // Initalize Parser and Compiler
     return (new Parser(options)).factory();
   }
   static compiler(options) {
