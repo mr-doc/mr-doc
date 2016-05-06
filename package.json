@@ -29,6 +29,7 @@
     "node": ">= 5.0.0"
   },
   "dependencies": {
+    "compiler": "github:mr-doc/compiler#v1.0.0",
     "fs-extra": "^0.26.7",
     "gulp-if": "^2.0.0",
     "is-glob": "^2.0.1",

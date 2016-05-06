@@ -13,14 +13,12 @@ const pkg = require('../../package.json');
 const rc = require('rc');
 const log = new Log();
 
-// TODO: Write tests for CLI.
 class CLI {
   /**
    * Parse the CLI arguments.
    * @static
    */
   static parse() {
-    // console.log(Option.cli());
     return Promise.resolve(Yargs
     .usage('Usage: mrdoc [options]', Option.cli)
     .help('help', Log.color.gray('Show help.'))
@@ -67,7 +65,7 @@ class CLI {
     // DEBUG: Launch
     log.debug(Log.color.blue('Launching CLI'));
     return new Promise((resolve, reject) => {
-      // Launch the CLI!
+      // Launch the CLI
       CLI.rocket.launch({
         cwd: options.cwd,
         configPath: options.mrdocrc,
