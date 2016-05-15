@@ -18,6 +18,7 @@ class CLI {
   /**
    * Parse the CLI arguments.
    * @static
+   * @return {Promise<options>} - A promise to the options.
    */
   static parse() {
     return Promise.resolve(Yargs
@@ -77,7 +78,9 @@ class CLI {
   }
   /**
    * Handle the result from the CLI.
+   * @private
    * @static
+   * @return {Promise<options>} - A promise to the options.
    */
   static handler(env, options) {
     const version = options.version || options.v;

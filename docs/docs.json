@@ -6,52 +6,70 @@
         "title": "static",
         "description": null,
         "lineNumber": 2
+      },
+      {
+        "title": "returns",
+        "description": "A promise to the options.",
+        "lineNumber": 3,
+        "type": {
+          "type": "TypeApplication",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Promise"
+          },
+          "applications": [
+            {
+              "type": "NameExpression",
+              "name": "options"
+            }
+          ]
+        }
       }
     ],
     "loc": {
       "start": {
-        "line": 17,
+        "line": 18,
         "column": 2
       },
       "end": {
-        "line": 20,
+        "line": 22,
         "column": 5
       }
     },
     "context": {
-      "code": "static parse() {\n    return Promise.resolve(Yargs\n    .usage('Usage: mrdoc [options]', Option.cli)\n    .help('help', Log.color.gray('Show help.'))\n    .alias('help', 'h')\n    .argv);\n  }",
+      "code": "static parse() {\r\n    return Promise.resolve(Yargs\r\n    .usage('Usage: mrdoc [options]', Option.cli)\r\n    .help('help', Log.color.gray('Show help.'))\r\n    .alias('help', 'h')\r\n    .argv);\r\n  }",
       "file": {
-        "id": "rJYUXB5-",
-        "cwd": "/Users/iwatakeshi/Documents/GitHub/mr-doc",
-        "base": "src/",
-        "path": "/Users/iwatakeshi/Documents/GitHub/mr-doc/src/cli/index.js",
-        "source": "/* eslint-env node */\n'use strict';\n\nconst Source = require('mr-doc-utils').Source;\nconst Log = require('../utils/log');\nconst Liftoff = require('liftoff');\nconst Option = require('mr-doc-utils').Option;\nconst Promise = require('bluebird');\nconst Yargs = require('yargs');\nconst ViynlFS = require('vinyl-fs');\nconst _ = require('lodash');\nconst pkg = require('../../package.json');\nconst rc = require('rc');\nconst log = new Log();\n\nclass CLI {\n  /**\n   * Parse the CLI arguments.\n   * @static\n   */\n  static parse() {\n    return Promise.resolve(Yargs\n    .usage('Usage: mrdoc [options]', Option.cli)\n    .help('help', Log.color.gray('Show help.'))\n    .alias('help', 'h')\n    .argv);\n  }\n  /**\n   * Setup the logger.\n   * @param  {Object} options - The parsed CLI arguments.\n   * @return {Promise<options>} - A promise to the options.\n   */\n  static log(options) {\n    return Promise.resolve((() => {\n      // Get log level.\n      const level = options.level || options.l || Option.defaults.log.level;\n      // Set up the logger.\n      Log.setup({\n        level: level !== 'silent' ? level : '',\n        silent: level === 'silent',\n      });\n      return options;\n    })());\n  }\n  /**\n   * Create the CLI.\n   * @static\n   * @return {Liftoff} - An instance of Liftoff.\n   */\n  static get rocket() {\n    // Create the CLI.\n    return new Liftoff({\n      name: 'mrdoc',\n      processTitle: 'mrdoc',\n      v8flags: require('v8flags'),\n    });\n  }\n  /**\n   * Launch the CLI.\n   * @static\n   * @param {Object} options - The parsed CLI arguments.\n   * @return {Promise<Stream>} - A promise to the stream.\n   */\n  static launch(options) {\n    // DEBUG: Launch\n    log.debug(Log.color.blue('Launching CLI'));\n    return new Promise((resolve, reject) => {\n      // Launch the CLI\n      CLI.rocket.launch({\n        cwd: options.cwd,\n        configPath: options.mrdocrc,\n      }, env => CLI.handler(env, options)\n      .then(stream => resolve(stream))\n      .catch(error => reject(error)));\n    });\n  }\n  /**\n   * Handle the result from the CLI.\n   * @static\n   */\n  static handler(env, options) {\n    const version = options.version || options.v;\n    const source = options.source || options.s;\n    if (version) {\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\n      process.exit();\n    }\n    if (_.isEmpty(source) && version === false) {\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\n      process.exit();\n    }\n    return new Promise((resolve, reject) => {\n      // Normalize the source's path(s).\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\n      // DEBUG: Sources\n      log.debug(Log.color.blue('Sources:'), sources);\n      if (sources.indexOf(null) > -1) {\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\n    });\n  }\n}\n\nmodule.exports = CLI;\n",
+        "id": "r1Y9fMUG",
+        "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+        "base": "src\\",
+        "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\cli\\index.js",
+        "source": "\r\n/* eslint-env node */\r\n'use strict';\r\n\r\nconst Source = require('mr-doc-utils').Source;\r\nconst Log = require('../utils/log');\r\nconst Liftoff = require('liftoff');\r\nconst Option = require('mr-doc-utils').Option;\r\nconst Promise = require('bluebird');\r\nconst Yargs = require('yargs');\r\nconst ViynlFS = require('vinyl-fs');\r\nconst _ = require('lodash');\r\nconst pkg = require('../../package.json');\r\nconst rc = require('rc');\r\nconst log = new Log();\r\n\r\nclass CLI {\r\n  /**\r\n   * Parse the CLI arguments.\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static parse() {\r\n    return Promise.resolve(Yargs\r\n    .usage('Usage: mrdoc [options]', Option.cli)\r\n    .help('help', Log.color.gray('Show help.'))\r\n    .alias('help', 'h')\r\n    .argv);\r\n  }\r\n  /**\r\n   * Setup the logger.\r\n   * @param  {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static log(options) {\r\n    return Promise.resolve((() => {\r\n      // Get log level.\r\n      const level = options.level || options.l || Option.defaults.log.level;\r\n      // Set up the logger.\r\n      Log.setup({\r\n        level: level !== 'silent' ? level : '',\r\n        silent: level === 'silent',\r\n      });\r\n      return options;\r\n    })());\r\n  }\r\n  /**\r\n   * Create the CLI.\r\n   * @static\r\n   * @return {Liftoff} - An instance of Liftoff.\r\n   */\r\n  static get rocket() {\r\n    // Create the CLI.\r\n    return new Liftoff({\r\n      name: 'mrdoc',\r\n      processTitle: 'mrdoc',\r\n      v8flags: require('v8flags'),\r\n    });\r\n  }\r\n  /**\r\n   * Launch the CLI.\r\n   * @static\r\n   * @param {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<Stream>} - A promise to the stream.\r\n   */\r\n  static launch(options) {\r\n    // DEBUG: Launch\r\n    log.debug(Log.color.blue('Launching CLI'));\r\n    return new Promise((resolve, reject) => {\r\n      // Launch the CLI\r\n      CLI.rocket.launch({\r\n        cwd: options.cwd,\r\n        configPath: options.mrdocrc,\r\n      }, env => CLI.handler(env, options)\r\n      .then(stream => resolve(stream))\r\n      .catch(error => reject(error)));\r\n    });\r\n  }\r\n  /**\r\n   * Handle the result from the CLI.\r\n   * @private\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static handler(env, options) {\r\n    const version = options.version || options.v;\r\n    const source = options.source || options.s;\r\n    if (version) {\r\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\r\n      process.exit();\r\n    }\r\n    if (_.isEmpty(source) && version === false) {\r\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\r\n      process.exit();\r\n    }\r\n    return new Promise((resolve, reject) => {\r\n      // Normalize the source's path(s).\r\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\r\n      // DEBUG: Sources\r\n      log.debug(Log.color.blue('Sources:'), sources);\r\n      if (sources.indexOf(null) > -1) {\r\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\r\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\r\n    });\r\n  }\r\n}\r\n\r\nmodule.exports = CLI;\r\n",
         "ref": [
           {
-            "rJYUXB5-": {
-              "cwd": "/Users/iwatakeshi/Documents/GitHub/mr-doc",
-              "base": "src/",
-              "path": "/Users/iwatakeshi/Documents/GitHub/mr-doc/src/cli/index.js",
-              "source": "/* eslint-env node */\n'use strict';\n\nconst Source = require('mr-doc-utils').Source;\nconst Log = require('../utils/log');\nconst Liftoff = require('liftoff');\nconst Option = require('mr-doc-utils').Option;\nconst Promise = require('bluebird');\nconst Yargs = require('yargs');\nconst ViynlFS = require('vinyl-fs');\nconst _ = require('lodash');\nconst pkg = require('../../package.json');\nconst rc = require('rc');\nconst log = new Log();\n\nclass CLI {\n  /**\n   * Parse the CLI arguments.\n   * @static\n   */\n  static parse() {\n    return Promise.resolve(Yargs\n    .usage('Usage: mrdoc [options]', Option.cli)\n    .help('help', Log.color.gray('Show help.'))\n    .alias('help', 'h')\n    .argv);\n  }\n  /**\n   * Setup the logger.\n   * @param  {Object} options - The parsed CLI arguments.\n   * @return {Promise<options>} - A promise to the options.\n   */\n  static log(options) {\n    return Promise.resolve((() => {\n      // Get log level.\n      const level = options.level || options.l || Option.defaults.log.level;\n      // Set up the logger.\n      Log.setup({\n        level: level !== 'silent' ? level : '',\n        silent: level === 'silent',\n      });\n      return options;\n    })());\n  }\n  /**\n   * Create the CLI.\n   * @static\n   * @return {Liftoff} - An instance of Liftoff.\n   */\n  static get rocket() {\n    // Create the CLI.\n    return new Liftoff({\n      name: 'mrdoc',\n      processTitle: 'mrdoc',\n      v8flags: require('v8flags'),\n    });\n  }\n  /**\n   * Launch the CLI.\n   * @static\n   * @param {Object} options - The parsed CLI arguments.\n   * @return {Promise<Stream>} - A promise to the stream.\n   */\n  static launch(options) {\n    // DEBUG: Launch\n    log.debug(Log.color.blue('Launching CLI'));\n    return new Promise((resolve, reject) => {\n      // Launch the CLI\n      CLI.rocket.launch({\n        cwd: options.cwd,\n        configPath: options.mrdocrc,\n      }, env => CLI.handler(env, options)\n      .then(stream => resolve(stream))\n      .catch(error => reject(error)));\n    });\n  }\n  /**\n   * Handle the result from the CLI.\n   * @static\n   */\n  static handler(env, options) {\n    const version = options.version || options.v;\n    const source = options.source || options.s;\n    if (version) {\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\n      process.exit();\n    }\n    if (_.isEmpty(source) && version === false) {\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\n      process.exit();\n    }\n    return new Promise((resolve, reject) => {\n      // Normalize the source's path(s).\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\n      // DEBUG: Sources\n      log.debug(Log.color.blue('Sources:'), sources);\n      if (sources.indexOf(null) > -1) {\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\n    });\n  }\n}\n\nmodule.exports = CLI;\n"
+            "r1Y9fMUG": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\cli\\index.js",
+              "source": "\r\n/* eslint-env node */\r\n'use strict';\r\n\r\nconst Source = require('mr-doc-utils').Source;\r\nconst Log = require('../utils/log');\r\nconst Liftoff = require('liftoff');\r\nconst Option = require('mr-doc-utils').Option;\r\nconst Promise = require('bluebird');\r\nconst Yargs = require('yargs');\r\nconst ViynlFS = require('vinyl-fs');\r\nconst _ = require('lodash');\r\nconst pkg = require('../../package.json');\r\nconst rc = require('rc');\r\nconst log = new Log();\r\n\r\nclass CLI {\r\n  /**\r\n   * Parse the CLI arguments.\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static parse() {\r\n    return Promise.resolve(Yargs\r\n    .usage('Usage: mrdoc [options]', Option.cli)\r\n    .help('help', Log.color.gray('Show help.'))\r\n    .alias('help', 'h')\r\n    .argv);\r\n  }\r\n  /**\r\n   * Setup the logger.\r\n   * @param  {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static log(options) {\r\n    return Promise.resolve((() => {\r\n      // Get log level.\r\n      const level = options.level || options.l || Option.defaults.log.level;\r\n      // Set up the logger.\r\n      Log.setup({\r\n        level: level !== 'silent' ? level : '',\r\n        silent: level === 'silent',\r\n      });\r\n      return options;\r\n    })());\r\n  }\r\n  /**\r\n   * Create the CLI.\r\n   * @static\r\n   * @return {Liftoff} - An instance of Liftoff.\r\n   */\r\n  static get rocket() {\r\n    // Create the CLI.\r\n    return new Liftoff({\r\n      name: 'mrdoc',\r\n      processTitle: 'mrdoc',\r\n      v8flags: require('v8flags'),\r\n    });\r\n  }\r\n  /**\r\n   * Launch the CLI.\r\n   * @static\r\n   * @param {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<Stream>} - A promise to the stream.\r\n   */\r\n  static launch(options) {\r\n    // DEBUG: Launch\r\n    log.debug(Log.color.blue('Launching CLI'));\r\n    return new Promise((resolve, reject) => {\r\n      // Launch the CLI\r\n      CLI.rocket.launch({\r\n        cwd: options.cwd,\r\n        configPath: options.mrdocrc,\r\n      }, env => CLI.handler(env, options)\r\n      .then(stream => resolve(stream))\r\n      .catch(error => reject(error)));\r\n    });\r\n  }\r\n  /**\r\n   * Handle the result from the CLI.\r\n   * @private\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static handler(env, options) {\r\n    const version = options.version || options.v;\r\n    const source = options.source || options.s;\r\n    if (version) {\r\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\r\n      process.exit();\r\n    }\r\n    if (_.isEmpty(source) && version === false) {\r\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\r\n      process.exit();\r\n    }\r\n    return new Promise((resolve, reject) => {\r\n      // Normalize the source's path(s).\r\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\r\n      // DEBUG: Sources\r\n      log.debug(Log.color.blue('Sources:'), sources);\r\n      if (sources.indexOf(null) > -1) {\r\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\r\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\r\n    });\r\n  }\r\n}\r\n\r\nmodule.exports = CLI;\r\n"
             }
           },
           {
-            "B1xFI7r5W": {
-              "cwd": "/Users/iwatakeshi/Documents/GitHub/mr-doc",
-              "base": "src/",
-              "path": "/Users/iwatakeshi/Documents/GitHub/mr-doc/src/utils/log.js",
-              "source": "/* eslint-env node */\n'use strict';\n\nconst Utils = require('mr-doc-utils');\nconst log = new Utils.Log();\nconst _ = require('lodash');\n\nclass Log {\n  constructor() {\n    return log;\n  }\n  static setup(options) {\n    if (options.silent) {\n      log.on('error', () => { /* NOOP */});\n    }\n    Log.levels(options.level)\n    .forEach(level => {\n      if (level === 'error') Log.error();\n      else Log.other(level);\n    });\n  }\n  static levels(level) {\n    const levels = _.isString(level) ? level.split(',') : level;\n    return levels.map(i => i.replace(/\\s/g, ''));\n  }\n  static error() {\n    log.on('error', function error() {\n      /* eslint-disable no-console */\n      const args = Array.prototype.slice.call(arguments);\n      args.unshift(Log.color.cyan('mrdoc'));\n      console.log.apply(console, args.map(i => Log.color.red(i)));\n      /* eslint-enable no-console */\n    });\n  }\n  static other(level) {\n    log.on(level, function logger() {\n      /* eslint-disable no-console */\n      const args = Array.prototype.slice.call(arguments);\n      args.unshift(Log.color.cyan('mrdoc'));\n      console.log.apply(console, args);\n      /* eslint-enable no-console */\n    });\n  }\n  static get color() {\n    return Utils.Log.color;\n  }\n}\n\nmodule.exports = Log;\n"
+            "rJlF9fzIz": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\utils\\log.js",
+              "source": "/* eslint-env node */\r\n'use strict';\r\n\r\nconst Utils = require('mr-doc-utils');\r\nconst log = new Utils.Log();\r\nconst _ = require('lodash');\r\n\r\nclass Log {\r\n  constructor() {\r\n    return log;\r\n  }\r\n  /**\r\n   * Set up the logger.\r\n   * @static\r\n   */\r\n  static setup(options) {\r\n    if (options.silent) {\r\n      log.on('error', () => { /* NOOP */});\r\n    }\r\n    Log.levels(options.level)\r\n    .forEach(level => {\r\n      if (level === 'error') Log.error();\r\n      else Log.other(level);\r\n    });\r\n  }\r\n  /**\r\n   * Set the log levels.\r\n   * @private\r\n   * @static\r\n   * @return {String} - The normalized levels.\r\n   */\r\n  static levels(level) {\r\n    const levels = _.isString(level) ? level.split(',') : level;\r\n    return levels.map(i => i.replace(/\\s/g, ''));\r\n  }\r\n  /**\r\n   * Set up the error logger.\r\n   * @private\r\n   * @static\r\n   */\r\n  static error() {\r\n    log.on('error', function error() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor('error')]('[error]:'));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args.map(i => Log.color.red(i)));\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  /**\r\n   * Set up the other loggers.\r\n   * @private\r\n   * @static\r\n   */\r\n  static other(level) {\r\n    log.on(level, function logger() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor(level)](`[${level}]:`));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args);\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  static get color() {\r\n    return Utils.Log.color;\r\n  }\r\n  static levelColor(level) {\r\n    return ({\r\n      info: 'green',\r\n      debug: 'blue',\r\n      warn: 'yellow',\r\n      error: 'red',\r\n    })[level];\r\n  }\r\n}\r\n\r\nmodule.exports = Log;\r\n"
             }
           }
         ]
       },
       "loc": {
         "start": {
-          "line": 21,
+          "line": 23,
           "column": 2
         },
         "end": {
-          "line": 27,
+          "line": 29,
           "column": 3
         }
       },
@@ -61,8 +79,8 @@
           3
         ],
         "line": [
-          21,
-          27
+          23,
+          29
         ]
       }
     }
@@ -101,48 +119,48 @@
     ],
     "loc": {
       "start": {
-        "line": 28,
+        "line": 30,
         "column": 2
       },
       "end": {
-        "line": 32,
+        "line": 34,
         "column": 5
       }
     },
     "context": {
-      "code": "static log(options) {\n    return Promise.resolve((() => {\n      // Get log level.\n      const level = options.level || options.l || Option.defaults.log.level;\n      // Set up the logger.\n      Log.setup({\n        level: level !== 'silent' ? level : '',\n        silent: level === 'silent',\n      });\n      return options;\n    })());\n  }",
+      "code": "static log(options) {\r\n    return Promise.resolve((() => {\r\n      // Get log level.\r\n      const level = options.level || options.l || Option.defaults.log.level;\r\n      // Set up the logger.\r\n      Log.setup({\r\n        level: level !== 'silent' ? level : '',\r\n        silent: level === 'silent',\r\n      });\r\n      return options;\r\n    })());\r\n  }",
       "file": {
-        "id": "rJYUXB5-",
-        "cwd": "/Users/iwatakeshi/Documents/GitHub/mr-doc",
-        "base": "src/",
-        "path": "/Users/iwatakeshi/Documents/GitHub/mr-doc/src/cli/index.js",
-        "source": "/* eslint-env node */\n'use strict';\n\nconst Source = require('mr-doc-utils').Source;\nconst Log = require('../utils/log');\nconst Liftoff = require('liftoff');\nconst Option = require('mr-doc-utils').Option;\nconst Promise = require('bluebird');\nconst Yargs = require('yargs');\nconst ViynlFS = require('vinyl-fs');\nconst _ = require('lodash');\nconst pkg = require('../../package.json');\nconst rc = require('rc');\nconst log = new Log();\n\nclass CLI {\n  /**\n   * Parse the CLI arguments.\n   * @static\n   */\n  static parse() {\n    return Promise.resolve(Yargs\n    .usage('Usage: mrdoc [options]', Option.cli)\n    .help('help', Log.color.gray('Show help.'))\n    .alias('help', 'h')\n    .argv);\n  }\n  /**\n   * Setup the logger.\n   * @param  {Object} options - The parsed CLI arguments.\n   * @return {Promise<options>} - A promise to the options.\n   */\n  static log(options) {\n    return Promise.resolve((() => {\n      // Get log level.\n      const level = options.level || options.l || Option.defaults.log.level;\n      // Set up the logger.\n      Log.setup({\n        level: level !== 'silent' ? level : '',\n        silent: level === 'silent',\n      });\n      return options;\n    })());\n  }\n  /**\n   * Create the CLI.\n   * @static\n   * @return {Liftoff} - An instance of Liftoff.\n   */\n  static get rocket() {\n    // Create the CLI.\n    return new Liftoff({\n      name: 'mrdoc',\n      processTitle: 'mrdoc',\n      v8flags: require('v8flags'),\n    });\n  }\n  /**\n   * Launch the CLI.\n   * @static\n   * @param {Object} options - The parsed CLI arguments.\n   * @return {Promise<Stream>} - A promise to the stream.\n   */\n  static launch(options) {\n    // DEBUG: Launch\n    log.debug(Log.color.blue('Launching CLI'));\n    return new Promise((resolve, reject) => {\n      // Launch the CLI\n      CLI.rocket.launch({\n        cwd: options.cwd,\n        configPath: options.mrdocrc,\n      }, env => CLI.handler(env, options)\n      .then(stream => resolve(stream))\n      .catch(error => reject(error)));\n    });\n  }\n  /**\n   * Handle the result from the CLI.\n   * @static\n   */\n  static handler(env, options) {\n    const version = options.version || options.v;\n    const source = options.source || options.s;\n    if (version) {\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\n      process.exit();\n    }\n    if (_.isEmpty(source) && version === false) {\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\n      process.exit();\n    }\n    return new Promise((resolve, reject) => {\n      // Normalize the source's path(s).\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\n      // DEBUG: Sources\n      log.debug(Log.color.blue('Sources:'), sources);\n      if (sources.indexOf(null) > -1) {\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\n    });\n  }\n}\n\nmodule.exports = CLI;\n",
+        "id": "r1Y9fMUG",
+        "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+        "base": "src\\",
+        "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\cli\\index.js",
+        "source": "\r\n/* eslint-env node */\r\n'use strict';\r\n\r\nconst Source = require('mr-doc-utils').Source;\r\nconst Log = require('../utils/log');\r\nconst Liftoff = require('liftoff');\r\nconst Option = require('mr-doc-utils').Option;\r\nconst Promise = require('bluebird');\r\nconst Yargs = require('yargs');\r\nconst ViynlFS = require('vinyl-fs');\r\nconst _ = require('lodash');\r\nconst pkg = require('../../package.json');\r\nconst rc = require('rc');\r\nconst log = new Log();\r\n\r\nclass CLI {\r\n  /**\r\n   * Parse the CLI arguments.\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static parse() {\r\n    return Promise.resolve(Yargs\r\n    .usage('Usage: mrdoc [options]', Option.cli)\r\n    .help('help', Log.color.gray('Show help.'))\r\n    .alias('help', 'h')\r\n    .argv);\r\n  }\r\n  /**\r\n   * Setup the logger.\r\n   * @param  {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static log(options) {\r\n    return Promise.resolve((() => {\r\n      // Get log level.\r\n      const level = options.level || options.l || Option.defaults.log.level;\r\n      // Set up the logger.\r\n      Log.setup({\r\n        level: level !== 'silent' ? level : '',\r\n        silent: level === 'silent',\r\n      });\r\n      return options;\r\n    })());\r\n  }\r\n  /**\r\n   * Create the CLI.\r\n   * @static\r\n   * @return {Liftoff} - An instance of Liftoff.\r\n   */\r\n  static get rocket() {\r\n    // Create the CLI.\r\n    return new Liftoff({\r\n      name: 'mrdoc',\r\n      processTitle: 'mrdoc',\r\n      v8flags: require('v8flags'),\r\n    });\r\n  }\r\n  /**\r\n   * Launch the CLI.\r\n   * @static\r\n   * @param {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<Stream>} - A promise to the stream.\r\n   */\r\n  static launch(options) {\r\n    // DEBUG: Launch\r\n    log.debug(Log.color.blue('Launching CLI'));\r\n    return new Promise((resolve, reject) => {\r\n      // Launch the CLI\r\n      CLI.rocket.launch({\r\n        cwd: options.cwd,\r\n        configPath: options.mrdocrc,\r\n      }, env => CLI.handler(env, options)\r\n      .then(stream => resolve(stream))\r\n      .catch(error => reject(error)));\r\n    });\r\n  }\r\n  /**\r\n   * Handle the result from the CLI.\r\n   * @private\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static handler(env, options) {\r\n    const version = options.version || options.v;\r\n    const source = options.source || options.s;\r\n    if (version) {\r\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\r\n      process.exit();\r\n    }\r\n    if (_.isEmpty(source) && version === false) {\r\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\r\n      process.exit();\r\n    }\r\n    return new Promise((resolve, reject) => {\r\n      // Normalize the source's path(s).\r\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\r\n      // DEBUG: Sources\r\n      log.debug(Log.color.blue('Sources:'), sources);\r\n      if (sources.indexOf(null) > -1) {\r\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\r\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\r\n    });\r\n  }\r\n}\r\n\r\nmodule.exports = CLI;\r\n",
         "ref": [
           {
-            "rJYUXB5-": {
-              "cwd": "/Users/iwatakeshi/Documents/GitHub/mr-doc",
-              "base": "src/",
-              "path": "/Users/iwatakeshi/Documents/GitHub/mr-doc/src/cli/index.js",
-              "source": "/* eslint-env node */\n'use strict';\n\nconst Source = require('mr-doc-utils').Source;\nconst Log = require('../utils/log');\nconst Liftoff = require('liftoff');\nconst Option = require('mr-doc-utils').Option;\nconst Promise = require('bluebird');\nconst Yargs = require('yargs');\nconst ViynlFS = require('vinyl-fs');\nconst _ = require('lodash');\nconst pkg = require('../../package.json');\nconst rc = require('rc');\nconst log = new Log();\n\nclass CLI {\n  /**\n   * Parse the CLI arguments.\n   * @static\n   */\n  static parse() {\n    return Promise.resolve(Yargs\n    .usage('Usage: mrdoc [options]', Option.cli)\n    .help('help', Log.color.gray('Show help.'))\n    .alias('help', 'h')\n    .argv);\n  }\n  /**\n   * Setup the logger.\n   * @param  {Object} options - The parsed CLI arguments.\n   * @return {Promise<options>} - A promise to the options.\n   */\n  static log(options) {\n    return Promise.resolve((() => {\n      // Get log level.\n      const level = options.level || options.l || Option.defaults.log.level;\n      // Set up the logger.\n      Log.setup({\n        level: level !== 'silent' ? level : '',\n        silent: level === 'silent',\n      });\n      return options;\n    })());\n  }\n  /**\n   * Create the CLI.\n   * @static\n   * @return {Liftoff} - An instance of Liftoff.\n   */\n  static get rocket() {\n    // Create the CLI.\n    return new Liftoff({\n      name: 'mrdoc',\n      processTitle: 'mrdoc',\n      v8flags: require('v8flags'),\n    });\n  }\n  /**\n   * Launch the CLI.\n   * @static\n   * @param {Object} options - The parsed CLI arguments.\n   * @return {Promise<Stream>} - A promise to the stream.\n   */\n  static launch(options) {\n    // DEBUG: Launch\n    log.debug(Log.color.blue('Launching CLI'));\n    return new Promise((resolve, reject) => {\n      // Launch the CLI\n      CLI.rocket.launch({\n        cwd: options.cwd,\n        configPath: options.mrdocrc,\n      }, env => CLI.handler(env, options)\n      .then(stream => resolve(stream))\n      .catch(error => reject(error)));\n    });\n  }\n  /**\n   * Handle the result from the CLI.\n   * @static\n   */\n  static handler(env, options) {\n    const version = options.version || options.v;\n    const source = options.source || options.s;\n    if (version) {\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\n      process.exit();\n    }\n    if (_.isEmpty(source) && version === false) {\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\n      process.exit();\n    }\n    return new Promise((resolve, reject) => {\n      // Normalize the source's path(s).\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\n      // DEBUG: Sources\n      log.debug(Log.color.blue('Sources:'), sources);\n      if (sources.indexOf(null) > -1) {\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\n    });\n  }\n}\n\nmodule.exports = CLI;\n"
+            "r1Y9fMUG": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\cli\\index.js",
+              "source": "\r\n/* eslint-env node */\r\n'use strict';\r\n\r\nconst Source = require('mr-doc-utils').Source;\r\nconst Log = require('../utils/log');\r\nconst Liftoff = require('liftoff');\r\nconst Option = require('mr-doc-utils').Option;\r\nconst Promise = require('bluebird');\r\nconst Yargs = require('yargs');\r\nconst ViynlFS = require('vinyl-fs');\r\nconst _ = require('lodash');\r\nconst pkg = require('../../package.json');\r\nconst rc = require('rc');\r\nconst log = new Log();\r\n\r\nclass CLI {\r\n  /**\r\n   * Parse the CLI arguments.\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static parse() {\r\n    return Promise.resolve(Yargs\r\n    .usage('Usage: mrdoc [options]', Option.cli)\r\n    .help('help', Log.color.gray('Show help.'))\r\n    .alias('help', 'h')\r\n    .argv);\r\n  }\r\n  /**\r\n   * Setup the logger.\r\n   * @param  {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static log(options) {\r\n    return Promise.resolve((() => {\r\n      // Get log level.\r\n      const level = options.level || options.l || Option.defaults.log.level;\r\n      // Set up the logger.\r\n      Log.setup({\r\n        level: level !== 'silent' ? level : '',\r\n        silent: level === 'silent',\r\n      });\r\n      return options;\r\n    })());\r\n  }\r\n  /**\r\n   * Create the CLI.\r\n   * @static\r\n   * @return {Liftoff} - An instance of Liftoff.\r\n   */\r\n  static get rocket() {\r\n    // Create the CLI.\r\n    return new Liftoff({\r\n      name: 'mrdoc',\r\n      processTitle: 'mrdoc',\r\n      v8flags: require('v8flags'),\r\n    });\r\n  }\r\n  /**\r\n   * Launch the CLI.\r\n   * @static\r\n   * @param {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<Stream>} - A promise to the stream.\r\n   */\r\n  static launch(options) {\r\n    // DEBUG: Launch\r\n    log.debug(Log.color.blue('Launching CLI'));\r\n    return new Promise((resolve, reject) => {\r\n      // Launch the CLI\r\n      CLI.rocket.launch({\r\n        cwd: options.cwd,\r\n        configPath: options.mrdocrc,\r\n      }, env => CLI.handler(env, options)\r\n      .then(stream => resolve(stream))\r\n      .catch(error => reject(error)));\r\n    });\r\n  }\r\n  /**\r\n   * Handle the result from the CLI.\r\n   * @private\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static handler(env, options) {\r\n    const version = options.version || options.v;\r\n    const source = options.source || options.s;\r\n    if (version) {\r\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\r\n      process.exit();\r\n    }\r\n    if (_.isEmpty(source) && version === false) {\r\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\r\n      process.exit();\r\n    }\r\n    return new Promise((resolve, reject) => {\r\n      // Normalize the source's path(s).\r\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\r\n      // DEBUG: Sources\r\n      log.debug(Log.color.blue('Sources:'), sources);\r\n      if (sources.indexOf(null) > -1) {\r\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\r\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\r\n    });\r\n  }\r\n}\r\n\r\nmodule.exports = CLI;\r\n"
             }
           },
           {
-            "B1xFI7r5W": {
-              "cwd": "/Users/iwatakeshi/Documents/GitHub/mr-doc",
-              "base": "src/",
-              "path": "/Users/iwatakeshi/Documents/GitHub/mr-doc/src/utils/log.js",
-              "source": "/* eslint-env node */\n'use strict';\n\nconst Utils = require('mr-doc-utils');\nconst log = new Utils.Log();\nconst _ = require('lodash');\n\nclass Log {\n  constructor() {\n    return log;\n  }\n  static setup(options) {\n    if (options.silent) {\n      log.on('error', () => { /* NOOP */});\n    }\n    Log.levels(options.level)\n    .forEach(level => {\n      if (level === 'error') Log.error();\n      else Log.other(level);\n    });\n  }\n  static levels(level) {\n    const levels = _.isString(level) ? level.split(',') : level;\n    return levels.map(i => i.replace(/\\s/g, ''));\n  }\n  static error() {\n    log.on('error', function error() {\n      /* eslint-disable no-console */\n      const args = Array.prototype.slice.call(arguments);\n      args.unshift(Log.color.cyan('mrdoc'));\n      console.log.apply(console, args.map(i => Log.color.red(i)));\n      /* eslint-enable no-console */\n    });\n  }\n  static other(level) {\n    log.on(level, function logger() {\n      /* eslint-disable no-console */\n      const args = Array.prototype.slice.call(arguments);\n      args.unshift(Log.color.cyan('mrdoc'));\n      console.log.apply(console, args);\n      /* eslint-enable no-console */\n    });\n  }\n  static get color() {\n    return Utils.Log.color;\n  }\n}\n\nmodule.exports = Log;\n"
+            "rJlF9fzIz": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\utils\\log.js",
+              "source": "/* eslint-env node */\r\n'use strict';\r\n\r\nconst Utils = require('mr-doc-utils');\r\nconst log = new Utils.Log();\r\nconst _ = require('lodash');\r\n\r\nclass Log {\r\n  constructor() {\r\n    return log;\r\n  }\r\n  /**\r\n   * Set up the logger.\r\n   * @static\r\n   */\r\n  static setup(options) {\r\n    if (options.silent) {\r\n      log.on('error', () => { /* NOOP */});\r\n    }\r\n    Log.levels(options.level)\r\n    .forEach(level => {\r\n      if (level === 'error') Log.error();\r\n      else Log.other(level);\r\n    });\r\n  }\r\n  /**\r\n   * Set the log levels.\r\n   * @private\r\n   * @static\r\n   * @return {String} - The normalized levels.\r\n   */\r\n  static levels(level) {\r\n    const levels = _.isString(level) ? level.split(',') : level;\r\n    return levels.map(i => i.replace(/\\s/g, ''));\r\n  }\r\n  /**\r\n   * Set up the error logger.\r\n   * @private\r\n   * @static\r\n   */\r\n  static error() {\r\n    log.on('error', function error() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor('error')]('[error]:'));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args.map(i => Log.color.red(i)));\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  /**\r\n   * Set up the other loggers.\r\n   * @private\r\n   * @static\r\n   */\r\n  static other(level) {\r\n    log.on(level, function logger() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor(level)](`[${level}]:`));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args);\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  static get color() {\r\n    return Utils.Log.color;\r\n  }\r\n  static levelColor(level) {\r\n    return ({\r\n      info: 'green',\r\n      debug: 'blue',\r\n      warn: 'yellow',\r\n      error: 'red',\r\n    })[level];\r\n  }\r\n}\r\n\r\nmodule.exports = Log;\r\n"
             }
           }
         ]
       },
       "loc": {
         "start": {
-          "line": 33,
+          "line": 35,
           "column": 2
         },
         "end": {
-          "line": 44,
+          "line": 46,
           "column": 3
         }
       },
@@ -152,8 +170,8 @@
           3
         ],
         "line": [
-          33,
-          44
+          35,
+          46
         ]
       }
     }
@@ -178,48 +196,48 @@
     ],
     "loc": {
       "start": {
-        "line": 45,
+        "line": 47,
         "column": 2
       },
       "end": {
-        "line": 49,
+        "line": 51,
         "column": 5
       }
     },
     "context": {
-      "code": "static get rocket() {\n    // Create the CLI.\n    return new Liftoff({\n      name: 'mrdoc',\n      processTitle: 'mrdoc',\n      v8flags: require('v8flags'),\n    });\n  }",
+      "code": "static get rocket() {\r\n    // Create the CLI.\r\n    return new Liftoff({\r\n      name: 'mrdoc',\r\n      processTitle: 'mrdoc',\r\n      v8flags: require('v8flags'),\r\n    });\r\n  }",
       "file": {
-        "id": "rJYUXB5-",
-        "cwd": "/Users/iwatakeshi/Documents/GitHub/mr-doc",
-        "base": "src/",
-        "path": "/Users/iwatakeshi/Documents/GitHub/mr-doc/src/cli/index.js",
-        "source": "/* eslint-env node */\n'use strict';\n\nconst Source = require('mr-doc-utils').Source;\nconst Log = require('../utils/log');\nconst Liftoff = require('liftoff');\nconst Option = require('mr-doc-utils').Option;\nconst Promise = require('bluebird');\nconst Yargs = require('yargs');\nconst ViynlFS = require('vinyl-fs');\nconst _ = require('lodash');\nconst pkg = require('../../package.json');\nconst rc = require('rc');\nconst log = new Log();\n\nclass CLI {\n  /**\n   * Parse the CLI arguments.\n   * @static\n   */\n  static parse() {\n    return Promise.resolve(Yargs\n    .usage('Usage: mrdoc [options]', Option.cli)\n    .help('help', Log.color.gray('Show help.'))\n    .alias('help', 'h')\n    .argv);\n  }\n  /**\n   * Setup the logger.\n   * @param  {Object} options - The parsed CLI arguments.\n   * @return {Promise<options>} - A promise to the options.\n   */\n  static log(options) {\n    return Promise.resolve((() => {\n      // Get log level.\n      const level = options.level || options.l || Option.defaults.log.level;\n      // Set up the logger.\n      Log.setup({\n        level: level !== 'silent' ? level : '',\n        silent: level === 'silent',\n      });\n      return options;\n    })());\n  }\n  /**\n   * Create the CLI.\n   * @static\n   * @return {Liftoff} - An instance of Liftoff.\n   */\n  static get rocket() {\n    // Create the CLI.\n    return new Liftoff({\n      name: 'mrdoc',\n      processTitle: 'mrdoc',\n      v8flags: require('v8flags'),\n    });\n  }\n  /**\n   * Launch the CLI.\n   * @static\n   * @param {Object} options - The parsed CLI arguments.\n   * @return {Promise<Stream>} - A promise to the stream.\n   */\n  static launch(options) {\n    // DEBUG: Launch\n    log.debug(Log.color.blue('Launching CLI'));\n    return new Promise((resolve, reject) => {\n      // Launch the CLI\n      CLI.rocket.launch({\n        cwd: options.cwd,\n        configPath: options.mrdocrc,\n      }, env => CLI.handler(env, options)\n      .then(stream => resolve(stream))\n      .catch(error => reject(error)));\n    });\n  }\n  /**\n   * Handle the result from the CLI.\n   * @static\n   */\n  static handler(env, options) {\n    const version = options.version || options.v;\n    const source = options.source || options.s;\n    if (version) {\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\n      process.exit();\n    }\n    if (_.isEmpty(source) && version === false) {\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\n      process.exit();\n    }\n    return new Promise((resolve, reject) => {\n      // Normalize the source's path(s).\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\n      // DEBUG: Sources\n      log.debug(Log.color.blue('Sources:'), sources);\n      if (sources.indexOf(null) > -1) {\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\n    });\n  }\n}\n\nmodule.exports = CLI;\n",
+        "id": "r1Y9fMUG",
+        "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+        "base": "src\\",
+        "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\cli\\index.js",
+        "source": "\r\n/* eslint-env node */\r\n'use strict';\r\n\r\nconst Source = require('mr-doc-utils').Source;\r\nconst Log = require('../utils/log');\r\nconst Liftoff = require('liftoff');\r\nconst Option = require('mr-doc-utils').Option;\r\nconst Promise = require('bluebird');\r\nconst Yargs = require('yargs');\r\nconst ViynlFS = require('vinyl-fs');\r\nconst _ = require('lodash');\r\nconst pkg = require('../../package.json');\r\nconst rc = require('rc');\r\nconst log = new Log();\r\n\r\nclass CLI {\r\n  /**\r\n   * Parse the CLI arguments.\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static parse() {\r\n    return Promise.resolve(Yargs\r\n    .usage('Usage: mrdoc [options]', Option.cli)\r\n    .help('help', Log.color.gray('Show help.'))\r\n    .alias('help', 'h')\r\n    .argv);\r\n  }\r\n  /**\r\n   * Setup the logger.\r\n   * @param  {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static log(options) {\r\n    return Promise.resolve((() => {\r\n      // Get log level.\r\n      const level = options.level || options.l || Option.defaults.log.level;\r\n      // Set up the logger.\r\n      Log.setup({\r\n        level: level !== 'silent' ? level : '',\r\n        silent: level === 'silent',\r\n      });\r\n      return options;\r\n    })());\r\n  }\r\n  /**\r\n   * Create the CLI.\r\n   * @static\r\n   * @return {Liftoff} - An instance of Liftoff.\r\n   */\r\n  static get rocket() {\r\n    // Create the CLI.\r\n    return new Liftoff({\r\n      name: 'mrdoc',\r\n      processTitle: 'mrdoc',\r\n      v8flags: require('v8flags'),\r\n    });\r\n  }\r\n  /**\r\n   * Launch the CLI.\r\n   * @static\r\n   * @param {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<Stream>} - A promise to the stream.\r\n   */\r\n  static launch(options) {\r\n    // DEBUG: Launch\r\n    log.debug(Log.color.blue('Launching CLI'));\r\n    return new Promise((resolve, reject) => {\r\n      // Launch the CLI\r\n      CLI.rocket.launch({\r\n        cwd: options.cwd,\r\n        configPath: options.mrdocrc,\r\n      }, env => CLI.handler(env, options)\r\n      .then(stream => resolve(stream))\r\n      .catch(error => reject(error)));\r\n    });\r\n  }\r\n  /**\r\n   * Handle the result from the CLI.\r\n   * @private\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static handler(env, options) {\r\n    const version = options.version || options.v;\r\n    const source = options.source || options.s;\r\n    if (version) {\r\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\r\n      process.exit();\r\n    }\r\n    if (_.isEmpty(source) && version === false) {\r\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\r\n      process.exit();\r\n    }\r\n    return new Promise((resolve, reject) => {\r\n      // Normalize the source's path(s).\r\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\r\n      // DEBUG: Sources\r\n      log.debug(Log.color.blue('Sources:'), sources);\r\n      if (sources.indexOf(null) > -1) {\r\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\r\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\r\n    });\r\n  }\r\n}\r\n\r\nmodule.exports = CLI;\r\n",
         "ref": [
           {
-            "rJYUXB5-": {
-              "cwd": "/Users/iwatakeshi/Documents/GitHub/mr-doc",
-              "base": "src/",
-              "path": "/Users/iwatakeshi/Documents/GitHub/mr-doc/src/cli/index.js",
-              "source": "/* eslint-env node */\n'use strict';\n\nconst Source = require('mr-doc-utils').Source;\nconst Log = require('../utils/log');\nconst Liftoff = require('liftoff');\nconst Option = require('mr-doc-utils').Option;\nconst Promise = require('bluebird');\nconst Yargs = require('yargs');\nconst ViynlFS = require('vinyl-fs');\nconst _ = require('lodash');\nconst pkg = require('../../package.json');\nconst rc = require('rc');\nconst log = new Log();\n\nclass CLI {\n  /**\n   * Parse the CLI arguments.\n   * @static\n   */\n  static parse() {\n    return Promise.resolve(Yargs\n    .usage('Usage: mrdoc [options]', Option.cli)\n    .help('help', Log.color.gray('Show help.'))\n    .alias('help', 'h')\n    .argv);\n  }\n  /**\n   * Setup the logger.\n   * @param  {Object} options - The parsed CLI arguments.\n   * @return {Promise<options>} - A promise to the options.\n   */\n  static log(options) {\n    return Promise.resolve((() => {\n      // Get log level.\n      const level = options.level || options.l || Option.defaults.log.level;\n      // Set up the logger.\n      Log.setup({\n        level: level !== 'silent' ? level : '',\n        silent: level === 'silent',\n      });\n      return options;\n    })());\n  }\n  /**\n   * Create the CLI.\n   * @static\n   * @return {Liftoff} - An instance of Liftoff.\n   */\n  static get rocket() {\n    // Create the CLI.\n    return new Liftoff({\n      name: 'mrdoc',\n      processTitle: 'mrdoc',\n      v8flags: require('v8flags'),\n    });\n  }\n  /**\n   * Launch the CLI.\n   * @static\n   * @param {Object} options - The parsed CLI arguments.\n   * @return {Promise<Stream>} - A promise to the stream.\n   */\n  static launch(options) {\n    // DEBUG: Launch\n    log.debug(Log.color.blue('Launching CLI'));\n    return new Promise((resolve, reject) => {\n      // Launch the CLI\n      CLI.rocket.launch({\n        cwd: options.cwd,\n        configPath: options.mrdocrc,\n      }, env => CLI.handler(env, options)\n      .then(stream => resolve(stream))\n      .catch(error => reject(error)));\n    });\n  }\n  /**\n   * Handle the result from the CLI.\n   * @static\n   */\n  static handler(env, options) {\n    const version = options.version || options.v;\n    const source = options.source || options.s;\n    if (version) {\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\n      process.exit();\n    }\n    if (_.isEmpty(source) && version === false) {\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\n      process.exit();\n    }\n    return new Promise((resolve, reject) => {\n      // Normalize the source's path(s).\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\n      // DEBUG: Sources\n      log.debug(Log.color.blue('Sources:'), sources);\n      if (sources.indexOf(null) > -1) {\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\n    });\n  }\n}\n\nmodule.exports = CLI;\n"
+            "r1Y9fMUG": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\cli\\index.js",
+              "source": "\r\n/* eslint-env node */\r\n'use strict';\r\n\r\nconst Source = require('mr-doc-utils').Source;\r\nconst Log = require('../utils/log');\r\nconst Liftoff = require('liftoff');\r\nconst Option = require('mr-doc-utils').Option;\r\nconst Promise = require('bluebird');\r\nconst Yargs = require('yargs');\r\nconst ViynlFS = require('vinyl-fs');\r\nconst _ = require('lodash');\r\nconst pkg = require('../../package.json');\r\nconst rc = require('rc');\r\nconst log = new Log();\r\n\r\nclass CLI {\r\n  /**\r\n   * Parse the CLI arguments.\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static parse() {\r\n    return Promise.resolve(Yargs\r\n    .usage('Usage: mrdoc [options]', Option.cli)\r\n    .help('help', Log.color.gray('Show help.'))\r\n    .alias('help', 'h')\r\n    .argv);\r\n  }\r\n  /**\r\n   * Setup the logger.\r\n   * @param  {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static log(options) {\r\n    return Promise.resolve((() => {\r\n      // Get log level.\r\n      const level = options.level || options.l || Option.defaults.log.level;\r\n      // Set up the logger.\r\n      Log.setup({\r\n        level: level !== 'silent' ? level : '',\r\n        silent: level === 'silent',\r\n      });\r\n      return options;\r\n    })());\r\n  }\r\n  /**\r\n   * Create the CLI.\r\n   * @static\r\n   * @return {Liftoff} - An instance of Liftoff.\r\n   */\r\n  static get rocket() {\r\n    // Create the CLI.\r\n    return new Liftoff({\r\n      name: 'mrdoc',\r\n      processTitle: 'mrdoc',\r\n      v8flags: require('v8flags'),\r\n    });\r\n  }\r\n  /**\r\n   * Launch the CLI.\r\n   * @static\r\n   * @param {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<Stream>} - A promise to the stream.\r\n   */\r\n  static launch(options) {\r\n    // DEBUG: Launch\r\n    log.debug(Log.color.blue('Launching CLI'));\r\n    return new Promise((resolve, reject) => {\r\n      // Launch the CLI\r\n      CLI.rocket.launch({\r\n        cwd: options.cwd,\r\n        configPath: options.mrdocrc,\r\n      }, env => CLI.handler(env, options)\r\n      .then(stream => resolve(stream))\r\n      .catch(error => reject(error)));\r\n    });\r\n  }\r\n  /**\r\n   * Handle the result from the CLI.\r\n   * @private\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static handler(env, options) {\r\n    const version = options.version || options.v;\r\n    const source = options.source || options.s;\r\n    if (version) {\r\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\r\n      process.exit();\r\n    }\r\n    if (_.isEmpty(source) && version === false) {\r\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\r\n      process.exit();\r\n    }\r\n    return new Promise((resolve, reject) => {\r\n      // Normalize the source's path(s).\r\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\r\n      // DEBUG: Sources\r\n      log.debug(Log.color.blue('Sources:'), sources);\r\n      if (sources.indexOf(null) > -1) {\r\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\r\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\r\n    });\r\n  }\r\n}\r\n\r\nmodule.exports = CLI;\r\n"
             }
           },
           {
-            "B1xFI7r5W": {
-              "cwd": "/Users/iwatakeshi/Documents/GitHub/mr-doc",
-              "base": "src/",
-              "path": "/Users/iwatakeshi/Documents/GitHub/mr-doc/src/utils/log.js",
-              "source": "/* eslint-env node */\n'use strict';\n\nconst Utils = require('mr-doc-utils');\nconst log = new Utils.Log();\nconst _ = require('lodash');\n\nclass Log {\n  constructor() {\n    return log;\n  }\n  static setup(options) {\n    if (options.silent) {\n      log.on('error', () => { /* NOOP */});\n    }\n    Log.levels(options.level)\n    .forEach(level => {\n      if (level === 'error') Log.error();\n      else Log.other(level);\n    });\n  }\n  static levels(level) {\n    const levels = _.isString(level) ? level.split(',') : level;\n    return levels.map(i => i.replace(/\\s/g, ''));\n  }\n  static error() {\n    log.on('error', function error() {\n      /* eslint-disable no-console */\n      const args = Array.prototype.slice.call(arguments);\n      args.unshift(Log.color.cyan('mrdoc'));\n      console.log.apply(console, args.map(i => Log.color.red(i)));\n      /* eslint-enable no-console */\n    });\n  }\n  static other(level) {\n    log.on(level, function logger() {\n      /* eslint-disable no-console */\n      const args = Array.prototype.slice.call(arguments);\n      args.unshift(Log.color.cyan('mrdoc'));\n      console.log.apply(console, args);\n      /* eslint-enable no-console */\n    });\n  }\n  static get color() {\n    return Utils.Log.color;\n  }\n}\n\nmodule.exports = Log;\n"
+            "rJlF9fzIz": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\utils\\log.js",
+              "source": "/* eslint-env node */\r\n'use strict';\r\n\r\nconst Utils = require('mr-doc-utils');\r\nconst log = new Utils.Log();\r\nconst _ = require('lodash');\r\n\r\nclass Log {\r\n  constructor() {\r\n    return log;\r\n  }\r\n  /**\r\n   * Set up the logger.\r\n   * @static\r\n   */\r\n  static setup(options) {\r\n    if (options.silent) {\r\n      log.on('error', () => { /* NOOP */});\r\n    }\r\n    Log.levels(options.level)\r\n    .forEach(level => {\r\n      if (level === 'error') Log.error();\r\n      else Log.other(level);\r\n    });\r\n  }\r\n  /**\r\n   * Set the log levels.\r\n   * @private\r\n   * @static\r\n   * @return {String} - The normalized levels.\r\n   */\r\n  static levels(level) {\r\n    const levels = _.isString(level) ? level.split(',') : level;\r\n    return levels.map(i => i.replace(/\\s/g, ''));\r\n  }\r\n  /**\r\n   * Set up the error logger.\r\n   * @private\r\n   * @static\r\n   */\r\n  static error() {\r\n    log.on('error', function error() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor('error')]('[error]:'));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args.map(i => Log.color.red(i)));\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  /**\r\n   * Set up the other loggers.\r\n   * @private\r\n   * @static\r\n   */\r\n  static other(level) {\r\n    log.on(level, function logger() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor(level)](`[${level}]:`));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args);\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  static get color() {\r\n    return Utils.Log.color;\r\n  }\r\n  static levelColor(level) {\r\n    return ({\r\n      info: 'green',\r\n      debug: 'blue',\r\n      warn: 'yellow',\r\n      error: 'red',\r\n    })[level];\r\n  }\r\n}\r\n\r\nmodule.exports = Log;\r\n"
             }
           }
         ]
       },
       "loc": {
         "start": {
-          "line": 50,
+          "line": 52,
           "column": 2
         },
         "end": {
-          "line": 57,
+          "line": 59,
           "column": 3
         }
       },
@@ -229,8 +247,8 @@
           3
         ],
         "line": [
-          50,
-          57
+          52,
+          59
         ]
       }
     }
@@ -274,48 +292,48 @@
     ],
     "loc": {
       "start": {
-        "line": 58,
+        "line": 60,
         "column": 2
       },
       "end": {
-        "line": 63,
+        "line": 65,
         "column": 5
       }
     },
     "context": {
-      "code": "static launch(options) {\n    // DEBUG: Launch\n    log.debug(Log.color.blue('Launching CLI'));\n    return new Promise((resolve, reject) => {\n      // Launch the CLI\n      CLI.rocket.launch({\n        cwd: options.cwd,\n        configPath: options.mrdocrc,\n      }, env => CLI.handler(env, options)\n      .then(stream => resolve(stream))\n      .catch(error => reject(error)));\n    });\n  }",
+      "code": "static launch(options) {\r\n    // DEBUG: Launch\r\n    log.debug(Log.color.blue('Launching CLI'));\r\n    return new Promise((resolve, reject) => {\r\n      // Launch the CLI\r\n      CLI.rocket.launch({\r\n        cwd: options.cwd,\r\n        configPath: options.mrdocrc,\r\n      }, env => CLI.handler(env, options)\r\n      .then(stream => resolve(stream))\r\n      .catch(error => reject(error)));\r\n    });\r\n  }",
       "file": {
-        "id": "rJYUXB5-",
-        "cwd": "/Users/iwatakeshi/Documents/GitHub/mr-doc",
-        "base": "src/",
-        "path": "/Users/iwatakeshi/Documents/GitHub/mr-doc/src/cli/index.js",
-        "source": "/* eslint-env node */\n'use strict';\n\nconst Source = require('mr-doc-utils').Source;\nconst Log = require('../utils/log');\nconst Liftoff = require('liftoff');\nconst Option = require('mr-doc-utils').Option;\nconst Promise = require('bluebird');\nconst Yargs = require('yargs');\nconst ViynlFS = require('vinyl-fs');\nconst _ = require('lodash');\nconst pkg = require('../../package.json');\nconst rc = require('rc');\nconst log = new Log();\n\nclass CLI {\n  /**\n   * Parse the CLI arguments.\n   * @static\n   */\n  static parse() {\n    return Promise.resolve(Yargs\n    .usage('Usage: mrdoc [options]', Option.cli)\n    .help('help', Log.color.gray('Show help.'))\n    .alias('help', 'h')\n    .argv);\n  }\n  /**\n   * Setup the logger.\n   * @param  {Object} options - The parsed CLI arguments.\n   * @return {Promise<options>} - A promise to the options.\n   */\n  static log(options) {\n    return Promise.resolve((() => {\n      // Get log level.\n      const level = options.level || options.l || Option.defaults.log.level;\n      // Set up the logger.\n      Log.setup({\n        level: level !== 'silent' ? level : '',\n        silent: level === 'silent',\n      });\n      return options;\n    })());\n  }\n  /**\n   * Create the CLI.\n   * @static\n   * @return {Liftoff} - An instance of Liftoff.\n   */\n  static get rocket() {\n    // Create the CLI.\n    return new Liftoff({\n      name: 'mrdoc',\n      processTitle: 'mrdoc',\n      v8flags: require('v8flags'),\n    });\n  }\n  /**\n   * Launch the CLI.\n   * @static\n   * @param {Object} options - The parsed CLI arguments.\n   * @return {Promise<Stream>} - A promise to the stream.\n   */\n  static launch(options) {\n    // DEBUG: Launch\n    log.debug(Log.color.blue('Launching CLI'));\n    return new Promise((resolve, reject) => {\n      // Launch the CLI\n      CLI.rocket.launch({\n        cwd: options.cwd,\n        configPath: options.mrdocrc,\n      }, env => CLI.handler(env, options)\n      .then(stream => resolve(stream))\n      .catch(error => reject(error)));\n    });\n  }\n  /**\n   * Handle the result from the CLI.\n   * @static\n   */\n  static handler(env, options) {\n    const version = options.version || options.v;\n    const source = options.source || options.s;\n    if (version) {\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\n      process.exit();\n    }\n    if (_.isEmpty(source) && version === false) {\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\n      process.exit();\n    }\n    return new Promise((resolve, reject) => {\n      // Normalize the source's path(s).\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\n      // DEBUG: Sources\n      log.debug(Log.color.blue('Sources:'), sources);\n      if (sources.indexOf(null) > -1) {\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\n    });\n  }\n}\n\nmodule.exports = CLI;\n",
+        "id": "r1Y9fMUG",
+        "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+        "base": "src\\",
+        "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\cli\\index.js",
+        "source": "\r\n/* eslint-env node */\r\n'use strict';\r\n\r\nconst Source = require('mr-doc-utils').Source;\r\nconst Log = require('../utils/log');\r\nconst Liftoff = require('liftoff');\r\nconst Option = require('mr-doc-utils').Option;\r\nconst Promise = require('bluebird');\r\nconst Yargs = require('yargs');\r\nconst ViynlFS = require('vinyl-fs');\r\nconst _ = require('lodash');\r\nconst pkg = require('../../package.json');\r\nconst rc = require('rc');\r\nconst log = new Log();\r\n\r\nclass CLI {\r\n  /**\r\n   * Parse the CLI arguments.\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static parse() {\r\n    return Promise.resolve(Yargs\r\n    .usage('Usage: mrdoc [options]', Option.cli)\r\n    .help('help', Log.color.gray('Show help.'))\r\n    .alias('help', 'h')\r\n    .argv);\r\n  }\r\n  /**\r\n   * Setup the logger.\r\n   * @param  {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static log(options) {\r\n    return Promise.resolve((() => {\r\n      // Get log level.\r\n      const level = options.level || options.l || Option.defaults.log.level;\r\n      // Set up the logger.\r\n      Log.setup({\r\n        level: level !== 'silent' ? level : '',\r\n        silent: level === 'silent',\r\n      });\r\n      return options;\r\n    })());\r\n  }\r\n  /**\r\n   * Create the CLI.\r\n   * @static\r\n   * @return {Liftoff} - An instance of Liftoff.\r\n   */\r\n  static get rocket() {\r\n    // Create the CLI.\r\n    return new Liftoff({\r\n      name: 'mrdoc',\r\n      processTitle: 'mrdoc',\r\n      v8flags: require('v8flags'),\r\n    });\r\n  }\r\n  /**\r\n   * Launch the CLI.\r\n   * @static\r\n   * @param {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<Stream>} - A promise to the stream.\r\n   */\r\n  static launch(options) {\r\n    // DEBUG: Launch\r\n    log.debug(Log.color.blue('Launching CLI'));\r\n    return new Promise((resolve, reject) => {\r\n      // Launch the CLI\r\n      CLI.rocket.launch({\r\n        cwd: options.cwd,\r\n        configPath: options.mrdocrc,\r\n      }, env => CLI.handler(env, options)\r\n      .then(stream => resolve(stream))\r\n      .catch(error => reject(error)));\r\n    });\r\n  }\r\n  /**\r\n   * Handle the result from the CLI.\r\n   * @private\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static handler(env, options) {\r\n    const version = options.version || options.v;\r\n    const source = options.source || options.s;\r\n    if (version) {\r\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\r\n      process.exit();\r\n    }\r\n    if (_.isEmpty(source) && version === false) {\r\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\r\n      process.exit();\r\n    }\r\n    return new Promise((resolve, reject) => {\r\n      // Normalize the source's path(s).\r\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\r\n      // DEBUG: Sources\r\n      log.debug(Log.color.blue('Sources:'), sources);\r\n      if (sources.indexOf(null) > -1) {\r\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\r\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\r\n    });\r\n  }\r\n}\r\n\r\nmodule.exports = CLI;\r\n",
         "ref": [
           {
-            "rJYUXB5-": {
-              "cwd": "/Users/iwatakeshi/Documents/GitHub/mr-doc",
-              "base": "src/",
-              "path": "/Users/iwatakeshi/Documents/GitHub/mr-doc/src/cli/index.js",
-              "source": "/* eslint-env node */\n'use strict';\n\nconst Source = require('mr-doc-utils').Source;\nconst Log = require('../utils/log');\nconst Liftoff = require('liftoff');\nconst Option = require('mr-doc-utils').Option;\nconst Promise = require('bluebird');\nconst Yargs = require('yargs');\nconst ViynlFS = require('vinyl-fs');\nconst _ = require('lodash');\nconst pkg = require('../../package.json');\nconst rc = require('rc');\nconst log = new Log();\n\nclass CLI {\n  /**\n   * Parse the CLI arguments.\n   * @static\n   */\n  static parse() {\n    return Promise.resolve(Yargs\n    .usage('Usage: mrdoc [options]', Option.cli)\n    .help('help', Log.color.gray('Show help.'))\n    .alias('help', 'h')\n    .argv);\n  }\n  /**\n   * Setup the logger.\n   * @param  {Object} options - The parsed CLI arguments.\n   * @return {Promise<options>} - A promise to the options.\n   */\n  static log(options) {\n    return Promise.resolve((() => {\n      // Get log level.\n      const level = options.level || options.l || Option.defaults.log.level;\n      // Set up the logger.\n      Log.setup({\n        level: level !== 'silent' ? level : '',\n        silent: level === 'silent',\n      });\n      return options;\n    })());\n  }\n  /**\n   * Create the CLI.\n   * @static\n   * @return {Liftoff} - An instance of Liftoff.\n   */\n  static get rocket() {\n    // Create the CLI.\n    return new Liftoff({\n      name: 'mrdoc',\n      processTitle: 'mrdoc',\n      v8flags: require('v8flags'),\n    });\n  }\n  /**\n   * Launch the CLI.\n   * @static\n   * @param {Object} options - The parsed CLI arguments.\n   * @return {Promise<Stream>} - A promise to the stream.\n   */\n  static launch(options) {\n    // DEBUG: Launch\n    log.debug(Log.color.blue('Launching CLI'));\n    return new Promise((resolve, reject) => {\n      // Launch the CLI\n      CLI.rocket.launch({\n        cwd: options.cwd,\n        configPath: options.mrdocrc,\n      }, env => CLI.handler(env, options)\n      .then(stream => resolve(stream))\n      .catch(error => reject(error)));\n    });\n  }\n  /**\n   * Handle the result from the CLI.\n   * @static\n   */\n  static handler(env, options) {\n    const version = options.version || options.v;\n    const source = options.source || options.s;\n    if (version) {\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\n      process.exit();\n    }\n    if (_.isEmpty(source) && version === false) {\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\n      process.exit();\n    }\n    return new Promise((resolve, reject) => {\n      // Normalize the source's path(s).\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\n      // DEBUG: Sources\n      log.debug(Log.color.blue('Sources:'), sources);\n      if (sources.indexOf(null) > -1) {\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\n    });\n  }\n}\n\nmodule.exports = CLI;\n"
+            "r1Y9fMUG": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\cli\\index.js",
+              "source": "\r\n/* eslint-env node */\r\n'use strict';\r\n\r\nconst Source = require('mr-doc-utils').Source;\r\nconst Log = require('../utils/log');\r\nconst Liftoff = require('liftoff');\r\nconst Option = require('mr-doc-utils').Option;\r\nconst Promise = require('bluebird');\r\nconst Yargs = require('yargs');\r\nconst ViynlFS = require('vinyl-fs');\r\nconst _ = require('lodash');\r\nconst pkg = require('../../package.json');\r\nconst rc = require('rc');\r\nconst log = new Log();\r\n\r\nclass CLI {\r\n  /**\r\n   * Parse the CLI arguments.\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static parse() {\r\n    return Promise.resolve(Yargs\r\n    .usage('Usage: mrdoc [options]', Option.cli)\r\n    .help('help', Log.color.gray('Show help.'))\r\n    .alias('help', 'h')\r\n    .argv);\r\n  }\r\n  /**\r\n   * Setup the logger.\r\n   * @param  {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static log(options) {\r\n    return Promise.resolve((() => {\r\n      // Get log level.\r\n      const level = options.level || options.l || Option.defaults.log.level;\r\n      // Set up the logger.\r\n      Log.setup({\r\n        level: level !== 'silent' ? level : '',\r\n        silent: level === 'silent',\r\n      });\r\n      return options;\r\n    })());\r\n  }\r\n  /**\r\n   * Create the CLI.\r\n   * @static\r\n   * @return {Liftoff} - An instance of Liftoff.\r\n   */\r\n  static get rocket() {\r\n    // Create the CLI.\r\n    return new Liftoff({\r\n      name: 'mrdoc',\r\n      processTitle: 'mrdoc',\r\n      v8flags: require('v8flags'),\r\n    });\r\n  }\r\n  /**\r\n   * Launch the CLI.\r\n   * @static\r\n   * @param {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<Stream>} - A promise to the stream.\r\n   */\r\n  static launch(options) {\r\n    // DEBUG: Launch\r\n    log.debug(Log.color.blue('Launching CLI'));\r\n    return new Promise((resolve, reject) => {\r\n      // Launch the CLI\r\n      CLI.rocket.launch({\r\n        cwd: options.cwd,\r\n        configPath: options.mrdocrc,\r\n      }, env => CLI.handler(env, options)\r\n      .then(stream => resolve(stream))\r\n      .catch(error => reject(error)));\r\n    });\r\n  }\r\n  /**\r\n   * Handle the result from the CLI.\r\n   * @private\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static handler(env, options) {\r\n    const version = options.version || options.v;\r\n    const source = options.source || options.s;\r\n    if (version) {\r\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\r\n      process.exit();\r\n    }\r\n    if (_.isEmpty(source) && version === false) {\r\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\r\n      process.exit();\r\n    }\r\n    return new Promise((resolve, reject) => {\r\n      // Normalize the source's path(s).\r\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\r\n      // DEBUG: Sources\r\n      log.debug(Log.color.blue('Sources:'), sources);\r\n      if (sources.indexOf(null) > -1) {\r\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\r\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\r\n    });\r\n  }\r\n}\r\n\r\nmodule.exports = CLI;\r\n"
             }
           },
           {
-            "B1xFI7r5W": {
-              "cwd": "/Users/iwatakeshi/Documents/GitHub/mr-doc",
-              "base": "src/",
-              "path": "/Users/iwatakeshi/Documents/GitHub/mr-doc/src/utils/log.js",
-              "source": "/* eslint-env node */\n'use strict';\n\nconst Utils = require('mr-doc-utils');\nconst log = new Utils.Log();\nconst _ = require('lodash');\n\nclass Log {\n  constructor() {\n    return log;\n  }\n  static setup(options) {\n    if (options.silent) {\n      log.on('error', () => { /* NOOP */});\n    }\n    Log.levels(options.level)\n    .forEach(level => {\n      if (level === 'error') Log.error();\n      else Log.other(level);\n    });\n  }\n  static levels(level) {\n    const levels = _.isString(level) ? level.split(',') : level;\n    return levels.map(i => i.replace(/\\s/g, ''));\n  }\n  static error() {\n    log.on('error', function error() {\n      /* eslint-disable no-console */\n      const args = Array.prototype.slice.call(arguments);\n      args.unshift(Log.color.cyan('mrdoc'));\n      console.log.apply(console, args.map(i => Log.color.red(i)));\n      /* eslint-enable no-console */\n    });\n  }\n  static other(level) {\n    log.on(level, function logger() {\n      /* eslint-disable no-console */\n      const args = Array.prototype.slice.call(arguments);\n      args.unshift(Log.color.cyan('mrdoc'));\n      console.log.apply(console, args);\n      /* eslint-enable no-console */\n    });\n  }\n  static get color() {\n    return Utils.Log.color;\n  }\n}\n\nmodule.exports = Log;\n"
+            "rJlF9fzIz": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\utils\\log.js",
+              "source": "/* eslint-env node */\r\n'use strict';\r\n\r\nconst Utils = require('mr-doc-utils');\r\nconst log = new Utils.Log();\r\nconst _ = require('lodash');\r\n\r\nclass Log {\r\n  constructor() {\r\n    return log;\r\n  }\r\n  /**\r\n   * Set up the logger.\r\n   * @static\r\n   */\r\n  static setup(options) {\r\n    if (options.silent) {\r\n      log.on('error', () => { /* NOOP */});\r\n    }\r\n    Log.levels(options.level)\r\n    .forEach(level => {\r\n      if (level === 'error') Log.error();\r\n      else Log.other(level);\r\n    });\r\n  }\r\n  /**\r\n   * Set the log levels.\r\n   * @private\r\n   * @static\r\n   * @return {String} - The normalized levels.\r\n   */\r\n  static levels(level) {\r\n    const levels = _.isString(level) ? level.split(',') : level;\r\n    return levels.map(i => i.replace(/\\s/g, ''));\r\n  }\r\n  /**\r\n   * Set up the error logger.\r\n   * @private\r\n   * @static\r\n   */\r\n  static error() {\r\n    log.on('error', function error() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor('error')]('[error]:'));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args.map(i => Log.color.red(i)));\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  /**\r\n   * Set up the other loggers.\r\n   * @private\r\n   * @static\r\n   */\r\n  static other(level) {\r\n    log.on(level, function logger() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor(level)](`[${level}]:`));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args);\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  static get color() {\r\n    return Utils.Log.color;\r\n  }\r\n  static levelColor(level) {\r\n    return ({\r\n      info: 'green',\r\n      debug: 'blue',\r\n      warn: 'yellow',\r\n      error: 'red',\r\n    })[level];\r\n  }\r\n}\r\n\r\nmodule.exports = Log;\r\n"
             }
           }
         ]
       },
       "loc": {
         "start": {
-          "line": 64,
+          "line": 66,
           "column": 2
         },
         "end": {
-          "line": 76,
+          "line": 78,
           "column": 3
         }
       },
@@ -325,14 +343,106 @@
           3
         ],
         "line": [
-          64,
-          76
+          66,
+          78
         ]
       }
     }
   },
   {
     "description": "Handle the result from the CLI.",
+    "tags": [
+      {
+        "title": "private",
+        "description": null,
+        "lineNumber": 2,
+        "type": null
+      },
+      {
+        "title": "static",
+        "description": null,
+        "lineNumber": 3
+      },
+      {
+        "title": "returns",
+        "description": "A promise to the options.",
+        "lineNumber": 4,
+        "type": {
+          "type": "TypeApplication",
+          "expression": {
+            "type": "NameExpression",
+            "name": "Promise"
+          },
+          "applications": [
+            {
+              "type": "NameExpression",
+              "name": "options"
+            }
+          ]
+        }
+      }
+    ],
+    "loc": {
+      "start": {
+        "line": 79,
+        "column": 2
+      },
+      "end": {
+        "line": 84,
+        "column": 5
+      }
+    },
+    "context": {
+      "code": "static handler(env, options) {\r\n    const version = options.version || options.v;\r\n    const source = options.source || options.s;\r\n    if (version) {\r\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\r\n      process.exit();\r\n    }\r\n    if (_.isEmpty(source) && version === false) {\r\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\r\n      process.exit();\r\n    }\r\n    return new Promise((resolve, reject) => {\r\n      // Normalize the source's path(s).\r\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\r\n      // DEBUG: Sources\r\n      log.debug(Log.color.blue('Sources:'), sources);\r\n      if (sources.indexOf(null) > -1) {\r\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\r\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\r\n    });\r\n  }",
+      "file": {
+        "id": "r1Y9fMUG",
+        "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+        "base": "src\\",
+        "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\cli\\index.js",
+        "source": "\r\n/* eslint-env node */\r\n'use strict';\r\n\r\nconst Source = require('mr-doc-utils').Source;\r\nconst Log = require('../utils/log');\r\nconst Liftoff = require('liftoff');\r\nconst Option = require('mr-doc-utils').Option;\r\nconst Promise = require('bluebird');\r\nconst Yargs = require('yargs');\r\nconst ViynlFS = require('vinyl-fs');\r\nconst _ = require('lodash');\r\nconst pkg = require('../../package.json');\r\nconst rc = require('rc');\r\nconst log = new Log();\r\n\r\nclass CLI {\r\n  /**\r\n   * Parse the CLI arguments.\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static parse() {\r\n    return Promise.resolve(Yargs\r\n    .usage('Usage: mrdoc [options]', Option.cli)\r\n    .help('help', Log.color.gray('Show help.'))\r\n    .alias('help', 'h')\r\n    .argv);\r\n  }\r\n  /**\r\n   * Setup the logger.\r\n   * @param  {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static log(options) {\r\n    return Promise.resolve((() => {\r\n      // Get log level.\r\n      const level = options.level || options.l || Option.defaults.log.level;\r\n      // Set up the logger.\r\n      Log.setup({\r\n        level: level !== 'silent' ? level : '',\r\n        silent: level === 'silent',\r\n      });\r\n      return options;\r\n    })());\r\n  }\r\n  /**\r\n   * Create the CLI.\r\n   * @static\r\n   * @return {Liftoff} - An instance of Liftoff.\r\n   */\r\n  static get rocket() {\r\n    // Create the CLI.\r\n    return new Liftoff({\r\n      name: 'mrdoc',\r\n      processTitle: 'mrdoc',\r\n      v8flags: require('v8flags'),\r\n    });\r\n  }\r\n  /**\r\n   * Launch the CLI.\r\n   * @static\r\n   * @param {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<Stream>} - A promise to the stream.\r\n   */\r\n  static launch(options) {\r\n    // DEBUG: Launch\r\n    log.debug(Log.color.blue('Launching CLI'));\r\n    return new Promise((resolve, reject) => {\r\n      // Launch the CLI\r\n      CLI.rocket.launch({\r\n        cwd: options.cwd,\r\n        configPath: options.mrdocrc,\r\n      }, env => CLI.handler(env, options)\r\n      .then(stream => resolve(stream))\r\n      .catch(error => reject(error)));\r\n    });\r\n  }\r\n  /**\r\n   * Handle the result from the CLI.\r\n   * @private\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static handler(env, options) {\r\n    const version = options.version || options.v;\r\n    const source = options.source || options.s;\r\n    if (version) {\r\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\r\n      process.exit();\r\n    }\r\n    if (_.isEmpty(source) && version === false) {\r\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\r\n      process.exit();\r\n    }\r\n    return new Promise((resolve, reject) => {\r\n      // Normalize the source's path(s).\r\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\r\n      // DEBUG: Sources\r\n      log.debug(Log.color.blue('Sources:'), sources);\r\n      if (sources.indexOf(null) > -1) {\r\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\r\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\r\n    });\r\n  }\r\n}\r\n\r\nmodule.exports = CLI;\r\n",
+        "ref": [
+          {
+            "r1Y9fMUG": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\cli\\index.js",
+              "source": "\r\n/* eslint-env node */\r\n'use strict';\r\n\r\nconst Source = require('mr-doc-utils').Source;\r\nconst Log = require('../utils/log');\r\nconst Liftoff = require('liftoff');\r\nconst Option = require('mr-doc-utils').Option;\r\nconst Promise = require('bluebird');\r\nconst Yargs = require('yargs');\r\nconst ViynlFS = require('vinyl-fs');\r\nconst _ = require('lodash');\r\nconst pkg = require('../../package.json');\r\nconst rc = require('rc');\r\nconst log = new Log();\r\n\r\nclass CLI {\r\n  /**\r\n   * Parse the CLI arguments.\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static parse() {\r\n    return Promise.resolve(Yargs\r\n    .usage('Usage: mrdoc [options]', Option.cli)\r\n    .help('help', Log.color.gray('Show help.'))\r\n    .alias('help', 'h')\r\n    .argv);\r\n  }\r\n  /**\r\n   * Setup the logger.\r\n   * @param  {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static log(options) {\r\n    return Promise.resolve((() => {\r\n      // Get log level.\r\n      const level = options.level || options.l || Option.defaults.log.level;\r\n      // Set up the logger.\r\n      Log.setup({\r\n        level: level !== 'silent' ? level : '',\r\n        silent: level === 'silent',\r\n      });\r\n      return options;\r\n    })());\r\n  }\r\n  /**\r\n   * Create the CLI.\r\n   * @static\r\n   * @return {Liftoff} - An instance of Liftoff.\r\n   */\r\n  static get rocket() {\r\n    // Create the CLI.\r\n    return new Liftoff({\r\n      name: 'mrdoc',\r\n      processTitle: 'mrdoc',\r\n      v8flags: require('v8flags'),\r\n    });\r\n  }\r\n  /**\r\n   * Launch the CLI.\r\n   * @static\r\n   * @param {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<Stream>} - A promise to the stream.\r\n   */\r\n  static launch(options) {\r\n    // DEBUG: Launch\r\n    log.debug(Log.color.blue('Launching CLI'));\r\n    return new Promise((resolve, reject) => {\r\n      // Launch the CLI\r\n      CLI.rocket.launch({\r\n        cwd: options.cwd,\r\n        configPath: options.mrdocrc,\r\n      }, env => CLI.handler(env, options)\r\n      .then(stream => resolve(stream))\r\n      .catch(error => reject(error)));\r\n    });\r\n  }\r\n  /**\r\n   * Handle the result from the CLI.\r\n   * @private\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static handler(env, options) {\r\n    const version = options.version || options.v;\r\n    const source = options.source || options.s;\r\n    if (version) {\r\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\r\n      process.exit();\r\n    }\r\n    if (_.isEmpty(source) && version === false) {\r\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\r\n      process.exit();\r\n    }\r\n    return new Promise((resolve, reject) => {\r\n      // Normalize the source's path(s).\r\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\r\n      // DEBUG: Sources\r\n      log.debug(Log.color.blue('Sources:'), sources);\r\n      if (sources.indexOf(null) > -1) {\r\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\r\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\r\n    });\r\n  }\r\n}\r\n\r\nmodule.exports = CLI;\r\n"
+            }
+          },
+          {
+            "rJlF9fzIz": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\utils\\log.js",
+              "source": "/* eslint-env node */\r\n'use strict';\r\n\r\nconst Utils = require('mr-doc-utils');\r\nconst log = new Utils.Log();\r\nconst _ = require('lodash');\r\n\r\nclass Log {\r\n  constructor() {\r\n    return log;\r\n  }\r\n  /**\r\n   * Set up the logger.\r\n   * @static\r\n   */\r\n  static setup(options) {\r\n    if (options.silent) {\r\n      log.on('error', () => { /* NOOP */});\r\n    }\r\n    Log.levels(options.level)\r\n    .forEach(level => {\r\n      if (level === 'error') Log.error();\r\n      else Log.other(level);\r\n    });\r\n  }\r\n  /**\r\n   * Set the log levels.\r\n   * @private\r\n   * @static\r\n   * @return {String} - The normalized levels.\r\n   */\r\n  static levels(level) {\r\n    const levels = _.isString(level) ? level.split(',') : level;\r\n    return levels.map(i => i.replace(/\\s/g, ''));\r\n  }\r\n  /**\r\n   * Set up the error logger.\r\n   * @private\r\n   * @static\r\n   */\r\n  static error() {\r\n    log.on('error', function error() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor('error')]('[error]:'));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args.map(i => Log.color.red(i)));\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  /**\r\n   * Set up the other loggers.\r\n   * @private\r\n   * @static\r\n   */\r\n  static other(level) {\r\n    log.on(level, function logger() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor(level)](`[${level}]:`));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args);\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  static get color() {\r\n    return Utils.Log.color;\r\n  }\r\n  static levelColor(level) {\r\n    return ({\r\n      info: 'green',\r\n      debug: 'blue',\r\n      warn: 'yellow',\r\n      error: 'red',\r\n    })[level];\r\n  }\r\n}\r\n\r\nmodule.exports = Log;\r\n"
+            }
+          }
+        ]
+      },
+      "loc": {
+        "start": {
+          "line": 85,
+          "column": 2
+        },
+        "end": {
+          "line": 105,
+          "column": 3
+        }
+      },
+      "range": {
+        "column": [
+          2,
+          3
+        ],
+        "line": [
+          85,
+          105
+        ]
+      }
+    }
+  },
+  {
+    "description": "Set up the logger.",
     "tags": [
       {
         "title": "static",
@@ -342,48 +452,48 @@
     ],
     "loc": {
       "start": {
-        "line": 77,
+        "line": 12,
         "column": 2
       },
       "end": {
-        "line": 80,
+        "line": 15,
         "column": 5
       }
     },
     "context": {
-      "code": "static handler(env, options) {\n    const version = options.version || options.v;\n    const source = options.source || options.s;\n    if (version) {\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\n      process.exit();\n    }\n    if (_.isEmpty(source) && version === false) {\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\n      process.exit();\n    }\n    return new Promise((resolve, reject) => {\n      // Normalize the source's path(s).\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\n      // DEBUG: Sources\n      log.debug(Log.color.blue('Sources:'), sources);\n      if (sources.indexOf(null) > -1) {\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\n    });\n  }",
+      "code": "static setup(options) {\r\n    if (options.silent) {\r\n      log.on('error', () => { /* NOOP */});\r\n    }\r\n    Log.levels(options.level)\r\n    .forEach(level => {\r\n      if (level === 'error') Log.error();\r\n      else Log.other(level);\r\n    });\r\n  }",
       "file": {
-        "id": "rJYUXB5-",
-        "cwd": "/Users/iwatakeshi/Documents/GitHub/mr-doc",
-        "base": "src/",
-        "path": "/Users/iwatakeshi/Documents/GitHub/mr-doc/src/cli/index.js",
-        "source": "/* eslint-env node */\n'use strict';\n\nconst Source = require('mr-doc-utils').Source;\nconst Log = require('../utils/log');\nconst Liftoff = require('liftoff');\nconst Option = require('mr-doc-utils').Option;\nconst Promise = require('bluebird');\nconst Yargs = require('yargs');\nconst ViynlFS = require('vinyl-fs');\nconst _ = require('lodash');\nconst pkg = require('../../package.json');\nconst rc = require('rc');\nconst log = new Log();\n\nclass CLI {\n  /**\n   * Parse the CLI arguments.\n   * @static\n   */\n  static parse() {\n    return Promise.resolve(Yargs\n    .usage('Usage: mrdoc [options]', Option.cli)\n    .help('help', Log.color.gray('Show help.'))\n    .alias('help', 'h')\n    .argv);\n  }\n  /**\n   * Setup the logger.\n   * @param  {Object} options - The parsed CLI arguments.\n   * @return {Promise<options>} - A promise to the options.\n   */\n  static log(options) {\n    return Promise.resolve((() => {\n      // Get log level.\n      const level = options.level || options.l || Option.defaults.log.level;\n      // Set up the logger.\n      Log.setup({\n        level: level !== 'silent' ? level : '',\n        silent: level === 'silent',\n      });\n      return options;\n    })());\n  }\n  /**\n   * Create the CLI.\n   * @static\n   * @return {Liftoff} - An instance of Liftoff.\n   */\n  static get rocket() {\n    // Create the CLI.\n    return new Liftoff({\n      name: 'mrdoc',\n      processTitle: 'mrdoc',\n      v8flags: require('v8flags'),\n    });\n  }\n  /**\n   * Launch the CLI.\n   * @static\n   * @param {Object} options - The parsed CLI arguments.\n   * @return {Promise<Stream>} - A promise to the stream.\n   */\n  static launch(options) {\n    // DEBUG: Launch\n    log.debug(Log.color.blue('Launching CLI'));\n    return new Promise((resolve, reject) => {\n      // Launch the CLI\n      CLI.rocket.launch({\n        cwd: options.cwd,\n        configPath: options.mrdocrc,\n      }, env => CLI.handler(env, options)\n      .then(stream => resolve(stream))\n      .catch(error => reject(error)));\n    });\n  }\n  /**\n   * Handle the result from the CLI.\n   * @static\n   */\n  static handler(env, options) {\n    const version = options.version || options.v;\n    const source = options.source || options.s;\n    if (version) {\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\n      process.exit();\n    }\n    if (_.isEmpty(source) && version === false) {\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\n      process.exit();\n    }\n    return new Promise((resolve, reject) => {\n      // Normalize the source's path(s).\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\n      // DEBUG: Sources\n      log.debug(Log.color.blue('Sources:'), sources);\n      if (sources.indexOf(null) > -1) {\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\n    });\n  }\n}\n\nmodule.exports = CLI;\n",
+        "id": "rJlF9fzIz",
+        "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+        "base": "src\\",
+        "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\utils\\log.js",
+        "source": "/* eslint-env node */\r\n'use strict';\r\n\r\nconst Utils = require('mr-doc-utils');\r\nconst log = new Utils.Log();\r\nconst _ = require('lodash');\r\n\r\nclass Log {\r\n  constructor() {\r\n    return log;\r\n  }\r\n  /**\r\n   * Set up the logger.\r\n   * @static\r\n   */\r\n  static setup(options) {\r\n    if (options.silent) {\r\n      log.on('error', () => { /* NOOP */});\r\n    }\r\n    Log.levels(options.level)\r\n    .forEach(level => {\r\n      if (level === 'error') Log.error();\r\n      else Log.other(level);\r\n    });\r\n  }\r\n  /**\r\n   * Set the log levels.\r\n   * @private\r\n   * @static\r\n   * @return {String} - The normalized levels.\r\n   */\r\n  static levels(level) {\r\n    const levels = _.isString(level) ? level.split(',') : level;\r\n    return levels.map(i => i.replace(/\\s/g, ''));\r\n  }\r\n  /**\r\n   * Set up the error logger.\r\n   * @private\r\n   * @static\r\n   */\r\n  static error() {\r\n    log.on('error', function error() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor('error')]('[error]:'));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args.map(i => Log.color.red(i)));\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  /**\r\n   * Set up the other loggers.\r\n   * @private\r\n   * @static\r\n   */\r\n  static other(level) {\r\n    log.on(level, function logger() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor(level)](`[${level}]:`));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args);\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  static get color() {\r\n    return Utils.Log.color;\r\n  }\r\n  static levelColor(level) {\r\n    return ({\r\n      info: 'green',\r\n      debug: 'blue',\r\n      warn: 'yellow',\r\n      error: 'red',\r\n    })[level];\r\n  }\r\n}\r\n\r\nmodule.exports = Log;\r\n",
         "ref": [
           {
-            "rJYUXB5-": {
-              "cwd": "/Users/iwatakeshi/Documents/GitHub/mr-doc",
-              "base": "src/",
-              "path": "/Users/iwatakeshi/Documents/GitHub/mr-doc/src/cli/index.js",
-              "source": "/* eslint-env node */\n'use strict';\n\nconst Source = require('mr-doc-utils').Source;\nconst Log = require('../utils/log');\nconst Liftoff = require('liftoff');\nconst Option = require('mr-doc-utils').Option;\nconst Promise = require('bluebird');\nconst Yargs = require('yargs');\nconst ViynlFS = require('vinyl-fs');\nconst _ = require('lodash');\nconst pkg = require('../../package.json');\nconst rc = require('rc');\nconst log = new Log();\n\nclass CLI {\n  /**\n   * Parse the CLI arguments.\n   * @static\n   */\n  static parse() {\n    return Promise.resolve(Yargs\n    .usage('Usage: mrdoc [options]', Option.cli)\n    .help('help', Log.color.gray('Show help.'))\n    .alias('help', 'h')\n    .argv);\n  }\n  /**\n   * Setup the logger.\n   * @param  {Object} options - The parsed CLI arguments.\n   * @return {Promise<options>} - A promise to the options.\n   */\n  static log(options) {\n    return Promise.resolve((() => {\n      // Get log level.\n      const level = options.level || options.l || Option.defaults.log.level;\n      // Set up the logger.\n      Log.setup({\n        level: level !== 'silent' ? level : '',\n        silent: level === 'silent',\n      });\n      return options;\n    })());\n  }\n  /**\n   * Create the CLI.\n   * @static\n   * @return {Liftoff} - An instance of Liftoff.\n   */\n  static get rocket() {\n    // Create the CLI.\n    return new Liftoff({\n      name: 'mrdoc',\n      processTitle: 'mrdoc',\n      v8flags: require('v8flags'),\n    });\n  }\n  /**\n   * Launch the CLI.\n   * @static\n   * @param {Object} options - The parsed CLI arguments.\n   * @return {Promise<Stream>} - A promise to the stream.\n   */\n  static launch(options) {\n    // DEBUG: Launch\n    log.debug(Log.color.blue('Launching CLI'));\n    return new Promise((resolve, reject) => {\n      // Launch the CLI\n      CLI.rocket.launch({\n        cwd: options.cwd,\n        configPath: options.mrdocrc,\n      }, env => CLI.handler(env, options)\n      .then(stream => resolve(stream))\n      .catch(error => reject(error)));\n    });\n  }\n  /**\n   * Handle the result from the CLI.\n   * @static\n   */\n  static handler(env, options) {\n    const version = options.version || options.v;\n    const source = options.source || options.s;\n    if (version) {\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\n      process.exit();\n    }\n    if (_.isEmpty(source) && version === false) {\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\n      process.exit();\n    }\n    return new Promise((resolve, reject) => {\n      // Normalize the source's path(s).\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\n      // DEBUG: Sources\n      log.debug(Log.color.blue('Sources:'), sources);\n      if (sources.indexOf(null) > -1) {\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\n    });\n  }\n}\n\nmodule.exports = CLI;\n"
+            "r1Y9fMUG": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\cli\\index.js",
+              "source": "\r\n/* eslint-env node */\r\n'use strict';\r\n\r\nconst Source = require('mr-doc-utils').Source;\r\nconst Log = require('../utils/log');\r\nconst Liftoff = require('liftoff');\r\nconst Option = require('mr-doc-utils').Option;\r\nconst Promise = require('bluebird');\r\nconst Yargs = require('yargs');\r\nconst ViynlFS = require('vinyl-fs');\r\nconst _ = require('lodash');\r\nconst pkg = require('../../package.json');\r\nconst rc = require('rc');\r\nconst log = new Log();\r\n\r\nclass CLI {\r\n  /**\r\n   * Parse the CLI arguments.\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static parse() {\r\n    return Promise.resolve(Yargs\r\n    .usage('Usage: mrdoc [options]', Option.cli)\r\n    .help('help', Log.color.gray('Show help.'))\r\n    .alias('help', 'h')\r\n    .argv);\r\n  }\r\n  /**\r\n   * Setup the logger.\r\n   * @param  {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static log(options) {\r\n    return Promise.resolve((() => {\r\n      // Get log level.\r\n      const level = options.level || options.l || Option.defaults.log.level;\r\n      // Set up the logger.\r\n      Log.setup({\r\n        level: level !== 'silent' ? level : '',\r\n        silent: level === 'silent',\r\n      });\r\n      return options;\r\n    })());\r\n  }\r\n  /**\r\n   * Create the CLI.\r\n   * @static\r\n   * @return {Liftoff} - An instance of Liftoff.\r\n   */\r\n  static get rocket() {\r\n    // Create the CLI.\r\n    return new Liftoff({\r\n      name: 'mrdoc',\r\n      processTitle: 'mrdoc',\r\n      v8flags: require('v8flags'),\r\n    });\r\n  }\r\n  /**\r\n   * Launch the CLI.\r\n   * @static\r\n   * @param {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<Stream>} - A promise to the stream.\r\n   */\r\n  static launch(options) {\r\n    // DEBUG: Launch\r\n    log.debug(Log.color.blue('Launching CLI'));\r\n    return new Promise((resolve, reject) => {\r\n      // Launch the CLI\r\n      CLI.rocket.launch({\r\n        cwd: options.cwd,\r\n        configPath: options.mrdocrc,\r\n      }, env => CLI.handler(env, options)\r\n      .then(stream => resolve(stream))\r\n      .catch(error => reject(error)));\r\n    });\r\n  }\r\n  /**\r\n   * Handle the result from the CLI.\r\n   * @private\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static handler(env, options) {\r\n    const version = options.version || options.v;\r\n    const source = options.source || options.s;\r\n    if (version) {\r\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\r\n      process.exit();\r\n    }\r\n    if (_.isEmpty(source) && version === false) {\r\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\r\n      process.exit();\r\n    }\r\n    return new Promise((resolve, reject) => {\r\n      // Normalize the source's path(s).\r\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\r\n      // DEBUG: Sources\r\n      log.debug(Log.color.blue('Sources:'), sources);\r\n      if (sources.indexOf(null) > -1) {\r\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\r\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\r\n    });\r\n  }\r\n}\r\n\r\nmodule.exports = CLI;\r\n"
             }
           },
           {
-            "B1xFI7r5W": {
-              "cwd": "/Users/iwatakeshi/Documents/GitHub/mr-doc",
-              "base": "src/",
-              "path": "/Users/iwatakeshi/Documents/GitHub/mr-doc/src/utils/log.js",
-              "source": "/* eslint-env node */\n'use strict';\n\nconst Utils = require('mr-doc-utils');\nconst log = new Utils.Log();\nconst _ = require('lodash');\n\nclass Log {\n  constructor() {\n    return log;\n  }\n  static setup(options) {\n    if (options.silent) {\n      log.on('error', () => { /* NOOP */});\n    }\n    Log.levels(options.level)\n    .forEach(level => {\n      if (level === 'error') Log.error();\n      else Log.other(level);\n    });\n  }\n  static levels(level) {\n    const levels = _.isString(level) ? level.split(',') : level;\n    return levels.map(i => i.replace(/\\s/g, ''));\n  }\n  static error() {\n    log.on('error', function error() {\n      /* eslint-disable no-console */\n      const args = Array.prototype.slice.call(arguments);\n      args.unshift(Log.color.cyan('mrdoc'));\n      console.log.apply(console, args.map(i => Log.color.red(i)));\n      /* eslint-enable no-console */\n    });\n  }\n  static other(level) {\n    log.on(level, function logger() {\n      /* eslint-disable no-console */\n      const args = Array.prototype.slice.call(arguments);\n      args.unshift(Log.color.cyan('mrdoc'));\n      console.log.apply(console, args);\n      /* eslint-enable no-console */\n    });\n  }\n  static get color() {\n    return Utils.Log.color;\n  }\n}\n\nmodule.exports = Log;\n"
+            "rJlF9fzIz": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\utils\\log.js",
+              "source": "/* eslint-env node */\r\n'use strict';\r\n\r\nconst Utils = require('mr-doc-utils');\r\nconst log = new Utils.Log();\r\nconst _ = require('lodash');\r\n\r\nclass Log {\r\n  constructor() {\r\n    return log;\r\n  }\r\n  /**\r\n   * Set up the logger.\r\n   * @static\r\n   */\r\n  static setup(options) {\r\n    if (options.silent) {\r\n      log.on('error', () => { /* NOOP */});\r\n    }\r\n    Log.levels(options.level)\r\n    .forEach(level => {\r\n      if (level === 'error') Log.error();\r\n      else Log.other(level);\r\n    });\r\n  }\r\n  /**\r\n   * Set the log levels.\r\n   * @private\r\n   * @static\r\n   * @return {String} - The normalized levels.\r\n   */\r\n  static levels(level) {\r\n    const levels = _.isString(level) ? level.split(',') : level;\r\n    return levels.map(i => i.replace(/\\s/g, ''));\r\n  }\r\n  /**\r\n   * Set up the error logger.\r\n   * @private\r\n   * @static\r\n   */\r\n  static error() {\r\n    log.on('error', function error() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor('error')]('[error]:'));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args.map(i => Log.color.red(i)));\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  /**\r\n   * Set up the other loggers.\r\n   * @private\r\n   * @static\r\n   */\r\n  static other(level) {\r\n    log.on(level, function logger() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor(level)](`[${level}]:`));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args);\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  static get color() {\r\n    return Utils.Log.color;\r\n  }\r\n  static levelColor(level) {\r\n    return ({\r\n      info: 'green',\r\n      debug: 'blue',\r\n      warn: 'yellow',\r\n      error: 'red',\r\n    })[level];\r\n  }\r\n}\r\n\r\nmodule.exports = Log;\r\n"
             }
           }
         ]
       },
       "loc": {
         "start": {
-          "line": 81,
+          "line": 16,
           "column": 2
         },
         "end": {
-          "line": 101,
+          "line": 25,
           "column": 3
         }
       },
@@ -393,8 +503,239 @@
           3
         ],
         "line": [
-          81,
-          101
+          16,
+          25
+        ]
+      }
+    }
+  },
+  {
+    "description": "Set the log levels.",
+    "tags": [
+      {
+        "title": "private",
+        "description": null,
+        "lineNumber": 2,
+        "type": null
+      },
+      {
+        "title": "static",
+        "description": null,
+        "lineNumber": 3
+      },
+      {
+        "title": "returns",
+        "description": "The normalized levels.",
+        "lineNumber": 4,
+        "type": {
+          "type": "NameExpression",
+          "name": "String"
+        }
+      }
+    ],
+    "loc": {
+      "start": {
+        "line": 26,
+        "column": 2
+      },
+      "end": {
+        "line": 31,
+        "column": 5
+      }
+    },
+    "context": {
+      "code": "static levels(level) {\r\n    const levels = _.isString(level) ? level.split(',') : level;\r\n    return levels.map(i => i.replace(/\\s/g, ''));\r\n  }",
+      "file": {
+        "id": "rJlF9fzIz",
+        "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+        "base": "src\\",
+        "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\utils\\log.js",
+        "source": "/* eslint-env node */\r\n'use strict';\r\n\r\nconst Utils = require('mr-doc-utils');\r\nconst log = new Utils.Log();\r\nconst _ = require('lodash');\r\n\r\nclass Log {\r\n  constructor() {\r\n    return log;\r\n  }\r\n  /**\r\n   * Set up the logger.\r\n   * @static\r\n   */\r\n  static setup(options) {\r\n    if (options.silent) {\r\n      log.on('error', () => { /* NOOP */});\r\n    }\r\n    Log.levels(options.level)\r\n    .forEach(level => {\r\n      if (level === 'error') Log.error();\r\n      else Log.other(level);\r\n    });\r\n  }\r\n  /**\r\n   * Set the log levels.\r\n   * @private\r\n   * @static\r\n   * @return {String} - The normalized levels.\r\n   */\r\n  static levels(level) {\r\n    const levels = _.isString(level) ? level.split(',') : level;\r\n    return levels.map(i => i.replace(/\\s/g, ''));\r\n  }\r\n  /**\r\n   * Set up the error logger.\r\n   * @private\r\n   * @static\r\n   */\r\n  static error() {\r\n    log.on('error', function error() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor('error')]('[error]:'));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args.map(i => Log.color.red(i)));\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  /**\r\n   * Set up the other loggers.\r\n   * @private\r\n   * @static\r\n   */\r\n  static other(level) {\r\n    log.on(level, function logger() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor(level)](`[${level}]:`));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args);\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  static get color() {\r\n    return Utils.Log.color;\r\n  }\r\n  static levelColor(level) {\r\n    return ({\r\n      info: 'green',\r\n      debug: 'blue',\r\n      warn: 'yellow',\r\n      error: 'red',\r\n    })[level];\r\n  }\r\n}\r\n\r\nmodule.exports = Log;\r\n",
+        "ref": [
+          {
+            "r1Y9fMUG": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\cli\\index.js",
+              "source": "\r\n/* eslint-env node */\r\n'use strict';\r\n\r\nconst Source = require('mr-doc-utils').Source;\r\nconst Log = require('../utils/log');\r\nconst Liftoff = require('liftoff');\r\nconst Option = require('mr-doc-utils').Option;\r\nconst Promise = require('bluebird');\r\nconst Yargs = require('yargs');\r\nconst ViynlFS = require('vinyl-fs');\r\nconst _ = require('lodash');\r\nconst pkg = require('../../package.json');\r\nconst rc = require('rc');\r\nconst log = new Log();\r\n\r\nclass CLI {\r\n  /**\r\n   * Parse the CLI arguments.\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static parse() {\r\n    return Promise.resolve(Yargs\r\n    .usage('Usage: mrdoc [options]', Option.cli)\r\n    .help('help', Log.color.gray('Show help.'))\r\n    .alias('help', 'h')\r\n    .argv);\r\n  }\r\n  /**\r\n   * Setup the logger.\r\n   * @param  {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static log(options) {\r\n    return Promise.resolve((() => {\r\n      // Get log level.\r\n      const level = options.level || options.l || Option.defaults.log.level;\r\n      // Set up the logger.\r\n      Log.setup({\r\n        level: level !== 'silent' ? level : '',\r\n        silent: level === 'silent',\r\n      });\r\n      return options;\r\n    })());\r\n  }\r\n  /**\r\n   * Create the CLI.\r\n   * @static\r\n   * @return {Liftoff} - An instance of Liftoff.\r\n   */\r\n  static get rocket() {\r\n    // Create the CLI.\r\n    return new Liftoff({\r\n      name: 'mrdoc',\r\n      processTitle: 'mrdoc',\r\n      v8flags: require('v8flags'),\r\n    });\r\n  }\r\n  /**\r\n   * Launch the CLI.\r\n   * @static\r\n   * @param {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<Stream>} - A promise to the stream.\r\n   */\r\n  static launch(options) {\r\n    // DEBUG: Launch\r\n    log.debug(Log.color.blue('Launching CLI'));\r\n    return new Promise((resolve, reject) => {\r\n      // Launch the CLI\r\n      CLI.rocket.launch({\r\n        cwd: options.cwd,\r\n        configPath: options.mrdocrc,\r\n      }, env => CLI.handler(env, options)\r\n      .then(stream => resolve(stream))\r\n      .catch(error => reject(error)));\r\n    });\r\n  }\r\n  /**\r\n   * Handle the result from the CLI.\r\n   * @private\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static handler(env, options) {\r\n    const version = options.version || options.v;\r\n    const source = options.source || options.s;\r\n    if (version) {\r\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\r\n      process.exit();\r\n    }\r\n    if (_.isEmpty(source) && version === false) {\r\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\r\n      process.exit();\r\n    }\r\n    return new Promise((resolve, reject) => {\r\n      // Normalize the source's path(s).\r\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\r\n      // DEBUG: Sources\r\n      log.debug(Log.color.blue('Sources:'), sources);\r\n      if (sources.indexOf(null) > -1) {\r\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\r\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\r\n    });\r\n  }\r\n}\r\n\r\nmodule.exports = CLI;\r\n"
+            }
+          },
+          {
+            "rJlF9fzIz": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\utils\\log.js",
+              "source": "/* eslint-env node */\r\n'use strict';\r\n\r\nconst Utils = require('mr-doc-utils');\r\nconst log = new Utils.Log();\r\nconst _ = require('lodash');\r\n\r\nclass Log {\r\n  constructor() {\r\n    return log;\r\n  }\r\n  /**\r\n   * Set up the logger.\r\n   * @static\r\n   */\r\n  static setup(options) {\r\n    if (options.silent) {\r\n      log.on('error', () => { /* NOOP */});\r\n    }\r\n    Log.levels(options.level)\r\n    .forEach(level => {\r\n      if (level === 'error') Log.error();\r\n      else Log.other(level);\r\n    });\r\n  }\r\n  /**\r\n   * Set the log levels.\r\n   * @private\r\n   * @static\r\n   * @return {String} - The normalized levels.\r\n   */\r\n  static levels(level) {\r\n    const levels = _.isString(level) ? level.split(',') : level;\r\n    return levels.map(i => i.replace(/\\s/g, ''));\r\n  }\r\n  /**\r\n   * Set up the error logger.\r\n   * @private\r\n   * @static\r\n   */\r\n  static error() {\r\n    log.on('error', function error() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor('error')]('[error]:'));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args.map(i => Log.color.red(i)));\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  /**\r\n   * Set up the other loggers.\r\n   * @private\r\n   * @static\r\n   */\r\n  static other(level) {\r\n    log.on(level, function logger() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor(level)](`[${level}]:`));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args);\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  static get color() {\r\n    return Utils.Log.color;\r\n  }\r\n  static levelColor(level) {\r\n    return ({\r\n      info: 'green',\r\n      debug: 'blue',\r\n      warn: 'yellow',\r\n      error: 'red',\r\n    })[level];\r\n  }\r\n}\r\n\r\nmodule.exports = Log;\r\n"
+            }
+          }
+        ]
+      },
+      "loc": {
+        "start": {
+          "line": 32,
+          "column": 2
+        },
+        "end": {
+          "line": 35,
+          "column": 3
+        }
+      },
+      "range": {
+        "column": [
+          2,
+          3
+        ],
+        "line": [
+          32,
+          35
+        ]
+      }
+    }
+  },
+  {
+    "description": "Set up the error logger.",
+    "tags": [
+      {
+        "title": "private",
+        "description": null,
+        "lineNumber": 2,
+        "type": null
+      },
+      {
+        "title": "static",
+        "description": null,
+        "lineNumber": 3
+      }
+    ],
+    "loc": {
+      "start": {
+        "line": 36,
+        "column": 2
+      },
+      "end": {
+        "line": 40,
+        "column": 5
+      }
+    },
+    "context": {
+      "code": "static error() {\r\n    log.on('error', function error() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor('error')]('[error]:'));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args.map(i => Log.color.red(i)));\r\n      /* eslint-enable no-console */\r\n    });\r\n  }",
+      "file": {
+        "id": "rJlF9fzIz",
+        "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+        "base": "src\\",
+        "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\utils\\log.js",
+        "source": "/* eslint-env node */\r\n'use strict';\r\n\r\nconst Utils = require('mr-doc-utils');\r\nconst log = new Utils.Log();\r\nconst _ = require('lodash');\r\n\r\nclass Log {\r\n  constructor() {\r\n    return log;\r\n  }\r\n  /**\r\n   * Set up the logger.\r\n   * @static\r\n   */\r\n  static setup(options) {\r\n    if (options.silent) {\r\n      log.on('error', () => { /* NOOP */});\r\n    }\r\n    Log.levels(options.level)\r\n    .forEach(level => {\r\n      if (level === 'error') Log.error();\r\n      else Log.other(level);\r\n    });\r\n  }\r\n  /**\r\n   * Set the log levels.\r\n   * @private\r\n   * @static\r\n   * @return {String} - The normalized levels.\r\n   */\r\n  static levels(level) {\r\n    const levels = _.isString(level) ? level.split(',') : level;\r\n    return levels.map(i => i.replace(/\\s/g, ''));\r\n  }\r\n  /**\r\n   * Set up the error logger.\r\n   * @private\r\n   * @static\r\n   */\r\n  static error() {\r\n    log.on('error', function error() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor('error')]('[error]:'));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args.map(i => Log.color.red(i)));\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  /**\r\n   * Set up the other loggers.\r\n   * @private\r\n   * @static\r\n   */\r\n  static other(level) {\r\n    log.on(level, function logger() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor(level)](`[${level}]:`));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args);\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  static get color() {\r\n    return Utils.Log.color;\r\n  }\r\n  static levelColor(level) {\r\n    return ({\r\n      info: 'green',\r\n      debug: 'blue',\r\n      warn: 'yellow',\r\n      error: 'red',\r\n    })[level];\r\n  }\r\n}\r\n\r\nmodule.exports = Log;\r\n",
+        "ref": [
+          {
+            "r1Y9fMUG": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\cli\\index.js",
+              "source": "\r\n/* eslint-env node */\r\n'use strict';\r\n\r\nconst Source = require('mr-doc-utils').Source;\r\nconst Log = require('../utils/log');\r\nconst Liftoff = require('liftoff');\r\nconst Option = require('mr-doc-utils').Option;\r\nconst Promise = require('bluebird');\r\nconst Yargs = require('yargs');\r\nconst ViynlFS = require('vinyl-fs');\r\nconst _ = require('lodash');\r\nconst pkg = require('../../package.json');\r\nconst rc = require('rc');\r\nconst log = new Log();\r\n\r\nclass CLI {\r\n  /**\r\n   * Parse the CLI arguments.\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static parse() {\r\n    return Promise.resolve(Yargs\r\n    .usage('Usage: mrdoc [options]', Option.cli)\r\n    .help('help', Log.color.gray('Show help.'))\r\n    .alias('help', 'h')\r\n    .argv);\r\n  }\r\n  /**\r\n   * Setup the logger.\r\n   * @param  {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static log(options) {\r\n    return Promise.resolve((() => {\r\n      // Get log level.\r\n      const level = options.level || options.l || Option.defaults.log.level;\r\n      // Set up the logger.\r\n      Log.setup({\r\n        level: level !== 'silent' ? level : '',\r\n        silent: level === 'silent',\r\n      });\r\n      return options;\r\n    })());\r\n  }\r\n  /**\r\n   * Create the CLI.\r\n   * @static\r\n   * @return {Liftoff} - An instance of Liftoff.\r\n   */\r\n  static get rocket() {\r\n    // Create the CLI.\r\n    return new Liftoff({\r\n      name: 'mrdoc',\r\n      processTitle: 'mrdoc',\r\n      v8flags: require('v8flags'),\r\n    });\r\n  }\r\n  /**\r\n   * Launch the CLI.\r\n   * @static\r\n   * @param {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<Stream>} - A promise to the stream.\r\n   */\r\n  static launch(options) {\r\n    // DEBUG: Launch\r\n    log.debug(Log.color.blue('Launching CLI'));\r\n    return new Promise((resolve, reject) => {\r\n      // Launch the CLI\r\n      CLI.rocket.launch({\r\n        cwd: options.cwd,\r\n        configPath: options.mrdocrc,\r\n      }, env => CLI.handler(env, options)\r\n      .then(stream => resolve(stream))\r\n      .catch(error => reject(error)));\r\n    });\r\n  }\r\n  /**\r\n   * Handle the result from the CLI.\r\n   * @private\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static handler(env, options) {\r\n    const version = options.version || options.v;\r\n    const source = options.source || options.s;\r\n    if (version) {\r\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\r\n      process.exit();\r\n    }\r\n    if (_.isEmpty(source) && version === false) {\r\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\r\n      process.exit();\r\n    }\r\n    return new Promise((resolve, reject) => {\r\n      // Normalize the source's path(s).\r\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\r\n      // DEBUG: Sources\r\n      log.debug(Log.color.blue('Sources:'), sources);\r\n      if (sources.indexOf(null) > -1) {\r\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\r\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\r\n    });\r\n  }\r\n}\r\n\r\nmodule.exports = CLI;\r\n"
+            }
+          },
+          {
+            "rJlF9fzIz": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\utils\\log.js",
+              "source": "/* eslint-env node */\r\n'use strict';\r\n\r\nconst Utils = require('mr-doc-utils');\r\nconst log = new Utils.Log();\r\nconst _ = require('lodash');\r\n\r\nclass Log {\r\n  constructor() {\r\n    return log;\r\n  }\r\n  /**\r\n   * Set up the logger.\r\n   * @static\r\n   */\r\n  static setup(options) {\r\n    if (options.silent) {\r\n      log.on('error', () => { /* NOOP */});\r\n    }\r\n    Log.levels(options.level)\r\n    .forEach(level => {\r\n      if (level === 'error') Log.error();\r\n      else Log.other(level);\r\n    });\r\n  }\r\n  /**\r\n   * Set the log levels.\r\n   * @private\r\n   * @static\r\n   * @return {String} - The normalized levels.\r\n   */\r\n  static levels(level) {\r\n    const levels = _.isString(level) ? level.split(',') : level;\r\n    return levels.map(i => i.replace(/\\s/g, ''));\r\n  }\r\n  /**\r\n   * Set up the error logger.\r\n   * @private\r\n   * @static\r\n   */\r\n  static error() {\r\n    log.on('error', function error() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor('error')]('[error]:'));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args.map(i => Log.color.red(i)));\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  /**\r\n   * Set up the other loggers.\r\n   * @private\r\n   * @static\r\n   */\r\n  static other(level) {\r\n    log.on(level, function logger() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor(level)](`[${level}]:`));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args);\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  static get color() {\r\n    return Utils.Log.color;\r\n  }\r\n  static levelColor(level) {\r\n    return ({\r\n      info: 'green',\r\n      debug: 'blue',\r\n      warn: 'yellow',\r\n      error: 'red',\r\n    })[level];\r\n  }\r\n}\r\n\r\nmodule.exports = Log;\r\n"
+            }
+          }
+        ]
+      },
+      "loc": {
+        "start": {
+          "line": 41,
+          "column": 2
+        },
+        "end": {
+          "line": 50,
+          "column": 3
+        }
+      },
+      "range": {
+        "column": [
+          2,
+          3
+        ],
+        "line": [
+          41,
+          50
+        ]
+      }
+    }
+  },
+  {
+    "description": "Set up the other loggers.",
+    "tags": [
+      {
+        "title": "private",
+        "description": null,
+        "lineNumber": 2,
+        "type": null
+      },
+      {
+        "title": "static",
+        "description": null,
+        "lineNumber": 3
+      }
+    ],
+    "loc": {
+      "start": {
+        "line": 51,
+        "column": 2
+      },
+      "end": {
+        "line": 55,
+        "column": 5
+      }
+    },
+    "context": {
+      "code": "static other(level) {\r\n    log.on(level, function logger() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor(level)](`[${level}]:`));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args);\r\n      /* eslint-enable no-console */\r\n    });\r\n  }",
+      "file": {
+        "id": "rJlF9fzIz",
+        "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+        "base": "src\\",
+        "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\utils\\log.js",
+        "source": "/* eslint-env node */\r\n'use strict';\r\n\r\nconst Utils = require('mr-doc-utils');\r\nconst log = new Utils.Log();\r\nconst _ = require('lodash');\r\n\r\nclass Log {\r\n  constructor() {\r\n    return log;\r\n  }\r\n  /**\r\n   * Set up the logger.\r\n   * @static\r\n   */\r\n  static setup(options) {\r\n    if (options.silent) {\r\n      log.on('error', () => { /* NOOP */});\r\n    }\r\n    Log.levels(options.level)\r\n    .forEach(level => {\r\n      if (level === 'error') Log.error();\r\n      else Log.other(level);\r\n    });\r\n  }\r\n  /**\r\n   * Set the log levels.\r\n   * @private\r\n   * @static\r\n   * @return {String} - The normalized levels.\r\n   */\r\n  static levels(level) {\r\n    const levels = _.isString(level) ? level.split(',') : level;\r\n    return levels.map(i => i.replace(/\\s/g, ''));\r\n  }\r\n  /**\r\n   * Set up the error logger.\r\n   * @private\r\n   * @static\r\n   */\r\n  static error() {\r\n    log.on('error', function error() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor('error')]('[error]:'));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args.map(i => Log.color.red(i)));\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  /**\r\n   * Set up the other loggers.\r\n   * @private\r\n   * @static\r\n   */\r\n  static other(level) {\r\n    log.on(level, function logger() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor(level)](`[${level}]:`));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args);\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  static get color() {\r\n    return Utils.Log.color;\r\n  }\r\n  static levelColor(level) {\r\n    return ({\r\n      info: 'green',\r\n      debug: 'blue',\r\n      warn: 'yellow',\r\n      error: 'red',\r\n    })[level];\r\n  }\r\n}\r\n\r\nmodule.exports = Log;\r\n",
+        "ref": [
+          {
+            "r1Y9fMUG": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\cli\\index.js",
+              "source": "\r\n/* eslint-env node */\r\n'use strict';\r\n\r\nconst Source = require('mr-doc-utils').Source;\r\nconst Log = require('../utils/log');\r\nconst Liftoff = require('liftoff');\r\nconst Option = require('mr-doc-utils').Option;\r\nconst Promise = require('bluebird');\r\nconst Yargs = require('yargs');\r\nconst ViynlFS = require('vinyl-fs');\r\nconst _ = require('lodash');\r\nconst pkg = require('../../package.json');\r\nconst rc = require('rc');\r\nconst log = new Log();\r\n\r\nclass CLI {\r\n  /**\r\n   * Parse the CLI arguments.\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static parse() {\r\n    return Promise.resolve(Yargs\r\n    .usage('Usage: mrdoc [options]', Option.cli)\r\n    .help('help', Log.color.gray('Show help.'))\r\n    .alias('help', 'h')\r\n    .argv);\r\n  }\r\n  /**\r\n   * Setup the logger.\r\n   * @param  {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static log(options) {\r\n    return Promise.resolve((() => {\r\n      // Get log level.\r\n      const level = options.level || options.l || Option.defaults.log.level;\r\n      // Set up the logger.\r\n      Log.setup({\r\n        level: level !== 'silent' ? level : '',\r\n        silent: level === 'silent',\r\n      });\r\n      return options;\r\n    })());\r\n  }\r\n  /**\r\n   * Create the CLI.\r\n   * @static\r\n   * @return {Liftoff} - An instance of Liftoff.\r\n   */\r\n  static get rocket() {\r\n    // Create the CLI.\r\n    return new Liftoff({\r\n      name: 'mrdoc',\r\n      processTitle: 'mrdoc',\r\n      v8flags: require('v8flags'),\r\n    });\r\n  }\r\n  /**\r\n   * Launch the CLI.\r\n   * @static\r\n   * @param {Object} options - The parsed CLI arguments.\r\n   * @return {Promise<Stream>} - A promise to the stream.\r\n   */\r\n  static launch(options) {\r\n    // DEBUG: Launch\r\n    log.debug(Log.color.blue('Launching CLI'));\r\n    return new Promise((resolve, reject) => {\r\n      // Launch the CLI\r\n      CLI.rocket.launch({\r\n        cwd: options.cwd,\r\n        configPath: options.mrdocrc,\r\n      }, env => CLI.handler(env, options)\r\n      .then(stream => resolve(stream))\r\n      .catch(error => reject(error)));\r\n    });\r\n  }\r\n  /**\r\n   * Handle the result from the CLI.\r\n   * @private\r\n   * @static\r\n   * @return {Promise<options>} - A promise to the options.\r\n   */\r\n  static handler(env, options) {\r\n    const version = options.version || options.v;\r\n    const source = options.source || options.s;\r\n    if (version) {\r\n      log.info(`${Log.color.blue('version:')} ${pkg.version}`);\r\n      process.exit();\r\n    }\r\n    if (_.isEmpty(source) && version === false) {\r\n      log.warn(`${Log.color.yellow('No source specified!')} See --help for usage.`);\r\n      process.exit();\r\n    }\r\n    return new Promise((resolve, reject) => {\r\n      // Normalize the source's path(s).\r\n      const sources = Source.normalizePath(source, Option.normalize(rc('mrdoc', options)));\r\n      // DEBUG: Sources\r\n      log.debug(Log.color.blue('Sources:'), sources);\r\n      if (sources.indexOf(null) > -1) {\r\n        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);\r\n      } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });\r\n    });\r\n  }\r\n}\r\n\r\nmodule.exports = CLI;\r\n"
+            }
+          },
+          {
+            "rJlF9fzIz": {
+              "cwd": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc",
+              "base": "src\\",
+              "path": "c:\\Users\\iwata\\Documents\\GitHub\\mr-doc\\src\\utils\\log.js",
+              "source": "/* eslint-env node */\r\n'use strict';\r\n\r\nconst Utils = require('mr-doc-utils');\r\nconst log = new Utils.Log();\r\nconst _ = require('lodash');\r\n\r\nclass Log {\r\n  constructor() {\r\n    return log;\r\n  }\r\n  /**\r\n   * Set up the logger.\r\n   * @static\r\n   */\r\n  static setup(options) {\r\n    if (options.silent) {\r\n      log.on('error', () => { /* NOOP */});\r\n    }\r\n    Log.levels(options.level)\r\n    .forEach(level => {\r\n      if (level === 'error') Log.error();\r\n      else Log.other(level);\r\n    });\r\n  }\r\n  /**\r\n   * Set the log levels.\r\n   * @private\r\n   * @static\r\n   * @return {String} - The normalized levels.\r\n   */\r\n  static levels(level) {\r\n    const levels = _.isString(level) ? level.split(',') : level;\r\n    return levels.map(i => i.replace(/\\s/g, ''));\r\n  }\r\n  /**\r\n   * Set up the error logger.\r\n   * @private\r\n   * @static\r\n   */\r\n  static error() {\r\n    log.on('error', function error() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor('error')]('[error]:'));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args.map(i => Log.color.red(i)));\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  /**\r\n   * Set up the other loggers.\r\n   * @private\r\n   * @static\r\n   */\r\n  static other(level) {\r\n    log.on(level, function logger() {\r\n      /* eslint-disable no-console */\r\n      const args = Array.prototype.slice.call(arguments);\r\n      args.unshift(Log.color[Log.levelColor(level)](`[${level}]:`));\r\n      args.unshift(Log.color.cyan('mrdoc'));\r\n      console.log.apply(console, args);\r\n      /* eslint-enable no-console */\r\n    });\r\n  }\r\n  static get color() {\r\n    return Utils.Log.color;\r\n  }\r\n  static levelColor(level) {\r\n    return ({\r\n      info: 'green',\r\n      debug: 'blue',\r\n      warn: 'yellow',\r\n      error: 'red',\r\n    })[level];\r\n  }\r\n}\r\n\r\nmodule.exports = Log;\r\n"
+            }
+          }
+        ]
+      },
+      "loc": {
+        "start": {
+          "line": 56,
+          "column": 2
+        },
+        "end": {
+          "line": 65,
+          "column": 3
+        }
+      },
+      "range": {
+        "column": [
+          2,
+          3
+        ],
+        "line": [
+          56,
+          65
         ]
       }
     }
