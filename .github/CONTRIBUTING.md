@@ -16,16 +16,17 @@ If this is your first time contributing to an open source project, check out som
 
 ## Coding Conventions
 
-Try your best to follow the [Airbnb's Style Guide](https://github.com/airbnb/javascript) but since most of the code will be written in TypeScript, there will be a gulp task that will assist you in checking style issues for TypeScript.
+Try your best to follow the [Airbnb's Style Guide](https://github.com/airbnb/javascript) but there will be a gulp task that will assist you in checking style issues.
 
-## IDE
+## Editors
 
-The IDE used frequently to develop Mr. Doc. are:
+The Editor used frequently to develop Mr. Doc. are:
 
 * Visual Studio Code
 * Atom
+* Sublime
 
-## Commiting and Versioning
+## Committing and Versioning
 
 Write your commit summary as :strawberry: Patch, :candy: Minor, or :cake: Major. In the extended description, write your tested changes in past test. If you are unsure whether the changes you have made has fixed the issue, write your changes in present test.
 
