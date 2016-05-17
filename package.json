@@ -29,15 +29,19 @@
     "node": ">= 5.0.0"
   },
   "dependencies": {
-    "bluebird": "^3.3.5",
+    "compiler": "github:mr-doc/compiler#v1.0.0",
+    "fs-extra": "^0.26.7",
     "gulp-if": "^2.0.0",
+    "is-glob": "^2.0.1",
+    "json-stringify": "^1.0.0",
     "liftoff": "^2.2.0",
     "lodash": "^4.6.1",
-    "mr-doc-compiler": "1.0.0",
-    "mr-doc-parser": "1.0.0",
     "mr-doc-utils": "^2.2.2",
+    "parser": "github:mr-doc/parser#v1.0.0",
     "rc": "^1.1.6",
+    "shortid": "^2.2.4",
     "v8flags": "^2.0.11",
+    "vinyl": "^1.1.1",
     "vinyl-fs": "^2.4.3",
     "yargs": "^4.3.2"
   },
@@ -47,7 +51,8 @@
     "eslint-plugin-react": "^4.2.3",
     "gulp": "^3.9.1",
     "gulp-eslint": "^2.0.0",
-    "gulp-mocha": "^2.2.0"
+    "gulp-mocha": "^2.2.0",
+    "through2": "^2.0.1"
   },
   "keywords": [
     "dox",
