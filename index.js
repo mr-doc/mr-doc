@@ -5,8 +5,8 @@ const Option = require('mr-doc-utils').Option;
 const Output = require('mr-doc-utils').Output;
 const Promise = require('bluebird');
 const VinylFS = require('vinyl-fs');
-const Parser = require('mr-doc-parser');
-const Compiler = require('mr-doc-compiler');
+const Parser = require('parser');
+const Compiler = require('compiler');
 const log = new Log();
 
 class MrDoc {
