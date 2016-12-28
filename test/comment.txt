@@ -9,7 +9,7 @@ Lets make a car!
 ```js
 const mySweetBabyHonda = new Car('Honda');
 ```
-----
+---
 
 @method Something
 @return: boolean
