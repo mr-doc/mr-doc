@@ -4,12 +4,12 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Scanner_1 = require("./Scanner");
-var Token_1 = require("./Token");
-var Location_1 = require("./Location");
-var Match_1 = require("../utils/Match");
-var FS = require("fs");
-var Path = require("path");
+var Scanner_1 = require('./Scanner');
+var Token_1 = require('./Token');
+var Location_1 = require('./Location');
+var Match_1 = require('../utils/Match');
+var FS = require('fs');
+var Path = require('path');
 /**
  * JSDOC grammer
  * <jsdoc> := <start> <comment> <end>
@@ -34,7 +34,6 @@ var Path = require("path");
  * <collection type> := '[]'
  * <default type> := <assignment>
  */
-var TokenType;
 (function (TokenType) {
     TokenType[TokenType["Colon"] = 0] = "Colon";
     TokenType[TokenType["Description"] = 1] = "Description";
@@ -47,11 +46,12 @@ var TokenType;
     TokenType[TokenType["OptionalIdentifier"] = 8] = "OptionalIdentifier";
     TokenType[TokenType["ReservedWord"] = 9] = "ReservedWord";
     TokenType[TokenType["Tag"] = 10] = "Tag";
-})(TokenType = exports.TokenType || (exports.TokenType = {}));
+})(exports.TokenType || (exports.TokenType = {}));
+var TokenType = exports.TokenType;
 var CommentScanner = (function (_super) {
     __extends(CommentScanner, _super);
     function CommentScanner(source) {
-        return _super.call(this, source) || this;
+        _super.call(this, source);
     }
     CommentScanner.prototype.scan = function () {
         while (!this.ended) {
@@ -169,5 +169,5 @@ var CommentScanner = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = CommentScanner;
 var tokens = new CommentScanner(FS.readFileSync("" + Path.resolve(__dirname, '../../test/comment.txt'), 'utf8')).scan();
-tokens.forEach(function (token) { return console.log(token.lexeme, TokenType[token.type]); });
+tokens.forEach(function (token) { return console.log(token.lexeme, 'is a', TokenType[token.type]); });
 //# sourceMappingURL=index.js.map

@@ -159,4 +159,4 @@ export default class CommentScanner extends Scanner {
 const tokens = new CommentScanner(
   FS.readFileSync(`${Path.resolve(__dirname, '../../test/comment.txt')}`, 'utf8')
 ).scan();
-tokens.forEach(token => console.log(token.lexeme, TokenType[token.type]));
+tokens.forEach(token => console.log(token.lexeme, 'is a' ,TokenType[token.type]));
