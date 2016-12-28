@@ -55,9 +55,9 @@ export default class CommentScanner extends Scanner {
       
       if (Match.isLetterOrDigit(ch)) {
         this.tokens.push(this.scanString());
-      } else if (Match.isLineTerminator(ch)) {
+    } /*else if (Match.isLineTerminator(ch)) {
         this.tokens.push(this.scanLineTerminator());
-      } else if (Match.isNullTerminator(ch)) { 
+    } */else if (Match.isNullTerminator(ch)) { 
         this.tokens.push(this.scanNullTerminator());
       } else if (ch === '@') {
         this.tokens.push(this.scanTag());
@@ -65,7 +65,7 @@ export default class CommentScanner extends Scanner {
         this.tokens.push(this.scanMinus());
       } else if(ch === ':') {
         this.tokens.push(this.scanColon());
-      }else { this.next(); } 
+      } else { this.next(); } 
     }
     return this.tokens;
   }

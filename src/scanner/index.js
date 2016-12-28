@@ -59,10 +59,9 @@ var CommentScanner = (function (_super) {
             var ch = this.current();
             if (Match_1.default.isLetterOrDigit(ch)) {
                 this.tokens.push(this.scanString());
-            }
-            else if (Match_1.default.isLineTerminator(ch)) {
+            } /*else if (Match.isLineTerminator(ch)) {
                 this.tokens.push(this.scanLineTerminator());
-            }
+            } */
             else if (Match_1.default.isNullTerminator(ch)) {
                 this.tokens.push(this.scanNullTerminator());
             }
