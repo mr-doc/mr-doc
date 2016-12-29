@@ -41,7 +41,7 @@ export enum TokenType {
   MarkdownComment,
   Minus,
   NullTerminator,
-  OptionalIdentifier,
+  QuestionMark,
   ReservedWord,
   Tag,
 }
@@ -65,6 +65,8 @@ export default class CommentScanner extends Scanner {
         this.tokens.push(this.scanMinus());
       } else if(ch === ':') {
         this.tokens.push(this.scanColon());
+      } else if(ch === '?'){
+        this.tokens.push(this.scanQuestionMark());
       } else { this.next(); } 
     }
     return this.tokens;
@@ -74,21 +76,17 @@ export default class CommentScanner extends Scanner {
     const previousToken = this.tokens[this.tokens.length - 1];
     // Handle strings that are identifiers. ie. MyClass | myVariable: string[?]
     if (previousToken.type === TokenType.Tag) {
-      while(
-        !Match.isWhiteSpace(this.current()) &&
-        !Match.isLineTerminator(this.current()) &&
-        ':-'.indexOf(this.current()) === -1) {
+      while(!':-?'.includes(this.current()) && !Match.isSpace(this.current())) {
           this.lexeme.push(this.next());
       }
       const end = this.position;
       const lexeme = this.lexeme.join('');
-      const isOptional = lexeme[lexeme.length - 1] === '?';
-      return new Token(lexeme, isOptional ? TokenType.OptionalIdentifier : TokenType.Identifier, new Location(start, end));
+      return new Token(lexeme, TokenType.Identifier, new Location(start, end));
     }
 
     // Handle Reserved words. ie. : [reserved word]
     if (previousToken.type === TokenType.Colon) {
-      while(this.current() !== '-' && !Match.isLineTerminator(this.current())) { 
+      while(this.current() !== '-' && !Match.isSpace(this.current())) { 
         this.lexeme.push(this.next());
       }
       const end = this.position;
@@ -117,9 +115,7 @@ export default class CommentScanner extends Scanner {
   }
   scanTag(): Token {
     const start = this.position;
-    while(
-      !Match.isWhiteSpace(this.current()) &&
-      this.current() !== ':') {
+    while(!Match.isSpace(this.current()) && this.current() !== ':') {
       this.lexeme.push(this.next());
     }
     const end = this.position;
@@ -148,6 +144,12 @@ export default class CommentScanner extends Scanner {
     this.lexeme.push(this.next());
     const end = this.position;
     return new Token(this.lexeme.join(''), TokenType.Colon, new Location(start, end));
+  }
+  scanQuestionMark(): Token {
+    const start = this.position;
+    this.lexeme.push(this.next());
+    const end = this.position;
+    return new Token(this.lexeme.join(''), TokenType.QuestionMark, new Location(start, end));
   }
   // scanEqual(): Token {
   //   const start = this.position;

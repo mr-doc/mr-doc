@@ -2,7 +2,7 @@
 @constructor arg: string - First argument.
 @constructor arg2?: number - Second argument.
 @example - An example is shown below.
-----
+---
 Lets make a car!
 ================
 
@@ -13,3 +13,12 @@ const mySweetBabyHonda = new Car('Honda');
 
 @method Something
 @return: boolean
+@example
+---
+## Usage:
+
+Call it! Duh!
+```js
+doSomething()
+```
+---

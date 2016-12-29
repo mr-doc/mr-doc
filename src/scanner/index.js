@@ -43,7 +43,7 @@ var Path = require('path');
     TokenType[TokenType["MarkdownComment"] = 5] = "MarkdownComment";
     TokenType[TokenType["Minus"] = 6] = "Minus";
     TokenType[TokenType["NullTerminator"] = 7] = "NullTerminator";
-    TokenType[TokenType["OptionalIdentifier"] = 8] = "OptionalIdentifier";
+    TokenType[TokenType["QuestionMark"] = 8] = "QuestionMark";
     TokenType[TokenType["ReservedWord"] = 9] = "ReservedWord";
     TokenType[TokenType["Tag"] = 10] = "Tag";
 })(exports.TokenType || (exports.TokenType = {}));
@@ -74,6 +74,9 @@ var CommentScanner = (function (_super) {
             else if (ch === ':') {
                 this.tokens.push(this.scanColon());
             }
+            else if (ch === '?') {
+                this.tokens.push(this.scanQuestionMark());
+            }
             else {
                 this.next();
             }
@@ -85,19 +88,16 @@ var CommentScanner = (function (_super) {
         var previousToken = this.tokens[this.tokens.length - 1];
         // Handle strings that are identifiers. ie. MyClass | myVariable: string[?]
         if (previousToken.type === TokenType.Tag) {
-            while (!Match_1.default.isWhiteSpace(this.current()) &&
-                !Match_1.default.isLineTerminator(this.current()) &&
-                ':-'.indexOf(this.current()) === -1) {
+            while (!':-?'.includes(this.current()) && !Match_1.default.isSpace(this.current())) {
                 this.lexeme.push(this.next());
             }
             var end_1 = this.position;
             var lexeme = this.lexeme.join('');
-            var isOptional = lexeme[lexeme.length - 1] === '?';
-            return new Token_1.default(lexeme, isOptional ? TokenType.OptionalIdentifier : TokenType.Identifier, new Location_1.default(start, end_1));
+            return new Token_1.default(lexeme, TokenType.Identifier, new Location_1.default(start, end_1));
         }
         // Handle Reserved words. ie. : [reserved word]
         if (previousToken.type === TokenType.Colon) {
-            while (this.current() !== '-' && !Match_1.default.isLineTerminator(this.current())) {
+            while (this.current() !== '-' && !Match_1.default.isSpace(this.current())) {
                 this.lexeme.push(this.next());
             }
             var end_2 = this.position;
@@ -124,8 +124,7 @@ var CommentScanner = (function (_super) {
     };
     CommentScanner.prototype.scanTag = function () {
         var start = this.position;
-        while (!Match_1.default.isWhiteSpace(this.current()) &&
-            this.current() !== ':') {
+        while (!Match_1.default.isSpace(this.current()) && this.current() !== ':') {
             this.lexeme.push(this.next());
         }
         var end = this.position;
@@ -162,6 +161,12 @@ var CommentScanner = (function (_super) {
         this.lexeme.push(this.next());
         var end = this.position;
         return new Token_1.default(this.lexeme.join(''), TokenType.Colon, new Location_1.default(start, end));
+    };
+    CommentScanner.prototype.scanQuestionMark = function () {
+        var start = this.position;
+        this.lexeme.push(this.next());
+        var end = this.position;
+        return new Token_1.default(this.lexeme.join(''), TokenType.QuestionMark, new Location_1.default(start, end));
     };
     return CommentScanner;
 }(Scanner_1.default));
