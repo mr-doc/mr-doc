@@ -1,6 +1,6 @@
 "use strict";
-var CharacterStream_1 = require('./CharacterStream');
-var Location_1 = require('./Location');
+var CharacterStream_1 = require("./CharacterStream");
+var Location_1 = require("./Location");
 var Scanner = (function () {
     function Scanner(source) {
         this.lexeme = [];

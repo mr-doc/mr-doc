@@ -17,7 +17,7 @@ const mySweetBabyHonda = new Car('Honda');
 ---
 ## Usage:
 
-Call it! Duh!
+* Call it! Duh!
 ```js
 doSomething()
 ```

@@ -1,5 +1,5 @@
 "use strict";
-var Match_1 = require('../utils/Match');
+var Match_1 = require("../utils/Match");
 var CharacterStream = (function () {
     function CharacterStream(s) {
         this.stream = [];

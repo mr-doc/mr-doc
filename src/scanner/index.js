@@ -4,12 +4,12 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Scanner_1 = require('./Scanner');
-var Token_1 = require('./Token');
-var Location_1 = require('./Location');
-var Match_1 = require('../utils/Match');
-var FS = require('fs');
-var Path = require('path');
+var Scanner_1 = require("./Scanner");
+var Token_1 = require("./Token");
+var Location_1 = require("./Location");
+var Match_1 = require("../utils/Match");
+var FS = require("fs");
+var Path = require("path");
 /**
  * JSDOC grammer
  * <jsdoc> := <start> <comment> <end>
@@ -34,6 +34,7 @@ var Path = require('path');
  * <collection type> := '[]'
  * <default type> := <assignment>
  */
+var TokenType;
 (function (TokenType) {
     TokenType[TokenType["Colon"] = 0] = "Colon";
     TokenType[TokenType["Description"] = 1] = "Description";
@@ -46,12 +47,11 @@ var Path = require('path');
     TokenType[TokenType["QuestionMark"] = 8] = "QuestionMark";
     TokenType[TokenType["ReservedWord"] = 9] = "ReservedWord";
     TokenType[TokenType["Tag"] = 10] = "Tag";
-})(exports.TokenType || (exports.TokenType = {}));
-var TokenType = exports.TokenType;
+})(TokenType = exports.TokenType || (exports.TokenType = {}));
 var CommentScanner = (function (_super) {
     __extends(CommentScanner, _super);
     function CommentScanner(source) {
-        _super.call(this, source);
+        return _super.call(this, source) || this;
     }
     CommentScanner.prototype.scan = function () {
         while (!this.ended) {
@@ -88,7 +88,7 @@ var CommentScanner = (function (_super) {
         var previousToken = this.tokens[this.tokens.length - 1];
         // Handle strings that are identifiers. ie. MyClass | myVariable: string[?]
         if (previousToken.type === TokenType.Tag) {
-            while (!':-?'.includes(this.current()) && !Match_1.default.isSpace(this.current())) {
+            while (!(':-?'.includes(this.current())) && !Match_1.default.isSpace(this.current())) {
                 this.lexeme.push(this.next());
             }
             var end_1 = this.position;
@@ -133,15 +133,22 @@ var CommentScanner = (function (_super) {
     CommentScanner.prototype.scanMinus = function () {
         var _this = this;
         var start = this.position;
-        var type;
         var isMarkdownTag = function () { return _this.current() + _this.peek(1) + _this.peek(2) === '---'; };
+        var isCommentStar = function (col) { return (col === 0 || col === 1) && _this.current() === '*'; };
+        var type;
+        var starEnabled = this.peek(-1) === '*';
         // Determine whether it is markdown
         if (isMarkdownTag()) {
             // Consume the first three lexemes
             this.consume(3, this.lexeme);
             // Keep consuming the lexemes until markdown ends
             while (!isMarkdownTag()) {
-                this.lexeme.push(this.next());
+                if (isCommentStar(this.position.column) && starEnabled) {
+                    this.next();
+                }
+                else {
+                    this.lexeme.push(this.next());
+                }
             }
             // Consume the last three lexemes
             if (isMarkdownTag()) {

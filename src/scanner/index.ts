@@ -76,7 +76,7 @@ export default class CommentScanner extends Scanner {
     const previousToken = this.tokens[this.tokens.length - 1];
     // Handle strings that are identifiers. ie. MyClass | myVariable: string[?]
     if (previousToken.type === TokenType.Tag) {
-      while(!':-?'.includes(this.current()) && !Match.isSpace(this.current())) {
+      while(!(':-?'.includes(this.current())) && !Match.isSpace(this.current())) {
           this.lexeme.push(this.next());
       }
       const end = this.position;
@@ -123,15 +123,19 @@ export default class CommentScanner extends Scanner {
   }
   scanMinus(): Token {
     const start = this.position;
-    let type: TokenType;
     const isMarkdownTag = (): boolean => this.current() + this.peek(1) + this.peek(2) === '---';
-    
+    const isCommentStar = (col: number): boolean => (col === 0 || col === 1) && this.current() === '*';
+    let type: TokenType;
+    let starEnabled: boolean = this.peek(-1) === '*';
     // Determine whether it is markdown
     if (isMarkdownTag()) {
       // Consume the first three lexemes
       this.consume(3, this.lexeme);
       // Keep consuming the lexemes until markdown ends
-      while (!isMarkdownTag()) { this.lexeme.push(this.next()); }
+      while (!isMarkdownTag()) {
+        if(isCommentStar(this.position.column) && starEnabled) { this.next();} 
+        else { this.lexeme.push(this.next()); }
+      }
       // Consume the last three lexemes
       if (isMarkdownTag()) { this.consume(3, this.lexeme); }
       type = TokenType.MarkdownComment;
