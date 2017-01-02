@@ -6,47 +6,25 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var Scanner_1 = require("./Scanner");
 var Token_1 = require("./Token");
+var TokenStream_1 = require("./TokenStream");
 var Location_1 = require("./Location");
 var Match_1 = require("../utils/Match");
 var FS = require("fs");
 var Path = require("path");
-/**
- * JSDOC grammer
- * <jsdoc> := <start> <comment> <end>
- * <start> := <forward slash> <asterisk> <asterisk>
- * <forward slash> := '/'
- * <asterisk> := '*'
- * <comment> := <simple comment>
- *            | <complex comment>
- *            | <markdown comment>
- * <simple comment> := <description> <eol> { <simple comment> }
- * <description> := <special char> { <special char> }
- * <special char> := [a-z] | [A-Z] | [0-9] | <ws>
- * <period> := '.'
- * <eol> := '\n'
- * <complex comment> := <type declaration> <minus> <simple comment>
- * <type declaration> := <tag> <variable> <colon> <reserved>
- * <tag> := @public | @private | @protected | ...
- * <variable> := <char> { <char> }
- * <char> := [a-z] | [A-Z] | [0-9] | '_'
- * <colon> := ':'
- * <type> := 'string' | 'number' | 'object' | 'function' | 'undefined' | 'boolean'
- * <collection type> := '[]'
- * <default type> := <assignment>
- */
 var TokenType;
 (function (TokenType) {
     TokenType[TokenType["Colon"] = 0] = "Colon";
     TokenType[TokenType["Description"] = 1] = "Description";
-    TokenType[TokenType["Equal"] = 2] = "Equal";
-    TokenType[TokenType["Identifier"] = 3] = "Identifier";
-    TokenType[TokenType["LineTerminator"] = 4] = "LineTerminator";
-    TokenType[TokenType["MarkdownComment"] = 5] = "MarkdownComment";
-    TokenType[TokenType["Minus"] = 6] = "Minus";
-    TokenType[TokenType["NullTerminator"] = 7] = "NullTerminator";
-    TokenType[TokenType["QuestionMark"] = 8] = "QuestionMark";
-    TokenType[TokenType["ReservedWord"] = 9] = "ReservedWord";
-    TokenType[TokenType["Tag"] = 10] = "Tag";
+    TokenType[TokenType["DefaultValue"] = 2] = "DefaultValue";
+    TokenType[TokenType["Equal"] = 3] = "Equal";
+    TokenType[TokenType["Identifier"] = 4] = "Identifier";
+    TokenType[TokenType["LineTerminator"] = 5] = "LineTerminator";
+    TokenType[TokenType["Markdown"] = 6] = "Markdown";
+    TokenType[TokenType["Minus"] = 7] = "Minus";
+    TokenType[TokenType["NullTerminator"] = 8] = "NullTerminator";
+    TokenType[TokenType["QuestionMark"] = 9] = "QuestionMark";
+    TokenType[TokenType["ReservedWord"] = 10] = "ReservedWord";
+    TokenType[TokenType["Tag"] = 11] = "Tag";
 })(TokenType = exports.TokenType || (exports.TokenType = {}));
 var CommentScanner = (function (_super) {
     __extends(CommentScanner, _super);
@@ -77,11 +55,14 @@ var CommentScanner = (function (_super) {
             else if (ch === '?') {
                 this.tokens.push(this.scanQuestionMark());
             }
+            else if (ch === '=') {
+                this.tokens.push(this.scanEqual());
+            }
             else {
                 this.next();
             }
         }
-        return this.tokens;
+        return new TokenStream_1.default(this.tokens);
     };
     CommentScanner.prototype.scanString = function () {
         var start = this.position;
@@ -102,6 +83,14 @@ var CommentScanner = (function (_super) {
             }
             var end_2 = this.position;
             return new Token_1.default(this.lexeme.join(''), TokenType.ReservedWord, new Location_1.default(start, end_2));
+        }
+        // Handle default values. ie. : [reserved word] = value | ... = value
+        if (previousToken.type === TokenType.Equal) {
+            while (this.current() !== '-' && !Match_1.default.isSpace(this.current())) {
+                this.lexeme.push(this.next());
+            }
+            var end_3 = this.position;
+            return new Token_1.default(this.lexeme.join(''), TokenType.DefaultValue, new Location_1.default(start, end_3));
         }
         // Handle Descriptions
         while (!Match_1.default.isTerminator(this.current())) {
@@ -154,7 +143,7 @@ var CommentScanner = (function (_super) {
             if (isMarkdownTag()) {
                 this.consume(3, this.lexeme);
             }
-            type = TokenType.MarkdownComment;
+            type = TokenType.Markdown;
         }
         else {
             this.lexeme.push(this.next());
@@ -175,10 +164,16 @@ var CommentScanner = (function (_super) {
         var end = this.position;
         return new Token_1.default(this.lexeme.join(''), TokenType.QuestionMark, new Location_1.default(start, end));
     };
+    CommentScanner.prototype.scanEqual = function () {
+        var start = this.position;
+        this.lexeme.push(this.next());
+        var end = this.position;
+        return new Token_1.default(this.lexeme.join(''), TokenType.Equal, new Location_1.default(start, end));
+    };
     return CommentScanner;
 }(Scanner_1.default));
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = CommentScanner;
 var tokens = new CommentScanner(FS.readFileSync("" + Path.resolve(__dirname, '../../test/comment.txt'), 'utf8')).scan();
-tokens.forEach(function (token) { return console.log(token.lexeme, 'is a', TokenType[token.type]); });
+tokens.stream.forEach(function (token) { return console.log(token.lexeme, 'is a', TokenType[token.type]); });
 //# sourceMappingURL=index.js.map

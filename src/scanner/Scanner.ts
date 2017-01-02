@@ -1,13 +1,14 @@
 import CharacterStream from './CharacterStream';
 import Location, { Position } from './Location';
 import Token from './Token';
+import TokenStream from './TokenStream';
 
 abstract class Scanner {
   private source: CharacterStream;
   protected lexeme: string[] = [];
   protected tokens: Token[] = [];
   constructor(source: string) { this.source = new CharacterStream(source); }
-  abstract scan(): Token[];
+  abstract scan(): TokenStream;
   protected get position (): Position {
     let { position, line, column } = this.source;
     return new Position(position, line, column);

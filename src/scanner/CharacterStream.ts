@@ -1,6 +1,7 @@
 import Match from '../utils/Match';
+import Stream from './Stream';
 
-export default class CharacterStream {
+export default class CharacterStream implements Stream {
   private stream: string[] = [];
   private _position: number = 0;
   private _line: number = 1;
@@ -18,7 +19,7 @@ export default class CharacterStream {
   current(): string { return this.stream[this._position]; }
   next(): string { return  this.mark(this.stream[this._position++], true); }
   previous(): string { return this.mark(this.stream[this._position--], false); }
-  peek(to: number) { return this.stream[this._position + to]; }
+  peek(to: number): string { return this.stream[this._position + to]; }
   get ended(): boolean { return this._position === this.stream.length; }
   get position() { return this._position; }
   get line() { return this._line; }

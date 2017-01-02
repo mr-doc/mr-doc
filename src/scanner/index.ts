@@ -1,44 +1,20 @@
 "use strict";
 import Scanner from './Scanner';
 import Token from './Token';
+import TokenStream from './TokenStream';
 import Location from './Location';
 import Match from '../utils/Match';
 import * as FS from 'fs';
 import * as Path from 'path';
 
-
-/**
- * JSDOC grammer
- * <jsdoc> := <start> <comment> <end>
- * <start> := <forward slash> <asterisk> <asterisk>
- * <forward slash> := '/'
- * <asterisk> := '*'
- * <comment> := <simple comment>
- *            | <complex comment>
- *            | <markdown comment>
- * <simple comment> := <description> <eol> { <simple comment> }
- * <description> := <special char> { <special char> }
- * <special char> := [a-z] | [A-Z] | [0-9] | <ws>
- * <period> := '.'
- * <eol> := '\n'
- * <complex comment> := <type declaration> <minus> <simple comment>
- * <type declaration> := <tag> <variable> <colon> <reserved>
- * <tag> := @public | @private | @protected | ...
- * <variable> := <char> { <char> }
- * <char> := [a-z] | [A-Z] | [0-9] | '_'
- * <colon> := ':'
- * <type> := 'string' | 'number' | 'object' | 'function' | 'undefined' | 'boolean'
- * <collection type> := '[]'
- * <default type> := <assignment>
- */
-
 export enum TokenType {
   Colon,
   Description,
+  DefaultValue,
   Equal,
   Identifier,
   LineTerminator,
-  MarkdownComment,
+  Markdown,
   Minus,
   NullTerminator,
   QuestionMark,
@@ -48,7 +24,7 @@ export enum TokenType {
 
 export default class CommentScanner extends Scanner {
   constructor(source: string) { super(source); }
-  scan(): Token[] {
+  scan(): TokenStream {
     while (!this.ended) {
       this.lexeme = [];
       const ch = this.current();
@@ -65,11 +41,13 @@ export default class CommentScanner extends Scanner {
         this.tokens.push(this.scanMinus());
       } else if(ch === ':') {
         this.tokens.push(this.scanColon());
-      } else if(ch === '?'){
+      } else if(ch === '?') {
         this.tokens.push(this.scanQuestionMark());
+      } else if (ch === '=') {
+        this.tokens.push(this.scanEqual());
       } else { this.next(); } 
     }
-    return this.tokens;
+    return new TokenStream(this.tokens);
   }
   scanString(): Token {
     const start = this.position;
@@ -91,6 +69,15 @@ export default class CommentScanner extends Scanner {
       }
       const end = this.position;
       return new Token(this.lexeme.join(''), TokenType.ReservedWord, new Location(start, end));
+    }
+
+    // Handle default values. ie. : [reserved word] = value | ... = value
+    if(previousToken.type === TokenType.Equal) {
+      while(this.current() !== '-' && !Match.isSpace(this.current())) {
+        this.lexeme.push(this.next())
+      }
+      const end = this.position;
+      return new Token(this.lexeme.join(''), TokenType.DefaultValue, new Location(start, end));
     }
 
     // Handle Descriptions
@@ -138,7 +125,7 @@ export default class CommentScanner extends Scanner {
       }
       // Consume the last three lexemes
       if (isMarkdownTag()) { this.consume(3, this.lexeme); }
-      type = TokenType.MarkdownComment;
+      type = TokenType.Markdown;
     } else { this.lexeme.push(this.next()); type = TokenType.Minus; }
     const end = this.position;
     return new Token(this.lexeme.join(''), type, new Location(start, end));
@@ -155,14 +142,14 @@ export default class CommentScanner extends Scanner {
     const end = this.position;
     return new Token(this.lexeme.join(''), TokenType.QuestionMark, new Location(start, end));
   }
-  // scanEqual(): Token {
-  //   const start = this.position;
-  //   this.lexeme.push(this.next());
-  //   const end = this.position;
-  //   return new Token(this.lexeme.join(''), TokenType.Equal, new Location(start, end));
-  // }
+  scanEqual(): Token {
+    const start = this.position;
+    this.lexeme.push(this.next());
+    const end = this.position;
+    return new Token(this.lexeme.join(''), TokenType.Equal, new Location(start, end));
+  }
 }
 const tokens = new CommentScanner(
   FS.readFileSync(`${Path.resolve(__dirname, '../../test/comment.txt')}`, 'utf8')
 ).scan();
-tokens.forEach(token => console.log(token.lexeme, 'is a' ,TokenType[token.type]));
+tokens.stream.forEach(token => console.log(token.lexeme, 'is a' ,TokenType[token.type]));
