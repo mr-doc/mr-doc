@@ -7,6 +7,20 @@ import Match from '../utils/Match';
 import * as FS from 'fs';
 import * as Path from 'path';
 
+// 'includes' polyfill
+function includes(search, start) {
+  'use strict';
+  if (typeof start !== 'number') {
+    start = 0;
+  }
+  
+  if (start + search.length > this.length) {
+    return false;
+  } else {
+    return this.indexOf(search, start) !== -1;
+  }
+};
+
 export enum TokenType {
   Colon,
   Description,
@@ -54,7 +68,7 @@ export default class CommentScanner extends Scanner {
     const previousToken = this.tokens[this.tokens.length - 1];
     // Handle strings that are identifiers. ie. MyClass | myVariable: string[?]
     if (previousToken.type === TokenType.Tag) {
-      while(!(':-?'.includes(this.current())) && !Match.isSpace(this.current())) {
+      while(!(includes.apply(':-?', [this.current()])) && !Match.isSpace(this.current())) {
           this.lexeme.push(this.next());
       }
       const end = this.position;

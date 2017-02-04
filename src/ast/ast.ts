@@ -7,12 +7,3 @@ export interface Node {
   sibling: Node;
   readonly token: Token;
 }
-
-export interface Program extends Node {
-  type: "Program";
-  body: Statement[]
-}
-
-export interface Statement extends Node {
-
-}

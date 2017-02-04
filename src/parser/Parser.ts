@@ -5,11 +5,12 @@ import { Node } from '../ast/AST';
 abstract class Parser {
   private stream: TokenStream;
   constructor(stream: TokenStream) { this.stream = stream; }
-  current(): Token { return this.stream.current(); }
-  next(): Token { return this.stream.next(); }
-  previous(): Token { return this.stream.previous(); }
-  peek(to: number): Token { return this.stream.peek(to); }
+  protected current(): Token { return this.stream.current(); }
+  protected next(): Token { return this.stream.next(); }
+  protected previous(): Token { return this.stream.previous(); }
+  protected peek(to: number): Token { return this.stream.peek(to); }
   abstract parse(): Node;
+  get ended(): boolean { return this.stream.ended; }
 }
 
 export default Parser;

@@ -11,6 +11,20 @@ var Location_1 = require("./Location");
 var Match_1 = require("../utils/Match");
 var FS = require("fs");
 var Path = require("path");
+// 'includes' polyfill
+function includes(search, start) {
+    'use strict';
+    if (typeof start !== 'number') {
+        start = 0;
+    }
+    if (start + search.length > this.length) {
+        return false;
+    }
+    else {
+        return this.indexOf(search, start) !== -1;
+    }
+}
+;
 var TokenType;
 (function (TokenType) {
     TokenType[TokenType["Colon"] = 0] = "Colon";
@@ -69,7 +83,7 @@ var CommentScanner = (function (_super) {
         var previousToken = this.tokens[this.tokens.length - 1];
         // Handle strings that are identifiers. ie. MyClass | myVariable: string[?]
         if (previousToken.type === TokenType.Tag) {
-            while (!(':-?'.includes(this.current())) && !Match_1.default.isSpace(this.current())) {
+            while (!(includes.apply(':-?', [this.current()])) && !Match_1.default.isSpace(this.current())) {
                 this.lexeme.push(this.next());
             }
             var end_1 = this.position;
