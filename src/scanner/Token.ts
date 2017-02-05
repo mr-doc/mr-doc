@@ -1,6 +1,6 @@
 import Location from './Location';
 
-type TokenType = number | string;
+export type TokenType = number | string;
 
 export default class Token {
   readonly lexeme: string;
