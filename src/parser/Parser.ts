@@ -1,6 +1,6 @@
-import TokenStream from '../scanner/TokenStream';
-import Token, { TokenType } from '../scanner/Token';
-import Node, { NodeType } from './Node';
+import { TokenStream } from '../stream';
+import Token, { TokenType } from '../token';
+import Node, { NodeKind } from '../node';
 
 type TokenTypes = {
   type: TokenType,
@@ -41,7 +41,7 @@ abstract class Parser {
   }
   abstract parse(): Node;
   get ended(): boolean { return this.stream.ended; }
-  get location () { return this.current().location; }
+  get location () { return this.current().range; }
 }
 
 export default Parser;

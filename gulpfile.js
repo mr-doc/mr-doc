@@ -9,7 +9,7 @@ gulp.task('eslint', () => gulp
     .pipe(eslint.failAfterError()));
 
 gulp.task('mocha', ['eslint'], () => gulp
-    .src('test/*.js', { read: false })
+    .src('test/*.mocha.js', { read: false })
     .pipe(mocha()));
 
 gulp.task('default', ['eslint', 'mocha']);

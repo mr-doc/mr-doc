@@ -1,41 +1,39 @@
 "use strict";
-var CharacterStream_1 = require("./CharacterStream");
-var Location_1 = require("./Location");
-var Scanner = (function () {
-    function Scanner(source) {
+const stream_1 = require("../stream");
+const location_1 = require("../location");
+class Scanner {
+    constructor(source, location) {
         this.lexeme = [];
         this.tokens = [];
-        this.source = new CharacterStream_1.default(source);
+        if (source) {
+            this.stream = new stream_1.CharacterStream(source);
+        }
     }
-    Object.defineProperty(Scanner.prototype, "position", {
-        get: function () {
-            var _a = this.source, position = _a.position, line = _a.line, column = _a.column;
-            return new Location_1.Position(position, line, column);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Scanner.prototype.consume = function (to, array) {
-        var i = 0;
+    consume(to, array) {
+        let i = 0;
         while (i < Math.abs(to)) {
-            var s = to < 0 ? this.previous() : this.next();
+            const s = to < 0 ? this.previous() : this.next();
             if (array) {
                 array.push(s);
             }
             i++;
         }
-    };
-    Scanner.prototype.current = function () { return this.source.current(); };
-    Scanner.prototype.next = function () { return this.source.next(); };
-    Scanner.prototype.previous = function () { return this.source.previous(); };
-    Scanner.prototype.peek = function (to) { return this.source.peek(to); };
-    Object.defineProperty(Scanner.prototype, "ended", {
-        get: function () { return this.source.ended; },
-        enumerable: true,
-        configurable: true
-    });
-    return Scanner;
-}());
+    }
+    current() { return this.stream.current(); }
+    next() { return this.stream.next(); }
+    previous() { return this.stream.previous(); }
+    peek(to) { return this.stream.peek(to); }
+    get ended() { return this.stream.ended; }
+    reset(source, location) {
+        this.stream.reset(source, location);
+        this.lexeme = [];
+        this.tokens = [];
+    }
+    get location() {
+        let { position, line, column } = this.stream;
+        return new location_1.default(position, line, column);
+    }
+}
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Scanner;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU2Nhbm5lci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIlNjYW5uZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUFBLHFEQUFnRDtBQUNoRCx1Q0FBZ0Q7QUFJaEQ7SUFJRSxpQkFBWSxNQUFjO1FBRmhCLFdBQU0sR0FBYSxFQUFFLENBQUM7UUFDdEIsV0FBTSxHQUFZLEVBQUUsQ0FBQztRQUNELElBQUksQ0FBQyxNQUFNLEdBQUcsSUFBSSx5QkFBZSxDQUFDLE1BQU0sQ0FBQyxDQUFDO0lBQUMsQ0FBQztJQUUxRSxzQkFBYyw2QkFBUTthQUF0QjtZQUNNLElBQUEsZ0JBQXdDLEVBQXRDLHNCQUFRLEVBQUUsY0FBSSxFQUFFLGtCQUFNLENBQWlCO1lBQzdDLE1BQU0sQ0FBQyxJQUFJLG1CQUFRLENBQUMsUUFBUSxFQUFFLElBQUksRUFBRSxNQUFNLENBQUMsQ0FBQztRQUM5QyxDQUFDOzs7T0FBQTtJQUNTLHlCQUFPLEdBQWpCLFVBQWtCLEVBQVUsRUFBRSxLQUFnQjtRQUM1QyxJQUFJLENBQUMsR0FBRyxDQUFDLENBQUM7UUFDVixPQUFNLENBQUMsR0FBRyxJQUFJLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxFQUFFLENBQUM7WUFDdkIsSUFBTSxDQUFDLEdBQUcsRUFBRSxHQUFHLENBQUMsR0FBRyxJQUFJLENBQUMsUUFBUSxFQUFFLEdBQUcsSUFBSSxDQUFDLElBQUksRUFBRSxDQUFDO1lBQ2pELEVBQUUsQ0FBQyxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUM7Z0JBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxDQUFDLENBQUMsQ0FBQztZQUFDLENBQUM7WUFDN0IsQ0FBQyxFQUFFLENBQUM7UUFDTixDQUFDO0lBQ0gsQ0FBQztJQUNTLHlCQUFPLEdBQWpCLGNBQThCLE1BQU0sQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLE9BQU8sRUFBRSxDQUFDLENBQUMsQ0FBQztJQUNuRCxzQkFBSSxHQUFkLGNBQTJCLE1BQU0sQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLElBQUksRUFBRSxDQUFDLENBQUMsQ0FBQztJQUM3QywwQkFBUSxHQUFsQixjQUErQixNQUFNLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxRQUFRLEVBQUUsQ0FBQyxDQUFDLENBQUM7SUFDckQsc0JBQUksR0FBZCxVQUFlLEVBQVUsSUFBSSxNQUFNLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxJQUFJLENBQUMsRUFBRSxDQUFDLENBQUMsQ0FBQyxDQUFDO0lBQzNELHNCQUFjLDBCQUFLO2FBQW5CLGNBQWlDLE1BQU0sQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUM7OztPQUFBO0lBQzlELGNBQUM7QUFBRCxDQUFDLEFBdkJELElBdUJDOztBQUdELGtCQUFlLE9BQU8sQ0FBQyJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiU2Nhbm5lci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIlNjYW5uZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUFBLHNDQUF5RDtBQUN6RCwwQ0FBOEM7QUFHOUM7SUFJRSxZQUFZLE1BQWUsRUFBRSxRQUFtQjtRQUZ0QyxXQUFNLEdBQWEsRUFBRSxDQUFDO1FBQ3RCLFdBQU0sR0FBWSxFQUFFLENBQUM7UUFFN0IsRUFBRSxDQUFDLENBQUMsTUFBTSxDQUFDLENBQUMsQ0FBQztZQUFDLElBQUksQ0FBQyxNQUFNLEdBQUcsSUFBSSx3QkFBZSxDQUFDLE1BQU0sQ0FBQyxDQUFDO1FBQUMsQ0FBQztJQUM1RCxDQUFDO0lBRVMsT0FBTyxDQUFDLEVBQVUsRUFBRSxLQUFnQjtRQUM1QyxJQUFJLENBQUMsR0FBRyxDQUFDLENBQUM7UUFDVixPQUFNLENBQUMsR0FBRyxJQUFJLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxFQUFFLENBQUM7WUFDdkIsTUFBTSxDQUFDLEdBQUcsRUFBRSxHQUFHLENBQUMsR0FBRyxJQUFJLENBQUMsUUFBUSxFQUFFLEdBQUcsSUFBSSxDQUFDLElBQUksRUFBRSxDQUFDO1lBQ2pELEVBQUUsQ0FBQyxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUM7Z0JBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxDQUFDLENBQUMsQ0FBQztZQUFDLENBQUM7WUFDN0IsQ0FBQyxFQUFFLENBQUM7UUFDTixDQUFDO0lBQ0gsQ0FBQztJQUNTLE9BQU8sS0FBYSxNQUFNLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxPQUFPLEVBQUUsQ0FBQyxDQUFDLENBQUM7SUFDbkQsSUFBSSxLQUFhLE1BQU0sQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLElBQUksRUFBRSxDQUFDLENBQUMsQ0FBQztJQUM3QyxRQUFRLEtBQWEsTUFBTSxDQUFDLElBQUksQ0FBQyxNQUFNLENBQUMsUUFBUSxFQUFFLENBQUMsQ0FBQyxDQUFDO0lBQ3JELElBQUksQ0FBQyxFQUFVLElBQUksTUFBTSxDQUFDLElBQUksQ0FBQyxNQUFNLENBQUMsSUFBSSxDQUFDLEVBQUUsQ0FBQyxDQUFDLENBQUMsQ0FBQztJQUMzRCxJQUFjLEtBQUssS0FBYyxNQUFNLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDO0lBQzVELEtBQUssQ0FBQyxNQUFjLEVBQUUsUUFBbUI7UUFDdkMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxLQUFLLENBQUMsTUFBTSxFQUFFLFFBQVEsQ0FBQyxDQUFDO1FBQ3BDLElBQUksQ0FBQyxNQUFNLEdBQUcsRUFBRSxDQUFDO1FBQ2pCLElBQUksQ0FBQyxNQUFNLEdBQUcsRUFBRSxDQUFDO0lBQ25CLENBQUM7SUFDRCxJQUFJLFFBQVE7UUFDVixJQUFJLEVBQUUsUUFBUSxFQUFFLElBQUksRUFBRSxNQUFNLEVBQUUsR0FBRyxJQUFJLENBQUMsTUFBTSxDQUFDO1FBQzdDLE1BQU0sQ0FBQyxJQUFJLGtCQUFRLENBQUMsUUFBUSxFQUFFLElBQUksRUFBRSxNQUFNLENBQUMsQ0FBQztJQUM5QyxDQUFDO0NBQ0Y7O0FBRUQsa0JBQWUsT0FBTyxDQUFDIn0=

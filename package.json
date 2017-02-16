@@ -23,7 +23,7 @@
     "mrdoc": "./bin/mrdoc"
   },
   "scripts": {
-    "test": "gulp",
+    "test": "node src/tests/index.js",
     "build": "tsc src/scanner/index.ts --watch --target es5 --sourcemap"
   },
   "engines": {
@@ -43,6 +43,7 @@
     "yargs": "^4.3.2"
   },
   "devDependencies": {
+    "@types/mocha": "^2.2.39",
     "@types/node": "^6.0.53",
     "chai": "^3.5.0",
     "eslint-config-airbnb": "^6.1.0",

@@ -1,10 +1,9 @@
 import CommentScanner from '../scanner';
-import CommentParser from './';
-import Node from './Node';
-import { Comment } from './'
+// import CommentParser from './';
+import Node, { Comment } from '../node';
 
 const scanner = new CommentScanner(`
-  * Returns an Image object that can then be painted on the screen. 
+ * Returns an Image object that can then be painted on the screen. 
  * The url argument must specify an absolute {@link URL}. The name
  * argument is a specifier that is relative to the url argument. 
  * This method always returns immediately, whether or not the 
@@ -12,18 +11,18 @@ const scanner = new CommentScanner(`
  * the screen, the data will be loaded. The graphics primitives 
  * that draw the image will incrementally paint on the screen. 
  *
- * @param  url  an absolute URL giving the base location of the image
- * @param  name the location of the image, relative to the url argument
+ * @param  [mydata?: someday]  an absolute URL giving the base location of the image
+ * @param  [name: string | number] the location of the image, relative to the url argument
  * @return      the image at the specified URL
  * @see         Image
-`);
+`.trim());
 
 const tokens = scanner.scan();
-// console.log(tokens);
+console.dir(tokens, { depth: null, colors: true });
 
-const parser = new CommentParser(tokens);
+// const parser = new CommentParser(tokens);
 
-const ast = parser.parse();
+// const ast = parser.parse();
 
 // console.log(ast);
 // function traverse(ast: any) {
@@ -60,6 +59,6 @@ const ast = parser.parse();
 
 // traverse(ast);
 
-console.dir(ast, { depth: null, colors: true });
+// console.dir(ast, { depth: null, colors: true });
 
-console.log('Done');
+// console.log('Done');

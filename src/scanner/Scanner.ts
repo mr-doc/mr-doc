@@ -1,18 +1,15 @@
-import CharacterStream from './CharacterStream';
-import Location, { Position } from './Location';
-import Token from './Token';
-import TokenStream from './TokenStream';
+import { CharacterStream, TokenStream } from '../stream';
+import Location, { Range } from '../location';
+import Token from '../token';
 
 abstract class Scanner {
-  private source: CharacterStream;
+  private stream: CharacterStream;
   protected lexeme: string[] = [];
   protected tokens: Token[] = [];
-  constructor(source: string) { this.source = new CharacterStream(source); }
-  abstract scan(): TokenStream;
-  protected get position (): Position {
-    let { position, line, column } = this.source;
-    return new Position(position, line, column);
+  constructor(source?: string, location?: Location) { 
+    if (source) { this.stream = new CharacterStream(source); }
   }
+  abstract scan(): TokenStream;
   protected consume(to: number, array?: string[]) {
     let i = 0;
     while(i < Math.abs(to)) {
@@ -21,12 +18,20 @@ abstract class Scanner {
       i++;
     }
   }
-  protected current(): string { return this.source.current(); }
-  protected next(): string { return this.source.next(); }
-  protected previous(): string { return this.source.previous(); }
-  protected peek(to: number) { return this.source.peek(to); }
-  protected get ended(): boolean { return this.source.ended; }
+  protected current(): string { return this.stream.current(); }
+  protected next(): string { return this.stream.next(); }
+  protected previous(): string { return this.stream.previous(); }
+  protected peek(to: number) { return this.stream.peek(to); }
+  protected get ended(): boolean { return this.stream.ended; }
+  reset(source: string, location?: Location) {
+    this.stream.reset(source, location);
+    this.lexeme = [];
+    this.tokens = [];
+  }
+  get location (): Location {
+    let { position, line, column } = this.stream;
+    return new Location(position, line, column);
+  }
 }
-
 
 export default Scanner;

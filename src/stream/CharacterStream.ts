@@ -1,13 +1,17 @@
 import Match from '../utils/Match';
 import Stream from './Stream';
+import Location from '../Location/';
 
 export default class CharacterStream implements Stream {
   private stream: string[] = [];
   private _position: number = 0;
   private _line: number = 1;
   private _column: number = 0;
-
-  constructor(s: String) { (this.stream = s.split('')).push('\u{0000}'); }
+  private _location: Location;
+  constructor(source: string, location?: Location) { 
+    this.source = source;
+    if (location) { this.location = location; }
+  }
   // [Symbol.iterator]() { return this.stream.values(); }
   private mark(c: string, next: boolean): string {
     if (Match.isLineTerminator(c)) {
@@ -20,7 +24,26 @@ export default class CharacterStream implements Stream {
   next(): string { return  this.mark(this.stream[this._position++], true); }
   previous(): string { return this.mark(this.stream[this._position--], false); }
   peek(to: number): string { return this.stream[this._position + to]; }
+  reset(source: string, location?: Location) {
+    this.source = source; 
+    if (location) {
+      this._position = location.position;
+      this._column = location.column;
+      this._line = location.line;
+    } else {
+      this._position = this._column = 0;
+      this._line = 1;
+    }
+  }
+  set source(source: string) { 
+    (this.stream = source.split('')).push('\u{0000}');
+  }
   get ended(): boolean { return this._position === this.stream.length; }
+  set location(location: Location) {
+    this._position = location.position;
+    this._line = location.line;
+    this._column = location.column;
+  }
   get position() { return this._position; }
   get line() { return this._line; }
   get column() { return this._column; }

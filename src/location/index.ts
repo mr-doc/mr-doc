@@ -1,4 +1,4 @@
-export class Position {
+export default class Location {
   readonly position: number;
   readonly line: number;
   readonly column: number;
@@ -9,10 +9,10 @@ export class Position {
   }
 }
 
-export default class Location {
-  readonly start: Position
-  readonly end: Position
-  constructor(start: Position, end: Position) {
+export class Range {
+  readonly start: Location
+  readonly end: Location
+  constructor(start: Location, end: Location) {
     this.start = start;
     this.end = end;
   }
