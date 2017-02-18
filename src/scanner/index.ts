@@ -65,13 +65,13 @@ export default class CommentScanner extends Scanner {
       return new Token(this.lexeme.join(''), TokenType.Identifier, new Range(start, end));
     }
 
-    const scanSpecial = () => {
+    const scanAny = () => {
       const start = this.location;
       while (!isEnd(this.current()) && !'&|,)-'.includes(this.current())) {
         this.lexeme.push(this.next());
       }
       const end = this.location;
-      return new Token(this.lexeme.join(''), TokenType.SpecialWord, new Range(start, end));
+      return new Token(this.lexeme.join(''), TokenType.Any, new Range(start, end));
     }
 
     const scanInitializer = () => {
@@ -91,7 +91,7 @@ export default class CommentScanner extends Scanner {
       previous.type === TokenType.Arrow ||
       previous.type === TokenType.Pipe ||
       previous.type === TokenType.Ampersand
-    ) { return scanSpecial(); }
+    ) { return scanAny(); }
 
     if (previous.type === TokenType.Equal) { return scanInitializer(); }
 
@@ -141,7 +141,6 @@ export default class CommentScanner extends Scanner {
     return new Token(this.lexeme.join(''), type, new Range(start, end));
   }
   private scanEqualOrArrow(): Token {
-    // let ch = this.next();
     const start = this.location;
     const lexeme = this.peek(1) === '>' ? this.next() + this.next() : this.next();
     const end = this.location;

@@ -1,6 +1,7 @@
 const enum TokenType {
   None = 0,
   Ampersand,
+  Any,
   Arrow,
   Colon,
   Comma,
@@ -20,7 +21,6 @@ const enum TokenType {
   // RightBrace,
   // RightBracket,
   RightParen,
-  SpecialWord,
   Tag
 }
 
@@ -31,14 +31,10 @@ export function getTokenType(ch: string): TokenType {
     ':': TokenType.Colon,
     ',': TokenType.Comma,
     '=': TokenType.Equal,
-    // '{': TokenType.LeftBrace,
-    // '[': TokenType.LeftBracket,
     '(': TokenType.LeftParen,
     '-': TokenType.Minus,
     '|': TokenType.Pipe,
     '?': TokenType.QuestionMark,
-    // '}': TokenType.RightBrace,
-    // ']': TokenType.RightBracket,
     ')': TokenType.RightParen,
     '@': TokenType.Tag
   })[ch];
@@ -55,19 +51,14 @@ export function getTokenName(type: TokenType): string {
     [TokenType.Equal]: 'Equal',
     [TokenType.Identifier]: 'Identifier',
     [TokenType.Initializer]: 'Initializer',
-    // LeftBrace,
-    // LeftBracket,
     [TokenType.LeftParen]: 'LeftParen',
-    // [TokenType.LineTerminator]: 'LineTerminator',
     [TokenType.Markdown]: 'Markdown',
     [TokenType.Minus]: 'Minus',
     [TokenType.NullTerminator]: 'NullTerminator',
     [TokenType.Pipe]: 'Pipe',
     [TokenType.QuestionMark]: 'QuestionMark',
-    // RightBrace,
-    // RightBracket,
     [TokenType.RightParen]: 'RightParen',
-    [TokenType.SpecialWord]: 'SpecialWord',
+    [TokenType.Any]: 'Any',
     [TokenType.Tag]: 'Tag'
   })[type];
 }
@@ -79,23 +70,12 @@ function getTokenCharacter(type: TokenType): string {
     [TokenType.Arrow]: '=>',
     [TokenType.Colon]: ':',
     [TokenType.Comma]: ',',
-    // [TokenType.Description]: 'Description',
     [TokenType.Equal]: '=',
-    // [TokenType.Identifier]: 'Identifier',
-    // [TokenType.Initializer]: 'Initializer',
-    // LeftBrace,
-    // LeftBracket,
     [TokenType.LeftParen]: '(',
-    // [TokenType.LineTerminator]: 'LineTerminator',
-    // [TokenType.Markdown]: 'Markdown',
     [TokenType.Minus]: '-',
-    // [TokenType.NullTerminator]: 'NullTerminator',
     [TokenType.Pipe]: '|',
     [TokenType.QuestionMark]: '?',
-    // RightBrace,
-    // RightBracket,
     [TokenType.RightParen]: ')',
-    // [TokenType.SpecialWord]: 'SpecialWord',
     [TokenType.Tag]: '@'
   })[type];
 }

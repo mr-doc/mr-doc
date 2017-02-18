@@ -76,16 +76,16 @@ describe('CommentScanner', () => {
       ['=', TokenType.Equal],
       ['init', TokenType.Initializer]
     ]));
-    it('should scan @tag id = () => special', () => test('@tag id = () => special', [
+    it('should scan @tag id = () => any', () => test('@tag id = () => any', [
       ['@tag', TokenType.Tag],
       ['id', TokenType.Identifier],
       ['=', TokenType.Equal],
       ['(', TokenType.LeftParen],
       [')', TokenType.RightParen],
       ['=>', TokenType.Arrow],
-      ['special', TokenType.SpecialWord]
+      ['any', TokenType.Any]
     ]));
-    it('should scan @tag id = (id) => special', () => test('@tag id = (id) => special', [
+    it('should scan @tag id = (id) => any', () => test('@tag id = (id) => any', [
       ['@tag', TokenType.Tag],
       ['id', TokenType.Identifier],
       ['=', TokenType.Equal],
@@ -93,9 +93,9 @@ describe('CommentScanner', () => {
       ['id', TokenType.Identifier],
       [')', TokenType.RightParen],
       ['=>', TokenType.Arrow],
-      ['special', TokenType.SpecialWord]
+      ['any', TokenType.Any]
     ]));
-    it('should scan @tag id = (id, id) => special', () => test('@tag id = (id, id) => special', [
+    it('should scan @tag id = (id, id) => any', () => test('@tag id = (id, id) => any', [
       ['@tag', TokenType.Tag],
       ['id', TokenType.Identifier],
       ['=', TokenType.Equal],
@@ -105,47 +105,47 @@ describe('CommentScanner', () => {
       ['id', TokenType.Identifier],
       [')', TokenType.RightParen],
       ['=>', TokenType.Arrow],
-      ['special', TokenType.SpecialWord]
+      ['any', TokenType.Any]
     ]));
 
-    it('should scan @tag id = (id: special, id) => special', () =>
-      test('@tag id = (id: special, id) => special', [
+    it('should scan @tag id = (id: any, id) => any', () =>
+      test('@tag id = (id: any, id) => any', [
         ['@tag', TokenType.Tag],
         ['id', TokenType.Identifier],
         ['=', TokenType.Equal],
         ['(', TokenType.LeftParen],
         ['id', TokenType.Identifier],
         [':', TokenType.Colon],
-        ['special', TokenType.SpecialWord],
+        ['any', TokenType.Any],
         [',', TokenType.Comma],
         ['id', TokenType.Identifier],
         [')', TokenType.RightParen],
         ['=>', TokenType.Arrow],
-        ['special', TokenType.SpecialWord]
+        ['any', TokenType.Any]
       ]));
 
-    it('should scan @tag id = (id: special | special, id) => special & special', () =>
-      test('@tag id = (id: special | special, id) => special & special', [
+    it('should scan @tag id = (id: any | any, id) => any & any', () =>
+      test('@tag id = (id: any | any, id) => any & any', [
         ['@tag', TokenType.Tag],
         ['id', TokenType.Identifier],
         ['=', TokenType.Equal],
         ['(', TokenType.LeftParen],
         ['id', TokenType.Identifier],
         [':', TokenType.Colon],
-        ['special', TokenType.SpecialWord],
+        ['any', TokenType.Any],
         ['|', TokenType.Pipe],
-        ['special', TokenType.SpecialWord],
+        ['any', TokenType.Any],
         [',', TokenType.Comma],
         ['id', TokenType.Identifier],
         [')', TokenType.RightParen],
         ['=>', TokenType.Arrow],
-        ['special', TokenType.SpecialWord],
+        ['any', TokenType.Any],
         ['&', TokenType.Ampersand],
-        ['special', TokenType.SpecialWord],
+        ['any', TokenType.Any],
       ]));
 
-    it('should scan @tag id = (id?: special, id) => special | special', () =>
-      test('@tag id = (id?: special, id) => special | special', [
+    it('should scan @tag id = (id?: any, id) => any | any', () =>
+      test('@tag id = (id?: any, id) => any | any', [
         ['@tag', TokenType.Tag],
         ['id', TokenType.Identifier],
         ['=', TokenType.Equal],
@@ -153,18 +153,18 @@ describe('CommentScanner', () => {
         ['id', TokenType.Identifier],
         ['?', TokenType.QuestionMark],
         [':', TokenType.Colon],
-        ['special', TokenType.SpecialWord],
+        ['any', TokenType.Any],
         [',', TokenType.Comma],
         ['id', TokenType.Identifier],
         [')', TokenType.RightParen],
         ['=>', TokenType.Arrow],
-        ['special', TokenType.SpecialWord],
+        ['any', TokenType.Any],
         ['|', TokenType.Pipe],
-        ['special', TokenType.SpecialWord]
+        ['any', TokenType.Any]
       ]));
 
-    it('should scan @tag id = (id?: special, id = 1) => special | special', () =>
-      test('@tag id = (id?: special, id = 1) => special | special', [
+    it('should scan @tag id = (id?: any, id = 1) => any | any', () =>
+      test('@tag id = (id?: any, id = 1) => any | any', [
         ['@tag', TokenType.Tag],
         ['id', TokenType.Identifier],
         ['=', TokenType.Equal],
@@ -172,19 +172,19 @@ describe('CommentScanner', () => {
         ['id', TokenType.Identifier],
         ['?', TokenType.QuestionMark],
         [':', TokenType.Colon],
-        ['special', TokenType.SpecialWord],
+        ['any', TokenType.Any],
         [',', TokenType.Comma],
         ['id', TokenType.Identifier],
         ['=', TokenType.Equal],
         ['1', TokenType.Initializer],
         [')', TokenType.RightParen],
         ['=>', TokenType.Arrow],
-        ['special', TokenType.SpecialWord],
+        ['any', TokenType.Any],
         ['|', TokenType.Pipe],
-        ['special', TokenType.SpecialWord]
+        ['any', TokenType.Any]
       ]));
-    it('should scan @tag id = (id?: special = init, id = init, id = init) => special', () =>
-      test('@tag id = (id?: special = init, id = init, id = init) => special', [
+    it('should scan @tag id = (id?: any = init, id = init, id = init) => any', () =>
+      test('@tag id = (id?: any = init, id = init, id = init) => any', [
         ['@tag', TokenType.Tag],
         ['id', TokenType.Identifier],
         ['=', TokenType.Equal],
@@ -192,7 +192,7 @@ describe('CommentScanner', () => {
         ['id', TokenType.Identifier],
         ['?', TokenType.QuestionMark],
         [':', TokenType.Colon],
-        ['special', TokenType.SpecialWord],
+        ['any', TokenType.Any],
         ['=', TokenType.Equal],
         ['init', TokenType.Initializer],
         [',', TokenType.Comma],
@@ -205,10 +205,10 @@ describe('CommentScanner', () => {
         ['init', TokenType.Initializer],
         [')', TokenType.RightParen],
         ['=>', TokenType.Arrow],
-        ['special', TokenType.SpecialWord]
+        ['any', TokenType.Any]
       ]));
-    it('should scan @tag id: (id?: special = init, id = init, id = init) => special', () =>
-      test('@tag id: (id?: special = init, id = init, id = init) => special', [
+    it('should scan @tag id: (id?: any = init, id = init, id = init) => any', () =>
+      test('@tag id: (id?: any = init, id = init, id = init) => any', [
         ['@tag', TokenType.Tag],
         ['id', TokenType.Identifier],
         [':', TokenType.Colon],
@@ -216,7 +216,7 @@ describe('CommentScanner', () => {
         ['id', TokenType.Identifier],
         ['?', TokenType.QuestionMark],
         [':', TokenType.Colon],
-        ['special', TokenType.SpecialWord],
+        ['any', TokenType.Any],
         ['=', TokenType.Equal],
         ['init', TokenType.Initializer],
         [',', TokenType.Comma],
@@ -229,34 +229,34 @@ describe('CommentScanner', () => {
         ['init', TokenType.Initializer],
         [')', TokenType.RightParen],
         ['=>', TokenType.Arrow],
-        ['special', TokenType.SpecialWord]
+        ['any', TokenType.Any]
       ]));
 
     /* Scan tags with types (special words) */
-    it('should scan @tag id: special', () => test('@tag id: special', [
+    it('should scan @tag id: any', () => test('@tag id: any', [
       ['@tag', TokenType.Tag],
       ['id', TokenType.Identifier],
       [':', TokenType.Colon],
-      ['special', TokenType.SpecialWord]
+      ['any', TokenType.Any]
     ]));
-    it('should scan @tag id?: special', () => test('@tag id?: special', [
+    it('should scan @tag id?: any', () => test('@tag id?: any', [
       ['@tag', TokenType.Tag],
       ['id', TokenType.Identifier],
       ['?', TokenType.QuestionMark],
       [':', TokenType.Colon],
-      ['special', TokenType.SpecialWord]
+      ['any', TokenType.Any]
     ]));
-    it('should scan @tag id: special | special', () => test('@tag id: special', [
+    it('should scan @tag id: any | any', () => test('@tag id: any', [
       ['@tag', TokenType.Tag],
       ['id', TokenType.Identifier],
       [':', TokenType.Colon],
-      ['special', TokenType.SpecialWord]
+      ['any', TokenType.Any]
     ]));
-    it('should scan @tag id: special & special', () => test('@tag id: special', [
+    it('should scan @tag id: any & any', () => test('@tag id: any', [
       ['@tag', TokenType.Tag],
       ['id', TokenType.Identifier],
       [':', TokenType.Colon],
-      ['special', TokenType.SpecialWord]
+      ['any', TokenType.Any]
     ]));
   });
 
@@ -272,13 +272,13 @@ describe('CommentScanner', () => {
       ['@param', TokenType.Tag],
       ['x', TokenType.Identifier],
       [':', TokenType.Colon],
-      ['number', TokenType.SpecialWord],
+      ['number', TokenType.Any],
       ['-', TokenType.Minus],
       ['The x value.', TokenType.Description],
       ['@param', TokenType.Tag],
       ['y', TokenType.Identifier],
       [':', TokenType.Colon],
-      ['number', TokenType.SpecialWord],
+      ['number', TokenType.Any],
       ['-', TokenType.Minus],
       ['The y value.', TokenType.Description]
     ]));
@@ -293,12 +293,12 @@ describe('CommentScanner', () => {
       ['@param', TokenType.Tag],
       ['str', TokenType.Identifier],
       [':', TokenType.Colon],
-      ['string', TokenType.SpecialWord],
+      ['string', TokenType.Any],
       ['-', TokenType.Minus],
       ['The string containing two comma-separated numbers.', TokenType.Description],
       ['@return', TokenType.Tag],
       [':', TokenType.Colon],
-      ['Point', TokenType.SpecialWord],
+      ['Point', TokenType.Any],
       ['-', TokenType.Minus],
       ['A Point object.', TokenType.Description]
     ]));
@@ -322,19 +322,19 @@ describe('CommentScanner', () => {
       ['@param', TokenType.Tag],
       ['x', TokenType.Identifier],
       [':', TokenType.Colon],
-      ['number', TokenType.SpecialWord],
+      ['number', TokenType.Any],
       ['-', TokenType.Minus],
       ['The x value.', TokenType.Description],
       ['@param', TokenType.Tag],
       ['y', TokenType.Identifier],
       [':', TokenType.Colon],
-      ['number', TokenType.SpecialWord],
+      ['number', TokenType.Any],
       ['-', TokenType.Minus],
       ['The y value.', TokenType.Description],
       ['@param', TokenType.Tag],
       ['width', TokenType.Identifier],
       [':', TokenType.Colon],
-      ['number', TokenType.SpecialWord],
+      ['number', TokenType.Any],
       ['-', TokenType.Minus],
       ['The width of the dot, in pixels.', TokenType.Description],
       [`---
