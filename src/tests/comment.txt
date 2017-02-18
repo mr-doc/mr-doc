@@ -1,2 +1,0 @@
-@tag id : (id: special & special, id: special) => special & special
-description

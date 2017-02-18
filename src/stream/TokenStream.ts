@@ -9,7 +9,7 @@ export default class TokenStream implements Stream {
   next(): Token { return this._stream[this._position++]; }
   previous(): Token { return this._stream[this._position--]; }
   peek(to: number): Token { return this._stream[this._position + to]; }
-  reset(tokens?: Token[]) {
+  source(tokens?: Token[]) {
     this._position = 0;
     this._stream = tokens ? tokens : this._stream;
   }

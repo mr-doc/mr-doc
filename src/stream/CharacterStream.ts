@@ -8,9 +8,8 @@ export default class CharacterStream implements Stream {
   private _line: number = 1;
   private _column: number = 0;
   private _location: Location;
-  constructor(source: string, location?: Location) { 
-    this.source = source;
-    if (location) { this.location = location; }
+  constructor(source?: string, location?: Location) { 
+    this.source(source, location);
   }
   // [Symbol.iterator]() { return this.stream.values(); }
   private mark(c: string, next: boolean): string {
@@ -24,8 +23,8 @@ export default class CharacterStream implements Stream {
   next(): string { return  this.mark(this.stream[this._position++], true); }
   previous(): string { return this.mark(this.stream[this._position--], false); }
   peek(to: number): string { return this.stream[this._position + to]; }
-  reset(source: string, location?: Location) {
-    this.source = source; 
+  source(source: string, location?: Location) {
+    (this.stream = source ? source.split('') : this.stream).push('\u{0000}'); 
     if (location) {
       this._position = location.position;
       this._column = location.column;
@@ -34,9 +33,6 @@ export default class CharacterStream implements Stream {
       this._position = this._column = 0;
       this._line = 1;
     }
-  }
-  set source(source: string) { 
-    (this.stream = source.split('')).push('\u{0000}');
   }
   get ended(): boolean { return this._position === this.stream.length; }
   set location(location: Location) {

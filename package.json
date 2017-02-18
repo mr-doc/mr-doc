@@ -23,8 +23,8 @@
     "mrdoc": "./bin/mrdoc"
   },
   "scripts": {
-    "test": "node src/tests/index.js",
-    "build": "tsc src/scanner/index.ts --watch --target es5 --sourcemap"
+    "test": "gulp",
+    "build": "tsc"
   },
   "engines": {
     "node": ">= 5.0.0"
@@ -43,6 +43,7 @@
     "yargs": "^4.3.2"
   },
   "devDependencies": {
+    "@types/chai": "^3.4.34",
     "@types/mocha": "^2.2.39",
     "@types/node": "^6.0.53",
     "chai": "^3.5.0",

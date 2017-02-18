@@ -3,7 +3,7 @@ import Location, { Range } from '../location';
 import Token from '../token';
 
 abstract class Scanner {
-  private stream: CharacterStream;
+  private stream = new CharacterStream();
   protected lexeme: string[] = [];
   protected tokens: Token[] = [];
   constructor(source?: string, location?: Location) { 
@@ -23,8 +23,8 @@ abstract class Scanner {
   protected previous(): string { return this.stream.previous(); }
   protected peek(to: number) { return this.stream.peek(to); }
   protected get ended(): boolean { return this.stream.ended; }
-  reset(source: string, location?: Location) {
-    this.stream.reset(source, location);
+  source(source?: string, location?: Location) {
+    this.stream.source(source, location);
     this.lexeme = [];
     this.tokens = [];
   }

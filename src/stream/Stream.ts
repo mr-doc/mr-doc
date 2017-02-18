@@ -3,7 +3,7 @@ interface Stream {
   next();
   previous();
   peek(to: number);
-  reset(source: any);
+  source?(source: any);
   position: number;
   ended: boolean;
 }

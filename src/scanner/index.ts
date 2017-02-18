@@ -1,6 +1,6 @@
 "use strict";
 import Scanner from './Scanner';
-import Token, { TokenType } from '../token';
+import Token, { TokenType, getTokenType } from '../token';
 import { TokenStream } from '../stream/';
 import Location, { Range } from '../location';
 import Match from '../utils/Match';
@@ -15,37 +15,31 @@ export default class CommentScanner extends Scanner {
     while (!this.ended) {
       this.lexeme = [];
       const ch = this.current();
-      if (Match.isLetterOrDigit(ch)) {
+      if (Match.isLetterOrDigit(ch) || '\'\"[]'.includes(ch)) {
         this.tokens.push(this.scanString());
-      } /*else if (Match.isLineTerminator(ch)) {
-        this.tokens.push(this.scanLineTerminator());
-      } */else if (Match.isNullTerminator(ch)) {
+      } else if (Match.isNullTerminator(ch)) {
         this.tokens.push(this.scanNullTerminator());
       } else if (ch === '@') {
         this.tokens.push(this.scanTag());
       } else if (ch === '-') {
-        this.tokens.push(this.scanMinus());
-      } else if (ch === ':') {
-        this.tokens.push(this.scanColon());
-      } else if (ch === '?') {
-        this.tokens.push(this.scanQuestionMark());
+        this.tokens.push(this.scanMinusOrMarkdown());
+      } else if (':?|&,'.includes(ch)) {
+        this.tokens.push(this.scanSimpleChar());
       } else if (ch === '=') {
-        this.tokens.push(this.peek(1) === '>' ? this.scanArrow() : this.scanEqual());
-      } else if (ch === '|') {
-        this.tokens.push(this.scanPipe());
-      } else if (ch === '&') {
-        this.tokens.push(this.scanAmpersand());
-      } else if (ch === ',') {
-        this.tokens.push(this.scanComma());
+        this.tokens.push(this.scanEqualOrArrow());
       } else if ('()'.includes(ch)) {
         this.tokens.push(this.scanParenthesis());
-      } /*else if ('{}'.includes(ch)) {
-        this.tokens.push(this.scanBrace());
-      } else if ('[]'.includes(ch)) {
-        this.tokens.push(this.scanBracket());
-      } */else { this.next(); }
+      } else { this.next(); }
     }
     return new TokenStream(this.tokens);
+  }
+  private scanSimpleChar(): Token {
+    const ch = this.current();
+    const start = this.location;
+    const lexeme = this.next();
+    const end = this.location;
+    const type = getTokenType(ch);
+    return new Token(lexeme, type, new Range(start, end));
   }
   private scanString(): Token {
     const start = this.location;
@@ -61,14 +55,10 @@ export default class CommentScanner extends Scanner {
     // @tag id : (id: special = init, id = init, id = init) => special
     // @tag id : (id: special | special) => special | special
     // @tag id : (id: special & special) => special & special
-    const isEnd = () =>  {
-      return Match.isLineTerminator(this.current()) || 
-      Match.isSpace(this.current()) ||
-      Match.isNullTerminator(this.current());
-    }
+    const isEnd = (ch: string) => Match.isSpace(ch) || Match.isNullTerminator(ch);
     const scanIdentifer = () => {
       const start = this.location;
-      while (!':)-'.includes(this.current()) && !isEnd()) {
+      while (!isEnd(this.current()) && !'?:)-,'.includes(this.current())) {
         this.lexeme.push(this.next());
       }
       const end = this.location;
@@ -77,7 +67,7 @@ export default class CommentScanner extends Scanner {
 
     const scanSpecial = () => {
       const start = this.location;
-      while (!'&|,)-'.includes(this.current()) && !isEnd()) {
+      while (!isEnd(this.current()) && !'&|,)-'.includes(this.current())) {
         this.lexeme.push(this.next());
       }
       const end = this.location;
@@ -86,16 +76,16 @@ export default class CommentScanner extends Scanner {
 
     const scanInitializer = () => {
       const start = this.location;
-      while (!',)-'.includes(this.current()) && !isEnd()) {
+      while (!isEnd(this.current()) && !',)-'.includes(this.current())) {
         this.lexeme.push(this.next());
       }
       const end = this.location;
       return new Token(this.lexeme.join(''), TokenType.Initializer, new Range(start, end));
     }
 
-    if (previous.type === TokenType.Tag || 
-    previous.type === TokenType.LeftParen ||
-    previous.type === TokenType.Comma) { return scanIdentifer(); }
+    if (previous.type === TokenType.Tag ||
+      previous.type === TokenType.LeftParen ||
+      previous.type === TokenType.Comma) { return scanIdentifer(); }
 
     if (previous.type === TokenType.Colon ||
       previous.type === TokenType.Arrow ||
@@ -113,12 +103,6 @@ export default class CommentScanner extends Scanner {
     return new Token(this.lexeme.join(''), TokenType.Description, new Range(start, end));
 
   }
-  private scanLineTerminator(): Token {
-    const start = this.location;
-    this.lexeme.push(this.next())
-    const end = this.location;
-    return new Token(this.lexeme.join(''), TokenType.LineTerminator, new Range(start, end));
-  }
   private scanNullTerminator(): Token {
     const start = this.location;
     this.lexeme.push(this.next());
@@ -127,13 +111,14 @@ export default class CommentScanner extends Scanner {
   }
   private scanTag(): Token {
     const start = this.location;
-    while (!Match.isSpace(this.current()) && this.current() !== ':') {
+    const isEnd = (ch: string) => Match.isSpace(ch) || Match.isNullTerminator(ch);
+    while (!isEnd(this.current()) && this.current() !== ':') {
       this.lexeme.push(this.next());
     }
     const end = this.location;
     return new Token(this.lexeme.join(''), TokenType.Tag, new Range(start, end));
   }
-  private scanMinus(): Token {
+  private scanMinusOrMarkdown(): Token {
     const start = this.location;
     const isMarkdownTag = (): boolean => this.current() + this.peek(1) + this.peek(2) === '---';
     const isCommentStar = (col: number): boolean => (col === 0 || col === 1) && this.current() === '*';
@@ -155,67 +140,18 @@ export default class CommentScanner extends Scanner {
     const end = this.location;
     return new Token(this.lexeme.join(''), type, new Range(start, end));
   }
-  private scanColon(): Token {
+  private scanEqualOrArrow(): Token {
+    // let ch = this.next();
     const start = this.location;
-    const lexeme = this.next();
+    const lexeme = this.peek(1) === '>' ? this.next() + this.next() : this.next();
     const end = this.location;
-    return new Token(lexeme, TokenType.Colon, new Range(start, end));
-  }
-  private scanQuestionMark(): Token {
-    const start = this.location;
-    const lexeme = this.next();
-    const end = this.location;
-    return new Token(lexeme, TokenType.QuestionMark, new Range(start, end));
-  }
-  private scanArrow(): Token {
-    const start = this.location;
-    const lexeme = this.next() + this.next();
-    const end = this.location;
-    return new Token(lexeme, TokenType.Arrow, new Range(start, end));
-  }
-  private scanEqual(): Token {
-    const start = this.location;
-    const lexeme = this.next();
-    const end = this.location;
-    return new Token(lexeme, TokenType.Equal, new Range(start, end));
-  }
-  private scanPipe(): Token {
-    const start = this.location;
-    const lexeme = this.next();
-    const end = this.location;
-    return new Token(lexeme, TokenType.Pipe, new Range(start, end));
-  }
-  private scanAmpersand(): Token {
-    const start = this.location;
-    const lexeme = this.next();
-    const end = this.location;
-    return new Token(lexeme, TokenType.Ampersand, new Range(start, end));
-  }
-  private scanComma(): Token {
-    const start = this.location;
-    const lexeme = this.next();
-    const end = this.location;
-    return new Token(lexeme, TokenType.Comma, new Range(start, end));
+    return new Token(lexeme, getTokenType(lexeme), new Range(start, end));
   }
   private scanParenthesis(): Token {
     const start = this.location;
     const lexeme = this.next();
     const end = this.location;
     const type = lexeme === '(' ? TokenType.LeftParen : TokenType.RightParen;
-    return new Token(lexeme, type, new Range(start, end));
-  }
-  private scanBrace(): Token {
-    const start = this.location;
-    const lexeme = this.next();
-    const end = this.location;
-    const type = lexeme === '{' ? TokenType.LeftBrace : TokenType.RightBrace;
-    return new Token(lexeme, type, new Range(start, end));
-  }
-  private scanBracket(): Token {
-    const start = this.location;
-    const lexeme = this.next();
-    const end = this.location;
-    const type = lexeme === '[' ? TokenType.LeftBracket : TokenType.RightBracket;
     return new Token(lexeme, type, new Range(start, end));
   }
 
