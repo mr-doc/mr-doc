@@ -6,6 +6,7 @@ import Location, { Range } from '../location';
 import Match from '../utils/Match';
 import * as FS from 'fs';
 import * as Path from 'path';
+import * as _ from 'lodash';
 
 export default class CommentScanner extends Scanner {
   constructor(source?: string, location?: Location) {
@@ -15,14 +16,14 @@ export default class CommentScanner extends Scanner {
     while (!this.ended) {
       this.lexeme = [];
       const ch = this.current();
-      if (Match.isLetterOrDigit(ch) || '\'\"[]'.includes(ch)) {
+      if (Match.isLetterOrDigit(ch) || '\'\"[].'.includes(ch)) {
         this.tokens.push(this.scanString());
       } else if (Match.isNullTerminator(ch)) {
         this.tokens.push(this.scanNullTerminator());
       } else if (ch === '@') {
         this.tokens.push(this.scanTag());
       } else if (ch === '-') {
-        this.tokens.push(this.scanMinusOrMarkdown());
+        this.tokens.push(this.scanMinus());
       } else if (':?|&,'.includes(ch)) {
         this.tokens.push(this.scanSimpleChar());
       } else if (ch === '=') {
@@ -43,65 +44,43 @@ export default class CommentScanner extends Scanner {
   }
   private scanString(): Token {
     const start = this.location;
-    const previous = this.tokens.length > 0 ? this.tokens[this.tokens.length - 1] : { type: TokenType.None };
-    // The possible types of tagged comments:
-    // @tag
-    // @tag id
-    // @tag id = init
-    // @tag id : special = init
-    // @tag id : () => special
-    // @tag id : (id: special) => special
-    // @tag id : (id: special, id, id) => special
-    // @tag id : (id: special = init, id = init, id = init) => special
-    // @tag id : (id: special | special) => special | special
-    // @tag id : (id: special & special) => special & special
+    const previous = this.tokens.length > 0 ?
+      this.tokens[this.tokens.length - 1] :
+      new Token('', TokenType.None, new Range(start, null));
+
     const isEnd = (ch: string) => Match.isSpace(ch) || Match.isNullTerminator(ch);
-    const scanIdentifer = () => {
-      const start = this.location;
-      while (!isEnd(this.current()) && !'?:)-,'.includes(this.current())) {
-        this.lexeme.push(this.next());
+    const filter = (type: TokenType, ch: string): boolean => ({
+      [TokenType.Any]: !isEnd(ch) && !'&|,)-'.includes(ch),
+      [TokenType.Identifier]: !isEnd(ch) && !'?:)-,'.includes(ch),
+      [TokenType.Initializer]: !isEnd(ch) && !',)-'.includes(ch),
+      [TokenType.Description]: !Match.isLineTerminator(ch) && !Match.isNullTerminator(ch)
+    }[type]);
+    const consume = (type: TokenType): Token => {
+      while (filter(type, this.current())) { this.lexeme.push(this.next()); }
+      const { Any, Ampersand, Pipe, Identifier, LeftParen } = TokenType;
+      if (type === Identifier) {
+        // Skip whitespace
+        while (Match.isWhiteSpace(this.current())) { this.next(); }
+        // ... =>  (... | any) || (... & any )
+        if (previous && previous.type === LeftParen) {
+          if ('&|'.includes(this.current())) { type = Any; }
+        } else if (previous && _.includes([Pipe, Ampersand], previous.type)) {
+          type = Any;
+        }
       }
+
       const end = this.location;
-      return new Token(this.lexeme.join(''), TokenType.Identifier, new Range(start, end));
+      return new Token(this.lexeme.join(''), type, new Range(start, end));
     }
+    const { Tag, LeftParen, Comma } = TokenType;
+    if (_.includes([Tag, LeftParen, Comma], previous.type)) { return consume(TokenType.Identifier); }
 
-    const scanAny = () => {
-      const start = this.location;
-      while (!isEnd(this.current()) && !'&|,)-'.includes(this.current())) {
-        this.lexeme.push(this.next());
-      }
-      const end = this.location;
-      return new Token(this.lexeme.join(''), TokenType.Any, new Range(start, end));
-    }
+    const { Colon, Arrow, Pipe, Ampersand } = TokenType;
+    if (_.includes([Colon, Arrow, Pipe, Ampersand], previous.type)) { return consume(TokenType.Any); }
 
-    const scanInitializer = () => {
-      const start = this.location;
-      while (!isEnd(this.current()) && !',)-'.includes(this.current())) {
-        this.lexeme.push(this.next());
-      }
-      const end = this.location;
-      return new Token(this.lexeme.join(''), TokenType.Initializer, new Range(start, end));
-    }
+    if (previous.type === TokenType.Equal) { return consume(TokenType.Initializer); }
 
-    if (previous.type === TokenType.Tag ||
-      previous.type === TokenType.LeftParen ||
-      previous.type === TokenType.Comma) { return scanIdentifer(); }
-
-    if (previous.type === TokenType.Colon ||
-      previous.type === TokenType.Arrow ||
-      previous.type === TokenType.Pipe ||
-      previous.type === TokenType.Ampersand
-    ) { return scanAny(); }
-
-    if (previous.type === TokenType.Equal) { return scanInitializer(); }
-
-    while (!Match.isLineTerminator(this.current()) && !Match.isNullTerminator(this.current())) {
-      this.lexeme.push(this.next())
-    }
-
-    const end = this.location;
-    return new Token(this.lexeme.join(''), TokenType.Description, new Range(start, end));
-
+    return consume(TokenType.Description);
   }
   private scanNullTerminator(): Token {
     const start = this.location;
@@ -118,27 +97,40 @@ export default class CommentScanner extends Scanner {
     const end = this.location;
     return new Token(this.lexeme.join(''), TokenType.Tag, new Range(start, end));
   }
-  private scanMinusOrMarkdown(): Token {
+  private scanMinus(): Token {
     const start = this.location;
-    const isMarkdownTag = (): boolean => this.current() + this.peek(1) + this.peek(2) === '---';
-    const isCommentStar = (col: number): boolean => (col === 0 || col === 1) && this.current() === '*';
-    let type: TokenType;
-    let starEnabled: boolean = this.peek(-1) === '*';
-    // Determine whether it is markdown
-    if (isMarkdownTag()) {
-      // Consume the first three lexemes
-      this.consume(3, this.lexeme);
-      // Keep consuming the lexemes until markdown ends
-      while (!isMarkdownTag()) {
-        if (isCommentStar(this.location.column) && starEnabled) { this.next(); }
-        else { this.lexeme.push(this.next()); }
-      }
-      // Consume the last three lexemes
-      if (isMarkdownTag()) { this.consume(3, this.lexeme); }
-      type = TokenType.Markdown;
-    } else { this.lexeme.push(this.next()); type = TokenType.Minus; }
+    const previous = this.tokens[this.tokens.length - 1];
+    const isInitializer = previous && previous.type === TokenType.Equal && this.current() === '-' && Match.isDigit(this.peek(1));
+    const isMarkdown = this.current() + this.peek(1) + this.peek(2) === '---';
+    let type: TokenType = TokenType.None;
+
+    if (isInitializer) {
+      this.lexeme.push(this.next());
+      while (Match.isDigit(this.current())) { this.lexeme.push(this.next()); }
+      type = TokenType.Initializer;
+    }
+    else if (isMarkdown) { type = this.scanMarkdown(); }
+    else { this.lexeme.push(this.next()); type = TokenType.Minus }
+
     const end = this.location;
     return new Token(this.lexeme.join(''), type, new Range(start, end));
+  }
+
+  private scanMarkdown(): TokenType {
+    const isMarkdownTag = (m1: string, m2: string, m3: string): boolean => m1 + m2 + m3 === '---';
+    const isCommentStar = (col: number): boolean => (col === 0 || col === 1) && this.current() === '*';
+    let starEnabled: boolean = this.peek(-1) === '*';
+
+    // Consume the first three lexemes
+    this.consume(3, this.lexeme);
+    // Keep consuming the lexemes until markdown ends
+    while (!isMarkdownTag(this.current(), this.peek(1), this.peek(2))) {
+      if (isCommentStar(this.location.column) && starEnabled) { this.next(); }
+      else { this.lexeme.push(this.next()); }
+    }
+    // Consume the last three lexemes
+    if (isMarkdownTag(this.current(), this.peek(1), this.peek(2))) { this.consume(3, this.lexeme); }
+    return TokenType.Markdown;
   }
   private scanEqualOrArrow(): Token {
     const start = this.location;

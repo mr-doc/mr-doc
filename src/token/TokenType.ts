@@ -1,4 +1,4 @@
-const enum TokenType {
+enum TokenType {
   None = 0,
   Ampersand,
   Any,

@@ -1,20 +1,35 @@
-Comment Specification
+Comment Parser Specification
 ===================
 
 ```
 comment             := single-comment (single-comment)*
-single-comment      := description | declaration (- description)* | markdown
-declaration         := @tag (single-declaration)
-                    | @tag id
-                    | @tag id: any
-                    | @tag id: any | any
-                    | @tag id: function-type
-                    | @tag (: any)
-single-declaration  := id (: type)
-                    | id (= type)
-                    | optional-declaration
+single-comment      := description
+                    | @tag ('-' description | Parameter)
+                    | markdown
 
-type                := any
-function-type:=
+Parameter           := Identifier (?)
+
+```
+
+
+```
+comment             := single-comment (single-comment)*
+single-comment      := description
+                    | @tag ('-' description | declaration)
+                    | markdown
+declaration         := id (type-declaration | initializer)
+
+type-declaration    := (':' type | '?' ':' optional-type)
+initializer         := '=' init
+
+type                := any-type (initializer)
+                    | '(' any-type (, any-type)* ')' (arrow-function)
+optional-type       := any-type
+                    | '(' any-type (, any-type)* ')' (arrow-function)
+
+any-type            := any (terminal) (union-type | intersect-type)
+union-type          := any-type '|' any-type
+intersect-type      := any-type '&' any-type
+arrow-function      := '=''>' any-type
 
 ```

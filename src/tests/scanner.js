@@ -1,13 +1,14 @@
 "use strict";
 // import * as Path from 'path';
-const chai_1 = require('chai');
-const scanner_1 = require('../scanner');
+const chai_1 = require("chai");
+const scanner_1 = require("../scanner");
+const token_1 = require("../token");
 const scanner = new scanner_1.default();
 function test(source, match) {
     scanner.source(source);
     const stream = scanner.scan().stream;
     let array = typeof match === 'number' ? [[source, match]] : match;
-    array.push(['\u{0000}', 13 /* NullTerminator */]);
+    array.push(['\u{0000}', token_1.TokenType.NullTerminator]);
     let count = 0;
     while (count < stream.length) {
         chai_1.assert.strictEqual(stream[count].lexeme, array[count][0]);
@@ -17,227 +18,295 @@ function test(source, match) {
 }
 describe('CommentScanner', () => {
     describe('Basic scan', () => {
-        it('should scan an ampersand', () => test('&', 1 /* Ampersand */));
-        it('should scan a colon', () => test(':', 4 /* Colon */));
-        it('should scan a comma', () => test(',', 5 /* Comma */));
-        it('should scan a description', () => test('description', 6 /* Description */));
-        it('should scan an equal', () => test('=', 7 /* Equal */));
-        it('should scan a left parenthesis', () => test('(', 10 /* LeftParen */));
-        it('should scan a markdown code', () => test('--- markdown ---', 11 /* Markdown */));
-        it('should scan a minus', () => test('-', 12 /* Minus */));
-        it('should scan a pipe', () => test('|', 14 /* Pipe */));
-        it('should scan a question mark', () => test('?', 15 /* QuestionMark */));
-        it('should scan a right parenthesis', () => test(')', 16 /* RightParen */));
+        it('should scan an ampersand', () => test('&', token_1.TokenType.Ampersand));
+        it('should scan a colon', () => test(':', token_1.TokenType.Colon));
+        it('should scan a comma', () => test(',', token_1.TokenType.Comma));
+        it('should scan a description', () => test('description', token_1.TokenType.Description));
+        it('should scan an equal', () => test('=', token_1.TokenType.Equal));
+        it('should scan a left parenthesis', () => test('(', token_1.TokenType.LeftParen));
+        it('should scan a markdown code', () => test('--- markdown ---', token_1.TokenType.Markdown));
+        it('should scan a minus', () => test('-', token_1.TokenType.Minus));
+        it('should scan a pipe', () => test('|', token_1.TokenType.Pipe));
+        it('should scan a question mark', () => test('?', token_1.TokenType.QuestionMark));
+        it('should scan a right parenthesis', () => test(')', token_1.TokenType.RightParen));
     });
     describe('Advanced scan', () => {
         /* Scan tags */
-        it('should scan @tag', () => test('@tag', 17 /* Tag */));
+        it('should scan @tag', () => test('@tag', token_1.TokenType.Tag));
         /* Scan tags with identifiers */
         it('should scan @tag id', () => test('@tag id', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier]
+        ]));
+        it('should scan @tag ...id', () => test('@tag id', [
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier]
         ]));
         /* Scan tags with initializers */
         it('should scan @tag id = \'init\'', () => test('@tag id = \'init\'', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['\'init\'', 9 /* Initializer */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['\'init\'', token_1.TokenType.Initializer]
         ]));
         it('should scan @tag id = "init"', () => test('@tag id = "init"', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['"init"', 9 /* Initializer */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['"init"', token_1.TokenType.Initializer]
         ]));
         it('should scan @tag id = 1', () => test('@tag id = 1', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['1', 9 /* Initializer */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['1', token_1.TokenType.Initializer]
+        ]));
+        it('should scan @tag id = -1', () => test('@tag id = -1', [
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['-1', token_1.TokenType.Initializer]
         ]));
         it('should scan @tag id = []', () => test('@tag id = []', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['[]', 9 /* Initializer */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['[]', token_1.TokenType.Initializer]
         ]));
         it('should scan @tag id = init', () => test('@tag id = init', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['init', 9 /* Initializer */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['init', token_1.TokenType.Initializer]
         ]));
         it('should scan @tag id = () => any', () => test('@tag id = () => any', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['(', 10 /* LeftParen */],
-            [')', 16 /* RightParen */],
-            ['=>', 3 /* Arrow */],
-            ['any', 2 /* Any */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['(', token_1.TokenType.LeftParen],
+            [')', token_1.TokenType.RightParen],
+            ['=>', token_1.TokenType.Arrow],
+            ['any', token_1.TokenType.Any]
         ]));
         it('should scan @tag id = (id) => any', () => test('@tag id = (id) => any', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['(', 10 /* LeftParen */],
-            ['id', 8 /* Identifier */],
-            [')', 16 /* RightParen */],
-            ['=>', 3 /* Arrow */],
-            ['any', 2 /* Any */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['(', token_1.TokenType.LeftParen],
+            ['id', token_1.TokenType.Identifier],
+            [')', token_1.TokenType.RightParen],
+            ['=>', token_1.TokenType.Arrow],
+            ['any', token_1.TokenType.Any]
         ]));
         it('should scan @tag id = (id, id) => any', () => test('@tag id = (id, id) => any', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['(', 10 /* LeftParen */],
-            ['id', 8 /* Identifier */],
-            [',', 5 /* Comma */],
-            ['id', 8 /* Identifier */],
-            [')', 16 /* RightParen */],
-            ['=>', 3 /* Arrow */],
-            ['any', 2 /* Any */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['(', token_1.TokenType.LeftParen],
+            ['id', token_1.TokenType.Identifier],
+            [',', token_1.TokenType.Comma],
+            ['id', token_1.TokenType.Identifier],
+            [')', token_1.TokenType.RightParen],
+            ['=>', token_1.TokenType.Arrow],
+            ['any', token_1.TokenType.Any]
         ]));
         it('should scan @tag id = (id: any, id) => any', () => test('@tag id = (id: any, id) => any', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['(', 10 /* LeftParen */],
-            ['id', 8 /* Identifier */],
-            [':', 4 /* Colon */],
-            ['any', 2 /* Any */],
-            [',', 5 /* Comma */],
-            ['id', 8 /* Identifier */],
-            [')', 16 /* RightParen */],
-            ['=>', 3 /* Arrow */],
-            ['any', 2 /* Any */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['(', token_1.TokenType.LeftParen],
+            ['id', token_1.TokenType.Identifier],
+            [':', token_1.TokenType.Colon],
+            ['any', token_1.TokenType.Any],
+            [',', token_1.TokenType.Comma],
+            ['id', token_1.TokenType.Identifier],
+            [')', token_1.TokenType.RightParen],
+            ['=>', token_1.TokenType.Arrow],
+            ['any', token_1.TokenType.Any]
+        ]));
+        it('should scan @tag id = (id: any, id) => (any | any) & any', () => test('@tag id = (id: any, id) => (any | any) & any', [
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['(', token_1.TokenType.LeftParen],
+            ['id', token_1.TokenType.Identifier],
+            [':', token_1.TokenType.Colon],
+            ['any', token_1.TokenType.Any],
+            [',', token_1.TokenType.Comma],
+            ['id', token_1.TokenType.Identifier],
+            [')', token_1.TokenType.RightParen],
+            ['=>', token_1.TokenType.Arrow],
+            ['(', token_1.TokenType.LeftParen],
+            ['any', token_1.TokenType.Any],
+            ['|', token_1.TokenType.Pipe],
+            ['any', token_1.TokenType.Any],
+            [')', token_1.TokenType.RightParen],
+            ['&', token_1.TokenType.Ampersand],
+            ['any', token_1.TokenType.Any]
         ]));
         it('should scan @tag id = (id: any | any, id) => any & any', () => test('@tag id = (id: any | any, id) => any & any', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['(', 10 /* LeftParen */],
-            ['id', 8 /* Identifier */],
-            [':', 4 /* Colon */],
-            ['any', 2 /* Any */],
-            ['|', 14 /* Pipe */],
-            ['any', 2 /* Any */],
-            [',', 5 /* Comma */],
-            ['id', 8 /* Identifier */],
-            [')', 16 /* RightParen */],
-            ['=>', 3 /* Arrow */],
-            ['any', 2 /* Any */],
-            ['&', 1 /* Ampersand */],
-            ['any', 2 /* Any */],
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['(', token_1.TokenType.LeftParen],
+            ['id', token_1.TokenType.Identifier],
+            [':', token_1.TokenType.Colon],
+            ['any', token_1.TokenType.Any],
+            ['|', token_1.TokenType.Pipe],
+            ['any', token_1.TokenType.Any],
+            [',', token_1.TokenType.Comma],
+            ['id', token_1.TokenType.Identifier],
+            [')', token_1.TokenType.RightParen],
+            ['=>', token_1.TokenType.Arrow],
+            ['any', token_1.TokenType.Any],
+            ['&', token_1.TokenType.Ampersand],
+            ['any', token_1.TokenType.Any],
         ]));
         it('should scan @tag id = (id?: any, id) => any | any', () => test('@tag id = (id?: any, id) => any | any', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['(', 10 /* LeftParen */],
-            ['id', 8 /* Identifier */],
-            ['?', 15 /* QuestionMark */],
-            [':', 4 /* Colon */],
-            ['any', 2 /* Any */],
-            [',', 5 /* Comma */],
-            ['id', 8 /* Identifier */],
-            [')', 16 /* RightParen */],
-            ['=>', 3 /* Arrow */],
-            ['any', 2 /* Any */],
-            ['|', 14 /* Pipe */],
-            ['any', 2 /* Any */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['(', token_1.TokenType.LeftParen],
+            ['id', token_1.TokenType.Identifier],
+            ['?', token_1.TokenType.QuestionMark],
+            [':', token_1.TokenType.Colon],
+            ['any', token_1.TokenType.Any],
+            [',', token_1.TokenType.Comma],
+            ['id', token_1.TokenType.Identifier],
+            [')', token_1.TokenType.RightParen],
+            ['=>', token_1.TokenType.Arrow],
+            ['any', token_1.TokenType.Any],
+            ['|', token_1.TokenType.Pipe],
+            ['any', token_1.TokenType.Any]
+        ]));
+        it('should scan @tag id = (id?: any, ...id: any[]) => any | any', () => test('@tag id = (id?: any, ...id: any[]) => any | any', [
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['(', token_1.TokenType.LeftParen],
+            ['id', token_1.TokenType.Identifier],
+            ['?', token_1.TokenType.QuestionMark],
+            [':', token_1.TokenType.Colon],
+            ['any', token_1.TokenType.Any],
+            [',', token_1.TokenType.Comma],
+            ['...id', token_1.TokenType.Identifier],
+            [':', token_1.TokenType.Colon],
+            ['any[]', token_1.TokenType.Any],
+            [')', token_1.TokenType.RightParen],
+            ['=>', token_1.TokenType.Arrow],
+            ['any', token_1.TokenType.Any],
+            ['|', token_1.TokenType.Pipe],
+            ['any', token_1.TokenType.Any]
         ]));
         it('should scan @tag id = (id?: any, id = 1) => any | any', () => test('@tag id = (id?: any, id = 1) => any | any', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['(', 10 /* LeftParen */],
-            ['id', 8 /* Identifier */],
-            ['?', 15 /* QuestionMark */],
-            [':', 4 /* Colon */],
-            ['any', 2 /* Any */],
-            [',', 5 /* Comma */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['1', 9 /* Initializer */],
-            [')', 16 /* RightParen */],
-            ['=>', 3 /* Arrow */],
-            ['any', 2 /* Any */],
-            ['|', 14 /* Pipe */],
-            ['any', 2 /* Any */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['(', token_1.TokenType.LeftParen],
+            ['id', token_1.TokenType.Identifier],
+            ['?', token_1.TokenType.QuestionMark],
+            [':', token_1.TokenType.Colon],
+            ['any', token_1.TokenType.Any],
+            [',', token_1.TokenType.Comma],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['1', token_1.TokenType.Initializer],
+            [')', token_1.TokenType.RightParen],
+            ['=>', token_1.TokenType.Arrow],
+            ['any', token_1.TokenType.Any],
+            ['|', token_1.TokenType.Pipe],
+            ['any', token_1.TokenType.Any]
+        ]));
+        it('should scan @tag id = (id?: any, id = -1) => any | any', () => test('@tag id = (id?: any, id = -1) => any | any', [
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['(', token_1.TokenType.LeftParen],
+            ['id', token_1.TokenType.Identifier],
+            ['?', token_1.TokenType.QuestionMark],
+            [':', token_1.TokenType.Colon],
+            ['any', token_1.TokenType.Any],
+            [',', token_1.TokenType.Comma],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['-1', token_1.TokenType.Initializer],
+            [')', token_1.TokenType.RightParen],
+            ['=>', token_1.TokenType.Arrow],
+            ['any', token_1.TokenType.Any],
+            ['|', token_1.TokenType.Pipe],
+            ['any', token_1.TokenType.Any]
         ]));
         it('should scan @tag id = (id?: any = init, id = init, id = init) => any', () => test('@tag id = (id?: any = init, id = init, id = init) => any', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['(', 10 /* LeftParen */],
-            ['id', 8 /* Identifier */],
-            ['?', 15 /* QuestionMark */],
-            [':', 4 /* Colon */],
-            ['any', 2 /* Any */],
-            ['=', 7 /* Equal */],
-            ['init', 9 /* Initializer */],
-            [',', 5 /* Comma */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['init', 9 /* Initializer */],
-            [',', 5 /* Comma */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['init', 9 /* Initializer */],
-            [')', 16 /* RightParen */],
-            ['=>', 3 /* Arrow */],
-            ['any', 2 /* Any */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['(', token_1.TokenType.LeftParen],
+            ['id', token_1.TokenType.Identifier],
+            ['?', token_1.TokenType.QuestionMark],
+            [':', token_1.TokenType.Colon],
+            ['any', token_1.TokenType.Any],
+            ['=', token_1.TokenType.Equal],
+            ['init', token_1.TokenType.Initializer],
+            [',', token_1.TokenType.Comma],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['init', token_1.TokenType.Initializer],
+            [',', token_1.TokenType.Comma],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['init', token_1.TokenType.Initializer],
+            [')', token_1.TokenType.RightParen],
+            ['=>', token_1.TokenType.Arrow],
+            ['any', token_1.TokenType.Any]
         ]));
         it('should scan @tag id: (id?: any = init, id = init, id = init) => any', () => test('@tag id: (id?: any = init, id = init, id = init) => any', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            [':', 4 /* Colon */],
-            ['(', 10 /* LeftParen */],
-            ['id', 8 /* Identifier */],
-            ['?', 15 /* QuestionMark */],
-            [':', 4 /* Colon */],
-            ['any', 2 /* Any */],
-            ['=', 7 /* Equal */],
-            ['init', 9 /* Initializer */],
-            [',', 5 /* Comma */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['init', 9 /* Initializer */],
-            [',', 5 /* Comma */],
-            ['id', 8 /* Identifier */],
-            ['=', 7 /* Equal */],
-            ['init', 9 /* Initializer */],
-            [')', 16 /* RightParen */],
-            ['=>', 3 /* Arrow */],
-            ['any', 2 /* Any */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            [':', token_1.TokenType.Colon],
+            ['(', token_1.TokenType.LeftParen],
+            ['id', token_1.TokenType.Identifier],
+            ['?', token_1.TokenType.QuestionMark],
+            [':', token_1.TokenType.Colon],
+            ['any', token_1.TokenType.Any],
+            ['=', token_1.TokenType.Equal],
+            ['init', token_1.TokenType.Initializer],
+            [',', token_1.TokenType.Comma],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['init', token_1.TokenType.Initializer],
+            [',', token_1.TokenType.Comma],
+            ['id', token_1.TokenType.Identifier],
+            ['=', token_1.TokenType.Equal],
+            ['init', token_1.TokenType.Initializer],
+            [')', token_1.TokenType.RightParen],
+            ['=>', token_1.TokenType.Arrow],
+            ['any', token_1.TokenType.Any]
         ]));
         /* Scan tags with types (special words) */
         it('should scan @tag id: any', () => test('@tag id: any', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            [':', 4 /* Colon */],
-            ['any', 2 /* Any */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            [':', token_1.TokenType.Colon],
+            ['any', token_1.TokenType.Any]
         ]));
         it('should scan @tag id?: any', () => test('@tag id?: any', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            ['?', 15 /* QuestionMark */],
-            [':', 4 /* Colon */],
-            ['any', 2 /* Any */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            ['?', token_1.TokenType.QuestionMark],
+            [':', token_1.TokenType.Colon],
+            ['any', token_1.TokenType.Any]
         ]));
         it('should scan @tag id: any | any', () => test('@tag id: any', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            [':', 4 /* Colon */],
-            ['any', 2 /* Any */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            [':', token_1.TokenType.Colon],
+            ['any', token_1.TokenType.Any]
         ]));
         it('should scan @tag id: any & any', () => test('@tag id: any', [
-            ['@tag', 17 /* Tag */],
-            ['id', 8 /* Identifier */],
-            [':', 4 /* Colon */],
-            ['any', 2 /* Any */]
+            ['@tag', token_1.TokenType.Tag],
+            ['id', token_1.TokenType.Identifier],
+            [':', token_1.TokenType.Colon],
+            ['any', token_1.TokenType.Any]
         ]));
     });
     describe('Real-world scan', () => {
@@ -247,37 +316,37 @@ describe('CommentScanner', () => {
     \t@param x: number - The x value.
     \t@param y: number - The y value.\n`;
         it(`should scan: ${s0}`, () => test(s0, [
-            ['Create a point.', 6 /* Description */],
-            ['@param', 17 /* Tag */],
-            ['x', 8 /* Identifier */],
-            [':', 4 /* Colon */],
-            ['number', 2 /* Any */],
-            ['-', 12 /* Minus */],
-            ['The x value.', 6 /* Description */],
-            ['@param', 17 /* Tag */],
-            ['y', 8 /* Identifier */],
-            [':', 4 /* Colon */],
-            ['number', 2 /* Any */],
-            ['-', 12 /* Minus */],
-            ['The y value.', 6 /* Description */]
+            ['Create a point.', token_1.TokenType.Description],
+            ['@param', token_1.TokenType.Tag],
+            ['x', token_1.TokenType.Identifier],
+            [':', token_1.TokenType.Colon],
+            ['number', token_1.TokenType.Any],
+            ['-', token_1.TokenType.Minus],
+            ['The x value.', token_1.TokenType.Description],
+            ['@param', token_1.TokenType.Tag],
+            ['y', token_1.TokenType.Identifier],
+            [':', token_1.TokenType.Colon],
+            ['number', token_1.TokenType.Any],
+            ['-', token_1.TokenType.Minus],
+            ['The y value.', token_1.TokenType.Description]
         ]));
         const s1 = `\n
     \tConvert a string containing two comma-separated numbers into a point.
     \t@param str: string - The string containing two comma-separated numbers.
     \t@return: Point - A Point object.\n`;
         it(`should scan: ${s1}`, () => test(s1, [
-            ['Convert a string containing two comma-separated numbers into a point.', 6 /* Description */],
-            ['@param', 17 /* Tag */],
-            ['str', 8 /* Identifier */],
-            [':', 4 /* Colon */],
-            ['string', 2 /* Any */],
-            ['-', 12 /* Minus */],
-            ['The string containing two comma-separated numbers.', 6 /* Description */],
-            ['@return', 17 /* Tag */],
-            [':', 4 /* Colon */],
-            ['Point', 2 /* Any */],
-            ['-', 12 /* Minus */],
-            ['A Point object.', 6 /* Description */]
+            ['Convert a string containing two comma-separated numbers into a point.', token_1.TokenType.Description],
+            ['@param', token_1.TokenType.Tag],
+            ['str', token_1.TokenType.Identifier],
+            [':', token_1.TokenType.Colon],
+            ['string', token_1.TokenType.Any],
+            ['-', token_1.TokenType.Minus],
+            ['The string containing two comma-separated numbers.', token_1.TokenType.Description],
+            ['@return', token_1.TokenType.Tag],
+            [':', token_1.TokenType.Colon],
+            ['Point', token_1.TokenType.Any],
+            ['-', token_1.TokenType.Minus],
+            ['A Point object.', token_1.TokenType.Description]
         ]));
         const s2 = `\n
     \tCreate a dot.
@@ -293,25 +362,25 @@ describe('CommentScanner', () => {
     \t\`\`\`
     \t---\n`;
         it(`should scan ${s2}`, () => test(s2, [
-            ['Create a dot.', 6 /* Description */],
-            ['@param', 17 /* Tag */],
-            ['x', 8 /* Identifier */],
-            [':', 4 /* Colon */],
-            ['number', 2 /* Any */],
-            ['-', 12 /* Minus */],
-            ['The x value.', 6 /* Description */],
-            ['@param', 17 /* Tag */],
-            ['y', 8 /* Identifier */],
-            [':', 4 /* Colon */],
-            ['number', 2 /* Any */],
-            ['-', 12 /* Minus */],
-            ['The y value.', 6 /* Description */],
-            ['@param', 17 /* Tag */],
-            ['width', 8 /* Identifier */],
-            [':', 4 /* Colon */],
-            ['number', 2 /* Any */],
-            ['-', 12 /* Minus */],
-            ['The width of the dot, in pixels.', 6 /* Description */],
+            ['Create a dot.', token_1.TokenType.Description],
+            ['@param', token_1.TokenType.Tag],
+            ['x', token_1.TokenType.Identifier],
+            [':', token_1.TokenType.Colon],
+            ['number', token_1.TokenType.Any],
+            ['-', token_1.TokenType.Minus],
+            ['The x value.', token_1.TokenType.Description],
+            ['@param', token_1.TokenType.Tag],
+            ['y', token_1.TokenType.Identifier],
+            [':', token_1.TokenType.Colon],
+            ['number', token_1.TokenType.Any],
+            ['-', token_1.TokenType.Minus],
+            ['The y value.', token_1.TokenType.Description],
+            ['@param', token_1.TokenType.Tag],
+            ['width', token_1.TokenType.Identifier],
+            [':', token_1.TokenType.Colon],
+            ['number', token_1.TokenType.Any],
+            ['-', token_1.TokenType.Minus],
+            ['The width of the dot, in pixels.', token_1.TokenType.Description],
             [`---
     \t# Create a dot
     \t
@@ -319,8 +388,8 @@ describe('CommentScanner', () => {
     \t\`\`\`
     \tconst dot = new Dot();
     \t\`\`\`
-    \t---`, 11 /* Markdown */]
+    \t---`, token_1.TokenType.Markdown]
         ]));
     });
 });
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2Nhbm5lci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbInNjYW5uZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUVBLGdDQUFnQztBQUNoQyx1QkFBdUIsTUFBTSxDQUFDLENBQUE7QUFDOUIsMEJBQTJCLFlBQVksQ0FBQyxDQUFBO0FBR3hDLE1BQU0sT0FBTyxHQUFHLElBQUksaUJBQWMsRUFBRSxDQUFDO0FBQ3JDLGNBQWMsTUFBYyxFQUFFLEtBQXdDO0lBQ3BFLE9BQU8sQ0FBQyxNQUFNLENBQUMsTUFBTSxDQUFDLENBQUM7SUFDdkIsTUFBTSxNQUFNLEdBQUcsT0FBTyxDQUFDLElBQUksRUFBRSxDQUFDLE1BQU0sQ0FBQztJQUNyQyxJQUFJLEtBQUssR0FBRyxPQUFPLEtBQUssS0FBSyxRQUFRLEdBQUcsQ0FBQyxDQUFDLE1BQU0sRUFBRSxLQUFLLENBQUMsQ0FBQyxHQUFHLEtBQUssQ0FBQztJQUNsRSxLQUFLLENBQUMsSUFBSSxDQUFDLENBQUMsVUFBVSxFQUFFLHVCQUF3QixDQUFDLENBQUMsQ0FBQztJQUVuRCxJQUFJLEtBQUssR0FBRyxDQUFDLENBQUM7SUFDZCxPQUFPLEtBQUssR0FBRyxNQUFNLENBQUMsTUFBTSxFQUFFLENBQUM7UUFDN0IsYUFBTSxDQUFDLFdBQVcsQ0FBQyxNQUFNLENBQUMsS0FBSyxDQUFDLENBQUMsTUFBTSxFQUFFLEtBQUssQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDO1FBQzFELGFBQU0sQ0FBQyxXQUFXLENBQUMsTUFBTSxDQUFDLEtBQUssQ0FBQyxDQUFDLElBQUksRUFBRSxLQUFLLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQztRQUN4RCxLQUFLLEVBQUUsQ0FBQztJQUNWLENBQUM7QUFDSCxDQUFDO0FBQ0QsUUFBUSxDQUFDLGdCQUFnQixFQUFFO0lBRXpCLFFBQVEsQ0FBQyxZQUFZLEVBQUU7UUFDckIsRUFBRSxDQUFDLDBCQUEwQixFQUFF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
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2Nhbm5lci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbInNjYW5uZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUVBLGdDQUFnQztBQUNoQywrQkFBOEI7QUFDOUIsd0NBQXdDO0FBQ3hDLG9DQUEwRDtBQUUxRCxNQUFNLE9BQU8sR0FBRyxJQUFJLGlCQUFjLEVBQUUsQ0FBQztBQUNyQyxjQUFjLE1BQWMsRUFBRSxLQUF3QztJQUNwRSxPQUFPLENBQUMsTUFBTSxDQUFDLE1BQU0sQ0FBQyxDQUFDO0lBQ3ZCLE1BQU0sTUFBTSxHQUFHLE9BQU8sQ0FBQyxJQUFJLEVBQUUsQ0FBQyxNQUFNLENBQUM7SUFDckMsSUFBSSxLQUFLLEdBQUcsT0FBTyxLQUFLLEtBQUssUUFBUSxHQUFHLENBQUMsQ0FBQyxNQUFNLEVBQUUsS0FBSyxDQUFDLENBQUMsR0FBRyxLQUFLLENBQUM7SUFDbEUsS0FBSyxDQUFDLElBQUksQ0FBQyxDQUFDLFVBQVUsRUFBRSxpQkFBUyxDQUFDLGNBQWMsQ0FBQyxDQUFDLENBQUM7SUFFbkQsSUFBSSxLQUFLLEdBQUcsQ0FBQyxDQUFDO0lBQ2QsT0FBTyxLQUFLLEdBQUcsTUFBTSxDQUFDLE1BQU0sRUFBRSxDQUFDO1FBQzdCLGFBQU0sQ0FBQyxXQUFXLENBQUMsTUFBTSxDQUFDLEtBQUssQ0FBQyxDQUFDLE1BQU0sRUFBRSxLQUFLLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQztRQUMxRCxhQUFNLENBQUMsV0FBVyxDQUFDLE1BQU0sQ0FBQyxLQUFLLENBQUMsQ0FBQyxJQUFJLEVBQUUsS0FBSyxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUM7UUFDeEQsS0FBSyxFQUFFLENBQUM7SUFDVixDQUFDO0FBQ0gsQ0FBQztBQUNELFFBQVEsQ0FBQyxnQkFBZ0IsRUFBRTtJQUV6QixRQUFRLENBQUMsWUFBWSxFQUFFO1FBQ3JCLEVBQUUsQ0FBQywwQkFBMEIsRUFBRSxNQUFNLElBQUksQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxTQUFTLENBQUMsQ0FBQyxDQUFDO1FBQ3JFLEVBQUUsQ0FBQyxxQkFBcUIsRUFBRSxNQUFNLElBQUksQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFBO1FBQzNELEVBQUUsQ0FBQyxxQkFBcUIsRUFBRSxNQUFNLElBQUksQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDO1FBQzVELEVBQUUsQ0FBQywyQkFBMkIsRUFBRSxNQUFNLElBQUksQ0FBQyxhQUFhLEVBQUUsaUJBQVMsQ0FBQyxXQUFXLENBQUMsQ0FBQyxDQUFDO1FBQ2xGLEVBQUUsQ0FBQyxzQkFBc0IsRUFBRSxNQUFNLElBQUksQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDO1FBQzdELEVBQUUsQ0FBQyxnQ0FBZ0MsRUFBRSxNQUFNLElBQUksQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxTQUFTLENBQUMsQ0FBQyxDQUFDO1FBQzNFLEVBQUUsQ0FBQyw2QkFBNkIsRUFBRSxNQUFNLElBQUksQ0FBQyxrQkFBa0IsRUFBRSxpQkFBUyxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUM7UUFDdEYsRUFBRSxDQUFDLHFCQUFxQixFQUFFLE1BQU0sSUFBSSxDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUM7UUFDNUQsRUFBRSxDQUFDLG9CQUFvQixFQUFFLE1BQU0sSUFBSSxDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLElBQUksQ0FBQyxDQUFDLENBQUM7UUFDMUQsRUFBRSxDQUFDLDZCQUE2QixFQUFFLE1BQU0sSUFBSSxDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLFlBQVksQ0FBQyxDQUFDLENBQUM7UUFDM0UsRUFBRSxDQUFDLGlDQUFpQyxFQUFFLE1BQU0sSUFBSSxDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLFVBQVUsQ0FBQyxDQUFDLENBQUM7SUFDL0UsQ0FBQyxDQUFDLENBQUM7SUFFSCxRQUFRLENBQUMsZUFBZSxFQUFFO1FBQ3hCLGVBQWU7UUFDZixFQUFFLENBQUMsa0JBQWtCLEVBQUUsTUFBTSxJQUFJLENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQztRQUUxRCxnQ0FBZ0M7UUFDaEMsRUFBRSxDQUFDLHFCQUFxQixFQUFFLE1BQU0sSUFBSSxDQUFDLFNBQVMsRUFBRTtZQUM5QyxDQUFDLE1BQU0sRUFBRSxpQkFBUyxDQUFDLEdBQUcsQ0FBQztZQUN2QixDQUFDLElBQUksRUFBRSxpQkFBUyxDQUFDLFVBQVUsQ0FBQztTQUM3QixDQUFDLENBQUMsQ0FBQztRQUVKLEVBQUUsQ0FBQyx3QkFBd0IsRUFBRSxNQUFNLElBQUksQ0FBQyxTQUFTLEVBQUU7WUFDakQsQ0FBQyxNQUFNLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7WUFDdkIsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7U0FDN0IsQ0FBQyxDQUFDLENBQUM7UUFFSixpQ0FBaUM7UUFDakMsRUFBRSxDQUFDLGdDQUFnQyxFQUFFLE1BQU0sSUFBSSxDQUFDLG9CQUFvQixFQUFFO1lBQ3BFLENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3ZCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsVUFBVSxFQUFFLGlCQUFTLENBQUMsV0FBVyxDQUFDO1NBQ3BDLENBQUMsQ0FBQyxDQUFDO1FBQ0osRUFBRSxDQUFDLDhCQUE4QixFQUFFLE1BQU0sSUFBSSxDQUFDLGtCQUFrQixFQUFFO1lBQ2hFLENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3ZCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsUUFBUSxFQUFFLGlCQUFTLENBQUMsV0FBVyxDQUFDO1NBQ2xDLENBQUMsQ0FBQyxDQUFDO1FBQ0osRUFBRSxDQUFDLHlCQUF5QixFQUFFLE1BQU0sSUFBSSxDQUFDLGFBQWEsRUFBRTtZQUN0RCxDQUFDLE1BQU0sRUFBRSxpQkFBUyxDQUFDLEdBQUcsQ0FBQztZQUN2QixDQUFDLElBQUksRUFBRSxpQkFBUyxDQUFDLFVBQVUsQ0FBQztZQUM1QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLEtBQUssQ0FBQztZQUN0QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLFdBQVcsQ0FBQztTQUM3QixDQUFDLENBQUMsQ0FBQztRQUNKLEVBQUUsQ0FBQywwQkFBMEIsRUFBRSxNQUFNLElBQUksQ0FBQyxjQUFjLEVBQUU7WUFDeEQsQ0FBQyxNQUFNLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7WUFDdkIsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDNUIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxXQUFXLENBQUM7U0FDOUIsQ0FBQyxDQUFDLENBQUM7UUFDSixFQUFFLENBQUMsMEJBQTBCLEVBQUUsTUFBTSxJQUFJLENBQUMsY0FBYyxFQUFFO1lBQ3hELENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3ZCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsV0FBVyxDQUFDO1NBQzlCLENBQUMsQ0FBQyxDQUFDO1FBQ0osRUFBRSxDQUFDLDRCQUE0QixFQUFFLE1BQU0sSUFBSSxDQUFDLGdCQUFnQixFQUFFO1lBQzVELENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3ZCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsV0FBVyxDQUFDO1NBQ2hDLENBQUMsQ0FBQyxDQUFDO1FBQ0osRUFBRSxDQUFDLGlDQUFpQyxFQUFFLE1BQU0sSUFBSSxDQUFDLHFCQUFxQixFQUFFO1lBQ3RFLENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3ZCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsU0FBUyxDQUFDO1lBQzFCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzNCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3ZCLENBQUMsS0FBSyxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1NBQ3ZCLENBQUMsQ0FBQyxDQUFDO1FBQ0osRUFBRSxDQUFDLG1DQUFtQyxFQUFFLE1BQU0sSUFBSSxDQUFDLHVCQUF1QixFQUFFO1lBQzFFLENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3ZCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsU0FBUyxDQUFDO1lBQzFCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzNCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3ZCLENBQUMsS0FBSyxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1NBQ3ZCLENBQUMsQ0FBQyxDQUFDO1FBQ0osRUFBRSxDQUFDLHVDQUF1QyxFQUFFLE1BQU0sSUFBSSxDQUFDLDJCQUEyQixFQUFFO1lBQ2xGLENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3ZCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsU0FBUyxDQUFDO1lBQzFCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzNCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3ZCLENBQUMsS0FBSyxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1NBQ3ZCLENBQUMsQ0FBQyxDQUFDO1FBRUosRUFBRSxDQUFDLDRDQUE0QyxFQUFFLE1BQy9DLElBQUksQ0FBQyxnQ0FBZ0MsRUFBRTtZQUNyQyxDQUFDLE1BQU0sRUFBRSxpQkFBUyxDQUFDLEdBQUcsQ0FBQztZQUN2QixDQUFDLElBQUksRUFBRSxpQkFBUyxDQUFDLFVBQVUsQ0FBQztZQUM1QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLEtBQUssQ0FBQztZQUN0QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLFNBQVMsQ0FBQztZQUMxQixDQUFDLElBQUksRUFBRSxpQkFBUyxDQUFDLFVBQVUsQ0FBQztZQUM1QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLEtBQUssQ0FBQztZQUN0QixDQUFDLEtBQUssRUFBRSxpQkFBUyxDQUFDLEdBQUcsQ0FBQztZQUN0QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLEtBQUssQ0FBQztZQUN0QixDQUFDLElBQUksRUFBRSxpQkFBUyxDQUFDLFVBQVUsQ0FBQztZQUM1QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLFVBQVUsQ0FBQztZQUMzQixDQUFDLElBQUksRUFBRSxpQkFBUyxDQUFDLEtBQUssQ0FBQztZQUN2QixDQUFDLEtBQUssRUFBRSxpQkFBUyxDQUFDLEdBQUcsQ0FBQztTQUN2QixDQUFDLENBQUMsQ0FBQztRQUVKLEVBQUUsQ0FBQywwREFBMEQsRUFBRSxNQUMvRCxJQUFJLENBQUMsOENBQThDLEVBQUU7WUFDbkQsQ0FBQyxNQUFNLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7WUFDdkIsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDNUIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxTQUFTLENBQUM7WUFDMUIsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDNUIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxLQUFLLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7WUFDdEIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDNUIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDM0IsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdkIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxTQUFTLENBQUM7WUFDMUIsQ0FBQyxLQUFLLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7WUFDdEIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxJQUFJLENBQUM7WUFDckIsQ0FBQyxLQUFLLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7WUFDdEIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDM0IsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxTQUFTLENBQUM7WUFDMUIsQ0FBQyxLQUFLLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7U0FDdkIsQ0FBQyxDQUFDLENBQUM7UUFFTixFQUFFLENBQUMsd0RBQXdELEVBQUUsTUFDM0QsSUFBSSxDQUFDLDRDQUE0QyxFQUFFO1lBQ2pELENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3ZCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsU0FBUyxDQUFDO1lBQzFCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsS0FBSyxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3RCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsSUFBSSxDQUFDO1lBQ3JCLENBQUMsS0FBSyxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3RCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzNCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3ZCLENBQUMsS0FBSyxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3RCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsU0FBUyxDQUFDO1lBQzFCLENBQUMsS0FBSyxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1NBQ3ZCLENBQUMsQ0FBQyxDQUFDO1FBRU4sRUFBRSxDQUFDLG1EQUFtRCxFQUFFLE1BQ3RELElBQUksQ0FBQyx1Q0FBdUMsRUFBRTtZQUM1QyxDQUFDLE1BQU0sRUFBRSxpQkFBUyxDQUFDLEdBQUcsQ0FBQztZQUN2QixDQUFDLElBQUksRUFBRSxpQkFBUyxDQUFDLFVBQVUsQ0FBQztZQUM1QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLEtBQUssQ0FBQztZQUN0QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLFNBQVMsQ0FBQztZQUMxQixDQUFDLElBQUksRUFBRSxpQkFBUyxDQUFDLFVBQVUsQ0FBQztZQUM1QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLFlBQVksQ0FBQztZQUM3QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLEtBQUssQ0FBQztZQUN0QixDQUFDLEtBQUssRUFBRSxpQkFBUyxDQUFDLEdBQUcsQ0FBQztZQUN0QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLEtBQUssQ0FBQztZQUN0QixDQUFDLElBQUksRUFBRSxpQkFBUyxDQUFDLFVBQVUsQ0FBQztZQUM1QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLFVBQVUsQ0FBQztZQUMzQixDQUFDLElBQUksRUFBRSxpQkFBUyxDQUFDLEtBQUssQ0FBQztZQUN2QixDQUFDLEtBQUssRUFBRSxpQkFBUyxDQUFDLEdBQUcsQ0FBQztZQUN0QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLElBQUksQ0FBQztZQUNyQixDQUFDLEtBQUssRUFBRSxpQkFBUyxDQUFDLEdBQUcsQ0FBQztTQUN2QixDQUFDLENBQUMsQ0FBQztRQUVOLEVBQUUsQ0FBQyw2REFBNkQsRUFBRSxNQUNoRSxJQUFJLENBQUMsaURBQWlELEVBQUU7WUFDdEQsQ0FBQyxNQUFNLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7WUFDdkIsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDNUIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxTQUFTLENBQUM7WUFDMUIsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDNUIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxZQUFZLENBQUM7WUFDN0IsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxLQUFLLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7WUFDdEIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxPQUFPLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDL0IsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxPQUFPLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7WUFDeEIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDM0IsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdkIsQ0FBQyxLQUFLLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7WUFDdEIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxJQUFJLENBQUM7WUFDckIsQ0FBQyxLQUFLLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7U0FDdkIsQ0FBQyxDQUFDLENBQUM7UUFFTixFQUFFLENBQUMsdURBQXVELEVBQUUsTUFDMUQsSUFBSSxDQUFDLDJDQUEyQyxFQUFFO1lBQ2hELENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3ZCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsU0FBUyxDQUFDO1lBQzFCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsWUFBWSxDQUFDO1lBQzdCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsS0FBSyxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3RCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsV0FBVyxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzNCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3ZCLENBQUMsS0FBSyxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3RCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsSUFBSSxDQUFDO1lBQ3JCLENBQUMsS0FBSyxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1NBQ3ZCLENBQUMsQ0FBQyxDQUFDO1FBQ0osRUFBRSxDQUFDLHdEQUF3RCxFQUFFLE1BQzdELElBQUksQ0FBQyw0Q0FBNEMsRUFBRTtZQUNqRCxDQUFDLE1BQU0sRUFBRSxpQkFBUyxDQUFDLEdBQUcsQ0FBQztZQUN2QixDQUFDLElBQUksRUFBRSxpQkFBUyxDQUFDLFVBQVUsQ0FBQztZQUM1QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLEtBQUssQ0FBQztZQUN0QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLFNBQVMsQ0FBQztZQUMxQixDQUFDLElBQUksRUFBRSxpQkFBUyxDQUFDLFVBQVUsQ0FBQztZQUM1QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLFlBQVksQ0FBQztZQUM3QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLEtBQUssQ0FBQztZQUN0QixDQUFDLEtBQUssRUFBRSxpQkFBUyxDQUFDLEdBQUcsQ0FBQztZQUN0QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLEtBQUssQ0FBQztZQUN0QixDQUFDLElBQUksRUFBRSxpQkFBUyxDQUFDLFVBQVUsQ0FBQztZQUM1QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLEtBQUssQ0FBQztZQUN0QixDQUFDLElBQUksRUFBRSxpQkFBUyxDQUFDLFdBQVcsQ0FBQztZQUM3QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLFVBQVUsQ0FBQztZQUMzQixDQUFDLElBQUksRUFBRSxpQkFBUyxDQUFDLEtBQUssQ0FBQztZQUN2QixDQUFDLEtBQUssRUFBRSxpQkFBUyxDQUFDLEdBQUcsQ0FBQztZQUN0QixDQUFDLEdBQUcsRUFBRSxpQkFBUyxDQUFDLElBQUksQ0FBQztZQUNyQixDQUFDLEtBQUssRUFBRSxpQkFBUyxDQUFDLEdBQUcsQ0FBQztTQUN2QixDQUFDLENBQUMsQ0FBQztRQUNOLEVBQUUsQ0FBQyxzRUFBc0UsRUFBRSxNQUN6RSxJQUFJLENBQUMsMERBQTBELEVBQUU7WUFDL0QsQ0FBQyxNQUFNLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7WUFDdkIsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDNUIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxTQUFTLENBQUM7WUFDMUIsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDNUIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxZQUFZLENBQUM7WUFDN0IsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxLQUFLLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7WUFDdEIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxNQUFNLEVBQUUsaUJBQVMsQ0FBQyxXQUFXLENBQUM7WUFDL0IsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDNUIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxNQUFNLEVBQUUsaUJBQVMsQ0FBQyxXQUFXLENBQUM7WUFDL0IsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDNUIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxNQUFNLEVBQUUsaUJBQVMsQ0FBQyxXQUFXLENBQUM7WUFDL0IsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDM0IsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdkIsQ0FBQyxLQUFLLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7U0FDdkIsQ0FBQyxDQUFDLENBQUM7UUFDTixFQUFFLENBQUMscUVBQXFFLEVBQUUsTUFDeEUsSUFBSSxDQUFDLHlEQUF5RCxFQUFFO1lBQzlELENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3ZCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsU0FBUyxDQUFDO1lBQzFCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsWUFBWSxDQUFDO1lBQzdCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsS0FBSyxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3RCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsV0FBVyxDQUFDO1lBQy9CLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsV0FBVyxDQUFDO1lBQy9CLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3RCLENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsV0FBVyxDQUFDO1lBQy9CLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzNCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsS0FBSyxDQUFDO1lBQ3ZCLENBQUMsS0FBSyxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1NBQ3ZCLENBQUMsQ0FBQyxDQUFDO1FBRU4sMENBQTBDO1FBQzFDLEVBQUUsQ0FBQywwQkFBMEIsRUFBRSxNQUFNLElBQUksQ0FBQyxjQUFjLEVBQUU7WUFDeEQsQ0FBQyxNQUFNLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7WUFDdkIsQ0FBQyxJQUFJLEVBQUUsaUJBQVMsQ0FBQyxVQUFVLENBQUM7WUFDNUIsQ0FBQyxHQUFHLEVBQUUsaUJBQVMsQ0FBQyxLQUFLLENBQUM7WUFDdEIsQ0FBQyxLQUFLLEVBQUUsaUJBQVMsQ0FBQyxHQUFHLENBQUM7U0FDdkIsQ0FBQyxDQUFDLENBQUM7UUFDSixFQUFFLENBQUMsMkJBQTJCLEVBQUUsTUFBTSxJQUFJLENBQUMsZUFBZSxFQUFFO1lBQzFELENBQUMsTUFBTSxFQUFFLGlCQUFTLENBQUMsR0FBRyxDQUFDO1lBQ3ZCLENBQUMsSUFBSSxFQUFFLGlCQUFTLENBQUMsVUFBVSxDQUFDO1lBQzVCLENBQUMsR0FBRyxFQUFFLGlCQUFTLENBQUMsWUFBWSxDQUFDO1lBQzdCLENBQUMsR0FBRyxF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

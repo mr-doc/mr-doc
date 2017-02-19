@@ -27,12 +27,12 @@ export
 }
 
 export
-  interface SimpleComment extends Comment {
+  interface BasicComment extends Comment {
 
 }
 
 export
-  interface ComplexComment extends Comment {
+  interface AdvancedComment extends Comment {
   statements: Node[]
 }
 

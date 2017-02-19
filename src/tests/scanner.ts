@@ -45,6 +45,11 @@ describe('CommentScanner', () => {
       ['id', TokenType.Identifier]
     ]));
 
+    it('should scan @tag ...id', () => test('@tag id', [
+      ['@tag', TokenType.Tag],
+      ['id', TokenType.Identifier]
+    ]));
+
     /* Scan tags with initializers */
     it('should scan @tag id = \'init\'', () => test('@tag id = \'init\'', [
       ['@tag', TokenType.Tag],
@@ -63,6 +68,12 @@ describe('CommentScanner', () => {
       ['id', TokenType.Identifier],
       ['=', TokenType.Equal],
       ['1', TokenType.Initializer]
+    ]));
+    it('should scan @tag id = -1', () => test('@tag id = -1', [
+      ['@tag', TokenType.Tag],
+      ['id', TokenType.Identifier],
+      ['=', TokenType.Equal],
+      ['-1', TokenType.Initializer]
     ]));
     it('should scan @tag id = []', () => test('@tag id = []', [
       ['@tag', TokenType.Tag],
@@ -124,6 +135,28 @@ describe('CommentScanner', () => {
         ['any', TokenType.Any]
       ]));
 
+      it('should scan @tag id = (id: any, id) => (any | any) & any', () =>
+      test('@tag id = (id: any, id) => (any | any) & any', [
+        ['@tag', TokenType.Tag],
+        ['id', TokenType.Identifier],
+        ['=', TokenType.Equal],
+        ['(', TokenType.LeftParen],
+        ['id', TokenType.Identifier],
+        [':', TokenType.Colon],
+        ['any', TokenType.Any],
+        [',', TokenType.Comma],
+        ['id', TokenType.Identifier],
+        [')', TokenType.RightParen],
+        ['=>', TokenType.Arrow],
+        ['(', TokenType.LeftParen],
+        ['any', TokenType.Any],
+        ['|', TokenType.Pipe],
+        ['any', TokenType.Any],
+        [')', TokenType.RightParen],
+        ['&', TokenType.Ampersand],
+        ['any', TokenType.Any]
+      ]));
+
     it('should scan @tag id = (id: any | any, id) => any & any', () =>
       test('@tag id = (id: any | any, id) => any & any', [
         ['@tag', TokenType.Tag],
@@ -163,6 +196,27 @@ describe('CommentScanner', () => {
         ['any', TokenType.Any]
       ]));
 
+    it('should scan @tag id = (id?: any, ...id: any[]) => any | any', () =>
+      test('@tag id = (id?: any, ...id: any[]) => any | any', [
+        ['@tag', TokenType.Tag],
+        ['id', TokenType.Identifier],
+        ['=', TokenType.Equal],
+        ['(', TokenType.LeftParen],
+        ['id', TokenType.Identifier],
+        ['?', TokenType.QuestionMark],
+        [':', TokenType.Colon],
+        ['any', TokenType.Any],
+        [',', TokenType.Comma],
+        ['...id', TokenType.Identifier],
+        [':', TokenType.Colon],
+        ['any[]', TokenType.Any],
+        [')', TokenType.RightParen],
+        ['=>', TokenType.Arrow],
+        ['any', TokenType.Any],
+        ['|', TokenType.Pipe],
+        ['any', TokenType.Any]
+      ]));
+
     it('should scan @tag id = (id?: any, id = 1) => any | any', () =>
       test('@tag id = (id?: any, id = 1) => any | any', [
         ['@tag', TokenType.Tag],
@@ -177,6 +231,26 @@ describe('CommentScanner', () => {
         ['id', TokenType.Identifier],
         ['=', TokenType.Equal],
         ['1', TokenType.Initializer],
+        [')', TokenType.RightParen],
+        ['=>', TokenType.Arrow],
+        ['any', TokenType.Any],
+        ['|', TokenType.Pipe],
+        ['any', TokenType.Any]
+      ]));
+      it('should scan @tag id = (id?: any, id = -1) => any | any', () =>
+      test('@tag id = (id?: any, id = -1) => any | any', [
+        ['@tag', TokenType.Tag],
+        ['id', TokenType.Identifier],
+        ['=', TokenType.Equal],
+        ['(', TokenType.LeftParen],
+        ['id', TokenType.Identifier],
+        ['?', TokenType.QuestionMark],
+        [':', TokenType.Colon],
+        ['any', TokenType.Any],
+        [',', TokenType.Comma],
+        ['id', TokenType.Identifier],
+        ['=', TokenType.Equal],
+        ['-1', TokenType.Initializer],
         [')', TokenType.RightParen],
         ['=>', TokenType.Arrow],
         ['any', TokenType.Any],
