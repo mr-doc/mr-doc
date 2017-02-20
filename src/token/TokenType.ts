@@ -12,7 +12,7 @@ enum TokenType {
   // LeftBrace,
   // LeftBracket,
   LeftParen,
-  // LineTerminator,
+  LineTerminator,
   Markdown,
   Minus,
   NullTerminator,
@@ -36,7 +36,8 @@ export function getTokenType(ch: string): TokenType {
     '|': TokenType.Pipe,
     '?': TokenType.QuestionMark,
     ')': TokenType.RightParen,
-    '@': TokenType.Tag
+    '@': TokenType.Tag,
+    '\n': TokenType.LineTerminator
   })[ch];
 }
 

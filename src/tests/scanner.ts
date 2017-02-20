@@ -1,6 +1,3 @@
-
-import * as FS from 'fs';
-// import * as Path from 'path';
 import { assert } from 'chai';
 import CommentScanner from '../scanner';
 import Token, { TokenType, getTokenName } from '../token';
@@ -135,7 +132,7 @@ describe('CommentScanner', () => {
         ['any', TokenType.Any]
       ]));
 
-      it('should scan @tag id = (id: any, id) => (any | any) & any', () =>
+    it('should scan @tag id = (id: any, id) => (any | any) & any', () =>
       test('@tag id = (id: any, id) => (any | any) & any', [
         ['@tag', TokenType.Tag],
         ['id', TokenType.Identifier],
@@ -237,7 +234,7 @@ describe('CommentScanner', () => {
         ['|', TokenType.Pipe],
         ['any', TokenType.Any]
       ]));
-      it('should scan @tag id = (id?: any, id = -1) => any | any', () =>
+    it('should scan @tag id = (id?: any, id = -1) => any | any', () =>
       test('@tag id = (id?: any, id = -1) => any | any', [
         ['@tag', TokenType.Tag],
         ['id', TokenType.Identifier],
@@ -358,11 +355,32 @@ describe('CommentScanner', () => {
     ]));
 
     const s1 = `\n
+    \t@param x: number - The x value.
+    \t@param y: number - The y value.
+    \tCreate a point.\n`;
+
+    it(`should scan: ${s1}`, () => test(s1, [
+      ['@param', TokenType.Tag],
+      ['x', TokenType.Identifier],
+      [':', TokenType.Colon],
+      ['number', TokenType.Any],
+      ['-', TokenType.Minus],
+      ['The x value.', TokenType.Description],
+      ['@param', TokenType.Tag],
+      ['y', TokenType.Identifier],
+      [':', TokenType.Colon],
+      ['number', TokenType.Any],
+      ['-', TokenType.Minus],
+      ['The y value.', TokenType.Description],
+      ['Create a point.', TokenType.Description]
+    ]));
+
+    const s2 = `\n
     \tConvert a string containing two comma-separated numbers into a point.
     \t@param str: string - The string containing two comma-separated numbers.
     \t@return: Point - A Point object.\n`;
 
-    it(`should scan: ${s1}`, () => test(s1, [
+    it(`should scan: ${s2}`, () => test(s2, [
       ['Convert a string containing two comma-separated numbers into a point.', TokenType.Description],
       ['@param', TokenType.Tag],
       ['str', TokenType.Identifier],
@@ -377,7 +395,7 @@ describe('CommentScanner', () => {
       ['A Point object.', TokenType.Description]
     ]));
 
-    const s2 = `\n
+    const s3 = `\n
     \tCreate a dot.
     \t@param x: number - The x value.
     \t@param y: number - The y value.
@@ -391,7 +409,7 @@ describe('CommentScanner', () => {
     \t\`\`\`
     \t---\n`;
 
-    it(`should scan ${s2}`, () => test(s2, [
+    it(`should scan ${s3}`, () => test(s3, [
       ['Create a dot.', TokenType.Description],
       ['@param', TokenType.Tag],
       ['x', TokenType.Identifier],

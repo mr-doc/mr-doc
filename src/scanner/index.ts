@@ -17,19 +17,21 @@ export default class CommentScanner extends Scanner {
       this.lexeme = [];
       const ch = this.current();
       if (Match.isLetterOrDigit(ch) || '\'\"[].'.includes(ch)) {
-        this.tokens.push(this.scanString());
+        this.addToken(this.scanString())
+      } else if (Match.isLineTerminator(ch)) {
+        this.addToken(this.scanSimpleChar(), true);
       } else if (Match.isNullTerminator(ch)) {
-        this.tokens.push(this.scanNullTerminator());
+        this.addToken(this.scanNullTerminator());
       } else if (ch === '@') {
-        this.tokens.push(this.scanTag());
+        this.addToken(this.scanTag());
       } else if (ch === '-') {
-        this.tokens.push(this.scanMinus());
+        this.addToken(this.scanMinus());
       } else if (':?|&,'.includes(ch)) {
-        this.tokens.push(this.scanSimpleChar());
+        this.addToken(this.scanSimpleChar());
       } else if (ch === '=') {
-        this.tokens.push(this.scanEqualOrArrow());
+        this.addToken(this.scanEqualOrArrow());
       } else if ('()'.includes(ch)) {
-        this.tokens.push(this.scanParenthesis());
+        this.addToken(this.scanParenthesis());
       } else { this.next(); }
     }
     return new TokenStream(this.tokens);
@@ -44,8 +46,7 @@ export default class CommentScanner extends Scanner {
   }
   private scanString(): Token {
     const start = this.location;
-    const previous = this.tokens.length > 0 ?
-      this.tokens[this.tokens.length - 1] :
+    const previous = this.tokens.length > 0 ? this.previousToken :
       new Token('', TokenType.None, new Range(start, null));
 
     const isEnd = (ch: string) => Match.isSpace(ch) || Match.isNullTerminator(ch);
@@ -68,12 +69,13 @@ export default class CommentScanner extends Scanner {
           type = Any;
         }
       }
-
       const end = this.location;
       return new Token(this.lexeme.join(''), type, new Range(start, end));
     }
     const { Tag, LeftParen, Comma } = TokenType;
-    if (_.includes([Tag, LeftParen, Comma], previous.type)) { return consume(TokenType.Identifier); }
+    if (_.includes([Tag, LeftParen, Comma], previous.type) && !this.isTagTerminated) {
+        return  consume(TokenType.Identifier);
+    } else { this.history = []; }
 
     const { Colon, Arrow, Pipe, Ampersand } = TokenType;
     if (_.includes([Colon, Arrow, Pipe, Ampersand], previous.type)) { return consume(TokenType.Any); }
@@ -145,5 +147,12 @@ export default class CommentScanner extends Scanner {
     const type = lexeme === '(' ? TokenType.LeftParen : TokenType.RightParen;
     return new Token(lexeme, type, new Range(start, end));
   }
-
+  private get isTagTerminated() : boolean {
+    // Get the token from history which contains eols
+    const prev0 = this.previousTokenFromHistory,
+    // Get the previous token that does not have eols
+          prev1 = this.previousToken,
+          { LineTerminator, Tag } = TokenType;
+    return prev0 && prev0.type === LineTerminator && prev1.type === Tag
+  }
 }

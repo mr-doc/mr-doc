@@ -1,5 +1,5 @@
 import { TokenStream } from '../stream';
-import Token, { TokenType } from '../token';
+import Token, { TokenType, getTokenName } from '../token';
 import Node, { NodeKind } from '../node';
 
 type TokenTypes = {
@@ -23,25 +23,38 @@ abstract class Parser {
   }
   protected matchAny(matches: TokenTypes[]) {
     let results = [];
-    for(let i = 0; i < matches.length; i++) {
+    for (let i = 0; i < matches.length; i++) {
       const type = matches[i].type;
       const lexeme = matches[i].lexeme;
-      results.push(this.match.apply(this, lexeme ? [type, lexeme ] : [type]));
+      results.push(this.match.apply(this, lexeme ? [type, lexeme] : [type]));
     }
     return results.indexOf(true) > -1;
   }
   protected matchAll(matches: TokenTypes[]) {
     let results = [];
-    for(let i = 0; i < matches.length; i++) {
+    for (let i = 0; i < matches.length; i++) {
       const type = matches[i].type;
       const lexeme = matches[i].lexeme;
-      results.push(this.match.apply(this, lexeme ? [type, lexeme ] : [type]));
+      results.push(this.match.apply(this, lexeme ? [type, lexeme] : [type]));
     }
     return results.indexOf(false) === 0;
   }
   abstract parse(): Node;
-  get ended(): boolean { return this.stream.ended; }
-  get location () { return this.current().range; }
+  get ended(): boolean {
+    return this.stream.ended ||
+      this.current().type === TokenType.NullTerminator;
+  }
+  protected accept(type?: TokenType) {
+    if (type) {
+      if (this.current().type === type) {
+        this.next();
+      } else {
+        console.log(`warn: expected a token type of ${getTokenName(type)}`);
+        this.next();
+      }
+    } else { this.next(); }
+  }
+  get location() { return this.current().range; }
 }
 
 export default Parser;

@@ -1,44 +1,23 @@
 Comment Parser Specification
 ===================
 
-```
-comment             := <single-comment> (<single-comment>)*
-single-comment      := <<description>>
-                    | <<tag>> ('-' <<description>> | <<parameter>>)
-                    | <<markdown>>
+```ebnf
+<comment>             := <single-comment> (<single-comment>)*
+<single-comment>      := description
+                      | tag ('-' description | <parameters> ('-' description))
+                      | markdown
 
-parameter           := <<initialized (, initialized)*
-                    | optional (, optional)*
-                    | typed (, typed)*
+<parameters>          := <formal-parameter> (, <formal-parameter>)*
+<formal-parameter>    := <parameter> ('=' initializer) | <optional-parameter>
 
-initialized         := '=' init
-optional            := '?' ':' typed
+<parameter>           := identifier (':' <type> | ':' '(' <type> ')' | <arrow-function-type>)
+<optional-parameter>  := identifier '?' (':' <type>)
+<type>                := any (<union-type> | <intersection-type>) | <arrow-function-type>
 
-arrow-function      := '(' parameter-list ')'
+<union-type>          := '|' <type> (<union-type>)*
 
-function(a, b: () => () => string)
+<intersection-type>   := '&' <type> (<intersection-type)*
 
-```
-
-
-```
-comment             := single-comment (single-comment)*
-single-comment      := description
-                    | @tag ('-' description | declaration)
-                    | markdown
-declaration         := id (type-declaration | initializer)
-
-type-declaration    := (':' type | '?' ':' optional-type)
-initializer         := '=' init
-
-type                := any-type (initializer)
-                    | '(' any-type (, any-type)* ')' (arrow-function)
-optional-type       := any-type
-                    | '(' any-type (, any-type)* ')' (arrow-function)
-
-any-type            := any (terminal) (union-type | intersect-type)
-union-type          := any-type '|' any-type
-intersect-type      := any-type '&' any-type
-arrow-function      := '=''>' any-type
+<arrow-function-type> := '(' ( <parameter> (, <parameter>)* | <optional-parameter> (, <optional-parameter>)* ) ') => <type>
 
 ```
