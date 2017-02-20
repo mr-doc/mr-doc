@@ -2,12 +2,21 @@ Comment Parser Specification
 ===================
 
 ```
-comment             := single-comment (single-comment)*
-single-comment      := description
-                    | @tag ('-' description | Parameter)
-                    | markdown
+comment             := <single-comment> (<single-comment>)*
+single-comment      := <<description>>
+                    | <<tag>> ('-' <<description>> | <<parameter>>)
+                    | <<markdown>>
 
-Parameter           := Identifier (?)
+parameter           := <<initialized (, initialized)*
+                    | optional (, optional)*
+                    | typed (, typed)*
+
+initialized         := '=' init
+optional            := '?' ':' typed
+
+arrow-function      := '(' parameter-list ')'
+
+function(a, b: () => () => string)
 
 ```
 
