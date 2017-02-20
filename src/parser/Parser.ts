@@ -45,11 +45,14 @@ abstract class Parser {
       this.current().type === TokenType.NullTerminator;
   }
   protected accept(type?: TokenType) {
-    if (type) {
+    if (type && this.current()) {
+      const isEOF = () => this.current().type === TokenType.NullTerminator;
       if (this.current().type === type) {
+        if(isEOF()) return;
         this.next();
       } else {
         console.log(`warn: expected a token type of ${getTokenName(type)}`);
+        if(isEOF()) return;
         this.next();
       }
     } else { this.next(); }

@@ -84,13 +84,12 @@ export default class CommentParser extends Parser {
     console.log(`In parseFormalParameter: ${this.current().name}`);
     const { Identifier, Equal, Initializer, QuestionMark, Colon } = TokenType;
     if (this.current().type === Identifier) {
+      console.log(this.current().name);
+      
       switch (this.peek(1).type) {
         case Colon:
+        case Equal:
           this.parseParameter();
-          if (this.current().type === Equal) {
-            this.accept(Equal);
-            this.accept(Initializer);
-          }
           break;
         case QuestionMark:
           this.parseOptionalParameter();
@@ -101,10 +100,13 @@ export default class CommentParser extends Parser {
   }
   private parseParameter() {
     console.log(`In parseParameter: ${this.current().name}`);
-    const { Identifier, Colon, LeftParen, RightParen, Any } = TokenType;
+    const { Identifier, Colon, LeftParen, RightParen, Any, Equal, Initializer } = TokenType;
     this.accept(Identifier);
     if (this.current().type === Colon) {
       this.parseTypeDenoter();
+    } else if (this.current().type === Equal) {
+      this.accept();
+      this.accept(Initializer);
     }
     return;
   }

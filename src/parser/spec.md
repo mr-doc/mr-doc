@@ -8,9 +8,9 @@ Comment Parser Specification
                       | markdown
 
 <parameters>          := <formal-parameter> (, <formal-parameter>)*
-<formal-parameter>    := <parameter> ('=' initializer) | <optional-parameter>
+<formal-parameter>    := <parameter> | <optional-parameter>
 
-<parameter>           := identifier (<type-denoter>)
+<parameter>           := identifier ('=' initializer | <type-denoter>)
 <optional-parameter>  := identifier '?' (<type-denoter>)
 
 <type-denoter>        := ':' <type> | ':' '(' <type> ')' | <arrow-function-type>
