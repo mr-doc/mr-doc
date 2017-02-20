@@ -10,8 +10,11 @@ Comment Parser Specification
 <parameters>          := <formal-parameter> (, <formal-parameter>)*
 <formal-parameter>    := <parameter> ('=' initializer) | <optional-parameter>
 
-<parameter>           := identifier (':' <type> | ':' '(' <type> ')' | <arrow-function-type>)
-<optional-parameter>  := identifier '?' (':' <type>)
+<parameter>           := identifier (<type-denoter>)
+<optional-parameter>  := identifier '?' (<type-denoter>)
+
+<type-denoter>        := ':' <type> | ':' '(' <type> ')' | <arrow-function-type>
+
 <type>                := any (<union-type> | <intersection-type>) | <arrow-function-type>
 
 <union-type>          := '|' <type> (<union-type>)*

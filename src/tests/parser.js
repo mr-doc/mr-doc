@@ -3,7 +3,7 @@ const scanner_1 = require("../scanner");
 const parser_1 = require("../parser");
 const scanner = new scanner_1.default();
 scanner.source(`
- @see {{url}}
+ @see id?: string
 `);
 const parser = new parser_1.default(scanner.scan());
 describe('CommentParser', () => {

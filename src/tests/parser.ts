@@ -2,7 +2,7 @@ import CommentScanner from '../scanner';
 import CommentParser from '../parser';
 const scanner = new CommentScanner();
 scanner.source(`
- @see {{url}}
+ @see id?: string
 `);
 const parser = new CommentParser(scanner.scan());
 

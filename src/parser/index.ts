@@ -31,14 +31,14 @@ export default class CommentParser extends Parser {
     const { Tag, Description, Markdown } = TokenType;
     this.parseSingleComment();
     console.log(`current: ${this.current().name}`);
-    
+
     while (_.includes([Tag, Description, Markdown], this.current().type)) {
       console.log('...parsing');
       this.parseSingleComment();
       console.log(`current: ${this.current().name}`);
     }
     console.log('\ninfo: completed parsing');
-    
+
     return;
   }
   private parseSingleComment() {
@@ -55,7 +55,7 @@ export default class CommentParser extends Parser {
           this.accept();
           this.accept(Description);
         }
-        else if (this.current().type === Identifier) { 
+        else if (this.current().type === Identifier) {
           this.parseParameters();
           if (this.current().type === Minus) {
             this.accept();
@@ -104,16 +104,7 @@ export default class CommentParser extends Parser {
     const { Identifier, Colon, LeftParen, RightParen, Any } = TokenType;
     this.accept(Identifier);
     if (this.current().type === Colon) {
-      this.accept();
-      if (this.current().type === LeftParen) {
-        if (this.peek(1).type === Identifier) {
-          this.parseArrowFunctionType();
-        } else {
-          this.accept();
-          this.parseType();       
-          this.accept(RightParen);
-        }
-      } else this.parseType();
+      this.parseTypeDenoter();
     }
     return;
   }
@@ -123,19 +114,28 @@ export default class CommentParser extends Parser {
     this.accept(Identifier);
     this.accept(QuestionMark);
     if (this.current().type === Colon) {
-      this.accept();
-      if (this.current().type === LeftParen) {
+      this.parseTypeDenoter();
+    }
+    return;
+  }
+  private parseTypeDenoter() {
+    const { LeftParen, RightParen, Identifier } = TokenType;
+    this.accept();
+    if (this.current().type === LeftParen) {
+      if (this.peek(1).type === Identifier) {
+        this.parseArrowFunctionType();
+      } else {
         this.accept();
-        this.parseType();        
+        this.parseType();
         this.accept(RightParen);
       }
-    }
+    } else this.parseType();
     return;
   }
   private parseType() {
     console.log(`In parseType: ${this.current().name}`);
     const { Any, Pipe, Ampersand, LeftParen } = TokenType;
-    
+
     this.accept(Any);
     switch (this.current().type) {
       case Pipe:
