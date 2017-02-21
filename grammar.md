@@ -1,4 +1,4 @@
-Comment Parser Specification
+Comment Grammar
 ===================
 
 ```ebnf
