@@ -1,6 +1,6 @@
 import { TokenStream } from '../stream';
 import Token, { TokenType, getTokenName } from '../token';
-import Node, { NodeKind } from '../node';
+import Node, { NodeType } from '../node';
 
 type TokenTypes = {
   type: TokenType,
@@ -14,6 +14,13 @@ abstract class Parser {
   protected next(): Token { return this.stream.next(); }
   protected previous(): Token { return this.stream.previous(); }
   protected peek(to: number): Token { return this.stream.peek(to); }
+  protected consume(to: number) {
+    let i = 0;
+    while (i < Math.abs(to)) {
+      const s = to < 0 ? this.previous() : this.next();
+      i++;
+    }
+  }
   protected match(type: TokenType, lexeme?: string) {
     let current = this.current();
     if (lexeme) {

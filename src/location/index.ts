@@ -12,7 +12,7 @@ export default class Location {
 export class Range {
   readonly start: Location
   readonly end: Location
-  constructor(start: Location, end: Location) {
+  constructor(start: Location, end?: Location) {
     this.start = start;
     this.end = end;
   }

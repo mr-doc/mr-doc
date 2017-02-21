@@ -1,6 +1,6 @@
 import Match from '../utils/Match';
-import Stream from './Stream';
-import Location from '../Location/';
+import Stream from './';
+import Location from '../location';
 
 export default class CharacterStream implements Stream {
   private stream: string[] = [];

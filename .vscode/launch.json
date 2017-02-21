@@ -11,9 +11,17 @@
       "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
       "cwd": "${workspaceRoot}",
       "args": [
-        "src/tests/*.js",
+        "test/*.js",
         "--no-timeouts"
       ],
+      "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Parser",
+      "program": "${workspaceRoot}/test/parser.ts",
+      "cwd": "${workspaceRoot}",
       "sourceMaps": true
     }
   ]

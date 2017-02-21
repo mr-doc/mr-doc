@@ -1,6 +1,6 @@
 import { assert } from 'chai';
-import CommentScanner from '../scanner';
-import Token, { TokenType, getTokenName } from '../token';
+import CommentScanner from '../src/scanner';
+import Token, { TokenType, getTokenName } from '../src/token';
 
 const scanner = new CommentScanner();
 function test(source: string, match: [string, TokenType][] | TokenType) {
@@ -310,6 +310,7 @@ describe('CommentScanner', () => {
       [':', TokenType.Colon],
       ['any', TokenType.Any]
     ]));
+
     it('should scan @tag id?: any', () => test('@tag id?: any', [
       ['@tag', TokenType.Tag],
       ['id', TokenType.Identifier],
@@ -329,6 +330,18 @@ describe('CommentScanner', () => {
       [':', TokenType.Colon],
       ['any', TokenType.Any]
     ]));
+    it('should scan @tag id: (any | any | any[])', () => test('@tag id: (any | any | any[])', [
+      ['@tag', TokenType.Tag],
+      ['id', TokenType.Identifier],
+      [':', TokenType.Colon],
+      ['(', TokenType.LeftParen],
+      ['any', TokenType.Any],
+      ['|', TokenType.Pipe],
+      ['any', TokenType.Any],
+      ['|', TokenType.Pipe],
+      ['any[]', TokenType.Any],
+      [')', TokenType.RightParen],
+    ]))
   });
 
   describe('Real-world scan', () => {

@@ -1,86 +1,103 @@
 import Token, { TokenType } from '../token';
-import Range from '../location';
+import Location, { Range } from '../location';
 
 export
-  const enum NodeKind {
+  const enum NodeType {
   None = 0,
-  Comment = 2 << 1,
-  SimpleComment = 2 << 2,
-  ComplexComment = 2 << 3,
-  MarkdownComment = 2 << 4,
-  TypeStatement = 2 << 5,
-  TypeDeclaration = 2 << 6,
-}
-
-
-interface Node {
-  kind: TokenType,
-  flags: NodeKind
-  statements?: Node[];
-  range?: Range | [Range, Range]
-}
-
-export
-  interface Comment extends Node {
-  comments?: Node[]
-  description?: string
-}
-
-export
-  interface BasicComment extends Comment {
+  Comment,
+  DescriptionComment,
+  TagComment,
+  MarkdownComment,
+  // Parameters,
+  FormalParameter,
+  Parameter,
+  OptionalParameter,
+  TypeDeclaration,
+  Type,
+  UnionType,
+  IntersectionType,
+  ArrowFunctionType
 
 }
 
-export
-  interface AdvancedComment extends Comment {
-  statements: Node[]
+export function getNodeTypeName(flag: NodeType): string {
+  return ({
+    [NodeType.None]: "None",
+    [NodeType.Comment]: "Comment",
+    [NodeType.DescriptionComment]: "DescriptionComment",
+    [NodeType.TagComment]: "TagComment",
+    [NodeType.MarkdownComment]: "MarkdownComment",
+    [NodeType.FormalParameter]: "FormalParameter",
+    [NodeType.Parameter]: "Parameter",
+    [NodeType.OptionalParameter]: "OptionalParameter",
+    [NodeType.TypeDeclaration]: "TypeDeclaration",
+    [NodeType.Type]: "Type",
+    [NodeType.UnionType]: "UnionType",
+    [NodeType.IntersectionType]: "IntersectionType",
+    [NodeType.ArrowFunctionType]: "ArrowFunctionType"
+  })[flag];
 }
 
-export
-  interface MarkdownComment extends Comment {
+export interface Node {
+  token?: Token
+  kind?: TokenType
+  flag?: NodeType
+  flagName?: string
+  range?: Range
 }
 
-export
-  interface TypeStatement extends Node {
-  declarations: Node[]
+export interface Comment extends Node {
+  comments?: Comment[]
 }
 
-export
-  interface TypeDeclaration extends Node {
-  name?: string
-  tag?: Tag
-  types: Node[]
+export interface DescriptionComment extends Comment {
+  description?: string,
+}
+export interface TagComment extends Comment {
+  tag?: string,
+  description?: DescriptionComment,
+  parameter?: FormalParameter
 }
 
-export
-  interface VariableDeclaration extends Node {
-
+export interface MarkdownComment extends Comment {
+  markdown?: string
 }
 
-export
-  interface Tag extends Node {
-  text: string
+export interface FormalParameter extends Node {
+  parameter?: Parameter | OptionalParameter
+  isOptional?: boolean
 }
 
-export
-  interface Identifier extends Node {
-
+export interface Parameter extends Node {
+  identifier?: string
+  initializer?: string
+  type?: TypeDeclaration
 }
 
-export
-  interface SpecialWord extends Node {
-  text: string
+export interface OptionalParameter extends Node {
+  parameter?: string
+  type?: TypeDeclaration
 }
 
-export
-  interface UnionType extends Node {
-  types: SpecialWord[]
+export interface TypeDeclaration extends Node {
+  type?: Type | ArrowFunctionType
 }
 
-export
-  interface IntersectionType extends Node {
-    types: SpecialWord[]
+export interface Type extends Node {
+  type?: string | UnionType | IntersectionType | ArrowFunctionType
 }
 
+export interface UnionType extends Type {
+  types?: Type[]
+}
+
+export interface IntersectionType extends Type {
+  types?: Type[]
+}
+
+export interface ArrowFunctionType extends Type {
+  parameter?: Parameter | OptionalParameter
+  parameters?: Parameter[] & OptionalParameter[]
+}
 
 export default Node;

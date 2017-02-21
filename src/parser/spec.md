@@ -4,16 +4,15 @@ Comment Parser Specification
 ```ebnf
 <comment>             := <single-comment> (<single-comment>)*
 <single-comment>      := description
-                      | tag ('-' description | <parameters> ('-' description))
+                      | tag ('-' description | <formal-parameter> ('-' description))
                       | markdown
 
-<parameters>          := <formal-parameter> (, <formal-parameter>)*
 <formal-parameter>    := <parameter> | <optional-parameter>
 
-<parameter>           := identifier ('=' initializer | <type-denoter>)
-<optional-parameter>  := identifier '?' (<type-denoter>)
+<parameter>           := identifier ('=' initializer | <type-declaration>)
+<optional-parameter>  := identifier '?' (<type-declaration>)
 
-<type-denoter>        := ':' <type> | ':' '(' <type> ')' | <arrow-function-type>
+<type-declaration>    := ':' <type> | ':' '(' <type> ')' | <arrow-function-type>
 
 <type>                := any (<union-type> | <intersection-type>) | <arrow-function-type>
 
