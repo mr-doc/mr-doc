@@ -1,6 +1,6 @@
 import { TokenStream } from '../stream';
 import Token, { TokenType, getTokenName } from '../token';
-import Node, { NodeType } from '../node';
+import Node, { NodeType } from '../ast';
 
 type TokenTypes = {
   type: TokenType,

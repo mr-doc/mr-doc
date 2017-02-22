@@ -1,23 +1,16 @@
+import * as _ from 'lodash';
 import Token, { TokenType } from '../token';
 import Location, { Range } from '../location';
 
 export
   const enum NodeType {
   None = 0,
-  Comment,
-  DescriptionComment,
-  TagComment,
-  MarkdownComment,
-  // Parameters,
-  FormalParameter,
-  Parameter,
-  OptionalParameter,
-  TypeDeclaration,
-  Type,
-  UnionType,
-  IntersectionType,
-  ArrowFunctionType
-
+  // Comment
+  Comment, DescriptionComment, TagComment, MarkdownComment,
+  // Parameter
+  FormalParameter, Parameter, OptionalParameter,
+  // Types
+  TypeDeclaration, Type, UnionType, IntersectionType, ArrowFunctionType
 }
 
 export function getNodeTypeName(flag: NodeType): string {
@@ -101,3 +94,42 @@ export interface ArrowFunctionType extends Type {
 }
 
 export default Node;
+
+// ---------------
+// --- Helpers ---
+// ---------------
+
+type visitor = (node: Node, parent?: Node, property?, index?: number) => void;
+/**
+ * Traverses an AST
+ * Credits to https://github.com/olov/ast-traverse
+ * @returns Node[]  - A flattened tree
+ */
+export function traverse(root, visitor?: { pre?: visitor, post?: visitor }) {
+  const leaves: Node[] = [];
+
+  const visit = (node: Node, parent?, property?, index?: number) => {
+    if (_.isUndefined(node)) return;
+    if (visitor && visitor.pre) visitor.pre(node, parent, property, index);
+    if (_.isObject(node)) {
+      for (const prop in node) {
+        let child = node[prop];
+        if (_.isArray(child)) {
+          for (let i = 0; i < child.length; i++) {
+            if (_.isPlainObject(child[i])) {
+              leaves.push(child[i])
+              visit(child[i], node, prop, i);
+            }
+          }
+        } else if (_.isPlainObject(child)) {
+          leaves.push(child);
+          visit(child, node, prop);
+        }
+      }
+    }
+    if (visitor && visitor.post) visitor.post(node, parent, property, index);
+  }
+  leaves.push(root);
+  visit(root);
+  return leaves;
+};

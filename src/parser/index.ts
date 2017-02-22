@@ -19,11 +19,15 @@ import Node, {
   IntersectionType,
   ArrowFunctionType,
   getNodeTypeName
-} from '../node';
+} from '../ast';
 
 export default class CommentParser extends Parser {
+  options = {
+    flagName: false
+  }
   private createNode(flag: NodeType, kind: TokenType) {
-    return ({ range: new Range(this.location.start), flag, kind, flagName: getNodeTypeName(flag) });
+    const node = { range: new Range(this.location.start), flag, kind }
+    return this.options.flagName ? _.merge(node, { flagName: getNodeTypeName(flag) }) : node;
   }
   parse(): Comment {
     return this.parseComment();
@@ -53,7 +57,8 @@ export default class CommentParser extends Parser {
         flag: NodeType.DescriptionComment,
         description: current.lexeme,
         kind: current.type as TokenType,
-        range: current.range
+        range: current.range,
+        flagName: this.options.flagName ? getNodeTypeName(NodeType.DescriptionComment) : undefined
       }) : null;
     }
 
@@ -172,7 +177,7 @@ export default class CommentParser extends Parser {
     // Consume ':'
     this.accept();
     if (this.match(LeftParen)) {
-      if (this.peek(1).type === Identifier) {
+      if (this.peek(1).type === Identifier || this.peek(1).type == RightParen) {
         rootNode.type = this.parseArrowFunctionType();
       } else {
         this.accept();
