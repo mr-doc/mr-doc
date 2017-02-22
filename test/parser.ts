@@ -14,7 +14,6 @@ scanner.source(`
 
 
 const parser = new CommentParser(scanner.scan());
-parser.options.flagName = true;
 const ast = parser.parse();
 // console.dir(ast, { depth: null, colors: true });
 // console.log(ast.comments);

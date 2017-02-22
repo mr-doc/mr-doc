@@ -24,7 +24,7 @@ export default class CommentScanner extends Scanner {
         this.addToken(this.scanNullTerminator());
       } else if (ch === '@') {
         this.addToken(this.scanTag());
-      } else if (ch === '-') {
+      } else if (ch === '-' || this.isMarkdownTag) {
         this.addToken(this.scanMinus());
       } else if (':?|&,'.includes(ch)) {
         this.addToken(this.scanSimpleChar());
@@ -74,7 +74,7 @@ export default class CommentScanner extends Scanner {
     }
     const { Tag, LeftParen, Comma } = TokenType;
     if (_.includes([Tag, LeftParen, Comma], previous.type) && !this.isTagTerminated) {
-        return  consume(TokenType.Identifier);
+      return consume(TokenType.Identifier);
     } else { this.history = []; }
 
     const { Colon, Arrow, Pipe, Ampersand } = TokenType;
@@ -103,7 +103,6 @@ export default class CommentScanner extends Scanner {
     const start = this.location;
     const previous = this.tokens[this.tokens.length - 1];
     const isInitializer = previous && previous.type === TokenType.Equal && this.current() === '-' && Match.isDigit(this.peek(1));
-    const isMarkdown = this.current() + this.peek(1) + this.peek(2) === '---';
     let type: TokenType = TokenType.None;
 
     if (isInitializer) {
@@ -111,27 +110,31 @@ export default class CommentScanner extends Scanner {
       while (Match.isDigit(this.current())) { this.lexeme.push(this.next()); }
       type = TokenType.Initializer;
     }
-    else if (isMarkdown) { type = this.scanMarkdown(); }
+    else if (this.isMarkdownTag) { type = this.scanMarkdown(); }
     else { this.lexeme.push(this.next()); type = TokenType.Minus }
 
     const end = this.location;
     return new Token(this.lexeme.join(''), type, new Range(start, end));
   }
-
   private scanMarkdown(): TokenType {
-    const isMarkdownTag = (m1: string, m2: string, m3: string): boolean => m1 + m2 + m3 === '---';
-    const isCommentStar = (col: number): boolean => (col === 0 || col === 1) && this.current() === '*';
-    let starEnabled: boolean = this.peek(-1) === '*';
-
+    let offset = this.location.column;
     // Consume the first three lexemes
     this.consume(3, this.lexeme);
     // Keep consuming the lexemes until markdown ends
-    while (!isMarkdownTag(this.current(), this.peek(1), this.peek(2))) {
-      if (isCommentStar(this.location.column) && starEnabled) { this.next(); }
-      else { this.lexeme.push(this.next()); }
+    while (!this.isMarkdownTag) {
+      // Check if there were chars before the first '-'
+      if (_.includes([2, 3, 4], offset) && this.location.column === 1) {
+        for (let i = 0; i < offset - 1; i++) {
+          if (Match.isLineTerminator(this.current())) {
+            this.lexeme.push(this.next()); break;
+          } else this.next();
+        }
+        // this.consume(offset - 1);
+      } else this.lexeme.push(this.next());
     }
+
     // Consume the last three lexemes
-    if (isMarkdownTag(this.current(), this.peek(1), this.peek(2))) { this.consume(3, this.lexeme); }
+    if (this.isMarkdownTag) { this.consume(3, this.lexeme); }
     return TokenType.Markdown;
   }
   private scanEqualOrArrow(): Token {
@@ -147,12 +150,15 @@ export default class CommentScanner extends Scanner {
     const type = lexeme === '(' ? TokenType.LeftParen : TokenType.RightParen;
     return new Token(lexeme, type, new Range(start, end));
   }
-  private get isTagTerminated() : boolean {
+  private get isTagTerminated(): boolean {
     // Get the token from history which contains eols
     const prev0 = this.previousTokenFromHistory,
-    // Get the previous token that does not have eols
-          prev1 = this.previousToken,
-          { LineTerminator, Tag } = TokenType;
+      // Get the previous token that does not have eols
+      prev1 = this.previousToken,
+      { LineTerminator, Tag } = TokenType;
     return prev0 && prev0.type === LineTerminator && prev1.type === Tag
+  }
+  private get isMarkdownTag(): boolean {
+    return this.current() + this.peek(1) + this.peek(2) === '---';
   }
 }

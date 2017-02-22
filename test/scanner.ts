@@ -1,6 +1,8 @@
 import { assert } from 'chai';
 import CommentScanner from '../src/scanner';
 import Token, { TokenType, getTokenName } from '../src/token';
+import * as FS from 'fs';
+import * as Path from 'path';
 
 const scanner = new CommentScanner();
 function test(source: string, match: [string, TokenType][] | TokenType) {
@@ -16,6 +18,11 @@ function test(source: string, match: [string, TokenType][] | TokenType) {
     count++;
   }
 }
+
+function readComment(version: number, ext?: string) {
+  return FS.readFileSync(Path.resolve(__dirname, './fixtures') + `/comments/${version}${ext ? '.' + ext : '.txt'}`, 'utf8');
+}
+
 describe('CommentScanner', () => {
 
   describe('Basic scan', () => {
@@ -346,10 +353,7 @@ describe('CommentScanner', () => {
 
   describe('Real-world scan', () => {
     // From http://usejsdoc.org/howto-es2015-classes.html#documenting-a-simple-class
-    const s0 = `\n
-    \tCreate a point.
-    \t@param x: number - The x value.
-    \t@param y: number - The y value.\n`;
+    const s0 = readComment(0);
 
     it(`should scan: ${s0}`, () => test(s0, [
       ['Create a point.', TokenType.Description],
@@ -367,12 +371,9 @@ describe('CommentScanner', () => {
       ['The y value.', TokenType.Description]
     ]));
 
-    const s1 = `\n
-    \t@param x: number - The x value.
-    \t@param y: number - The y value.
-    \tCreate a point.\n`;
+    const s1 = readComment(1);
 
-    it(`should scan: ${s1}`, () => test(s1, [
+    it(`should scan \n${s1}`, () => test(s1, [
       ['@param', TokenType.Tag],
       ['x', TokenType.Identifier],
       [':', TokenType.Colon],
@@ -388,12 +389,9 @@ describe('CommentScanner', () => {
       ['Create a point.', TokenType.Description]
     ]));
 
-    const s2 = `\n
-    \tConvert a string containing two comma-separated numbers into a point.
-    \t@param str: string - The string containing two comma-separated numbers.
-    \t@return: Point - A Point object.\n`;
+    const s2 = readComment(2);
 
-    it(`should scan: ${s2}`, () => test(s2, [
+    it(`should scan: \n${s2}`, () => test(s2, [
       ['Convert a string containing two comma-separated numbers into a point.', TokenType.Description],
       ['@param', TokenType.Tag],
       ['str', TokenType.Identifier],
@@ -408,21 +406,9 @@ describe('CommentScanner', () => {
       ['A Point object.', TokenType.Description]
     ]));
 
-    const s3 = `\n
-    \tCreate a dot.
-    \t@param x: number - The x value.
-    \t@param y: number - The y value.
-    \t@param width: number - The width of the dot, in pixels.
-    \t---
-    \t# Create a dot
-    \t
-    \tExample usage
-    \t\`\`\`
-    \tconst dot = new Dot();
-    \t\`\`\`
-    \t---\n`;
+    const s3 = readComment(3);
 
-    it(`should scan ${s3}`, () => test(s3, [
+    it(`should scan \n${s3}`, () => test(s3, [
       ['Create a dot.', TokenType.Description],
       ['@param', TokenType.Tag],
       ['x', TokenType.Identifier],
@@ -442,14 +428,82 @@ describe('CommentScanner', () => {
       ['number', TokenType.Any],
       ['-', TokenType.Minus],
       ['The width of the dot, in pixels.', TokenType.Description],
-      [`---
-    \t# Create a dot
-    \t
-    \tExample usage
-    \t\`\`\`
-    \tconst dot = new Dot();
-    \t\`\`\`
-    \t---`, TokenType.Markdown]
+      ["---\n# Create a dot\n\nExample usage\n```\nconst dot = new Dot();\n```\n---", TokenType.Markdown]
+    ]));
+
+    const s4 = readComment(4);
+
+    it(`should scan \n${s4}`, () => test(s4, [
+      ['Create a dot.', TokenType.Description],
+      ['@param', TokenType.Tag],
+      ['x', TokenType.Identifier],
+      [':', TokenType.Colon],
+      ['number', TokenType.Any],
+      ['-', TokenType.Minus],
+      ['The x value.', TokenType.Description],
+      ['@param', TokenType.Tag],
+      ['y', TokenType.Identifier],
+      [':', TokenType.Colon],
+      ['number', TokenType.Any],
+      ['-', TokenType.Minus],
+      ['The y value.', TokenType.Description],
+      ['@param', TokenType.Tag],
+      ['width', TokenType.Identifier],
+      [':', TokenType.Colon],
+      ['number', TokenType.Any],
+      ['-', TokenType.Minus],
+      ['The width of the dot, in pixels.', TokenType.Description],
+      ["---\n# Create a dot\n\nExample usage\n```\nconst dot = new Dot();\n```\n---", TokenType.Markdown]
+    ]));
+
+    const s5 = readComment(5);
+
+    it(`should scan \n${s5}`, () => test(s5, [
+      ['Create a dot.', TokenType.Description],
+      ['@param', TokenType.Tag],
+      ['x', TokenType.Identifier],
+      [':', TokenType.Colon],
+      ['number', TokenType.Any],
+      ['-', TokenType.Minus],
+      ['The x value.', TokenType.Description],
+      ['@param', TokenType.Tag],
+      ['y', TokenType.Identifier],
+      [':', TokenType.Colon],
+      ['number', TokenType.Any],
+      ['-', TokenType.Minus],
+      ['The y value.', TokenType.Description],
+      ['@param', TokenType.Tag],
+      ['width', TokenType.Identifier],
+      [':', TokenType.Colon],
+      ['number', TokenType.Any],
+      ['-', TokenType.Minus],
+      ['The width of the dot, in pixels.', TokenType.Description],
+      ["---\n# Create a dot\n\nExample usage\n```\nconst dot = new Dot();\n```\n---", TokenType.Markdown]
+    ]));
+
+    const s6 = readComment(6, 'js');
+
+    it(`should scan \n${s6}`, () => test(s6, [
+      ['Create a dot.', TokenType.Description],
+      ['@param', TokenType.Tag],
+      ['x', TokenType.Identifier],
+      [':', TokenType.Colon],
+      ['number', TokenType.Any],
+      ['-', TokenType.Minus],
+      ['The x value.', TokenType.Description],
+      ['@param', TokenType.Tag],
+      ['y', TokenType.Identifier],
+      [':', TokenType.Colon],
+      ['number', TokenType.Any],
+      ['-', TokenType.Minus],
+      ['The y value.', TokenType.Description],
+      ['@param', TokenType.Tag],
+      ['width', TokenType.Identifier],
+      [':', TokenType.Colon],
+      ['number', TokenType.Any],
+      ['-', TokenType.Minus],
+      ['The width of the dot, in pixels.', TokenType.Description],
+      ["---\n# Create a dot\n\nExample usage\n```\nconst dot = new Dot();\n```\n---", TokenType.Markdown]
     ]));
   });
 

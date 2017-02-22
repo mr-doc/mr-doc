@@ -1,0 +1,3 @@
+Create a point.
+@param x: number - The x value.
+@param y: number - The y value.

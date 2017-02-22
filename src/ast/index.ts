@@ -2,6 +2,11 @@ import * as _ from 'lodash';
 import Token, { TokenType } from '../token';
 import Location, { Range } from '../location';
 
+
+// --------------
+// -- NodeType --
+// --------------
+
 export
   const enum NodeType {
   None = 0,
@@ -12,6 +17,10 @@ export
   // Types
   TypeDeclaration, Type, UnionType, IntersectionType, ArrowFunctionType
 }
+
+// ----------------------
+// -- NodeType Helpers --
+// ----------------------
 
 export function getNodeTypeName(flag: NodeType): string {
   return ({
@@ -30,6 +39,10 @@ export function getNodeTypeName(flag: NodeType): string {
     [NodeType.ArrowFunctionType]: "ArrowFunctionType"
   })[flag];
 }
+
+// --------------------
+// -- AST Interfaces --
+// --------------------
 
 export interface Node {
   token?: Token
@@ -89,15 +102,17 @@ export interface IntersectionType extends Type {
 }
 
 export interface ArrowFunctionType extends Type {
-  parameter?: Parameter | OptionalParameter
   parameters?: Parameter[] & OptionalParameter[]
 }
 
-export default Node;
+// -----------------
+// -- AST Helpers --
+// -----------------
 
-// ---------------
-// --- Helpers ---
-// ---------------
+export function createNode(flag: NodeType, kind: TokenType, range: Range) {
+  const node = { range: new Range(range.start), flag, kind, flagName: getNodeTypeName(flag) }
+  return node;
+}
 
 type visitor = (node: Node, parent?: Node, property?, index?: number) => void;
 /**
