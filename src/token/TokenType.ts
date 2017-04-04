@@ -21,7 +21,8 @@ enum TokenType {
   // RightBrace,
   // RightBracket,
   RightParen,
-  Tag
+  Tag,
+  EOF
 }
 
 export function getTokenType(ch: string): TokenType {
@@ -60,7 +61,8 @@ export function getTokenName(type: TokenType): string {
     [TokenType.QuestionMark]: 'QuestionMark',
     [TokenType.RightParen]: 'RightParen',
     [TokenType.Any]: 'Any',
-    [TokenType.Tag]: 'Tag'
+    [TokenType.Tag]: 'Tag',
+    [TokenType.EOF]: 'EOF'
   })[type];
 }
 

@@ -12,7 +12,7 @@ Comment Grammar
 <parameter>           := identifier ('=' initializer | <type-declaration>)
 <optional-parameter>  := identifier '?' (<type-declaration>)
 
-<type-declaration>    := ':' <type> | ':' '(' <type> ')' | <arrow-function-type>
+<type-declaration>    := ':' <type> | ':' '(' <type> ')'
 
 <type>                := any (<union-type> | <intersection-type>) | <arrow-function-type>
 

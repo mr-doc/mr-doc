@@ -1,12 +1,13 @@
-export default class Location {
-  readonly position: number;
-  readonly line: number;
-  readonly column: number;
-  constructor(position: number, line: number, column: number) {
-    this.position = position;
-    this.line = line;
-    this.column = column;
-  }
+interface Location {
+  position: number;
+  line: number;
+  column: number;
+}
+
+export default Location;
+
+export function location(position: number, line: number, column) {
+  return { position, line, column };
 }
 
 export class Range {

@@ -1,13 +1,12 @@
 import { assert } from 'chai';
-import CommentScanner from '../src/scanner';
+import Scanner from '../src/scanner';
 import Token, { TokenType, getTokenName } from '../src/token';
 
-const scanner = new CommentScanner();
 function test(source: string, match: [string, TokenType][] | TokenType) {
-  scanner.source(source);
-  const stream = scanner.scan().stream;
+  const tokenstream = Scanner(source).toTokenStream();
+  const stream = tokenstream.stream;
   let array = typeof match === 'number' ? [[source, match]] : match;
-  array.push(['\u{0000}', TokenType.NullTerminator]);
+  array.push(['\0', TokenType.EOF]);
 
   let count = 0;
   while (count < stream.length) {
@@ -77,6 +76,12 @@ describe('CommentScanner', () => {
       ['id', TokenType.Identifier],
       ['=', TokenType.Equal],
       ['[]', TokenType.Initializer]
+    ]));
+    it('should scan @tag id = {}', () => test('@tag id = {}', [
+      ['@tag', TokenType.Tag],
+      ['id', TokenType.Identifier],
+      ['=', TokenType.Equal],
+      ['{}', TokenType.Initializer]
     ]));
     it('should scan @tag id = init', () => test('@tag id = init', [
       ['@tag', TokenType.Tag],

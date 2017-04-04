@@ -8,11 +8,14 @@ export default class Token {
   readonly range: Range;
   readonly type: TokenType;
   readonly name: string;
-  constructor(lexeme: string, type: TokenType, range: Range) {
+  readonly line: number;
+  readonly column: number;
+  readonly position: number;
+  constructor(lexeme: string, type: TokenType, location: Location) {
     this.lexeme = lexeme;
     this.name = getTokenName(type as number);
     this.type = type;
-    this.range = range;
-    this.location = range.start;
+    this.location = location;
+    
   }
 }
