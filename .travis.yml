@@ -1,5 +1,5 @@
 language: node_js
 node_js:
-  - 5
+  - 7
 
-before_install: npm i -g gulp
+before_install: npm i -g gulp-cli
