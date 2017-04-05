@@ -23,7 +23,8 @@
       "command": "rm",
       "args": [
         "src/**/*.js",
-        "src/**/*.map"
+        "src/**/*.map",
+        "-f"
       ]
 
     }

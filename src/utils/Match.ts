@@ -33,7 +33,7 @@ export default class Match {
   }
 
   static isWhiteSpace(c: string): boolean {
-    return '\u{0009}\u{000B}\u{000C}\u{0020}\u{00A0}\u{FEFF}'.indexOf(c) > -1;
+    return '\u{0009}\u{000B}\u{000C}\u{0020}\u{000A}\u{FEFF}'.indexOf(c) > -1;
   }
 
   static isSpace(c: string): boolean {
