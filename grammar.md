@@ -14,11 +14,11 @@ Comment Grammar
 
 <type-declaration>    := ':' <type> | ':' '(' <type> ')'
 
-<type>                := any (<union-type> | <intersection-type>) | <arrow-function-type>
+<type>                := any | <union-type> | <intersection-type> | <arrow-function-type>
 
-<union-type>          := '|' <type> (<union-type>)*
+<union-type>          := <type> '|' <type> (<union-type>)*
 
-<intersection-type>   := '&' <type> (<intersection-type)*
+<intersection-type>   := <type> '&' <type> (<intersection-type)*
 
 <arrow-function-type> := '(' ( <parameter> (, <parameter>)* | <optional-parameter> (, <optional-parameter>)* ) ') => <type>
 

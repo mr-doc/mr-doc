@@ -2,68 +2,54 @@ import Parser from './Parser';
 import Token, { TokenType } from '../token';
 import { Range } from '../location'
 import * as _ from 'lodash';
-
-import Node, {
-  NodeType,
-  Comment,
-  DescriptionComment,
-  TagComment,
-  MarkdownComment,
-  // Parameters,
-  FormalParameter,
-  Parameter,
-  OptionalParameter,
-  TypeDeclaration,
-  Type,
-  UnionType,
-  IntersectionType,
-  ArrowFunctionType,
-  getNodeTypeName
-} from '../node';
+import * as AST from '../ast';
+const { NodeType, createNode } = AST;
 
 export default class CommentParser extends Parser {
-  private createNode(flag: NodeType, kind: TokenType) {
-    return ({ range: new Range(this.location.start), flag, kind, flagName: getNodeTypeName(flag) });
-  }
-  parse(): Comment {
+
+  parse(): AST.Comment {
     return this.parseComment();
   }
-  private parseComment(): Comment {
+  /**
+   * Parses a comment
+   * ---
+   * Grammar for Comment
+   * ```
+   * <comment> := <single-comment> (<single-comment>)*
+   * ```
+   * ---
+   * @returns AST.Comment - An ast of the parsed comment.
+   */
+  private parseComment(): AST.Comment {
     console.log('started parsing');
     const { Tag, Description, Markdown, None } = TokenType;
-    const rootNode: Comment = this.createNode(NodeType.Comment, None);
+    const rootNode: AST.Comment = createNode(NodeType.Comment, None, this.location);
     rootNode.comments = []
     rootNode.comments.push(this.parseSingleComment());
     while (_.includes([Tag, Description, Markdown], this.current().type)) {
-      console.log('...parsing');
       rootNode.comments.push(this.parseSingleComment());
     }
-    console.log(`current: ${this.current().name}`);
     console.log('\ninfo: completed parsing');
     rootNode.range = new Range(rootNode.range.start, this.location.end);
     return rootNode;
   }
-  private parseSingleComment(): Comment {
+  private parseSingleComment(): AST.Comment {
     const { Minus, Identifier, Tag, Description, Markdown, None } = TokenType;
-    const rootNode: Comment = this.createNode(NodeType.Comment, None);
+    const rootNode: AST.Comment = createNode(NodeType.Comment, None, this.location);
     console.log(`In parseSingleComment: ${this.current().name}`);
-    const getDescription = (): DescriptionComment => {
-      const current = this.current();
-      return this.match(Description) ? ({
-        flag: NodeType.DescriptionComment,
-        description: current.lexeme,
-        kind: current.type as TokenType,
-        range: current.range
-      }) : null;
-    }
 
+    const getDescription = (): AST.DescriptionComment => {
+      const descriptionNode: AST.DescriptionComment = createNode(NodeType.DescriptionComment, Description, this.location);
+      descriptionNode.description = this.current().lexeme;
+      return this.match(Description) ? descriptionNode : null;
+    }
     switch (this.current().type) {
       case Description:
         const descNode = getDescription();
         this.accept();
         return descNode;
       case Tag:
-        const tagNode: TagComment = this.createNode(NodeType.TagComment, Tag);
+        const tagNode: AST.TagComment = createNode(NodeType.TagComment, Tag, this.location);
         tagNode.tag = this.current().lexeme;
         this.accept();
         if (this.match(Minus)) {
@@ -72,7 +58,7 @@ export default class CommentParser extends Parser {
           this.accept(Description);
           return tagNode;
         } else if (this.match(Identifier)) {
-          const formalParamNode: FormalParameter = this.parseFormalParameter();
+          const formalParamNode: AST.FormalParameter = this.parseFormalParameter();
           if (this.match(Minus)) {
             this.accept();
             tagNode.description = getDescription();
@@ -83,7 +69,7 @@ export default class CommentParser extends Parser {
         tagNode.range = new Range(rootNode.range.start, this.location.end);
         return tagNode;
       case Markdown:
-        const mdNode: MarkdownComment = this.createNode(NodeType.MarkdownComment, Markdown);
+        const mdNode: AST.MarkdownComment = createNode(NodeType.MarkdownComment, Markdown, this.location);
         mdNode.markdown = this.current().lexeme;
         mdNode.range = this.current().range;
         this.accept();
@@ -94,25 +80,10 @@ export default class CommentParser extends Parser {
         return rootNode;
     }
   }
-  // private parseParameters(): Parameters {
-  //   console.log(`In parseParameters: ${this.current().name}`);
-  //   const { Comma, None } = TokenType;
-  //   const rootNode: Parameters = this.createNode(NodeType.Parameters, None);
-  //   let paramNode = this.parseFormalParameter();
-  //   rootNode.parameters = [paramNode];
-  //   while (this.match(Comma)) {
-  //     this.accept();
-  //     rootNode.parameters.push(this.parseFormalParameter());
-
-  //   }
-  //   rootNode.range = new Range(rootNode.range.start, this.location.end);
-  //   return rootNode;
-  // }
-  private parseFormalParameter(): FormalParameter {
+  private parseFormalParameter(): AST.FormalParameter {
     console.log(`In parseFormalParameter: ${this.current().name}`);
     const { Identifier, Equal, Initializer, QuestionMark, Colon, None } = TokenType;
-    const rootNode: FormalParameter = this.createNode(NodeType.FormalParameter, None);
-
+    const rootNode: AST.FormalParameter = createNode(NodeType.FormalParameter, None, this.location);
     if (this.match(Identifier)) {
       switch (this.peek(1).type) {
         case Colon:
@@ -121,24 +92,18 @@ export default class CommentParser extends Parser {
           rootNode.isOptional = false;
           break;
         case QuestionMark:
-          const optionalParamNode = this.parseOptionalParameter();
-          rootNode.parameter = optionalParamNode;
-          rootNode.isOptional = optionalParamNode ? true : false;
-
-          break;
-        default:
-          rootNode.parameter = this.parseParameter();
-          rootNode.isOptional = false;
+          rootNode.parameter = this.parseOptionalParameter();
+          rootNode.isOptional = true;
           break;
       }
     }
     rootNode.range = new Range(rootNode.range.start, this.location.end);
     return rootNode;
   }
-  private parseParameter(): Parameter {
+  private parseParameter(): AST.Parameter {
     console.log(`In parseParameter: ${this.current().name}`);
     const { Identifier, Colon, LeftParen, RightParen, Any, Equal, Initializer } = TokenType;
-    const rootNode: Parameter = this.createNode(NodeType.Parameter, Identifier);
+    const rootNode: AST.Parameter = createNode(NodeType.Parameter, Identifier, this.location);
 
     rootNode.identifier = this.current().lexeme;
     this.accept(Identifier);
@@ -152,27 +117,25 @@ export default class CommentParser extends Parser {
     rootNode.range = new Range(rootNode.range.start, this.location.end);
     return rootNode;
   }
-  private parseOptionalParameter(): OptionalParameter {
+  private parseOptionalParameter(): AST.OptionalParameter {
     console.log(`In parseOptionalParameter: ${this.current().name}`);
     const { Identifier, QuestionMark, LeftParen, RightParen, Colon } = TokenType;
-    const rootNode: Parameter = this.createNode(NodeType.Parameter, Identifier);
+    const rootNode: AST.Parameter = createNode(NodeType.Parameter, Identifier, this.location);
 
     rootNode.identifier = this.current().lexeme;
     this.accept(Identifier);
     this.accept(QuestionMark);
-    if (this.match(Colon)) {
-      rootNode.type = this.parseTypeDeclaration();
-    }
+    if (this.match(Colon)) { rootNode.type = this.parseTypeDeclaration(); }
     rootNode.range = new Range(rootNode.range.start, this.location.end);
     return rootNode;
   }
-  private parseTypeDeclaration(): TypeDeclaration {
+  private parseTypeDeclaration(): AST.TypeDeclaration {
     const { LeftParen, RightParen, Identifier, None } = TokenType;
-    const rootNode: TypeDeclaration = this.createNode(NodeType.TypeDeclaration, None);
+    const rootNode: AST.TypeDeclaration = createNode(NodeType.TypeDeclaration, None, this.location);
     // Consume ':'
     this.accept();
     if (this.match(LeftParen)) {
-      if (this.peek(1).type === Identifier) {
+      if (this.peek(1).type === Identifier || this.peek(1).type == RightParen) {
         rootNode.type = this.parseArrowFunctionType();
       } else {
         this.accept();
@@ -183,10 +146,10 @@ export default class CommentParser extends Parser {
     rootNode.range = new Range(rootNode.range.start, this.location.end);
     return rootNode;
   }
-  private parseType(): Type {
+  private parseType(): AST.Type {
     console.log(`In parseType: ${this.current().name}`);
     const { Any, Pipe, Ampersand, LeftParen } = TokenType;
-    const rootNode: Type = this.createNode(NodeType.Type, Any);
+    const rootNode: AST.Type = createNode(NodeType.Type, Any, this.location);
 
     if (!_.includes([Pipe, Ampersand, LeftParen], this.peek(1).type)) {
       rootNode.type = this.current().lexeme;
@@ -204,14 +167,13 @@ export default class CommentParser extends Parser {
           break;
       }
     }
-
     rootNode.range = new Range(rootNode.range.start, this.location.end);
     return rootNode;
   }
-  private parseUnionType(): UnionType {
+  private parseUnionType(): AST.UnionType {
     console.log(`In parseUnionType: ${this.current().name}`);
     const { Pipe, Any } = TokenType;
-    const rootNode: UnionType = this.createNode(NodeType.UnionType, Any);
+    const rootNode: AST.UnionType = createNode(NodeType.UnionType, Any, this.location);
     rootNode.types = [this.current().lexeme]
     this.accept(Any);
     if (this.match(Pipe)) {
@@ -229,10 +191,10 @@ export default class CommentParser extends Parser {
     rootNode.range = new Range(rootNode.range.start, this.location.end);
     return rootNode;
   }
-  private parseIntersectionType(): IntersectionType {
+  private parseIntersectionType(): AST.IntersectionType {
     console.log(`In parseIntersectionType: ${this.current().name}`);
     const { Ampersand, Any } = TokenType;
-    const rootNode: IntersectionType = this.createNode(NodeType.IntersectionType, Any);
+    const rootNode: AST.IntersectionType = createNode(NodeType.IntersectionType, Any, this.location);
     rootNode.types = [this.current().lexeme]
     this.accept(Any);
     if (this.match(Ampersand)) {
@@ -250,33 +212,25 @@ export default class CommentParser extends Parser {
     rootNode.range = new Range(rootNode.range.start, this.location.end);
     return rootNode;
   }
-  private parseArrowFunctionType(): ArrowFunctionType {
+  private parseArrowFunctionType(): AST.ArrowFunctionType {
     console.log(`In parseArrowFunctionType: ${this.current().name}`);
-    const {
-      Identifier, LeftParen, RightParen,
-      Arrow, QuestionMark, Colon, Comma, None
+    const { 
+      Identifier, LeftParen, RightParen, Arrow, QuestionMark, Colon, Comma, None
     } = TokenType;
-    const rootNode: ArrowFunctionType = this.createNode(NodeType.ArrowFunctionType, None);
+    const rootNode: AST.ArrowFunctionType = createNode(NodeType.ArrowFunctionType, None, this.location);
+    rootNode.parameters = [];
     this.accept(LeftParen);
     if (this.match(Identifier)) {
       switch (this.peek(1).type) {
         case Colon:
-          rootNode.parameter = this.parseParameter();
-          if (this.match(Comma)) {
-            rootNode.parameters = [rootNode.parameter];
-            rootNode.parameter = null;
-          }
+          rootNode.parameters.push(this.parseParameter());
           while (this.match(Comma)) {
             this.accept();
             rootNode.parameters.push(this.parseParameter());
           }
           break;
         case QuestionMark:
-          rootNode.parameter = this.parseOptionalParameter();
-          if (this.match(Comma)) {
-            rootNode.parameters = [rootNode.parameter];
-            rootNode.parameter = null;
-          }
+          rootNode.parameters.push(this.parseOptionalParameter());
           while (this.match(Comma)) {
             this.accept();
             rootNode.parameters.push(this.parseOptionalParameter());
