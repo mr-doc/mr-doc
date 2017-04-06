@@ -12,8 +12,6 @@ Comment Grammar
 <parameter>                       := identifier ('=' initializer | <type-declaration>)
 <optional-parameter>              := identifier '?' (<type-declaration>)
 
-<initializer>                     := any
-
 <type-declaration>                := ':' <type>
 
 <type>                            := <union-or-intersection-type> | <function-type>
