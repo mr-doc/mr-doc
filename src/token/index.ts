@@ -1,4 +1,4 @@
 import Token from './Token';
-import TokenType, { getTokenType, getTokenName } from './TokenType';
-export { TokenType, getTokenType, getTokenName };
+import TokenKind, { getTokenKind, getTokenName } from './TokenType';
+export { TokenKind, getTokenKind, getTokenName };
 export default Token;

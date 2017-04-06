@@ -1,21 +1,16 @@
 import Location, { Range } from '../location';
-import { getTokenName } from './';
-export type TokenType = number | string;
+import { getTokenName, TokenKind } from './';
 
 export default class Token {
   readonly lexeme: string;
   readonly location: Location;
   readonly range: Range;
-  readonly type: TokenType;
+  readonly kind: TokenKind;
   readonly name: string;
-  readonly line: number;
-  readonly column: number;
-  readonly position: number;
-  constructor(lexeme: string, type: TokenType, location: Location) {
+  constructor(lexeme: string, type: TokenKind, location: Location) {
     this.lexeme = lexeme;
     this.name = getTokenName(type as number);
-    this.type = type;
+    this.kind = type;
     this.location = location;
-    
   }
 }

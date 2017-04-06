@@ -2,24 +2,39 @@ Comment Grammar
 ===================
 
 ```ebnf
-<comment>             := <single-comment> (<single-comment>)*
-<single-comment>      := description
-                      | tag ('-' description | <formal-parameter> ('-' description))
-                      | markdown
+<comment>                         := <single-comment> (<single-comment>)*
+<single-comment>                  := description
+                                  | tag ('-' description | <formal-parameter> ('-' description))
+                                  | markdown
 
-<formal-parameter>    := <parameter> | <optional-parameter>
+<formal-parameter>                := <parameter> | <optional-parameter>
 
-<parameter>           := identifier ('=' initializer | <type-declaration>)
-<optional-parameter>  := identifier '?' (<type-declaration>)
+<parameter>                       := identifier ('=' initializer | <type-declaration>)
+<optional-parameter>              := identifier '?' (<type-declaration>)
 
-<type-declaration>    := ':' <type> | ':' '(' <type> ')'
+<initializer>                     := any
 
-<type>                := any | <union-type> | <intersection-type> | <arrow-function-type>
+<type-declaration>                := ':' <type>
 
-<union-type>          := <type> '|' <type> (<union-type>)*
+<type>                            := <union-or-intersection-type> | <function-type>
 
-<intersection-type>   := <type> '&' <type> (<intersection-type)*
+<union-or-intersection-type>      := <union-type> | <intersection-or-primary-type>
 
-<arrow-function-type> := '(' ( <parameter> (, <parameter>)* | <optional-parameter> (, <optional-parameter>)* ) ') => <type>
+<intersection-or-primary-type>    := <intersection-type> | <primary-type>
+
+<primary-type>                    := any | <parenthesized-type>
+
+<parenthesized-type>              := '(' <type> ')'
+
+<union-type>                      := <union-or-intersection-or-primary-type> '|' <intersection-or-primary-type>
+
+<intersection>                    := <intersection-or-primary-type> '&' <primary-type>
+
+<function-type>                   := '(' <formal-parameter-list> ') => <type>
+
+<formal-parameter-list>           := <formal-parameter> <formal-parameters>
+
+<formal-parameters>               := ',' <formal-parameter>
+
 
 ```

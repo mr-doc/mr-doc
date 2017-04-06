@@ -1,4 +1,4 @@
-import Token, { TokenType, getTokenType } from '../token';
+import Token, { TokenKind, getTokenKind } from '../token';
 import { TokenStream } from '../stream/';
 import { location } from '../location';
 import Match from '../utils/Match';
@@ -9,7 +9,7 @@ let _stream = "";
 let _lexeme: string[], _tokens: Token[] = [];
 let _previousToken: Token;
 
-function isEOF() { return (_position >= _stream.length || Match.isNullTerminator(current())); }
+function isEOF() { return _position >= _stream.length - 1; }
 function current(): string { return _stream[_position]; }
 function next(): string {
   const ch = _stream[++_position];
@@ -35,109 +35,111 @@ function consume(to: number, array?: string[]) {
 function accept(): string { const ch = current(); next(); return ch; }
 function scan(): Token {
   _lexeme = [];
-  while (Match.isWhiteSpace(current())) { next() };
+  while (Match.isWhiteSpace(current()) && !isEOF()) { next() };
+  // console.log(current());
+  
   if (isEOF()) {
-    return new Token('\0', TokenType.EOF, location(_position, _line, _column));
+    return new Token('\0', TokenKind.EOF, location(_position, _line, _column));
   } else if (Match.isLetterOrDigit(current()) || '\'\"[]{}.'.includes(current())) {
     return scanName();
-  } else if (Match.isLineTerminator(current())) {
-    return scanSimpleChar();
   } else if (current() === '@') {
     return scanTag();
   } else if (current() === '-') {
     return scanMinus();
+  } else if(current() === '+' && peek(1) === '-' && peek(2) === '-') { 
+    return scanMarkdown();
   } else if (':?|&,'.includes(current())) {
     return scanSimpleChar();
   } else if (current() === '=') {
     return scanEqualOrArrow();
   } else if ('()'.includes(current())) {
     return scanParenthesis();
-  } else { next(); }
+  } else { return new Token(accept(), TokenKind.None, location(_position, _line, _column)); }
 }
 
 function scanName(): Token {
-  const isEnd = (ch: string) => Match.isSpace(ch) && Match.isNullTerminator(ch);
-  const filter = (type: TokenType, ch: string): boolean => ({
-    [TokenType.Any]: !isEnd(ch) && !'&|,)-='.includes(ch) && !Match.isSpace(ch),
-    [TokenType.Identifier]: !isEnd(ch) && !'?:)-=,'.includes(ch) && !Match.isSpace(ch),
-    [TokenType.Initializer]: !isEnd(ch) && !',)-='.includes(ch) && !Match.isSpace(ch),
-    [TokenType.Description]: !Match.isLineTerminator(ch) && !Match.isNullTerminator(ch)
-  }[type]);
-  const consume = (type: TokenType): Token => {
-    while (filter(type, current()) && !isEOF()) { _lexeme.push(accept()); }
-    const { Any, Ampersand, Pipe, Identifier, LeftParen } = TokenType;
-    if (type === Identifier) {
+  const filter = (kind: TokenKind, ch: string): boolean => ({
+    [TokenKind.Any]: !Match.isSpace(ch) && !'&|,)-='.includes(ch) && !Match.isSpace(ch),
+    [TokenKind.Identifier]: !Match.isSpace(ch) && !'?:)-=,'.includes(ch) && !Match.isSpace(ch),
+    [TokenKind.Initializer]: !Match.isSpace(ch) && !',)-='.includes(ch) && !Match.isSpace(ch),
+    [TokenKind.Description]: !Match.isLineTerminator(ch) && !Match.isNullTerminator(ch)
+  }[kind]);
+  const consume = (kind: TokenKind): Token => {
+    while (filter(kind, current()) && !isEOF()) { _lexeme.push(accept()); }
+    const { Any, Ampersand, Pipe, Identifier, LeftParen } = TokenKind;
+    if (kind === Identifier) {
 
       // Skip whitespace
       while (Match.isWhiteSpace(current())) { next(); }
       // ... =>  (... | any) || (... & any )
-      if (_previousToken && _previousToken.type === LeftParen) {
-        if ('&|'.includes(current())) { type = Any; }
-      } else if (_previousToken && _.includes([Pipe, Ampersand], _previousToken.type)) { type = Any; }
+      if (_previousToken && _previousToken.kind === LeftParen) {
+        if ('&|'.includes(current())) { kind = Any; }
+      } else if (_previousToken && _.includes([Pipe, Ampersand], _previousToken.kind)) { kind = Any; }
     }
-    return new Token(_lexeme.join(''), type, location(_position, _line, _column));
+    return new Token(_lexeme.join(''), kind, location(_position, _line, _column));
   }
-  const { Tag, LeftParen, Comma } = TokenType;
-  if (_previousToken && _.includes([Tag, LeftParen, Comma], _previousToken.type)) { return consume(TokenType.Identifier); }
+  const { Tag, LeftParen, Comma } = TokenKind;
+  if (_previousToken && _.includes([Tag, LeftParen, Comma], _previousToken.kind)) { return consume(TokenKind.Identifier); }
 
-  const { Colon, Arrow, Pipe, Ampersand } = TokenType;
-  if (_previousToken && _.includes([Colon, Arrow, Pipe, Ampersand], _previousToken.type)) { return consume(TokenType.Any); }
-  if (_previousToken && _previousToken.type === TokenType.Equal) { return consume(TokenType.Initializer); }
+  const { Colon, Arrow, Pipe, Ampersand } = TokenKind;
+  if (_previousToken && _.includes([Colon, Arrow, Pipe, Ampersand], _previousToken.kind)) { return consume(TokenKind.Any); }
+  if (_previousToken && _previousToken.kind === TokenKind.Equal) { return consume(TokenKind.Initializer); }
 
-  return consume(TokenType.Description);
+  return consume(TokenKind.Description);
 }
 function scanSimpleChar(): Token {
   const ch = accept();
-  const type = getTokenType(ch);
-  return new Token(ch, type, location(_position, _line, _column));
+  const kind = getTokenKind(ch);
+  return new Token(ch, kind, location(_position, _line, _column));
 }
 function scanTag(): Token {
-  while (current() !== ':' && !Match.isWhiteSpace(current()) && !isEOF()) { _lexeme.push(accept()); }
-  return new Token(_lexeme.join(''), TokenType.Tag, location(_position, _line, _column));
+  while (current() !== ':' && !Match.isSpace(current())) { _lexeme.push(accept()); }
+  return new Token(_lexeme.join(''), TokenKind.Tag, location(_position, _line, _column));
 }
 function scanMinus(): Token {
   const isInitializer = _previousToken &&
-    _previousToken.type === TokenType.Equal &&
+    _previousToken.kind === TokenKind.Equal &&
     current() === '-' && Match.isDigit(peek(1));
-  const isMarkdown = current() + peek(1) + peek(2) === '---';
-  let type: TokenType = TokenType.None;
+  let kind: TokenKind = TokenKind.None;
 
   if (isInitializer) {
     _lexeme.push(accept());
     while (Match.isDigit(current())) { _lexeme.push(accept()); }
-    type = TokenType.Initializer;
-  }
-  else if (isMarkdown) { type = scanMarkdown(); }
-  else { _lexeme.push(accept()); type = TokenType.Minus }
+    kind = TokenKind.Initializer;
+  } else { _lexeme.push(accept()); kind = TokenKind.Minus }
 
-  return new Token(_lexeme.join(''), type, location(_position, _line, _column));
+  return new Token(_lexeme.join(''), kind, location(_position, _line, _column));
 }
 
-function scanMarkdown() {
-  const isMarkdownTag = (m1: string, m2: string, m3: string): boolean => m1 + m2 + m3 === '---';
-  const isCommentStar = (col: number): boolean => (col === 0 || col === 1) && current() === '*';
-  let starEnabled: boolean = peek(-1) === '*';
+function scanMarkdown() : Token {
+  const isMarkdownTag = (m1: string, m2: string, m3: string): boolean => m1 + m2 + m3 === '+--';
+  // const isCommentStar = (col: number): boolean => (col === 0 || col === 1) && current() === '*';
+  // let starEnabled: boolean = peek(-1) === '*';
+  let distance = peek(-1) === '*' ? _column - 1 : null;
+  distance = peek(-2) === '*' ? _column - 2 : distance;
 
   // Consume the first three lexemes
   consume(3, _lexeme);
   // Keep consuming the lexemes until markdown ends
   while (!isMarkdownTag(current(), peek(1), peek(2))) {
-    if (isCommentStar(_column) && starEnabled) { next(); }
+    
+    if (distance && distance === _column && current() === '*') { next(); }
     else { _lexeme.push(accept()); }
   }
   // Consume the last three lexemes
   if (isMarkdownTag(current(), peek(1), peek(2))) { consume(3, _lexeme); }
-  return TokenType.Markdown;
+  
+  return new Token(_lexeme.join(''), TokenKind.Markdown, location(_position, _line, _column));
 }
 
 function scanEqualOrArrow(): Token {
   const lexeme = peek(1) === '>' ? accept() + accept() : accept();
-  return new Token(lexeme, getTokenType(lexeme), location(_position, _line, _column));
+  return new Token(lexeme, getTokenKind(lexeme), location(_position, _line, _column));
 }
 function scanParenthesis(): Token {
   const lexeme = accept();
-  const type = lexeme === '(' ? TokenType.LeftParen : TokenType.RightParen;
-  return new Token(lexeme, type, location(_position, _line, _column));
+  const kind = lexeme === '(' ? TokenKind.LeftParen : TokenKind.RightParen;
+  return new Token(lexeme, kind, location(_position, _line, _column));
 }
 
 export default function Scanner(source?: string) {
@@ -146,13 +148,11 @@ export default function Scanner(source?: string) {
   _stream = source ? `${source}\u{0000}` : '\u{0000}';
   _tokens = [];
   _previousToken = null;
-  const getToken = () => { _previousToken = scan(); return _previousToken; }
   return {
-    scan: function scan() { return _previousToken = getToken(); },
+    scan: () => _previousToken = scan(),
     toTokenStream: function toTokenStream() {
-      let token = getToken();
-      while (token.type !== TokenType.EOF) { _tokens.push(token); token = getToken(); }
-      _tokens.push(token);
+      let token = _previousToken = scan();
+      while (token.kind !== TokenKind.EOF) { if(token.kind !== TokenKind.None){ _tokens.push(token); }  token = _previousToken = scan(); }
       return new TokenStream(_tokens);
     },
     position: function position(): number { return _position; },
@@ -160,4 +160,12 @@ export default function Scanner(source?: string) {
     column: function column(): number { return _column; },
     eof: isEOF
   };
+}
+
+export interface IScanner {
+  scan: () => Token;
+  toTokenStream: () => TokenStream;
+  position: () => number;
+  line: () => number;
+  eof: () => boolean;
 }

@@ -1,4 +1,4 @@
-enum TokenType {
+export enum TokenKind {
   None = 0,
   Ampersand,
   Any,
@@ -25,62 +25,62 @@ enum TokenType {
   EOF
 }
 
-export function getTokenType(ch: string): TokenType {
+export function getTokenKind(ch: string): TokenKind {
   return ({
-    '&': TokenType.Ampersand,
-    '=>': TokenType.Arrow,
-    ':': TokenType.Colon,
-    ',': TokenType.Comma,
-    '=': TokenType.Equal,
-    '(': TokenType.LeftParen,
-    '-': TokenType.Minus,
-    '|': TokenType.Pipe,
-    '?': TokenType.QuestionMark,
-    ')': TokenType.RightParen,
-    '@': TokenType.Tag,
-    '\n': TokenType.LineTerminator
+    '&': TokenKind.Ampersand,
+    '=>': TokenKind.Arrow,
+    ':': TokenKind.Colon,
+    ',': TokenKind.Comma,
+    '=': TokenKind.Equal,
+    '(': TokenKind.LeftParen,
+    '-': TokenKind.Minus,
+    '|': TokenKind.Pipe,
+    '?': TokenKind.QuestionMark,
+    ')': TokenKind.RightParen,
+    '@': TokenKind.Tag,
+    '\n': TokenKind.LineTerminator
   })[ch];
 }
 
-export function getTokenName(type: TokenType): string {
+export function getTokenName(type: TokenKind): string {
   return ({
-    [TokenType.None]: 'None',
-    [TokenType.Ampersand]: 'Ampersand',
-    [TokenType.Arrow]: 'Arrow',
-    [TokenType.Colon]: 'Colon',
-    [TokenType.Comma]: 'Comma',
-    [TokenType.Description]: 'Description',
-    [TokenType.Equal]: 'Equal',
-    [TokenType.Identifier]: 'Identifier',
-    [TokenType.Initializer]: 'Initializer',
-    [TokenType.LeftParen]: 'LeftParen',
-    [TokenType.Markdown]: 'Markdown',
-    [TokenType.Minus]: 'Minus',
-    [TokenType.NullTerminator]: 'NullTerminator',
-    [TokenType.Pipe]: 'Pipe',
-    [TokenType.QuestionMark]: 'QuestionMark',
-    [TokenType.RightParen]: 'RightParen',
-    [TokenType.Any]: 'Any',
-    [TokenType.Tag]: 'Tag',
-    [TokenType.EOF]: 'EOF'
+    [TokenKind.None]: 'None',
+    [TokenKind.Ampersand]: 'Ampersand',
+    [TokenKind.Arrow]: 'Arrow',
+    [TokenKind.Colon]: 'Colon',
+    [TokenKind.Comma]: 'Comma',
+    [TokenKind.Description]: 'Description',
+    [TokenKind.Equal]: 'Equal',
+    [TokenKind.Identifier]: 'Identifier',
+    [TokenKind.Initializer]: 'Initializer',
+    [TokenKind.LeftParen]: 'LeftParen',
+    [TokenKind.Markdown]: 'Markdown',
+    [TokenKind.Minus]: 'Minus',
+    [TokenKind.NullTerminator]: 'NullTerminator',
+    [TokenKind.Pipe]: 'Pipe',
+    [TokenKind.QuestionMark]: 'QuestionMark',
+    [TokenKind.RightParen]: 'RightParen',
+    [TokenKind.Any]: 'Any',
+    [TokenKind.Tag]: 'Tag',
+    [TokenKind.EOF]: 'EOF'
   })[type];
 }
 
-function getTokenCharacter(type: TokenType): string {
+function getTokenCharacter(type: TokenKind): string {
   return ({
-    [TokenType.None]: '',
-    [TokenType.Ampersand]: '&',
-    [TokenType.Arrow]: '=>',
-    [TokenType.Colon]: ':',
-    [TokenType.Comma]: ',',
-    [TokenType.Equal]: '=',
-    [TokenType.LeftParen]: '(',
-    [TokenType.Minus]: '-',
-    [TokenType.Pipe]: '|',
-    [TokenType.QuestionMark]: '?',
-    [TokenType.RightParen]: ')',
-    [TokenType.Tag]: '@'
+    [TokenKind.None]: '',
+    [TokenKind.Ampersand]: '&',
+    [TokenKind.Arrow]: '=>',
+    [TokenKind.Colon]: ':',
+    [TokenKind.Comma]: ',',
+    [TokenKind.Equal]: '=',
+    [TokenKind.LeftParen]: '(',
+    [TokenKind.Minus]: '-',
+    [TokenKind.Pipe]: '|',
+    [TokenKind.QuestionMark]: '?',
+    [TokenKind.RightParen]: ')',
+    [TokenKind.Tag]: '@'
   })[type];
 }
 
-export default TokenType;
+export default TokenKind;

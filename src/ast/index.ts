@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import Token, { TokenType } from '../token';
+import Token, { TokenKind } from '../token';
 import Location, { Range } from '../location';
 
 
@@ -46,7 +46,7 @@ export function getNodeTypeName(flag: NodeType): string {
 
 export interface Node {
   token?: Token
-  kind?: TokenType
+  kind?: TokenKind
   flag?: NodeType
   flagName?: string
   range?: Range
@@ -70,6 +70,7 @@ export interface MarkdownComment extends Comment {
 }
 
 export interface FormalParameter extends Node {
+  identifier?: string
   parameter?: Parameter | OptionalParameter
   isOptional?: boolean
 }
@@ -81,6 +82,7 @@ export interface Parameter extends Node {
 }
 
 export interface OptionalParameter extends Node {
+  identifier?: string
   parameter?: string
   type?: TypeDeclaration
 }
@@ -109,8 +111,13 @@ export interface ArrowFunctionType extends Type {
 // -- AST Helpers --
 // -----------------
 
-export function createNode(flag: NodeType, kind: TokenType, range: Range) {
-  const node = { range: new Range(range.start), flag, kind, flagName: getNodeTypeName(flag) }
+export function createNode(flag: NodeType, kind: TokenKind, start: Location): Node {
+  const node: Node = { range: new Range(start), flag, kind, flagName: getNodeTypeName(flag) }
+  return node;
+}
+
+export function endNode(node: Node, end: Location) {
+  node.range = new Range(node.range.start, end);
   return node;
 }
 
