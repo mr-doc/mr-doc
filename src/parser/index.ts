@@ -133,7 +133,7 @@ export class CommentParser {
         rootNode.initializer = this.expect(TokenKind.Initializer).lexeme;
       } else if (this.match(TokenKind.LeftParen)) {
         this.accept();
-        rootNode.initializer = this.parseFunctionType();
+        rootNode.initializer = this.parseArrowFunctionType();
       }
     }
     return endNode(rootNode, this.location);
@@ -161,7 +161,7 @@ export class CommentParser {
     // console.log(`In parseType: ${this.current().name}`);
     let rootNode: AST.Type = createNode(NodeType.Type, TokenKind.None, this.location);
     if (this.match(TokenKind.LeftParen)) {
-      rootNode = this.parseParenthesizedTypeOrFunctionType();
+      rootNode = this.parseParenthesizedTypeOrArrowFunctionType();
       if (this.match(TokenKind.Ampersand) || this.match(TokenKind.Pipe)) {
         rootNode = this.parseUnionOrIntersectionType(rootNode);
       }
@@ -170,17 +170,17 @@ export class CommentParser {
     return endNode(rootNode, this.location);
   }
 
-  private parseParenthesizedTypeOrFunctionType(): AST.Type {
-    // console.log(`In parseParenthesizedTypeOrFunctionType: ${this.current().name}`);
+  private parseParenthesizedTypeOrArrowFunctionType(): AST.Type {
+    // console.log(`In parseParenthesizedTypeOrArrowFunctionType: ${this.current().name}`);
     let rootNode: AST.Type = createNode(NodeType.Type, TokenKind.None, this.location);
     this.accept();
     if (this.match(TokenKind.Identifier) || this.match(TokenKind.RightParen)) {
-      rootNode = this.parseFunctionType();
+      rootNode = this.parseArrowFunctionType();
     } else {
       rootNode = this.parseType();
       this.expect(TokenKind.RightParen);
     }
-    // console.log(`In parseParenthesizedTypeOrFunctionType: (after) ${this.current().name}`);
+    // console.log(`In parseParenthesizedTypeOrArrowFunctionType: (after) ${this.current().name}`);
     return endNode(rootNode, this.location);
   }
   private parseUnionOrIntersectionOrPrimaryType(): AST.Type {
@@ -211,14 +211,14 @@ export class CommentParser {
   }
 
 
-  private parseFunctionType(): AST.ArrowFunctionType {
-    // console.log(`In parseFunctionType: ${this.current().name}`);
+  private parseArrowFunctionType(): AST.ArrowFunctionType {
+    // console.log(`In parseArrowFunctionType: ${this.current().name}`);
     let rootNode: AST.ArrowFunctionType = createNode(NodeType.ArrowFunctionType, TokenKind.None, this.location);
     if (this.match(TokenKind.Identifier)) rootNode.parameters = this.parseFormalParameterList();
     else delete rootNode.parameters;
     this.expect(TokenKind.RightParen);
     this.expect(TokenKind.Arrow);
-    // console.log(`In parseFunctionType: (after) ${this.current().name}`);
+    // console.log(`In parseArrowFunctionType: (after) ${this.current().name}`);
     rootNode.type = this.parseType();
     return endNode(rootNode, this.location);
   }
