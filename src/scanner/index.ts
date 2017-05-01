@@ -25,7 +25,7 @@ export class CommentScanner {
   private peek(to: number) { return this.stream.peek(to); }
   private scanSource() {
     this.lexeme = [];
-    while (Match.isWhiteSpace(this.current()) && !this.eof) { this.next() };
+    while (Match.isWhiteSpace(this.current()) && !this.eof) { this.next() }
 
     if (this.eof) {
       return new Token('\0', TokenKind.EOF, this.location);
