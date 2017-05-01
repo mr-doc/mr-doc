@@ -23,7 +23,7 @@ function readComment(version: number, ext?: string) {
   return FS.readFileSync(Path.resolve(__dirname, './fixtures') + `/comments/${version}${ext ? '.' + ext : '.txt'}`, 'utf8');
 }
 
-describe('CommentScanner', () => {
+describe('Scanner', () => {
 
   describe('Basic scan', () => {
     it('should scan an ampersand', () => test('&', TokenKind.Ampersand));
@@ -49,9 +49,9 @@ describe('CommentScanner', () => {
       ['id', TokenKind.Identifier]
     ]));
 
-    it('should scan @tag ...id', () => test('@tag id', [
+    it('should scan @tag ...id', () => test('@tag ...id', [
       ['@tag', TokenKind.Tag],
-      ['id', TokenKind.Identifier]
+      ['...id', TokenKind.Identifier]
     ]));
 
     /* Scan tags with initializers */
@@ -331,16 +331,20 @@ describe('CommentScanner', () => {
       [':', TokenKind.Colon],
       ['any', TokenKind.Any]
     ]));
-    it('should scan @tag id: any | any', () => test('@tag id: any', [
+    it('should scan @tag id: any | any', () => test('@tag id: any | any', [
       ['@tag', TokenKind.Tag],
       ['id', TokenKind.Identifier],
       [':', TokenKind.Colon],
+      ['any', TokenKind.Any],
+      ['|', TokenKind.Pipe],
       ['any', TokenKind.Any]
     ]));
-    it('should scan @tag id: any & any', () => test('@tag id: any', [
+    it('should scan @tag id: any & any', () => test('@tag id: any & any', [
       ['@tag', TokenKind.Tag],
       ['id', TokenKind.Identifier],
       [':', TokenKind.Colon],
+      ['any', TokenKind.Any],
+      ['&', TokenKind.Ampersand],
       ['any', TokenKind.Any]
     ]));
     it('should scan @tag id: (any | any | any[])', () => test('@tag id: (any | any | any[])', [
@@ -354,7 +358,7 @@ describe('CommentScanner', () => {
       ['|', TokenKind.Pipe],
       ['any[]', TokenKind.Any],
       [')', TokenKind.RightParen],
-    ]))
+    ]));
   });
 
   describe('Real-world scan', () => {
@@ -397,7 +401,7 @@ describe('CommentScanner', () => {
 
     const s2 = readComment(2);
 
-    it(`should scan: ${OS.EOL}${s2}`, () => test(s2, [
+    it(`should scan: ${OS.EOL}${2}`, () => test(s2, [
       ['Convert a string containing two comma-separated numbers into a point.', TokenKind.Description],
       ['@param', TokenKind.Tag],
       ['str', TokenKind.Identifier],
@@ -406,7 +410,6 @@ describe('CommentScanner', () => {
       ['-', TokenKind.Minus],
       ['The string containing two comma-separated numbers.', TokenKind.Description],
       ['@return', TokenKind.Tag],
-      [':', TokenKind.Colon],
       ['Point', TokenKind.Any],
       ['-', TokenKind.Minus],
       ['A Point object.', TokenKind.Description]
@@ -438,7 +441,6 @@ describe('CommentScanner', () => {
     ]));
 
     const s4 = readComment(4);
-    console.log(OS.EOL.charCodeAt(0));
     
     it(`should scan ${OS.EOL}${s4}`, () => test(s4, [
       ['Create a dot.', TokenKind.Description],

@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import Token, { TokenKind } from '../token';
+import Token, { TokenKind, getTokenName } from '../token';
 import Location, { Range } from '../location';
 
 
@@ -49,6 +49,7 @@ export interface Node {
   kind?: TokenKind
   flag?: NodeType
   flagName?: string
+  kindName?: string
   range?: Range
 }
 
@@ -62,7 +63,8 @@ export interface DescriptionComment extends Comment {
 export interface TagComment extends Comment {
   tag?: string,
   description?: DescriptionComment,
-  parameter?: FormalParameter
+  parameter?: FormalParameter,
+  type?: Type
 }
 
 export interface MarkdownComment extends Comment {
@@ -73,18 +75,19 @@ export interface FormalParameter extends Node {
   identifier?: string
   parameter?: Parameter | OptionalParameter
   isOptional?: boolean
+  type?: Type
 }
 
 export interface Parameter extends Node {
   identifier?: string
-  initializer?: string
-  type?: TypeDeclaration
+  initializer?: string | Type
+  type?: Type
 }
 
 export interface OptionalParameter extends Node {
   identifier?: string
   parameter?: string
-  type?: TypeDeclaration
+  type?: Type
 }
 
 export interface TypeDeclaration extends Node {
@@ -92,7 +95,8 @@ export interface TypeDeclaration extends Node {
 }
 
 export interface Type extends Node {
-  type?: string | UnionType | IntersectionType | ArrowFunctionType
+  type?: any | Type[]
+  types?: Type[]
 }
 
 export interface UnionType extends Type {
@@ -104,15 +108,16 @@ export interface IntersectionType extends Type {
 }
 
 export interface ArrowFunctionType extends Type {
-  parameters?: Parameter[] & OptionalParameter[]
+  parameters?: FormalParameter[]
 }
+
 
 // -----------------
 // -- AST Helpers --
 // -----------------
 
 export function createNode(flag: NodeType, kind: TokenKind, start: Location): Node {
-  const node: Node = { range: new Range(start), flag, kind, flagName: getNodeTypeName(flag) }
+  const node: Node = { range: new Range(start), flag, kind, flagName: getNodeTypeName(flag), kindName: getTokenName(kind) }
   return node;
 }
 
@@ -120,38 +125,3 @@ export function endNode(node: Node, end: Location) {
   node.range = new Range(node.range.start, end);
   return node;
 }
-
-type visitor = (node: Node, parent?: Node, property?, index?: number) => void;
-/**
- * Traverses an AST
- * Credits to https://github.com/olov/ast-traverse
- * @returns Node[]  - A flattened tree
- */
-export function traverse(root, visitor?: { pre?: visitor, post?: visitor }) {
-  const leaves: Node[] = [];
-
-  const visit = (node: Node, parent?, property?, index?: number) => {
-    if (_.isUndefined(node)) return;
-    if (visitor && visitor.pre) visitor.pre(node, parent, property, index);
-    if (_.isObject(node)) {
-      for (const prop in node) {
-        let child = node[prop];
-        if (_.isArray(child)) {
-          for (let i = 0; i < child.length; i++) {
-            if (_.isPlainObject(child[i])) {
-              leaves.push(child[i])
-              visit(child[i], node, prop, i);
-            }
-          }
-        } else if (_.isPlainObject(child)) {
-          leaves.push(child);
-          visit(child, node, prop);
-        }
-      }
-    }
-    if (visitor && visitor.post) visitor.post(node, parent, property, index);
-  }
-  leaves.push(root);
-  visit(root);
-  return leaves;
-};

@@ -5,7 +5,7 @@ interface Stream {
   peek(to: number);
   source?(source: any);
   position: number;
-  ended: boolean;
+  eos: boolean;
 }
 
 export default Stream;

@@ -1,224 +1,237 @@
-import Scanner, { IScanner } from '../scanner/';
+import { CommentScanner } from '../scanner/';
 import Token, { TokenKind, getTokenName } from '../token';
-import { Range } from '../location'
+import Location from '../location'
 import * as _ from 'lodash';
 import * as AST from '../ast';
 const { NodeType, createNode, endNode } = AST;
 
-let scanner: IScanner = null;
-let currentToken: Token = null;
-
-function current(): Token {
-  // Skip the tokens we don't care
-  while(currentToken.kind === TokenKind.None) {
-    currentToken = scanner.scan();
+export class CommentParser {
+  currentToken: Token = null;
+  scanner: CommentScanner = null;
+  constructor(source?: string) {
+    this.scanner = new CommentScanner(source);
   }
-  return currentToken;
-}
-
-/* flow control */
-function accept() {
-  currentToken = scanner.scan();
-}
-
-/* comparisons */
-function match(kind: TokenKind, lexeme?: string) {
-  const isEqualKind = current().kind === kind;
-  return lexeme ? (isEqualKind && current().lexeme === lexeme) : isEqualKind;
-}
-
-function expect(kind: TokenKind, lexeme?: string) {
-  let token = current();
-  if (match(kind, lexeme)) accept();
-  else token = raise(kind, lexeme);
-  return token;
-}
-
-/* state handling */
-function reset() { currentToken = null; }
-
-/* error handling */
-function raise(kinds: TokenKind | TokenKind[], expected?: string) {
-  const { lexeme, location, kind } = current(), loc = `${location.line}:${location.column}`;
-  let kindNames = "";
-  if (Array.isArray(kinds)) {
-    kinds.forEach((k, i) => i === 0 ? kindNames += getTokenName(k) : kindNames += ` or ${getTokenName(k)}`);
-  } else { kindNames = expected ? `(${getTokenName(kinds)}, ${lexeme})` : getTokenName(kinds); }
-  console.log(`mrdoc::parse [error]: expected ${kindNames} but found (${getTokenName(kind)}, '${lexeme}'). ${loc}`);
-  return new Token(expected ? expected : "", TokenKind.None, current().location);
-}
-
-
-function parse() {
-  currentToken = scanner.scan();
-  if (currentToken) {
-    parseComment();
-    reset();
-  } else return;
-}
-
-function parseComment() {
-  const { Tag, Description, Markdown, None } = TokenKind;
-  const rootNode: AST.Comment = createNode(NodeType.Comment, None, current().location);
-  (rootNode.comments = []).push(parseSingleComment());
-  while (current() && _.includes([Tag, Description, Markdown], current().kind)) {
-    rootNode.comments.push(parseSingleComment());
+  private current(): Token {
+    // Skip the tokens we don't care
+    while (this.currentToken.kind === TokenKind.None) { this.currentToken = this.scanner.scan(); }
+    return this.currentToken;
   }
-  return endNode(rootNode, current().location);
-}
 
+  private get location(): Location { return this.currentToken.location; }
 
-function parseSingleComment() {
-  const { Minus, Identifier, Tag, Description, Markdown, None } = TokenKind;
-  const rootNode: AST.Comment = createNode(NodeType.Comment, None, current().location);
-  console.log(`In parseSingleComment: ${current().name}`);
-
-  const getDescription = (): AST.DescriptionComment => {
-    console.log(`In getDescription: ${current().name}`);
-    const descriptionNode: AST.DescriptionComment = createNode(NodeType.DescriptionComment, Description, current().location);
-    descriptionNode.description = expect(Description).lexeme;
-    return endNode(descriptionNode, current().location);
+  /* flow control */
+  private accept(): Token {
+    const previousToken = this.currentToken;
+    this.currentToken = this.scanner.scan();
+    return previousToken;
   }
-  switch (current().kind) {
-    case Description:
-      return getDescription();
-    case Tag:
-      const tagNode: AST.TagComment = createNode(NodeType.TagComment, Tag, current().location);
-      tagNode.tag = expect(Tag).lexeme;
-      if (match(Identifier)) tagNode.parameter = parseFormalParameter();
-      if (match(Minus)) { expect(Minus); tagNode.description = getDescription(); }
-      return endNode(tagNode, current().location);
-    case Markdown:
-      const mdNode: AST.MarkdownComment = createNode(NodeType.MarkdownComment, Markdown, current().location);
-      mdNode.markdown = expect(Markdown).lexeme;
-      return endNode(mdNode, current().location);
-    default: return endNode(createNode(null, raise([Description, Tag, Markdown]).kind, null), null);
+
+  /* comparisons */
+  private match(kind: TokenKind, lexeme?: string) {
+    const isEqualKind = this.current().kind === kind;
+    return lexeme ? (isEqualKind && this.current().lexeme === lexeme) : isEqualKind;
   }
-}
 
-function parseFormalParameter(): AST.FormalParameter {
-  console.log(`In parseFormalParameter: ${current().name}`);
-  const { Identifier, Equal, Initializer, QuestionMark, Colon, None } = TokenKind;
-  const rootNode: AST.FormalParameter = createNode(NodeType.FormalParameter, None, current().location);
-  const lexeme = expect(TokenKind.Identifier).lexeme;
-  switch (current().kind) {
-    case Colon: case Equal:
-      rootNode.parameter = parseParameter();
-      (rootNode as AST.Parameter).identifier = lexeme;
-      rootNode.isOptional = false;
-      break;
-    case QuestionMark:
-      rootNode.parameter = parseOptionalParameter();
-      (rootNode as AST.OptionalParameter).identifier = lexeme;
-      rootNode.isOptional = true;
-      break;
+  private expect(kind: TokenKind, lexeme?: string) {
+    let token = this.current();
+    if (this.match(kind, lexeme)) this.accept();
+    else { token = this.raise(kind, lexeme); }
+    return token;
   }
-  return endNode(rootNode, current().location);
-}
 
-function parseParameter() {
-  console.log(`In parseParameter: ${current().name}`);
-  const { Identifier, Colon, LeftParen, RightParen, Any, Equal, Initializer } = TokenKind;
-  const rootNode: AST.Parameter = createNode(NodeType.Parameter, Identifier, current().location);
-  // rootNode.identifier = expect(Identifier).lexeme;
-  if (match(Colon)) rootNode.type = parseTypeDeclaration();
-  if (match(Equal)) { rootNode.initializer = expect(Equal).lexeme; }
-  return endNode(rootNode, current().location);
-}
+  /* error handling */
+  private raise(kinds: TokenKind | TokenKind[], expected?: string) {
+    const { lexeme, location, kind } = this.current(), loc = `Ln ${location.line}, Col ${location.column}`;
+    let kindNames = "";
+    if (Array.isArray(kinds)) {
+      kinds.forEach((k, i) => i === 0 ? kindNames += getTokenName(k) : kindNames += ` or ${getTokenName(k)}`);
+    } else { kindNames = expected ? `(${getTokenName(kinds)}, ${lexeme})` : getTokenName(kinds); }
+    console.log(`mrdoc::parse [error]: expected ${kindNames} but found (${getTokenName(kind)}, '${lexeme}'). ${loc}`);
+    return new Token(expected ? expected : "", TokenKind.None, this.location);
+  }
 
-function parseOptionalParameter() {
-  console.log(`In parseOptionalParameter: ${current().name}`);
-  const { Identifier, QuestionMark, LeftParen, RightParen, Colon } = TokenKind;
-  const rootNode: AST.OptionalParameter = createNode(NodeType.Parameter, Identifier, current().location);
-  // rootNode.identifier = expect(Identifier).lexeme;
-  expect(QuestionMark);
-  if (match(Colon)) { rootNode.type = parseTypeDeclaration(); }
-  return endNode(rootNode, current().location);
-}
+  parse(): AST.Comment {
+    this.currentToken = this.scanner.scan();
+    if (this.currentToken) return this.parseComment();
+    else return;
+  }
 
-function parseTypeDeclaration() {
-  console.log(`In parseTypeDeclaration: ${current().name}`);
-  expect(TokenKind.Colon);
-  return parseType();
-}
+  private parseComment() {
+    const { Tag, Description, Markdown, None } = TokenKind;
+    const rootNode: AST.Comment = createNode(NodeType.Comment, None, this.location);
+    (rootNode.comments = []).push(this.parseSingleComment());
+    while (this.current() && _.includes([Tag, Description, Markdown], this.current().kind)) {
+      rootNode.comments.push(this.parseSingleComment());
+    }
+    return endNode(rootNode, this.location);
+  }
 
-function parseType() {
-  console.log(`In parseType: ${current().name}`);
-  if (match(TokenKind.LeftParen)) parseParenthesizedTypeOrFunctionType();
-  else parseUnionTypeOrHigher();
-  return null;
-}
+  private parseSingleComment() {
+    const { Any, Minus, Identifier, Tag, Description, Markdown, None, Colon } = TokenKind;
+    const rootNode: AST.Comment = createNode(NodeType.Comment, None, this.location);
+    // console.log(`In parseSingleComment: ${this.current().name}`);
 
-function parseParenthesizedTypeOrFunctionType() {
-  console.log(`In parseParenthesizedTypeOrFunctionType: ${current().name}`);
-  const rootNode: AST.Type = createNode(NodeType.Type, TokenKind.None, current().location);
-  if (match(TokenKind.LeftParen)) {
-    accept();
-    if (match(TokenKind.Identifier) || match(TokenKind.RightParen)) {
-      parseFunctionType();
-      return null;
+    const getDescription = (): AST.DescriptionComment => {
+      // console.log(`In getDescription: ${this.current().name}`);
+      const descriptionNode: AST.DescriptionComment = createNode(NodeType.DescriptionComment, Description, this.location);
+      descriptionNode.description = this.expect(Description).lexeme;
+      return endNode(descriptionNode, this.location);
+    }
+    switch (this.current().kind) {
+      case Description:
+        return getDescription();
+      case Tag:
+        const tagNode: AST.TagComment = createNode(NodeType.TagComment, Tag, this.location);
+        tagNode.tag = this.expect(Tag).lexeme;
+        if (tagNode.tag === '@return' && this.match(Any)) { tagNode.type = this.parseType(); }
+        else if (this.match(Identifier)) tagNode.parameter = this.parseFormalParameter();
+        if (this.match(Minus)) { this.expect(Minus); tagNode.description = getDescription(); }
+        return endNode(tagNode, this.location);
+      case Markdown:
+        const mdNode: AST.MarkdownComment = createNode(NodeType.MarkdownComment, Markdown, this.location);
+        mdNode.markdown = this.expect(Markdown).lexeme;
+        return endNode(mdNode, this.location);
+      default: return endNode(createNode(null, this.raise([Description, Tag, Markdown]).kind, null), null);
+    }
+  }
+
+  private parseFormalParameter(): AST.FormalParameter {
+    // console.log(`In parseFormalParameter: ${this.current().name}`);
+    const { Identifier, Equal, Initializer, QuestionMark, Colon, None } = TokenKind;
+    let rootNode: AST.FormalParameter = createNode(NodeType.FormalParameter, None, this.location);
+    const lexeme = this.expect(TokenKind.Identifier).lexeme;
+    // console.log(`In parseFormalParameter (after): ${this.current().name}`);
+
+    switch (this.current().kind) {
+      case Colon: case Equal:
+        rootNode = this.parseParameter();
+        (rootNode as AST.Parameter).identifier = lexeme;
+        rootNode.isOptional = false;
+        break;
+      case QuestionMark:
+        rootNode = this.parseOptionalParameter();
+        (rootNode as AST.OptionalParameter).identifier = lexeme;
+        rootNode.isOptional = true;
+        break;
+      default:
+        rootNode.identifier = lexeme;
+        rootNode.isOptional = false;
+    }
+    return endNode(rootNode, this.location);
+  }
+
+  private parseParameter(): AST.Parameter {
+    // console.log(`In parseParameter: ${this.current().name}`);
+    const { None, Colon, LeftParen, RightParen, Any, Equal, Initializer } = TokenKind;
+    const rootNode: AST.Parameter = createNode(NodeType.FormalParameter, None, this.location);
+    if (this.match(Colon)) {
+      rootNode.type = this.parseTypeDeclaration();
+    }
+    if (this.match(Equal)) {
+      this.accept();
+      if (this.match(TokenKind.Initializer)) {
+        rootNode.initializer = this.expect(TokenKind.Initializer).lexeme;
+      } else if (this.match(TokenKind.LeftParen)) {
+        this.accept();
+        rootNode.initializer = this.parseFunctionType();
+      }
+    }
+    return endNode(rootNode, this.location);
+  }
+
+  private parseOptionalParameter(): AST.OptionalParameter {
+    // console.log(`In parseOptionalParameter: ${this.current().name}`);
+    const { None, QuestionMark, LeftParen, RightParen, Colon } = TokenKind;
+    const rootNode: AST.OptionalParameter = createNode(NodeType.FormalParameter, None, this.location);
+    this.expect(QuestionMark);
+    if (this.match(Colon)) {
+      rootNode.type = this.parseTypeDeclaration();
+      rootNode.type = _.isString(rootNode.type.type) ? rootNode.type : rootNode.type.type;
+    }
+    return endNode(rootNode, this.location);
+  }
+
+  private parseTypeDeclaration(): AST.Type {
+    // console.log(`In parseTypeDeclaration: ${this.current().name}`);
+    this.expect(TokenKind.Colon);
+    return this.parseType();
+  }
+
+  private parseType(): AST.Type {
+    // console.log(`In parseType: ${this.current().name}`);
+    let rootNode: AST.Type = createNode(NodeType.Type, TokenKind.None, this.location);
+    if (this.match(TokenKind.LeftParen)) {
+      rootNode = this.parseParenthesizedTypeOrFunctionType();
+      if (this.match(TokenKind.Ampersand) || this.match(TokenKind.Pipe)) {
+        rootNode = this.parseUnionOrIntersectionType(rootNode);
+      }
+    } else rootNode = this.parseUnionOrIntersectionOrPrimaryType();
+
+    return endNode(rootNode, this.location);
+  }
+
+  private parseParenthesizedTypeOrFunctionType(): AST.Type {
+    // console.log(`In parseParenthesizedTypeOrFunctionType: ${this.current().name}`);
+    let rootNode: AST.Type = createNode(NodeType.Type, TokenKind.None, this.location);
+    this.accept();
+    if (this.match(TokenKind.Identifier) || this.match(TokenKind.RightParen)) {
+      rootNode = this.parseFunctionType();
     } else {
-      parseType();
-      expect(TokenKind.RightParen);
+      rootNode = this.parseType();
+      this.expect(TokenKind.RightParen);
     }
+    // console.log(`In parseParenthesizedTypeOrFunctionType: (after) ${this.current().name}`);
+    return endNode(rootNode, this.location);
   }
-  return endNode(rootNode, current().location);
-}
+  private parseUnionOrIntersectionOrPrimaryType(): AST.Type {
+    // console.log(`In parseUnionOrIntersectionOrPrimaryType: ${this.current().name}`);
+    let rootNode: AST.Type = createNode(NodeType.Type, TokenKind.Any, this.location);
+    rootNode.type = this.expect(TokenKind.Any).lexeme;
+    // console.log(`In parseUnionOrIntersectionOrPrimaryType: (after) ${this.current().name}`);
+    return this.parseUnionOrIntersectionType(rootNode);
+  }
 
-function parseUnionTypeOrHigher() {
-  console.log(`In parseUnionTypeOrHigher: ${current().name}`);
-  parseUnionOrIntersectionType(AST.NodeType.UnionType, parseIntersectionTypeOrHigher, TokenKind.Pipe);
-}
-
-function parseIntersectionTypeOrHigher() {
-  console.log(`In parseIntersectionTypeOrHigher: ${current().name}`);
-  parseUnionOrIntersectionType(AST.NodeType.IntersectionType, parseTypeOperatorOrHigher, TokenKind.Ampersand);
-}
-
-function parseTypeOperatorOrHigher() {
-  console.log(`In parseTypeOperatorOrHigher: ${current().name}`);
-  if(match(TokenKind.Any)) accept();
-  else parseType();
-}
-
-function parseUnionOrIntersectionType(type: AST.NodeType, parseConstituentType: () => void, operator: TokenKind) {
-  console.log(`In parseUnionOrIntersectionType: ${current().name}, operator ${getTokenName(operator)}`);
-  if (match(operator)) accept();
-  parseConstituentType();
-  if (match(operator)) {
-    while (match(operator)) {
-      accept();
-      parseConstituentType();
+  private parseUnionOrIntersectionType(rootNode?: AST.Type) {
+    // console.log(`In parseUnionOrIntersectionType: ${this.current().name}`);
+    if (this.match(TokenKind.Pipe) || this.match(TokenKind.Ampersand)) {
+      const operator = this.current().kind;
+      const nodeType = operator === TokenKind.Pipe ? NodeType.UnionType : NodeType.IntersectionType;
+      let tempNode: AST.Type = endNode(rootNode, this.location);
+      rootNode = createNode(nodeType, operator, this.location);
+      (rootNode.types = []).push(tempNode);
+      while (this.match(operator)) {
+        this.accept();
+        rootNode.types.push(this.parseType());
+      }
+      // console.log(`In parseUnionOrIntersectionType: (after) ${this.current().name}`);
+      rootNode.type = rootNode.types;
+      delete rootNode.types;
     }
+    return endNode(rootNode, this.location);
+  }
+
+
+  private parseFunctionType(): AST.ArrowFunctionType {
+    // console.log(`In parseFunctionType: ${this.current().name}`);
+    let rootNode: AST.ArrowFunctionType = createNode(NodeType.ArrowFunctionType, TokenKind.None, this.location);
+    if (this.match(TokenKind.Identifier)) rootNode.parameters = this.parseFormalParameterList();
+    else delete rootNode.parameters;
+    this.expect(TokenKind.RightParen);
+    this.expect(TokenKind.Arrow);
+    // console.log(`In parseFunctionType: (after) ${this.current().name}`);
+    rootNode.type = this.parseType();
+    return endNode(rootNode, this.location);
+  }
+
+  private parseFormalParameterList(): AST.FormalParameter[] {
+    // console.log(`In parseFormalParameterList: ${this.current().name}`);
+    const parameters: AST.FormalParameter[] = [];
+    parameters.push(this.parseFormalParameter());
+    while (this.match(TokenKind.Comma)) { this.accept(); parameters.push(this.parseFormalParameter()); }
+    return parameters;
   }
 }
-
-
-function parseFunctionType() {
-  console.log(`In parseFunctionType: ${current().name}`);
-  if(!match(TokenKind.RightParen)) parseFormalParameterList();
-  expect(TokenKind.RightParen);
-  expect(TokenKind.Arrow);
-  parseType();
-}
-
-function parseFormalParameterList() {
-  console.log(`In parseFormalParameterList: ${current().name}`);
-  parseFormalParameter();
-  parseFormalParameters();
-}
-
-function parseFormalParameters() {
-  console.log(`In parseFormalParameters: ${current().name}`);
-  while (match(TokenKind.Comma)) { accept(); parseFormalParameter();}
-}
-
 
 export default function Parser(source?: string) {
-  scanner = Scanner(source);
-  return {
-    parse: function () {
-      return parse();
-    }
-  }
+  return new CommentParser(source);
 }

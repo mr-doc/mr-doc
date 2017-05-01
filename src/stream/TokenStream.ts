@@ -15,5 +15,5 @@ export default class TokenStream implements Stream {
   }
   get stream(): Token[] { return this._stream; }
   get position(): number { return this._position; }
-  get ended(): boolean { return this._position === this._stream.length; }
+  get eos(): boolean { return this._position === this._stream.length; }
 }
