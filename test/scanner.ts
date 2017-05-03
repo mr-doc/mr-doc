@@ -1,27 +1,8 @@
-import { assert } from 'chai';
-import Scanner from '../src/scanner';
+import Test from './helpers/test';
 import Token, { TokenKind, getTokenName } from '../src/token';
-import * as FS from 'fs';
-import * as Path from 'path';
-import * as OS from 'os';
-
-function test(source: string, match: [string, TokenKind][] | TokenKind) {
-  const tokenstream = Scanner(source).toTokenStream();
-  const stream = tokenstream.stream;
-  let array = typeof match === 'number' ? [[source, match]] : match;
-  array.push(['\0', TokenKind.EOF]);
-
-  let count = 0;
-  while (count < stream.length) {
-    assert.strictEqual(stream[count].lexeme, array[count][0]);
-    assert.strictEqual(stream[count].kind, array[count][1]);
-    count++;
-  }
-}
-
-function readComment(file: number | string, ext?: string) {
-  return FS.readFileSync(Path.resolve(__dirname, './fixtures') + `/comments/${file}${ext ? '.' + ext : '.txt'}`, 'utf8');
-}
+import read from './helpers/read';
+import indent from './helpers/indent';
+const test = Test.Scanner.test;
 
 describe('Scanner', () => {
 
@@ -363,9 +344,9 @@ describe('Scanner', () => {
 
   describe('Real-world scan', () => {
     // From http://usejsdoc.org/howto-es2015-classes.html#documenting-a-simple-class
-    const s0 = readComment(0);
+    const s0 = read(0);
 
-    it(`should scan: ${s0}`, () => test(s0, [
+    it(`should scan: \n${indent(s0, 2)}`, () => test(s0, [
       ['Create a point.', TokenKind.Description],
       ['@param', TokenKind.Tag],
       ['x', TokenKind.Identifier],
@@ -381,9 +362,9 @@ describe('Scanner', () => {
       ['The y value.', TokenKind.Description]
     ]));
 
-    const s1 = readComment(1);
+    const s1 = read(1);
 
-    it(`should scan ${OS.EOL}${s1}`, () => test(s1, [
+    it(`should scan \n${indent(s1, 2)}`, () => test(s1, [
       ['@param', TokenKind.Tag],
       ['x', TokenKind.Identifier],
       [':', TokenKind.Colon],
@@ -399,9 +380,9 @@ describe('Scanner', () => {
       ['Create a point.', TokenKind.Description]
     ]));
 
-    const s2 = readComment(2);
+    const s2 = read(2);
 
-    it(`should scan: ${OS.EOL}${2}`, () => test(s2, [
+    it(`should scan: \n${indent(s2, 2)}`, () => test(s2, [
       ['Convert a string containing two comma-separated numbers into a point.', TokenKind.Description],
       ['@param', TokenKind.Tag],
       ['str', TokenKind.Identifier],
@@ -415,9 +396,9 @@ describe('Scanner', () => {
       ['A Point object.', TokenKind.Description]
     ]));
 
-    const s3 = readComment(3);
+    const s3 = read(3);
 
-    it(`should scan ${OS.EOL}${s3}`, () => test(s3, [
+    it(`should scan \n${indent(s3, 2)}`, () => test(s3, [
       ['Create a dot.', TokenKind.Description],
       ['@param', TokenKind.Tag],
       ['x', TokenKind.Identifier],
@@ -437,13 +418,12 @@ describe('Scanner', () => {
       ['number', TokenKind.Any],
       ['-', TokenKind.Minus],
       ['The width of the dot, in pixels.', TokenKind.Description],
-      [`+--\n${readComment(3, 'md')}\n+--`, TokenKind.Markdown]
-      // [`+--${OS.EOL}# Create a dot${OS.EOL}${OS.EOL}Example usage${OS.EOL}\`\`\`${OS.EOL}const dot = new Dot();${OS.EOL}\`\`\`${OS.EOL}+--`, TokenKind.Markdown]
+      [`+--\n${read(3, 'md')}\n+--`, TokenKind.Markdown]
     ]));
 
-    const s4 = readComment(4);
+    const s4 = read(4);
     
-    it(`should scan ${OS.EOL}${s4}`, () => test(s4, [
+    it(`should scan \n${indent(s4, 2)}`, () => test(s4, [
       ['Create a dot.', TokenKind.Description],
       ['@param', TokenKind.Tag],
       ['x', TokenKind.Identifier],
@@ -463,13 +443,12 @@ describe('Scanner', () => {
       ['number', TokenKind.Any],
       ['-', TokenKind.Minus],
       ['The width of the dot, in pixels.', TokenKind.Description],
-       [`+--\n${readComment(4, 'md')}\n+--`, TokenKind.Markdown]
-      // [`+--${OS.EOL}# Create a dot${OS.EOL}${OS.EOL}Example usage${OS.EOL}\`\`\`${OS.EOL}const dot = new Dot();${OS.EOL}\`\`\`${OS.EOL}+--`, TokenKind.Markdown]
+       [`+--\n${read(4, 'md')}\n+--`, TokenKind.Markdown]
     ]));
 
-    const s5 = readComment(5);
+    const s5 = read(5);
 
-    it(`should scan ${OS.EOL}${s5}`, () => test(s5, [
+    it(`should scan \n${indent(s5, 2)}`, () => test(s5, [
       ['Create a dot.', TokenKind.Description],
       ['@param', TokenKind.Tag],
       ['x', TokenKind.Identifier],
@@ -489,13 +468,12 @@ describe('Scanner', () => {
       ['number', TokenKind.Any],
       ['-', TokenKind.Minus],
       ['The width of the dot, in pixels.', TokenKind.Description],
-      [`+--\n${readComment(5, 'md')}\n +--`, TokenKind.Markdown]
-      // [`+--${OS.EOL} # Create a dot${OS.EOL}${OS.EOL} Example usage${OS.EOL} \`\`\`${OS.EOL} const dot = new Dot();${OS.EOL} \`\`\`${OS.EOL} +--`, TokenKind.Markdown]
+      [`+--\n${read(5, 'md')}\n +--`, TokenKind.Markdown]
     ]));
 
-    const s6 = readComment(6, 'js');
+    const s6 = read(6, 'js');
 
-    it(`should scan ${OS.EOL}${s6}`, () => test(s6, [
+    it(`should scan \n${indent(s6, 2)}`, () => test(s6, [
       ['Create a dot.', TokenKind.Description],
       ['@param', TokenKind.Tag],
       ['x', TokenKind.Identifier],
@@ -515,8 +493,7 @@ describe('Scanner', () => {
       ['number', TokenKind.Any],
       ['-', TokenKind.Minus],
       ['The width of the dot, in pixels.', TokenKind.Description],
-       [`+--\n${readComment(6, 'md')}\n   +--`, TokenKind.Markdown]
-      // [`+--${OS.EOL}   # Create a dot${OS.EOL}  ${OS.EOL}   Example usage${OS.EOL}   \`\`\`${OS.EOL}   const dot = new Dot();${OS.EOL}   \`\`\`${OS.EOL}   +--`, TokenKind.Markdown]
+       [`+--\n${read(6, 'md')}\n   +--`, TokenKind.Markdown]
     ]));
   });
 
