@@ -10,9 +10,10 @@ import { assert } from 'chai';
 import { TokenKind, getTokenName } from "../src/token/";
 const { NodeType, } = AST;
 
-function readComment(version: number, ext?: string) {
-  return FS.readFileSync(Path.resolve(__dirname, './fixtures') + `/comments/${version}${ext ? '.' + ext : '.txt'}`, 'utf8');
+function readComment(file: number | string, ext?: string) {
+  return FS.readFileSync(Path.resolve(__dirname, './fixtures') + `/comments/${file}${ext ? '.' + ext : '.txt'}`, 'utf8');
 }
+
 function remove(obj, property: string | string[]) {
   for (let prop in obj) {
     if (prop === property) delete obj[prop];
@@ -289,7 +290,7 @@ describe('Parser', () => {
         createFormalParameter('width', createAnyType('number')),
         createDescriptionComment('The width of the dot, in pixels.')
       ),
-      createMarkdownComment(`+--${OS.EOL}# Create a dot${OS.EOL}${OS.EOL}Example usage${OS.EOL}\`\`\`${OS.EOL}const dot = new Dot();${OS.EOL}\`\`\`${OS.EOL}+--`)
+      createMarkdownComment(`+--\n${readComment(3, 'md')}\n+--`)
     ])));
   });
 });

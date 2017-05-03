@@ -19,8 +19,8 @@ function test(source: string, match: [string, TokenKind][] | TokenKind) {
   }
 }
 
-function readComment(version: number, ext?: string) {
-  return FS.readFileSync(Path.resolve(__dirname, './fixtures') + `/comments/${version}${ext ? '.' + ext : '.txt'}`, 'utf8');
+function readComment(file: number | string, ext?: string) {
+  return FS.readFileSync(Path.resolve(__dirname, './fixtures') + `/comments/${file}${ext ? '.' + ext : '.txt'}`, 'utf8');
 }
 
 describe('Scanner', () => {
@@ -437,7 +437,8 @@ describe('Scanner', () => {
       ['number', TokenKind.Any],
       ['-', TokenKind.Minus],
       ['The width of the dot, in pixels.', TokenKind.Description],
-      [`+--${OS.EOL}# Create a dot${OS.EOL}${OS.EOL}Example usage${OS.EOL}\`\`\`${OS.EOL}const dot = new Dot();${OS.EOL}\`\`\`${OS.EOL}+--`, TokenKind.Markdown]
+      [`+--\n${readComment(3, 'md')}\n+--`, TokenKind.Markdown]
+      // [`+--${OS.EOL}# Create a dot${OS.EOL}${OS.EOL}Example usage${OS.EOL}\`\`\`${OS.EOL}const dot = new Dot();${OS.EOL}\`\`\`${OS.EOL}+--`, TokenKind.Markdown]
     ]));
 
     const s4 = readComment(4);
@@ -462,7 +463,8 @@ describe('Scanner', () => {
       ['number', TokenKind.Any],
       ['-', TokenKind.Minus],
       ['The width of the dot, in pixels.', TokenKind.Description],
-      [`+--${OS.EOL}# Create a dot${OS.EOL}${OS.EOL}Example usage${OS.EOL}\`\`\`${OS.EOL}const dot = new Dot();${OS.EOL}\`\`\`${OS.EOL}+--`, TokenKind.Markdown]
+       [`+--\n${readComment(4, 'md')}\n+--`, TokenKind.Markdown]
+      // [`+--${OS.EOL}# Create a dot${OS.EOL}${OS.EOL}Example usage${OS.EOL}\`\`\`${OS.EOL}const dot = new Dot();${OS.EOL}\`\`\`${OS.EOL}+--`, TokenKind.Markdown]
     ]));
 
     const s5 = readComment(5);
@@ -487,7 +489,8 @@ describe('Scanner', () => {
       ['number', TokenKind.Any],
       ['-', TokenKind.Minus],
       ['The width of the dot, in pixels.', TokenKind.Description],
-      [`+--${OS.EOL} # Create a dot${OS.EOL}${OS.EOL} Example usage${OS.EOL} \`\`\`${OS.EOL} const dot = new Dot();${OS.EOL} \`\`\`${OS.EOL} +--`, TokenKind.Markdown]
+      [`+--\n${readComment(5, 'md')}\n +--`, TokenKind.Markdown]
+      // [`+--${OS.EOL} # Create a dot${OS.EOL}${OS.EOL} Example usage${OS.EOL} \`\`\`${OS.EOL} const dot = new Dot();${OS.EOL} \`\`\`${OS.EOL} +--`, TokenKind.Markdown]
     ]));
 
     const s6 = readComment(6, 'js');
@@ -512,7 +515,8 @@ describe('Scanner', () => {
       ['number', TokenKind.Any],
       ['-', TokenKind.Minus],
       ['The width of the dot, in pixels.', TokenKind.Description],
-      [`+--${OS.EOL}   # Create a dot${OS.EOL}  ${OS.EOL}   Example usage${OS.EOL}   \`\`\`${OS.EOL}   const dot = new Dot();${OS.EOL}   \`\`\`${OS.EOL}   +--`, TokenKind.Markdown]
+       [`+--\n${readComment(6, 'md')}\n   +--`, TokenKind.Markdown]
+      // [`+--${OS.EOL}   # Create a dot${OS.EOL}  ${OS.EOL}   Example usage${OS.EOL}   \`\`\`${OS.EOL}   const dot = new Dot();${OS.EOL}   \`\`\`${OS.EOL}   +--`, TokenKind.Markdown]
     ]));
   });
 

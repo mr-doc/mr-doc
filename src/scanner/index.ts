@@ -9,8 +9,8 @@ export class CommentScanner {
   private tokens: Token[] = []
   private previousToken: Token = null;
   private lexeme: string[]
-  constructor(source?: string, location?: Location) {
-    this.stream = new CharacterStream(source, location);
+  constructor(source?: string, location?: Location) { 
+    this.stream = new CharacterStream(source, location); 
   }
   scan() { return this.previousToken = this.scanSource(); }
   toTokenStream() {
@@ -106,8 +106,6 @@ export class CommentScanner {
 
   private scanMarkdown(): Token {
     const isMarkdownTag = (m1: string, m2: string, m3: string): boolean => m1 + m2 + m3 === '+--';
-    // const isCommentStar = (col: number): boolean => (col === 0 || col === 1) && this.current() === '*';
-    // let starEnabled: boolean = this.peek(-1) === '*';
     let distance = this.peek(-1) === '*' ? this.location.column - 1 : null;
     distance = this.peek(-2) === '*' ? this.location.column - 2 : distance;
 
