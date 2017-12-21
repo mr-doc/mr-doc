@@ -17,7 +17,10 @@ export class CommentParser {
     while (!this.scanner.eof) {
       this.tokens.push(this.scanner.scan())
     }
-    // console.log(this.tokens);
+    // Add EOF if the scanner did not create one at the end.
+    if (this.tokens[this.tokens.length - 1].kind != TokenKind.EOF) {
+      this.tokens.push(this.scanner.scan());
+    }
   }
 
   private get location(): Location { return this.peek().location; }
@@ -106,7 +109,7 @@ export class CommentParser {
         optional = true;
       }
 
-      let value: Expression = null;
+      let value: Expression;
       // Does it have a default value?
       if (this.check([TokenType.Equal, null])) {
        this.next();
