@@ -56,6 +56,14 @@
       "program": "${workspaceRoot}/test/parser.ts",
       "cwd": "${workspaceRoot}",
       "sourceMaps": true
-    }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Main",
+      "program": "${workspaceRoot}/main.js",
+      "cwd": "${workspaceRoot}",
+      "sourceMaps": true
+    },
   ]
 }
