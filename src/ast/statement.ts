@@ -1,5 +1,5 @@
 import { Token, TokenType, getTokenName } from '../token';
-import { StatementVisitor } from '../visitor'
+import { StatementVisitor } from '../ast/visitor'
 import { ParameterDeclaration } from './index';
 
 export abstract class Statement {

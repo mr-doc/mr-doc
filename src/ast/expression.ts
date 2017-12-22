@@ -1,4 +1,4 @@
-import { ExpressionVisitor } from "../visitor/index";
+import { ExpressionVisitor } from "./visitor/index";
 import { Token } from "../token/index";
 
 

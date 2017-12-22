@@ -15,7 +15,7 @@ import {
   StatementVisitor, 
   Visitor, 
   ExpressionVisitor, 
-  DeclarationVisitor } from '../visitor';
+  DeclarationVisitor } from '../ast/visitor';
   
 import * as _ from 'lodash';
 import remove from '../utils/remove';

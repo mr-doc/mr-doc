@@ -10,7 +10,7 @@ import {
   GroupExpression,
   UnionExpression,
   IntersectionExpression
- } from '../ast/'
+ } from '../'
 
 
 export interface Visitor {
