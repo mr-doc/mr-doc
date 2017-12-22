@@ -1,4 +1,4 @@
-import Token, { TokenKind, getTokenName } from '../token';
+import { Token, TokenType, getTokenName } from '../token';
 import { StatementVisitor } from '../visitor'
 import { ParameterDeclaration } from './index';
 

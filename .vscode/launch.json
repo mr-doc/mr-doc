@@ -4,50 +4,19 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "moca",
-      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
-      "cwd": "${workspaceRoot}",
-      "args": [
-        "test/*.js",
-        "--no-timeouts"
-      ],
-      "sourceMaps": true
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "moca: scanner",
-      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
-      "cwd": "${workspaceRoot}",
-      "args": [
-        "test/scanner.js",
-        "--no-timeouts"
-      ],
-      "sourceMaps": true
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "moca: parser",
-      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
-      "cwd": "${workspaceRoot}",
-      "args": [
-        "test/parser.js",
-        "--no-timeouts"
-      ],
-      "sourceMaps": true
-    },
     {
       "type": "node",
       "request": "launch",
       "name": "Scanner",
-      "program": "${workspaceRoot}/test/scanner.ts",
-      "cwd": "${workspaceRoot}",
-      "sourceMaps": true
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "${workspaceRoot}/test/scanner.js"
+      ],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceRoot}/src/**/*.js",
+        "${workspaceRoot}/test/**/*.js"
+      ]
     },
     {
       "type": "node",

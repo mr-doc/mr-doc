@@ -1,6 +1,6 @@
 import { DeclarationVisitor } from "../visitor/index";
-import Token from "../token/Token";
 import { Expression } from "./index";
+import { Token } from "../token/index";
 
 export abstract class Declaration {
   abstract accept<T>(visitor: DeclarationVisitor<T>): T;

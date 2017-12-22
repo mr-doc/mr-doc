@@ -1,26 +1,19 @@
 import { CommentScanner } from '../scanner/';
-import Token, { TokenKind, getTokenName } from '../token';
 import Location from '../location'
 import * as _ from 'lodash';
 import * as AST from '../ast/';
-import TokenType from '../token/TokenType';
 import { ParseException, Exception } from '../exceptions'
 import { Expression } from '../ast/';
+import { Token, TokenType } from '../token/index';
+import TokenStream from '../stream/TokenStream';
 // const { NodeType, createNode, endNode } = AST;
 
 export class CommentParser {
-  private position: number = 0;
   readonly scanner: CommentScanner = null;
-  readonly tokens: Token[] = []
+  readonly tokens: TokenStream
   constructor(source?: string) {
     this.scanner = new CommentScanner(source);
-    while (!this.scanner.eof) {
-      this.tokens.push(this.scanner.scan())
-    }
-    // Add EOF if the scanner did not create one at the end.
-    if (this.tokens[this.tokens.length - 1].kind != TokenKind.EOF) {
-      this.tokens.push(this.scanner.scan());
-    }
+    this.tokens = this.scanner.toTokenStream();
   }
 
   private get location(): Location { return this.peek().location; }
@@ -30,27 +23,27 @@ export class CommentParser {
   /* flow control */
 
   private next(): Token {
-    if (!this.eof) this.position++;
+    if (!this.eof) this.tokens.next();
     return this.previous();
 
   }
 
   private peek(): Token {
-    return this.tokens[this.position];
+    return this.tokens.current();
   }
 
   private previous(): Token {
-    return this.tokens[this.position - 1];
+    return this.tokens.peek(-1);
   }
 
   /* comparisons */
-  private check(kind: [TokenKind, string | null]) {
+  private check(kind: [TokenType, string | null]) {
     if (this.eof) return false;
     const isEqualKind = this.peek().kind === kind[0];
     return kind[1] ? (isEqualKind && this.peek().lexeme === kind[1]) : isEqualKind;
   }
 
-  private match(...kinds: [TokenKind, string | null][]) {
+  private match(...kinds: [TokenType, string | null][]) {
     for (let i = 0; i < kinds.length; i++) {
       if (this.check(kinds[i])) {
         this.next();
@@ -60,7 +53,7 @@ export class CommentParser {
     return false;
   }
 
-  private consume(kind: [TokenKind, string | null], message: string) {
+  private consume(kind: [TokenType, string | null], message: string) {
     if (this.check(kind)) return this.next();
     throw this.error(this.previous(), message);
   }

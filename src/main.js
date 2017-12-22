@@ -2,17 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const parser_1 = require("./parser");
 const ast_1 = require("./ast");
-let parser = new parser_1.CommentParser(`
-  Hello world
-  @param id: (string & number) | MyType = 2 - description
-  +--
-   # Hello
-   \`\`\`
-    function () {}
-   \`\`\`
-  +--
-`);
-let printer = new ast_1.Printer();
+// let scanner = new CommentScanner(`
+//   @tag id
+// `);
+// console.log(scanner.toTokenStream());
+let parser = new parser_1.CommentParser('@tag id');
+let generator = new ast_1.Generator();
 let statements = parser.parse();
-statements.forEach(statement => console.log(printer.print(statement)));
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFpbi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIm1haW4udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxxQ0FBeUM7QUFDekMsK0JBQStCO0FBRy9CLElBQUksTUFBTSxHQUFHLElBQUksc0JBQWEsQ0FBQzs7Ozs7Ozs7O0NBUzlCLENBQUMsQ0FBQztBQUNILElBQUksT0FBTyxHQUFHLElBQUksYUFBTyxFQUFFLENBQUM7QUFFNUIsSUFBSSxVQUFVLEdBQUcsTUFBTSxDQUFDLEtBQUssRUFBRSxDQUFDO0FBRWhDLFVBQVUsQ0FBQyxPQUFPLENBQUMsU0FBUyxDQUFDLEVBQUUsQ0FBQyxPQUFPLENBQUMsR0FBRyxDQUFDLE9BQU8sQ0FBQyxLQUFLLENBQUMsU0FBUyxDQUFDLENBQUMsQ0FBQyxDQUFDIn0=
+// statements.forEach(statement => console.log(generator.print(statement)));
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFpbi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIm1haW4udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxxQ0FBeUM7QUFDekMsK0JBQWlDO0FBR2pDLHFDQUFxQztBQUNyQyxZQUFZO0FBQ1osTUFBTTtBQUVOLHdDQUF3QztBQUd4QyxJQUFJLE1BQU0sR0FBRyxJQUFJLHNCQUFhLENBQUMsU0FBUyxDQUFDLENBQUM7QUFDMUMsSUFBSSxTQUFTLEdBQUcsSUFBSSxlQUFTLEVBQUUsQ0FBQztBQUVoQyxJQUFJLFVBQVUsR0FBRyxNQUFNLENBQUMsS0FBSyxFQUFFLENBQUM7QUFFaEMsNEVBQTRFIn0=

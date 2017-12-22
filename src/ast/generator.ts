@@ -20,7 +20,7 @@ import {
 import * as _ from 'lodash';
 import remove from '../utils/remove';
 
-export class Printer implements StatementVisitor<string>, DeclarationVisitor<string>, ExpressionVisitor<string> {
+export class Generator implements StatementVisitor<string>, DeclarationVisitor<string>, ExpressionVisitor<string> {
   private options = {
     omit_location: false
   };

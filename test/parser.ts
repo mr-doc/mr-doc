@@ -1,12 +1,12 @@
 // import parsener from '../src/parsener';
 
-import { TokenKind, getTokenName } from "../src/token/";
+import { TokenType, getTokenName } from "../src/token/";
 import Test from './helpers/test';
 import read from './helpers/read';
 import indent from './helpers/indent';
 const {
   test,
-  comment, tag, param, init, description, markdown
+  comment, tag, param, init, description, markdown, union, intersect, any, group
 } = Test.Parser;
 
 
@@ -44,6 +44,20 @@ describe('Parser', () => {
   it('should parse @tag id = init', () => test('@tag id = init', comment(
     tag('@tag', param('id', init("init")))
   )));
+
+  /* Parse optional tags */
+  it('should parse @tag id?', () => test('@tag id?', comment(
+    tag('@tag', param('id', null, null, true))
+  )));
+
+  it('should parse @tag id?: any', () => test('@tag id?: any', comment(
+    tag('@tag', param('id', null, any('any'), true))
+  )))
+
+  it('should parse @tag id?: (any)', () => test('@tag id?: (any)', comment(
+    tag('@tag', param('id', null, group(any('any')), true))
+  )));
+
   // it('should parse @tag id = () => any', () => test('@tag id = () => any', comment([
   //   tag('@tag', param('id', null, arrowfunc(null, anytype('any'))))
   // ])));

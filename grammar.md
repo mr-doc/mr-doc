@@ -22,9 +22,9 @@ any             → literal-expresssion
 <comments>                 → <comment> ( <comment> )*
 <comment>                  → description | markdown | <tag>
 <tag>                      → <simple-tag> | <optional-tag> | <assigned-tag>
-<simple-tag>               → tag
-<optional-tag>             → tag '?' ( ':' <type> )
-<assigned-tag>             → tag (':' <type>) '=' initializer
+<simple-tag>               → tag ( identifier )
+<optional-tag>             → tag identifier '?' ( ':' <type> )
+<assigned-tag>             → tag identifier (':' <type>) '=' initializer
 
 <type>                     → <intersection-type>
 <intersection-type>        → <union-type> ( ( '&' ) <type> )*
