@@ -92,11 +92,11 @@ export class CommentParser {
     if (this.match([TokenType.Markdown, null]))
       return new AST.MarkdownStatement(this.previous());
     if (this.match([TokenType.Tag, null]))
-      return this.parseTagCommentStatement();
+      return this.parseTagStatement();
     throw this.error(this.previous(), "Expected a description comment, markdown comment, or tag comment");
   }
 
-  public parseTagCommentStatement(): AST.TagStatement {
+  public parseTagStatement(): AST.TagStatement {
     let tag = this.previous();
 
     // Check if we have a parameter
