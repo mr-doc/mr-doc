@@ -4,21 +4,20 @@ import * as _ from 'lodash';
 import scanner from '../../src/scanner';
 import parser from '../../src/parser';
 
-import Token, { TokenKind, getTokenName } from '../../src/token';
+// import Token, { TokenType, getTokenName, getTokenKind } from '../../src/token';
 import * as AST from '../../src/ast';
 
 import remove from './remove';
-
-const { NodeType, } = AST;
+import { TokenType, getTokenName } from '../../src/token/index';
 
 
 export default {
   Scanner: {
-    test: function test(source: string, match: [string, TokenKind][] | TokenKind) {
+    test: function test(source: string, match: [string, TokenType][] | TokenType) {
       const tokenstream = scanner(source).toTokenStream();
       const stream = tokenstream.stream;
       let array = typeof match === 'number' ? [[source, match]] : match;
-      array.push(['\0', TokenKind.EOF]);
+      array.push(['\0', TokenType.EOF]);
 
       let count = 0;
       while (count < stream.length) {
@@ -29,45 +28,77 @@ export default {
     }
   },
   Parser: {
-    test: function test(source: string, match?: any) {
+    test: function test(source: string, match?: any[]) {
       const array = [];
-      const result = parser(source).parse();
-      remove(result, 'range');
-      // console.dir(result, { depth: null, colors: true });
-      assert.deepEqual(result, match)
+      const printer = new AST.Generator({ omit_location: true });
+      let result = parser(source)
+        .parse()
+        .map(statement => JSON.parse(printer.print(statement)));
+      // console.log(result);
+      assert.deepEqual(result, match);
     },
-    node, comment, description, markdown, tag, param, arrowfunc, union, intersect, anytype
-  }
+    comment, description, markdown, tag,
+    param, init, any, group, union, intersect
+  },
 };
 
-function node(flag: AST.NodeType, kind: TokenKind) {
-  return { flag, kind, flagName: AST.getNodeTypeName(flag), kindName: getTokenName(kind) }
-}
-function comment(comments: any[]) {
-  return _.assign({ comments }, node(NodeType.Comment, TokenKind.None));
-}
-function description(description: string) {
-  return _.assign({ description }, node(NodeType.DescriptionComment, TokenKind.Description));
-}
-function markdown(markdown: string) {
-  return _.assign({ markdown }, node(NodeType.MarkdownComment, TokenKind.Markdown));
-}
-function tag(tag: string, parameter?: any, description?: any, type?: any) {
-  return _.assign({ tag }, parameter ? { parameter } : {}, description ? { description } : {}, type ? { type } : {}, node(NodeType.TagComment, TokenKind.Tag));
-}
-function param(identifier: string, type?: any, initializer?: any, isOptional = false) {
-  return _.assign({ identifier, isOptional }, type ? { type } : {}, initializer ? { initializer } : {}, node(NodeType.FormalParameter, TokenKind.None))
-}
-function arrowfunc(parameters: any[], type: any) {
-  return _.assign({ type }, parameters ? { parameters } : {}, node(NodeType.ArrowFunctionType, TokenKind.None));
-}
-function union(type: any[]) {
-  return _.assign({ type }, node(NodeType.UnionType, TokenKind.Pipe));
-}
-function intersect(type: any[]) {
-  return _.assign({ type }, node(NodeType.IntersectionType, TokenKind.Ampersand));
+function tokenkind(kind: TokenType) {
+  return { name: getTokenName(kind), kind: kind };
 }
 
-function anytype(type: string) {
-  return _.assign({ type }, node(NodeType.Type, TokenKind.Any));
+function node(lexeme: string, kind: TokenType) {
+  return _.assign({}, { lexeme }, tokenkind(kind));
+}
+
+function comment(...statements: any[]) {
+  return statements;
+}
+
+function description(lexeme: string, wrap: boolean = true) {
+  const description = node(lexeme, TokenType.Description);
+  if (wrap) return { description: description };
+  return description;
+}
+
+function markdown(lexeme: string) {
+  return { markdown: node(lexeme, TokenType.Markdown) };
+}
+
+function tag(lexeme: string, parameter?: {}, description?:{}) {
+  return {
+    tag: _.assign({}, node(lexeme, TokenType.Tag), {
+      parameter: parameter || null,
+      description: description || null
+    }),
+
+  };
+}
+
+function param(lexeme: string, value?: {}, type?: {}, optional: boolean = false) {
+  return {
+    identifier: node(lexeme, TokenType.Identifier),
+    optional: optional,
+    value: value || null,
+    type: type || null
+  }
+}
+
+function init(lexeme: string) {
+  return node(lexeme, TokenType.Initializer);
+}
+
+function any(lexeme: string) {
+  return node(lexeme, TokenType.Any);
+}
+
+function group(node: {}) {
+  return { group: node || null }
+}
+
+function union(node: {}[]) {
+  return { union: { types: node || null } };
+}
+
+function intersect(node: {}[]) {
+  return { intersection: { types: node || null } };
 }

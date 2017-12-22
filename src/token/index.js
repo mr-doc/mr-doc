@@ -1,9 +1,8 @@
 "use strict";
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
 Object.defineProperty(exports, "__esModule", { value: true });
-const Token_1 = require("./Token");
-const TokenType_1 = require("./TokenType");
-exports.TokenKind = TokenType_1.default;
-exports.getTokenKind = TokenType_1.getTokenKind;
-exports.getTokenName = TokenType_1.getTokenName;
-exports.default = Token_1.default;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLG1DQUE0QjtBQUM1QiwyQ0FBb0U7QUFDM0Qsd0NBQVM7QUFBRSxnREFBWTtBQUFFLGdEQUFZO0FBQzlDLGtCQUFlLGVBQUssQ0FBQyJ9
+__export(require("./TokenType"));
+__export(require("./Token"));
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBQUFBLGlDQUE0QjtBQUM1Qiw2QkFBd0IifQ==

@@ -2,11 +2,13 @@
   "compileOnSave": true,
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es6",
+    "target": "esnext",
     "watch": true,
     "inlineSourceMap": true
   },
   "include": [
-    "test/**/*"
+    "test/**/*",
+    // "./main.ts",
+    "src/**/*"
   ]
 }
