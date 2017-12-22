@@ -16,17 +16,6 @@ export class LiteralExpression implements Expression {
   }
 }
 
-export class BinaryExpression implements Expression {
-  public left: Expression
-  public right: Expression
-  constructor(left: Expression, right: Expression) {
-    this.left = left;
-    this.right = right;
-  }  
-  public accept<T>(visitor: ExpressionVisitor<T>): T {
-    return visitor.visitBinaryExpression(this);
-  }
-}
 
 export class GroupExpression implements Expression {
   public expression: Expression

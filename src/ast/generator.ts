@@ -5,10 +5,10 @@ import {
   TagStatement,
   ParameterDeclaration,
   LiteralExpression,
-  BinaryExpression,
+  // UnionAndIntersectionExpression,
   GroupExpression,
   UnionExpression,
-  IntersectionExpression
+  IntersectionExpression,
 } from './';
 
 import { 
@@ -59,13 +59,6 @@ export class Generator implements StatementVisitor<string>, DeclarationVisitor<s
 
   visitLiteralExpression(expression: LiteralExpression): string {
     return this.stringify(expression.value);
-  }
-
-  visitBinaryExpression(expression: BinaryExpression) : string {
-    return this.stringify({
-      left: expression.left.accept(this),
-      right: expression.right.accept(this)
-    });
   }
 
   visitGroupExpression(expression: GroupExpression) : string {

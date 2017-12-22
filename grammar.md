@@ -19,16 +19,17 @@ any             → literal-expresssion
 ### Grammar
 
 ```
-<comments>                 → <comment> ( <comment> )*
-<comment>                  → description | markdown | <tag>
-<tag>                      → <simple-tag> | <optional-tag> | <assigned-tag>
-<simple-tag>               → tag ( identifier )
-<optional-tag>             → tag identifier '?' ( ':' <type> )
-<assigned-tag>             → tag identifier (':' <type>) '=' initializer
+<comments>                        → <comment> ( <comment> )*
+<comment>                         → description | markdown | <tag>
+<tag>                             → <simple-tag> | <optional-tag> | <assigned-tag>
+<simple-tag>                      → tag ( identifier )
+<optional-tag>                    → tag identifier '?' ( ':' <type> )
+<assigned-tag>                    → tag identifier (':' <type>) '=' initializer
 
-<type>                     → <intersection-type>
-<intersection-type>        → <union-type> ( ( '&' ) <type> )*
-<union-type>               → <primary-type> ( ( '|' ) <type> )
-<primary-type>             → any | '(' <type> ')'
+<type>                            → <union-and-intersection-type> ( <union-and-intersection-type> )*
+<union-and-intersection-type>     → <union-type> | <intersection-type>
+<intersection-type>               → <primary-type> ( ( '&' ) <type> )*
+<union-type>                      → <primary-type> ( ( '|' ) <type> )*
+<primary-type>                    → any | '(' <type> ')'
 
 ```

@@ -57,6 +57,81 @@ describe('Parser', () => {
   it('should parse @tag id?: (any)', () => test('@tag id?: (any)', comment(
     tag('@tag', param('id', null, group(any('any')), true))
   )));
+  
+  /* Parse tag with union/intersection types */
+  it('should parse @tag id: any | any', () => test('@tag id: any | any', comment(
+    tag('@tag', param('id', null, union([
+      any('any'),
+      any('any')
+    ])))
+  )));
+
+  it('should parse @tag id: any & any', () => test('@tag id: any & any', comment(
+    tag('@tag', param('id', null, intersect([
+      any('any'),
+      any('any')
+    ])))
+  )));
+
+  it('should parse @tag id: (any | any) | any', () => test('@tag id: (any | any) | any', comment(
+    tag('@tag', param('id', null, union([
+      group(union([
+        any('any'),
+        any('any')
+      ])),
+      any('any')
+    ])))
+  )));
+
+  it('should parse @tag id: (any & any) & any', () => test('@tag id: (any & any) & any', comment(
+    tag('@tag', param('id', null, intersect([
+      group(intersect([
+        any('any'),
+        any('any')
+      ])),
+      any('any')
+    ])))
+  )));
+
+  it('should parse @tag id: any & any | any', () => test('@tag id: any & any | any', comment(
+    tag('@tag', param('id', null, intersect([
+      any('any'),
+      union([
+        any('any'),
+        any('any')
+      ])
+    ])))
+  )));
+
+  it('should parse @tag id: any | any & any', () => test('@tag id: any | any & any', comment(
+    tag('@tag', param('id', null, union([
+      any('any'),
+      intersect([
+        any('any'),
+        any('any')
+      ])
+    ])))
+  )));
+
+  it('should parse @tag id: any | any & any = 1', () => test('@tag id: any | any & any = 1', comment(
+    tag('@tag', param('id', init('1'), union([
+      any('any'),
+      intersect([
+        any('any'),
+        any('any')
+      ])
+    ])))
+  )));
+
+  it('should parse @tag id: any | (any & any) = 1', () => test('@tag id: any | (any & any) = 1', comment(
+    tag('@tag', param('id', init('1'), union([
+      any('any'),
+      group(intersect([
+        any('any'),
+        any('any')
+      ]))
+    ])))
+  )));
 
   // it('should parse @tag id = () => any', () => test('@tag id = () => any', comment([
   //   tag('@tag', param('id', null, arrowfunc(null, anytype('any'))))
