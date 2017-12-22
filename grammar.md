@@ -1,31 +1,34 @@
 Comment Grammar
 ===================
 
-```ebnf
-<comment>                                    ::= <single-comment> ( <single-comment> )*
-<single-comment>                             ::= description
-                                             | tag ( '-' description | <formal-parameter> ('-' description) )
-                                             | markdown
+### Grammar Map
 
-<formal-parameter>                           ::= <parameter> | <optional-parameter>
+```
+<comments>      → statements
+<comment>       → statement
+<tag>           → tag-statement
+<description>   → description-statement
+<markdown>      → markdown-statement
+<type>          → expression
 
-<parameter>                                  ::= identifier ( '=' initializer | <type-declaration> )
-<optional-parameter>                         ::= identifier '?' ( <type-declaration> )
+initializer     → literal-expresssion
+any             → literal-expresssion
 
-<type-declaration>                           ::= ':' <type>
+```
 
-<type>                                       ::= <parenthesized-type-or-arrow-function-type> ( <union-or-intersection-type> )
-<type>                                       ::= <union-or-intersection-or-primary-type>
+### Grammar
 
-<parenthesized-type-or-arrow-function-type>  ::= <arrow-function-type> | '(' <type> ')'
+```
+<comments>                 → <comment> ( <comment> )*
+<comment>                  → description | markdown | <tag>
+<tag>                      → <simple-tag> | <optional-tag> | <assigned-tag>
+<simple-tag>               → tag
+<optional-tag>             → tag '?' ( ':' <type> )
+<assigned-tag>             → tag (':' <type>) '=' initializer
 
-<union-or-intersection-or-primary>           ::= any ( <union-or-intersection-type> )
-
-<union-or-intersection-type>                 ::= '|' <type>
-<union-or-intersection-type>                 ::= '&' <type>
-
-<arrow-function-type>                        ::= '(' <formal-parameter-list> ')' '=>' <type>
-
-<formal-parameter-list>                      ::= <formal-parameter> (',' <formal-parameter> )
+<type>                     → <intersection-type>
+<intersection-type>        → <union-type> ( ( '&' ) <type> )*
+<union-type>               → <primary-type> ( ( '|' ) <type> )
+<primary-type>             → any | '(' <type> ')'
 
 ```
