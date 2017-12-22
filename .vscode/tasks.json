@@ -1,0 +1,32 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "0.1.0",
+  "tasks": [
+    {
+      "taskName": "Gulp",
+      "command": "gulp",
+      "isTestCommand": true,
+      "isShellCommand": true
+    },
+    {
+      "taskName": "Typescript",
+      "command": "tsc",
+      "problemMatcher": "$tsc",
+      "isBuildCommand": true,
+      "showOutput": "silent",
+      "isShellCommand": true
+    },
+    {
+      "taskName": "Clean",
+      // "isShellCommand": true,
+      "command": "rm",
+      "args": [
+        "src/**/*.js",
+        "src/**/*.map",
+        "-f"
+      ]
+
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "esnext",
+    "watch": true,
+    "inlineSourceMap": true
+  },
+  "include": [
+    "test/**/*",
+    // "./main.ts",
+    "src/**/*"
+  ]
+}
