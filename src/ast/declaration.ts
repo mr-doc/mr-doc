@@ -10,9 +10,11 @@ export class ParameterDeclaration implements Declaration {
   public optional: boolean;
   public identifier: Token;
   public value: Expression;
-  constructor(identifier: Token, value: Expression, optional: boolean = false) {
+  public type: Expression;
+  constructor(identifier: Token, value: Expression, type?: Expression, optional: boolean = false) {
     this.identifier = identifier;
     this.value = value;
+    this.type = type;
     this.optional = optional
   }
   public accept<T>(visitor: DeclarationVisitor<T>): T {

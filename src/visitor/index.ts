@@ -5,7 +5,11 @@ import {
   MarkdownStatement,
   TagStatement,
   ParameterDeclaration,
-  LiteralExpression
+  LiteralExpression,
+  BinaryExpression,
+  GroupExpression,
+  UnionExpression,
+  IntersectionExpression
  } from '../ast/'
 
 
@@ -25,4 +29,8 @@ export interface DeclarationVisitor<T> extends Visitor {
 
 export interface ExpressionVisitor<T> extends Visitor {
   visitLiteralExpression: (expression: LiteralExpression) => T,
+  visitBinaryExpression: (expression: BinaryExpression) => T,
+  visitGroupExpression: (expression: GroupExpression) => T,
+  visitUnionExpresson: (expression: UnionExpression) => T,
+  visitIntersectExpression: (expression: IntersectionExpression) => T,
 }

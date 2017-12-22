@@ -53,17 +53,27 @@
       "type": "node",
       "request": "launch",
       "name": "Parser",
-      "program": "${workspaceRoot}/test/parser.ts",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "${workspaceRoot}/test/parser.js"
+      ],
       "cwd": "${workspaceRoot}",
-      "sourceMaps": true
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceRoot}/src/**/*.js",
+        "${workspaceRoot}/test/**/*.js"
+      ]
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Main",
-      "program": "${workspaceRoot}/main.js",
+      "program": "${workspaceRoot}/src/main.ts",
       "cwd": "${workspaceRoot}",
-      "sourceMaps": true
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceRoot}/src/**/*.js"
+      ]
     },
   ]
 }

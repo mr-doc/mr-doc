@@ -72,11 +72,12 @@ function tag(lexeme: string, parameter?: {}, description?:{}) {
   };
 }
 
-function param(lexeme: string, value?: {}, optional: boolean = false) {
+function param(lexeme: string, value?: {}, type?: {}, optional: boolean = false) {
   return {
     identifier: node(lexeme, TokenKind.Identifier),
     optional: optional,
-    value: value || null
+    value: value || null,
+    type: type || null
   }
 }
 

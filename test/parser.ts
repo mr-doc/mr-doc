@@ -14,7 +14,7 @@ describe('Parser', () => {
   /* Parse Description */
   it('should parse a description', () => test('description', comment(description('description'))))
   /* Parse Markdown */
-  it('should scan a markdown code', () => test('+-- markdown +--', comment(markdown('+-- markdown +--'))))
+  it('should parse a markdown code', () => test('+-- markdown +--', comment(markdown('+-- markdown +--'))))
   
   /* Parse tags */
   it('should parse @tag', () => test('@tag', comment(tag('@tag'))));

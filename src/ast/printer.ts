@@ -4,7 +4,11 @@ import {
   MarkdownStatement,
   TagStatement,
   ParameterDeclaration,
-  LiteralExpression
+  LiteralExpression,
+  BinaryExpression,
+  GroupExpression,
+  UnionExpression,
+  IntersectionExpression
 } from './';
 
 import { 
@@ -48,12 +52,42 @@ export class Printer implements StatementVisitor<string>, DeclarationVisitor<str
     return this.stringify({
       "identifier": declaration.identifier,
       "optional": declaration.optional,
-      "value": declaration.value ? JSON.parse(declaration.value.accept<string>(this)) : null
+      "value": declaration.value ? JSON.parse(declaration.value.accept<string>(this)) : null,
+      "type": declaration.type ? JSON.parse(declaration.type.accept<string>(this)) : null,
     });
   }
 
   visitLiteralExpression(expression: LiteralExpression): string {
     return this.stringify(expression.value);
+  }
+
+  visitBinaryExpression(expression: BinaryExpression) : string {
+    return this.stringify({
+      left: expression.left.accept(this),
+      right: expression.right.accept(this)
+    });
+  }
+
+  visitGroupExpression(expression: GroupExpression) : string {
+    return this.stringify({
+      group: JSON.parse(expression.expression.accept(this))
+    })
+  }
+
+  visitUnionExpresson(expression: UnionExpression) : string {
+    return this.stringify({
+      union: {
+        types: expression.expressions.map(expr => JSON.parse(expr.accept<string>(this))),
+      }
+    });
+  }
+
+  visitIntersectExpression(expression: IntersectionExpression) : string {
+    return this.stringify({
+      intersection: {
+        types: expression.expressions.map(expr => JSON.parse(expr.accept<string>(this))),
+      }
+    })
   }
 
   private stringify(object) {

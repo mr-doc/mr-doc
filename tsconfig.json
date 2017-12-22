@@ -7,6 +7,8 @@
     "inlineSourceMap": true
   },
   "include": [
-    "test/**/*"
+    "test/**/*",
+    // "./main.ts",
+    "src/**/*"
   ]
 }

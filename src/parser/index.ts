@@ -95,7 +95,8 @@ export class CommentParser {
       return this.parseTagCommentStatement();
     throw this.error(this.previous(), "Expected a description comment, markdown comment, or tag comment");
   }
-  public parseTagCommentStatement() : AST.TagStatement {
+
+  public parseTagCommentStatement(): AST.TagStatement {
     let tag = this.previous();
 
     // Check if we have a parameter
@@ -111,25 +112,37 @@ export class CommentParser {
 
       let value: Expression;
       // Does it have a default value?
-      if (this.check([TokenType.Equal, null])) {
-       this.next();
-       if (this.match([TokenType.Initializer, null])) {
-         value = new AST.LiteralExpression(this.previous());
-       } else throw this.error(this.previous(), "Expected a valid initializer");
+      if (this.check([TokenType.Equal, null]) && optional === false) {
+        this.next();
+        value = new AST.LiteralExpression(this.consume([TokenType.Initializer, null], "Expected a valid initilizer"));
+      }
+
+      let type: Expression;
+      // Is there a type associated with this?
+      if (this.check([TokenType.Colon, null])) {
+        this.next();
+        type = this.parseExpression();
+
+        // Does it have a default value after a type? (i.e. @param id: MyType = value)
+        if (this.check([TokenType.Equal, null]) && optional === false) {
+          this.next();
+          
+          value = new AST.LiteralExpression(this.consume([TokenType.Initializer, null], "Expected a valid initializer"));
+        }
       }
 
       // Check if we have a description
       if (this.check([TokenType.Minus, null])) {
         this.next();
         if (this.match([TokenType.Description, null])) {
-          return new AST.TagStatement(tag, 
-            new AST.ParameterDeclaration(identifier, value, optional), 
+          return new AST.TagStatement(tag,
+            new AST.ParameterDeclaration(identifier, value, type, optional),
             new AST.DescriptionStatement(this.previous()));
         }
         throw this.error(this.previous(), "Expected a description comment");
       }
       // Otherwise, create a tag node with a parameter
-      return new AST.TagStatement(tag, new AST.ParameterDeclaration(identifier, value, optional));
+      return new AST.TagStatement(tag, new AST.ParameterDeclaration(identifier, value, type, optional));
     }
 
     if (this.check([TokenType.Minus, null])) {
@@ -141,6 +154,41 @@ export class CommentParser {
     }
     return new AST.TagStatement(tag);
   }
+
+  public parseExpression(): Expression {
+    return this.parseIntersectionExpression();
+  }
+
+  public parseIntersectionExpression(): Expression {
+    let expression = this.parseUnionExpression();
+    let expressions = [expression];
+    while (this.check([TokenType.Ampersand, null])) {
+      this.next();
+      expressions.push(this.parseExpression());
+    }
+    return expressions.length > 1 ? new AST.IntersectionExpression(expressions) : expression;
+  }
+
+  public parseUnionExpression(): Expression {
+    let expression = this.parsePrimaryExpression();
+    let expressions = [expression];
+    while (this.check([TokenType.Pipe, null])) {
+      this.next();
+      expressions.push(this.parseExpression());
+    }
+    return expressions.length > 1 ? new AST.UnionExpression(expressions) : expression;
+  }
+
+  public parsePrimaryExpression(): Expression {
+    if (this.match([TokenType.Any, null])) {
+      return new AST.LiteralExpression(this.previous());
+    } else if (this.match([TokenType.LeftParen, null])) {
+      let expression = this.parseExpression();
+      this.consume([TokenType.RightParen, null], "Expected right parenthesis");
+      return new AST.GroupExpression(expression);
+    } else throw this.error(this.previous(), "Expected a valid initializer");
+  }
+
 }
 
 export default function Parser(source?: string) {

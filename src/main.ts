@@ -1,10 +1,10 @@
-import { CommentParser } from './src/parser';
-import { Printer } from './src/ast'
+import { CommentParser } from './parser';
+import { Printer } from './ast'
 
 
 let parser = new CommentParser(`
   Hello world
-  @param id = [] - description
+  @param id: (string & number) | MyType = 2 - description
   +--
    # Hello
    \`\`\`
