@@ -1,14 +1,12 @@
 import { assert } from 'chai';
 import * as _ from 'lodash';
 
-import scanner from '../../src/scanner';
-import parser from '../../src/parser';
-
-// import Token, { TokenType, getTokenName, getTokenKind } from '../../src/token';
-import * as AST from '../../src/ast';
+import scanner from '../../src/comment-parser/scanner';
+import parser from '../../src/comment-parser/parser';
+import * as AST from '../../src/comment-parser/ast';
 
 import remove from './remove';
-import { TokenType, getTokenName } from '../../src/token/index';
+import { TokenType, getTokenName } from '../../src/comment-parser/token/index';
 
 
 export default {

@@ -1,5 +1,5 @@
 import Test from './helpers/test';
-import { Token, TokenType, getTokenName } from '../src/token';
+import { Token, TokenType, getTokenName } from '../src/comment-parser/token';
 import read from './helpers/read';
 import indent from './helpers/indent';
 const test = Test.Scanner.test;
