@@ -23,7 +23,7 @@ Before the year 2017 concludes, I wanted to let you know the thoughts I had and 
 
 The concept of `@` remains but the syntax will be a little different.
 
-I've seen some pretty confusing (in my opinion) syntax such as `@type {Array.<MyClass>}`  or `@param {*} somebody` and thought that there should be a natural way to express a type of array containing the instances of `MyClass` or a parameter named `somebody` that is a type of "whatever", respectively. So, I eventually came up with a syntax inspired by TypeScript and Swift, which is to define a type after a colon. Basically, adding the notion of a type-denoter to JSDoc/JavaDoc. Thus, convert our jsdoc comment docs to the following format:
+I've seen some pretty confusing (in my opinion) syntax such as `@type {Array.<MyClass>}`  or `@param {*} somebody` and thought that there should be a natural way to express a type of array containing the instances of `MyClass` or a parameter named `somebody` that is a type of "whatever", respectively. So, I eventually came up with a syntax inspired by TypeScript and Swift, which is to define a type after a colon. Basically, adding the notion of a type-denoter to JSDoc/JavaDoc. Thus, we can convert our JSDoc comments to the following format:
 
 ```
 /*
@@ -41,6 +41,10 @@ There a few things to keep in mind:
  - It also does not understand the JSDoc specific tags, except for `@return` since the scanner needs to know if there is a type/identifier after the tag.
  - At the moment, Tom's capabilities are limited. Concepts such as functions or closures as parameters are encountered in many languages today, however, Tom cannot parse a syntax such as `@param my_awesome_func: (string, number) => number`. In the mean time, you can define a parameter as a function like so: `@param my_awesome_func: function`.
  - Tom can scan a single star comment but will try its best to scan a double star comment.
+ - Tom can parse descriptions (with caveats) and markdown comments (using the `+--` delimiters)
+   - Descriptions are scanned from the beginning of the first character until a new line is reached. Thus,
+   you may have multiple descriptions in a single comment even if your intent was to have a single description
+   that contained more that one sentence (i.e. a paragraph). Of course, PR's are welcomed to fix this if it's an issue to you.
 
 2. **Mr. Doc is starting anew.**
 
