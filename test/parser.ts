@@ -1,6 +1,6 @@
 // import parsener from '../src/parsener';
 
-import { TokenType, getTokenName } from "../src/comment-parser/token/";
+import { TokenType, getTokenName } from "../src/tom/token/";
 import Test from './helpers/test';
 import read from './helpers/read';
 import indent from './helpers/indent';
