@@ -64,16 +64,16 @@ That being said, here's what I plan to work on next:
           For example, maybe introduce a config file that let's mr-doc 
           know which files to include or exclude for the generation process.
     
-  - [ ] Backend (Language-Parser)
+  - [ ] Backend (Language Parser)
     - [ ] Focus on JavaScript for now and only use babel as the JavaScript parser.
   
   - [ ] Backend (Documentation Generator)
     - [ ] Look into next.js which can generate static pages using React.
     - [ ] Mimic Rust's documentation generator where we can generate and serve the doc immediately.
   
-  - [ ] Backend (Comment Parser)
-    - [ ] Add support for closures and closure-expressions (PRs accepted).
-    - [ ] Add support for labels (maybe; PRs accepted). For example, `@param [async, throws] my_awesome_func: function`
+  - [ ] Backend (Tom: Comment Parser)
+    - [ ] Add support for closures and closure-expressions (PRs welcomed).
+    - [ ] Add support for labels (maybe; PRs welcomed). For example, `@param [async, throws] my_awesome_func: function`
  
  I will be updating the readme as time goes on. 
  
