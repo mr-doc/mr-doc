@@ -1,18 +1,19 @@
-
 /* eslint-env node */
+
 'use strict';
 
-const Source = require('mr-doc-utils').Source;
+const { Source, Option } = require('mr-doc-utils');
 const Log = require('../utils/log');
 const Liftoff = require('liftoff');
-const Option = require('mr-doc-utils').Option;
 const Promise = require('bluebird');
 const Yargs = require('yargs');
 const ViynlFS = require('vinyl-fs');
 const _ = require('lodash');
 const pkg = require('../../package.json');
 const rc = require('rc');
+
 const log = new Log();
+const v8flags = require('v8flags');
 
 class CLI {
   /**
@@ -22,10 +23,11 @@ class CLI {
    */
   static parse() {
     return Promise.resolve(Yargs
-    .usage('Usage: mrdoc [options]', Option.cli)
-    .help('help', Log.color.gray('Show help.'))
-    .alias('help', 'h')
-    .argv);
+      .usage('$0 [options]')
+      .options(Option.cli)
+      .help('help', Log.color.gray('Show help.'))
+      .alias('help', 'h')
+      .argv);
   }
   /**
    * Setup the logger.
@@ -54,7 +56,7 @@ class CLI {
     return new Liftoff({
       name: 'mrdoc',
       processTitle: 'mrdoc',
-      v8flags: require('v8flags'),
+      v8flags,
     });
   }
   /**
@@ -72,8 +74,8 @@ class CLI {
         cwd: options.cwd,
         configPath: options.mrdocrc,
       }, env => CLI.handler(env, options)
-      .then(stream => resolve(stream))
-      .catch(error => reject(error)));
+        .then(stream => resolve(stream))
+        .catch(error => reject(error)));
     });
   }
   /**
@@ -99,7 +101,7 @@ class CLI {
       // DEBUG: Sources
       log.debug(Log.color.blue('Sources:'), sources);
       if (sources.indexOf(null) > -1) {
-        reject(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`);
+        reject(new Error(`${_.isArray(sources) ? sources.join(', ') : sources} does not exist!`));
       } else resolve({ stream: ViynlFS.src(sources, { cwd: options.cwd }), options });
     });
   }

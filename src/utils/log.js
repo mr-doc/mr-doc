@@ -1,9 +1,11 @@
 /* eslint-env node */
+
 'use strict';
 
 const Utils = require('mr-doc-utils');
-const log = new Utils.Log();
 const _ = require('lodash');
+
+const log = new Utils.Log();
 
 class Log {
   constructor() {
@@ -15,13 +17,13 @@ class Log {
    */
   static setup(options) {
     if (options.silent) {
-      log.on('error', () => { /* NOOP */});
+      log.on('error', () => { /* NOOP */ });
     }
     Log.levels(options.level)
-    .forEach(level => {
-      if (level === 'error') Log.error();
-      else Log.other(level);
-    });
+      .forEach(level => {
+        if (level === 'error') Log.error();
+        else Log.other(level);
+      });
   }
   /**
    * Set the log levels.
@@ -44,7 +46,7 @@ class Log {
       const args = Array.prototype.slice.call(arguments);
       args.unshift(Log.color[Log.levelColor('error')]('[error]:'));
       args.unshift(Log.color.cyan('mrdoc'));
-      console.log.apply(console, args.map(i => Log.color.red(i)));
+      console.log(...args.map(i => Log.color.red(i)));
       /* eslint-enable no-console */
     });
   }
@@ -59,7 +61,7 @@ class Log {
       const args = Array.prototype.slice.call(arguments);
       args.unshift(Log.color[Log.levelColor(level)](`[${level}]:`));
       args.unshift(Log.color.cyan('mrdoc'));
-      console.log.apply(console, args);
+      console.log(...args);
       /* eslint-enable no-console */
     });
   }

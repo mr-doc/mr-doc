@@ -1,0 +1,48 @@
+{
+  // Use IntelliSense to learn about possible Node.js debug attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Scanner",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "${workspaceRoot}/test/scanner.js"
+      ],
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceRoot}/src/**/*.js",
+        "${workspaceRoot}/test/**/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Parser",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "${workspaceRoot}/test/parser.js"
+      ],
+      "cwd": "${workspaceRoot}",
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceRoot}/src/**/*.js",
+        "${workspaceRoot}/test/**/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Main",
+      "program": "${workspaceRoot}/src/main.ts",
+      "cwd": "${workspaceRoot}",
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceRoot}/src/**/*.js"
+      ]
+    },
+  ]
+}

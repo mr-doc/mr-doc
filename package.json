@@ -23,31 +23,36 @@
     "mrdoc": "./bin/mrdoc"
   },
   "scripts": {
-    "test": "gulp"
+    "test": "gulp",
+    "build": "tsc"
   },
   "engines": {
     "node": ">= 5.0.0"
   },
   "dependencies": {
-    "bluebird": "^3.3.5",
+    "bluebird": "^3.5.1",
     "gulp-if": "^2.0.0",
-    "liftoff": "^2.2.0",
+    "liftoff": "^2.5.0",
     "lodash": "^4.6.1",
     "mr-doc-compiler": "1.0.0",
     "mr-doc-parser": "1.0.0",
     "mr-doc-utils": "^2.2.2",
-    "rc": "^1.1.6",
-    "v8flags": "^2.0.11",
-    "vinyl-fs": "^2.4.3",
-    "yargs": "^4.3.2"
+    "rc": "^1.2.2",
+    "v8flags": "^3.0.1",
+    "vinyl-fs": "^3.0.0",
+    "yargs": "^10.0.3"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "eslint-config-airbnb": "^6.1.0",
-    "eslint-plugin-react": "^4.2.3",
+    "@types/chai": "^4.0.10",
+    "@types/lodash": "^4.14.91",
+    "@types/mocha": "^2.2.44",
+    "@types/node": "^8.5.2",
+    "chai": "^4.1.2",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-react": "^7.5.1",
     "gulp": "^3.9.1",
-    "gulp-eslint": "^2.0.0",
-    "gulp-mocha": "^2.2.0"
+    "gulp-eslint": "^4.0.0",
+    "gulp-mocha": "^4.3.1"
   },
   "keywords": [
     "dox",

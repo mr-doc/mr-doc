@@ -16,12 +16,3 @@ results
 node_modules
 npm-debug.log
 .env
-
-jsconfig.json
-.vscode/settings.json
-
-.backup/
-.backup
-jsconfig.json
-.vscode/
-Code
