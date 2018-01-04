@@ -7,6 +7,17 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Launch mr-doc",
+      "program": "${workspaceRoot}/bin/mrdoc.js",
+      "args": [
+        "-s", "src/",
+        "-l", "debug"
+      ],
+      "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Scanner",
       "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
       "args": [

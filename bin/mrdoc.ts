@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 /* eslint-env node */
 'use strict';
-const Log = require('../src/utils/log');
-const CLI = require('../src/cli');
-const MrDoc = require('../');
+import Utils from 'mr-doc-utils';
+import CLI from '../src/cli';
+import MrDoc from '../';
+
+const { Log } = Utils;
 const log = new Log();
 
 // Parse the arguments.
@@ -13,7 +15,7 @@ CLI.parse()
 // Launch the CLI.
 .then(options => CLI.launch(options))
 // Start documentation.
-.then(result => MrDoc.cli(result.stream, result.options))
+.then(result => MrDoc.generate(result.stream, result.options))
 // DEBUG: Land (with success)
 .then(() => log.debug(Log.color.blue('Landed CLI with success')))
 .catch(error => {

@@ -70,7 +70,7 @@ export class CommentScanner {
       [TokenType.Any]: !Match.isSpace(ch) && !'&|,)-='.includes(ch) && !Match.isSpace(ch),
       [TokenType.Identifier]: !Match.isSpace(ch) && !'?:)-=,'.includes(ch) && !Match.isSpace(ch),
       [TokenType.Initializer]: !Match.isSpace(ch) && !',)-='.includes(ch) && !Match.isSpace(ch),
-      [TokenType.Description]: !Match.isTerminator(ch)
+      [TokenType.Description]: !Match.isTerminator(ch) && this.peek(1) !== '*' && this.peek(2) !== '/'
     }[kind]);
     const consume = (kind: TokenType): Token => {
       while (filter(kind, this.current())) { this.lexeme.push(this.accept()); }
