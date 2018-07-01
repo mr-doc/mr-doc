@@ -1,6 +1,6 @@
-<img src="http://cl.ly/image/0x3g3I3c460q/content" width="40%" alt="Mr. Doc by Ben Matsuya">
+<img src="https://cl.ly/image/0x3g3I3c460q/content" width="40%" alt="Mr. Doc by Ben Matsuya">
 
-Artwork by [Ben Matsuya](http://www.matsuyacreative.com/about/).
+Artwork by [Ben Matsuya](https://www.matsuyacreative.com/freelance-artist-ben-matsuya-comics-illustrator/).
 
 [![Deps](https://david-dm.org/mr-doc/mr-doc.svg)](https://david-dm.org/mr-doc/mr-doc)
 [![npm](https://img.shields.io/npm/v/mr-doc.svg)](https://www.npmjs.com/package/mr-doc)
@@ -8,20 +8,40 @@ Artwork by [Ben Matsuya](http://www.matsuyacreative.com/about/).
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/mr-doc/mr-doc/master/LICENSE.md)
 [![npm](https://img.shields.io/npm/dt/mr-doc.svg)](https://www.npmjs.com/package/mr-doc)
 
+Mr. Doc
+====================
 
-## Status
+A personal source documenter at your service.
 
-This master branch is in work in progress. ~Please see #108, #109, #110 for progress.~
+# Architecture
 
-To whom it may concern,
+## 1. Core Components
 
-Yes, I am still working on this. 
+* Berman (dependency generator/engine)
+* Tom (documentation syntax scanner and parser)
+* Mr. Doc (documentation generator)
 
-Before the year 2017 concludes, I wanted to let you know the thoughts I had and the progress I've made for Mr. Doc:
+## 2. Process
 
-1.  **Mr. Doc is taking a different approach from JSDoc.**
+The goal of Mr. Doc is to simply generate documentation from a source. In addition, we want to make sure that only sources that are not listed as private are generated. As mentioned in the README, Mr. Doc will be using a familiar syntax for documenting your code. 
 
-The concept of `@` remains but the syntax will be a little different.
+To do so, we will use Berman to generate a dependecy graph and check whether a certain file should be included. This will also help us generate the hyperlinks between sources as well as generating a visual graph if needed. Once the graph is complete, we then proceed to Tom. 
+
+Tom will then generate an array of ASTs from the documentation syntax in the source codes and will pass that information to Mr. Doc. 
+
+Mr. Doc will have a compiler that will parse the source (i.e. Javascript) and will output the documentation (i.e. HTML). Note that the parser in Mr. Doc. is not the same as Tom. Tom only parses the documentation syntax which we can call it XDoc for now. Mr. Doc parses the actual source code and trims the code in question.
+
+![Mr. Doc](img/arch.png "Mr. Doc Process")
+
+## 1-A. Berman
+
+The logic behind Berman is to look each source file's import statements and determine which files does the source depend on. Using the dependency graph allows us to generate links between files.
+
+## 1-B. Tom
+
+### Background
+
+The concept of `@` remains but the syntax will be a little different from JSDoc.
 
 I've seen some pretty confusing (in my opinion) syntax such as `@type {Array.<MyClass>}`  or `@param {*} somebody` and thought that there should be a natural way to express a type of array containing the instances of `MyClass` or a parameter named `somebody` that is a type of "whatever", respectively. So, I eventually came up with a syntax inspired by TypeScript and Swift, which is to define a type after a colon. Basically, adding the notion of a type-denoter to JSDoc/JavaDoc. Thus, we can convert our JSDoc comments to the following format:
 
@@ -35,48 +55,75 @@ I've seen some pretty confusing (in my opinion) syntax such as `@type {Array.<My
 */
 ```
 
-There a few things to keep in mind:
+### Writing Documentation
 
- - Tom, the main parser that generates an AST from the comments, has no notion of types. It does not know what a string, number, object, any, etc is. 
- - It also does not understand the JSDoc specific tags, except for `@return` since the scanner needs to know if there is a type/identifier after the tag.
- - At the moment, Tom's capabilities are limited. Concepts such as functions or closures as parameters are encountered in many languages today, however, Tom cannot parse a syntax such as `@param my_awesome_func: (string, number) => number`. In the mean time, you can define a parameter as a function like so: `@param my_awesome_func: function`.
- - Tom can scan a single star comment but will try its best to scan a double star comment.
- - Tom can parse descriptions (with caveats) and markdown comments (using the `+--` delimiters)
-   - Descriptions are scanned from the beginning of the first character until a new line is reached. Thus,
-   you may have multiple descriptions in a single comment even if your intent was to have a single description
-   that contained more that one sentence (i.e. a paragraph). Of course, PR's are welcomed to fix this if it's an issue to you.
+The way documentation is written is mostly inspired by [Rust](https://doc.rust-lang.org/book/second-edition/ch14-02-publishing-to-crates-io.html#making-useful-documentation-comments). Proper and consistent documentation leads to better understanding of one's code and the purpose of the code. In Mr. Doc, we will follow Rust's concept of writing the documentation using Markdown. The documentation must begin with a summary or a short description of the code. It should also be properly punctuated.
 
-2. **Mr. Doc is starting anew.**
-
-As I try to complete v4.0.0, I will not focus on backward compatibility. Consider the next version to be a complete change or even the new 1.0.0. For example, options that you've used in the past may not exist (but could be re-introduced as Mr. Doc stabilizes). Themes that currently exist **will not work with v4 and beyond**. Even the theming system will not be available in v4. Again, the focus is on building the basics first to get Mr. Doc back up and running.
-
-3. **The progess made so far and additional thoughts:**
-
-Since [December of last year](https://github.com/mr-doc/mr-doc/pull/127/commits/130bc64974bba1a77d96a3b4f1fc75eb52435ee0), I've been working on Tom and finally completed the first version. It took a long time since 
-  - I am a full-time student & part-timer 
-  - I'm still not familiar with the rapidly changing tech such as next.js, lerna, etc. 
-  - I seem to be the only one working on this.
-
-That being said, here's what I plan to work on next:
-
-  - [ ] Frontend
-    - [ ] Figure out the interface and what to expect from the user.
-          For example, maybe introduce a config file that let's mr-doc 
-          know which files to include or exclude for the generation process.
+```javascript
+[Use a single star block comment]
+/*
+    A car class.
     
-  - [ ] Backend (Language Parser)
-    - [ ] Focus on JavaScript for now and only use babel as the JavaScript parser.
-  
-  - [ ] Backend (Documentation Generator)
-    - [ ] Look into next.js which can generate static pages using React.
-    - [ ] Mimic Rust's documentation generator where we can generate and serve the doc immediately.
-  
-  - [ ] Backend (Tom: Comment Parser)
-    - [ ] Add support for closures and closure-expressions (PRs welcomed).
-    - [ ] Add support for labels (maybe; PRs welcomed). For example, `@param [async, throws] my_awesome_func: function`
- 
- I will be updating the readme as time goes on. 
- 
- Apart from the update, Happy New Years!
- 
- \- [Takeshi](https://github.com/iwatakeshi)
+    # API
+    
+    ```
+    @class - Car.
+    ```
+    
+
+    # Examples
+
+    ```
+    const car = new Car();
+    car.honk();
+    ```
+
+*/
+
+class Car {
+    /*
+        Moves the car toward a certain point.
+
+        # API
+        
+        ```
+        @method run
+        @param x: Number - The distance towards "x".
+        @param y: Number - The distance towards "y".
+        ```
+        
+        # Examples
+
+        ```
+        car.run(10, 10);
+        ```
+
+    */
+    run (x, y) {
+        // ...
+    }
+    // ...
+
+}
+
+```
+
+
+### Grammar
+
+
+```
+<comments>                        → <comment> ( <comment> )*
+<comment>                         → <tag> (- description '.')
+<tag>                             → <simple-tag> | <optional-tag> | <assigned-tag>
+<simple-tag>                      → tag ( identifier )
+<optional-tag>                    → tag identifier '?' ( ':' <type> )
+<assigned-tag>                    → tag identifier (':' <type>) '=' initializer
+
+<type>                            → <union-and-intersection-type> ( <union-and-intersection-type> )*
+<union-and-intersection-type>     → <union-type> | <intersection-type>
+<intersection-type>               → <primary-type> ( ( '&' ) <type> )*
+<union-type>                      → <primary-type> ( ( '|' ) <type> )*
+<primary-type>                    → any | '(' <type> ')'
+
+```
