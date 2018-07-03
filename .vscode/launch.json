@@ -55,5 +55,14 @@
         "${workspaceRoot}/src/**/*.js"
       ]
     },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Berman",
+      "program": "${workspaceFolder}/src/berman/index.ts",
+      "outFiles": [
+        "${workspaceRoot}/src/**/*.js",
+      ]
+    }
   ]
 }

@@ -33,11 +33,11 @@ Mr. Doc will have a compiler that will parse the source (i.e. Javascript) and wi
 
 ![Mr. Doc](img/arch.png "Mr. Doc Process")
 
-## 1-A. Berman
+## Berman
 
 The logic behind Berman is to look each source file's import statements and determine which files does the source depend on. Using the dependency graph allows us to generate links between files.
 
-## 1-B. Tom
+## Tom
 
 ### Background
 
@@ -67,9 +67,10 @@ The way documentation is written is mostly inspired by [Rust](https://doc.rust-l
     # API
     
     ```
-    @class - Car.
+    @class Car.
+    @param make?: string - The maker of the car.
+    @param year?: string - The year of the car.
     ```
-    
 
     # Examples
 
@@ -81,6 +82,10 @@ The way documentation is written is mostly inspired by [Rust](https://doc.rust-l
 */
 
 class Car {
+    constructor(make, year) {
+        this.make = make ? make : "";
+        this.year = year ? year : "";
+    }
     /*
         Moves the car toward a certain point.
 
@@ -114,7 +119,7 @@ class Car {
 
 ```
 <comments>                        → <comment> ( <comment> )*
-<comment>                         → <tag> (- description '.')
+<comment>                         → <tag> ( '-' description '.' )
 <tag>                             → <simple-tag> | <optional-tag> | <assigned-tag>
 <simple-tag>                      → tag ( identifier )
 <optional-tag>                    → tag identifier '?' ( ':' <type> )

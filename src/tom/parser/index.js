@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const _1 = require("../scanner/");
+const scanner_1 = require("../scanner/");
 const AST = require("../ast/");
 const exceptions_1 = require("../exceptions");
 const index_1 = require("../token/index");
@@ -8,7 +8,7 @@ const index_1 = require("../token/index");
 class CommentParser {
     constructor(source) {
         this.scanner = null;
-        this.scanner = new _1.CommentScanner(source);
+        this.scanner = new scanner_1.CommentScanner(source);
         this.tokens = this.scanner.toTokenStream();
     }
     get location() { return this.peek().location; }

@@ -24,6 +24,7 @@ class MrDoc {
         return (new output_1.default(options))
             .use(MrDoc.parser)
             .use(options => (options) => [])
+            // .use(MrDoc.compiler)
             .toStream();
     }
     // static grunt() {

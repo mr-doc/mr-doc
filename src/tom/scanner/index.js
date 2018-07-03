@@ -1,29 +1,29 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // import Token, { TokenType, getTokenKind } from '../token';
-const _1 = require("../stream/");
+const stream_1 = require("../stream/");
 const Match_1 = require("../utils/Match");
 const _ = require("lodash");
-const _2 = require("../token/");
+const token_1 = require("../token/");
 class CommentScanner {
     constructor(source, location) {
         this.stream = null;
         this.tokens = [];
-        this.stream = new _1.CharacterStream(source, location);
+        this.stream = new stream_1.CharacterStream(source, location);
     }
     scan() { return this.scanSource(); }
     toTokenStream() {
         let token = this.scan();
-        while (token.kind !== _2.TokenType.EOF) {
-            if (token.kind !== _2.TokenType.None) {
+        while (token.kind !== token_1.TokenType.EOF) {
+            if (token.kind !== token_1.TokenType.None) {
                 this.tokens.push(token);
             }
             token = this.scan();
         }
-        if (this.previousToken().kind !== _2.TokenType.EOF) {
+        if (this.previousToken().kind !== token_1.TokenType.EOF) {
             this.tokens.push(token);
         }
-        return new _1.TokenStream(this.tokens);
+        return new stream_1.TokenStream(this.tokens);
     }
     current() { return this.stream.current(); }
     next() { return this.stream.next(); }
@@ -46,7 +46,7 @@ class CommentScanner {
             this.next();
         }
         if (this.eof) {
-            return new _2.Token('\0', _2.TokenType.EOF, this.location);
+            return new token_1.Token('\0', token_1.TokenType.EOF, this.location);
         }
         else if (Match_1.default.isLetterOrDigit(this.current()) || '\'\"[]{}.'.includes(this.current())) {
             return this.scanName();
@@ -70,22 +70,22 @@ class CommentScanner {
             return this.scanParenthesis();
         }
         else {
-            return new _2.Token(this.accept(), _2.TokenType.None, this.location);
+            return new token_1.Token(this.accept(), token_1.TokenType.None, this.location);
         }
     }
     scanName() {
         // Filter will stop the while-loop when a character reaches a certain point.
         const filter = (kind, ch) => ({
-            [_2.TokenType.Any]: !Match_1.default.isSpace(ch) && !'&|,)-='.includes(ch) && !Match_1.default.isSpace(ch),
-            [_2.TokenType.Identifier]: !Match_1.default.isSpace(ch) && !'?:)-=,'.includes(ch) && !Match_1.default.isSpace(ch),
-            [_2.TokenType.Initializer]: !Match_1.default.isSpace(ch) && !',)-='.includes(ch) && !Match_1.default.isSpace(ch),
-            [_2.TokenType.Description]: !Match_1.default.isTerminator(ch) && this.peek(1) !== '*' && this.peek(2) !== '/'
+            [token_1.TokenType.Any]: !Match_1.default.isSpace(ch) && !'&|,)-='.includes(ch) && !Match_1.default.isSpace(ch),
+            [token_1.TokenType.Identifier]: !Match_1.default.isSpace(ch) && !'?:)-=,'.includes(ch) && !Match_1.default.isSpace(ch),
+            [token_1.TokenType.Initializer]: !Match_1.default.isSpace(ch) && !',)-='.includes(ch) && !Match_1.default.isSpace(ch),
+            [token_1.TokenType.Description]: !Match_1.default.isTerminator(ch) && this.peek(1) !== '*' && this.peek(2) !== '/'
         }[kind]);
         const consume = (kind) => {
             while (filter(kind, this.current())) {
                 this.lexeme.push(this.accept());
             }
-            const { Any, Ampersand, Pipe, Identifier, LeftParen, Colon } = _2.TokenType;
+            const { Any, Ampersand, Pipe, Identifier, LeftParen, Colon } = token_1.TokenType;
             if (kind === Identifier) {
                 // Skip whitespace
                 while (Match_1.default.isWhiteSpace(this.current())) {
@@ -100,6 +100,7 @@ class CommentScanner {
                             this.peek(1) !== ':') {
                             kind = Any;
                         }
+                        // (... | any) || (... & any)
                         else if ('&|'.includes(this.current())) {
                             kind = Any;
                         }
@@ -109,55 +110,55 @@ class CommentScanner {
                     }
                 }
             }
-            return new _2.Token(this.lexeme.join(''), kind, this.location);
+            return new token_1.Token(this.lexeme.join(''), kind, this.location);
         };
         // @return Any
         if (this.previousToken()) {
             if (this.previousToken().lexeme === '@return' && Match_1.default.isLetter(this.current()))
-                return consume(_2.TokenType.Any);
-            const { Tag, LeftParen, Comma } = _2.TokenType;
+                return consume(token_1.TokenType.Any);
+            const { Tag, LeftParen, Comma } = token_1.TokenType;
             if (_.includes([Tag, LeftParen, Comma], this.previousToken().kind)) {
-                return consume(_2.TokenType.Identifier);
+                return consume(token_1.TokenType.Identifier);
             }
-            const { Colon, Arrow, Pipe, Ampersand } = _2.TokenType;
+            const { Colon, Arrow, Pipe, Ampersand } = token_1.TokenType;
             if (_.includes([Colon, Arrow, Pipe, Ampersand], this.previousToken().kind)) {
-                return consume(_2.TokenType.Any);
+                return consume(token_1.TokenType.Any);
             }
-            if (this.previousToken().kind === _2.TokenType.Equal) {
-                return consume(_2.TokenType.Initializer);
+            if (this.previousToken().kind === token_1.TokenType.Equal) {
+                return consume(token_1.TokenType.Initializer);
             }
         }
-        return consume(_2.TokenType.Description);
+        return consume(token_1.TokenType.Description);
     }
     scanSimpleChar() {
         const ch = this.accept();
-        const kind = _2.getTokenKind(ch);
-        return new _2.Token(ch, kind, this.location);
+        const kind = token_1.getTokenKind(ch);
+        return new token_1.Token(ch, kind, this.location);
     }
     scanTag() {
         while (this.current() !== ':' && !Match_1.default.isSpace(this.current())) {
             this.lexeme.push(this.accept());
         }
-        return new _2.Token(this.lexeme.join(''), _2.TokenType.Tag, this.location);
+        return new token_1.Token(this.lexeme.join(''), token_1.TokenType.Tag, this.location);
     }
     scanMinus() {
         const prevToken = this.previousToken();
         const isInitializer = prevToken &&
-            prevToken.kind === _2.TokenType.Equal &&
+            prevToken.kind === token_1.TokenType.Equal &&
             this.current() === '-' && Match_1.default.isDigit(this.peek(1));
-        let kind = _2.TokenType.None;
+        let kind = token_1.TokenType.None;
         if (isInitializer) {
             this.lexeme.push(this.accept());
             while (Match_1.default.isDigit(this.current())) {
                 this.lexeme.push(this.accept());
             }
-            kind = _2.TokenType.Initializer;
+            kind = token_1.TokenType.Initializer;
         }
         else {
             this.lexeme.push(this.accept());
-            kind = _2.TokenType.Minus;
+            kind = token_1.TokenType.Minus;
         }
-        return new _2.Token(this.lexeme.join(''), kind, this.location);
+        return new token_1.Token(this.lexeme.join(''), kind, this.location);
     }
     scanMarkdown() {
         const isMarkdownTag = (m1, m2, m3) => m1 + m2 + m3 === '+--';
@@ -178,16 +179,16 @@ class CommentScanner {
         if (isMarkdownTag(this.current(), this.peek(1), this.peek(2))) {
             this.consume(3, this.lexeme);
         }
-        return new _2.Token(this.lexeme.join(''), _2.TokenType.Markdown, this.location);
+        return new token_1.Token(this.lexeme.join(''), token_1.TokenType.Markdown, this.location);
     }
     scanEqualOrArrow() {
         const lexeme = this.peek(1) === '>' ? this.accept() + this.accept() : this.accept();
-        return new _2.Token(lexeme, _2.getTokenKind(lexeme), this.location);
+        return new token_1.Token(lexeme, token_1.getTokenKind(lexeme), this.location);
     }
     scanParenthesis() {
         const lexeme = this.accept();
-        const kind = lexeme === '(' ? _2.TokenType.LeftParen : _2.TokenType.RightParen;
-        return new _2.Token(lexeme, kind, this.location);
+        const kind = lexeme === '(' ? token_1.TokenType.LeftParen : token_1.TokenType.RightParen;
+        return new token_1.Token(lexeme, kind, this.location);
     }
     get location() { return this.stream.location; }
     get eof() { return this.stream.eos; }

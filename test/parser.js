@@ -257,5 +257,5 @@ describe('Parser', () => {
     //     markdown(`+--\n${read(3, 'md')}\n+--`)
     //   ])));
 });
-// }); 
+// });
 //# sourceMappingURL=parser.js.map
