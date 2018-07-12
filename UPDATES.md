@@ -2,6 +2,18 @@
 
 This master branch is in work in progress. ~Please see #108, #109, #110 for progress.~
 
+### 7 / 11 / 2018
+
+While it was a good learning experience, I've decided that my original parser, Tom, had some limitations when it came to matching complex productions in my inteded grammar. Also, my knowledge about grammar was limited at the time. Now, I think I have a much better understanding about grammar after reading Terence Parr's book, The Definitive Anltr 4 Reference.
+
+Today, I introduce two grammar files, [TomLexer.g4](./grammar/TomLexer.g4) and [TomParser.g4](./grammar/TomParser.g4). Named after my professor who taught my class language processing,
+Tom is powerful enough to support most "expressions" for documentations. Of course, optimizations
+might be needed. Thus, feel free to create pull requests to enhance the grammar.
+
+Finally, you may have noticed that the README shows a better way to write documentions. I don't have an official name yet, but I think I would call it XDoc. 'X' because it is very generic, which is perfect for a documentation parser that isn't picky about what programming language you use. So, you can now shout, "Markdown For The Win!". What this means is that I will be using a markdown parser and simply parse only the code blocks that contain XDoc. For now, this may sound easy but we'll see how it goes in practice.
+
+### Can't recall / 2017
+
 To whom it may concern,
 
 Yes, I am still working on this. 

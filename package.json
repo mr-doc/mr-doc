@@ -30,6 +30,7 @@
     "node": ">= 5.0.0"
   },
   "dependencies": {
+    "antlr4ts": "^0.4.1-alpha.0",
     "bluebird": "^3.5.1",
     "dependency-tree": "^6.1.0",
     "globby": "^8.0.1",

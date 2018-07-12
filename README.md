@@ -13,6 +13,10 @@ Mr. Doc
 
 A personal source documenter at your service.
 
+# Updates
+
+See [UPDATES.md](./UPDATES.md) for recents updates about this project.
+
 # Architecture
 
 ## 1. Core Components
@@ -68,7 +72,7 @@ The way documentation is written is mostly inspired by [Rust](https://doc.rust-l
     
     ```
 
-    @class [protected] Car.
+    @class Car.
     @param make?: string - The maker of the car.
     @param year?: string - The year of the car.
     ```
