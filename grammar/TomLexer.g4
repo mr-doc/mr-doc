@@ -298,7 +298,7 @@ SPACE
 	;
 
 TEXT_CONTENT
-	: ~[>'|&0123456789".,\n\r\t +=@*{}()/:?!-]+
+	: ~[>'|&0123456789".,\n\r\t +=@*{}()[\]/:?!-]+
 	;
 
 AT
@@ -378,6 +378,14 @@ PAREN_OPEN
 
 PAREN_CLOSE
   : ')'
+  ;
+
+BRACKET_OPEN
+  : '['
+  ;
+
+BRACKET_CLOSE
+  : ']'
   ;
 
 fragment

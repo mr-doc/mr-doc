@@ -4,7 +4,6 @@ options {
     tokenVocab = TomLexer;
 }
 
-
 documentation
 	: EOF
 	| body NEWLINE? EOF
@@ -71,10 +70,12 @@ type
   : identifier
   | identifier (SPACE? (AMP | PIPE) SPACE? type)*
   | PAREN_OPEN SPACE? type SPACE? PAREN_CLOSE
-  | lambda
+  | lambdaType
+  | arrayType
+  | objectType
   ;
 
-lambda
+lambdaType
   : PAREN_OPEN SPACE? formalParameterSequence SPACE? PAREN_CLOSE SPACE? ARROW SPACE? type
   ;
 
@@ -84,6 +85,18 @@ formalParameterSequence
 
 parameter
   : identifier (SPACE? COLON SPACE? type)?
+  ;
+
+arrayType
+  : BRACKET_OPEN SPACE? type? (COMMA SPACE? type)* SPACE? BRACKET_CLOSE
+  ;
+
+objectType
+  : BRACE_OPEN SPACE? objectPairType? SPACE? BRACE_CLOSE
+  ;
+
+objectPairType
+  : type SPACE? COLON SPACE? type
   ;
 
 /* Descriptions */
@@ -160,11 +173,27 @@ expression
   : unaryExpression
   | expression SPACE? (STAR | FORWARD_SLASH) SPACE? expression
   | expression  SPACE? (PLUS | MINUS) SPACE? expression
+  | arrayExpression
+  | objectExpression
   | literal
   ;
 
 unaryExpression
   : (PLUS | MINUS | EXCLAMATION) expression
+  ;
+
+arrayExpression
+  : BRACKET_OPEN expression? (COMMA SPACE? expression)* BRACKET_CLOSE;
+
+objectExpression
+  : BRACE_OPEN SPACE? objectPair? SPACE? BRACE_CLOSE;
+
+objectPair
+  : literal SPACE? COLON SPACE? literal;
+
+number
+  : IntegerLiteral
+  | FloatingPointLiteral
   ;
 
 literal

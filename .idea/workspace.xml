@@ -3,12 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="2f93aeea-db03-4f14-aa29-7995ba6aa6a2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/grammar/.antlr/TomLexer.interp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/grammar/.antlr/TomLexer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/grammar/.antlr/TomLexer.tokens" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/grammar/.antlr/TomParser.interp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/grammar/.antlr/TomParser.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/grammar/.antlr/TomParser.tokens" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grammar/TomLexer.g4" beforeDir="false" afterPath="$PROJECT_DIR$/grammar/TomLexer.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/grammar/TomParser.g4" beforeDir="false" afterPath="$PROJECT_DIR$/grammar/TomParser.g4" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,8 +22,8 @@
       <file leaf-file-name="TomLexer.g4" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grammar/TomLexer.g4">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="355" column="3" selection-start-line="355" selection-start-column="3" selection-end-line="355" selection-end-column="3" />
+            <state relative-caret-position="268">
+              <caret line="382" column="12" selection-start-line="382" selection-end-line="382" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -34,8 +31,8 @@
       <file leaf-file-name="TomParser.g4" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/grammar/TomParser.g4">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="182" lean-forward="true" selection-start-line="182" selection-end-line="182" />
+            <state relative-caret-position="-162">
+              <caret line="94" column="37" selection-start-line="94" selection-start-column="37" selection-end-line="94" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -73,6 +70,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView" />
       <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
@@ -91,7 +89,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -188,32 +185,46 @@
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50403875" side_tool="true" weight="0.5088235" />
       <window_info anchor="right" id="Maven Projects" order="3" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32941177" />
       <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32941177" />
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49676898" weight="0.32941177" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4970588" visible="true" weight="0.19063005" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4970588" visible="true" weight="0.19386107" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32859176" />
-      <window_info active="true" anchor="bottom" id="ANTLR Preview" order="7" sideWeight="0.49596122" visible="true" weight="0.5294118" />
+      <window_info active="true" anchor="bottom" id="ANTLR Preview" order="7" sideWeight="0.49596122" visible="true" weight="0.4867647" />
       <window_info id="Structure" order="1" sideWeight="0.5029412" side_tool="true" weight="0.18820679" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
       <window_info anchor="right" id="Theme Preview" order="3" />
-      <window_info id="Favorites" order="2" sideWeight="0.5029412" side_tool="true" weight="0.18820679" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="2" sideWeight="0.5029412" side_tool="true" weight="0.18820679" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Messages" order="8" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Messages" order="8" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/grammar/TomLexer.g4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5325">
+          <caret line="355" column="3" selection-start-line="355" selection-start-column="3" selection-end-line="355" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grammar/TomParser.g4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2730">
+          <caret line="182" lean-forward="true" selection-start-line="182" selection-end-line="182" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/grammar/TomLexer.g4">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -274,22 +285,18 @@
     <entry file="file://$PROJECT_DIR$/grammar/XDocLexer.g4" />
     <entry file="file://$PROJECT_DIR$/grammar/XDocParser.g4" />
     <entry file="file://$PROJECT_DIR$/grammar/.antlr/TomParser.tokens" />
-    <entry file="file://$PROJECT_DIR$/grammar/.antlr/TomLexer.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2962" />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/grammar/.antlr/TomLexer.class" />
     <entry file="file://$PROJECT_DIR$/grammar/TomLexer.g4">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="355" column="3" selection-start-line="355" selection-start-column="3" selection-end-line="355" selection-end-column="3" />
+        <state relative-caret-position="268">
+          <caret line="382" column="12" selection-start-line="382" selection-end-line="382" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grammar/TomParser.g4">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="182" lean-forward="true" selection-start-line="182" selection-end-line="182" />
+        <state relative-caret-position="-162">
+          <caret line="94" column="37" selection-start-line="94" selection-start-column="37" selection-end-line="94" selection-end-column="37" />
         </state>
       </provider>
     </entry>
