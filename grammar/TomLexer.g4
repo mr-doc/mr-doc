@@ -1,6 +1,6 @@
 lexer grammar TomLexer;
 
-/* Literals */
+/* Literals (borrowed from Java.g4 and slightly modified) */
 // §3.10.1 Integer Literals
 
 IntegerLiteral
