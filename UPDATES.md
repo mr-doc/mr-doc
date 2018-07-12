@@ -6,7 +6,7 @@ This master branch is in work in progress. ~Please see #108, #109, #110 for prog
 
 While it was a good learning experience, I've decided that my original parser, Tom, had some limitations when it came to matching complex productions in my inteded grammar. Also, my knowledge about grammar was limited at the time. Now, I think I have a much better understanding about grammar after reading Terence Parr's book, The Definitive Anltr 4 Reference.
 
-Today, I introduce two grammar files, [TomLexer.g4](./grammar/TomLexer.g4) and [TomParser.g4](./grammar/TomParser.g4). Named after my professor who taught my class language processing,
+Today, I introduce two grammar files, [TomLexer.g4](./src/tom/grammar/TomLexer.g4) and [TomParser.g4](./src/tom/grammar/TomParser.g4). Named after my professor who taught my class language processing,
 Tom is powerful enough to support most "expressions" for documentations. Of course, optimizations
 might be needed. Thus, feel free to create pull requests to enhance the grammar.
 

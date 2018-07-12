@@ -153,4 +153,4 @@ class MySuperCar extends Car {
 
 ### Grammar (Rough Draft)
 
-See [TomLexer.g4](./grammar/TomLexer.g4) and [TomParser.g4](./grammar/TomParser.g4) for the complete grammar.
+See [TomLexer.g4](./src/tom/grammar/TomLexer.g4) and [TomParser.g4](./src/tom/grammar/TomParser.g4) for a complete grammar.
