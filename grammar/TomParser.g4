@@ -1,31 +1,3 @@
-/*
- [The "BSD licence"]
- Copyright (c) 2016 Pascal Gruen
- All rights reserved.
-
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions
- are met:
- 1. Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
- 2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in the
-    documentation and/or other materials provided with the distribution.
- 3. The name of the author may not be used to endorse or promote products
-    derived from this software without specific prior written permission.
-
- THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
 parser grammar TomParser;
 
 options {
@@ -35,8 +7,7 @@ options {
 
 documentation
 	: EOF
-	| whitespace* body SPACE? EOF
-//	| whitespace* body EOF
+	| body NEWLINE? EOF
 	;
 
 body
@@ -49,39 +20,76 @@ whitespace
 	;
 
 annotations
-	: tag+
+	: tag (NEWLINE tag)*
+
 	;
 
 tag
-	: SPACE? AT tagID SPACE? tagBody* NEWLINE?
-//	| SPACE? AT tagBody SPACE? COLON SPACE? tagBody NEWLINE?
+	: tagName // i.e. @tag
+	| tagName SPACE tagID// i.e. @tag x
+	| tagName SPACE descriptionDelimiter SPACE tagBody// i.e. @tag - description
+	| tagName SPACE tagID SPACE? assignmentDelimiter SPACE? expression // i.e. @tag x = expression
+	| tagName SPACE tagID SPACE descriptionDelimiter SPACE tagBody // i.e. @tag x - description
+	| tagName SPACE tagID SPACE assignmentDelimiter SPACE? expression SPACE descriptionDelimiter SPACE tagBody // i.e. @tag x = expression - description
+	| tagName SPACE tagID SPACE? typeDelimiter SPACE? type // i.e. @tag x: type
+	| tagName SPACE tagID SPACE? typeDelimiter SPACE? type SPACE? assignmentDelimiter SPACE? expression // i.e. @tag x: type = expression
+	| tagName SPACE tagID SPACE? typeDelimiter SPACE? type SPACE descriptionDelimiter SPACE tagBody // i.e. @tag x: type - description
+	| tagName SPACE tagID SPACE? typeDelimiter SPACE? type SPACE? assignmentDelimiter SPACE? expression SPACE descriptionDelimiter SPACE tagBody // i.e. @tag x: type = expression - description
+	;
+
+/* Tags */
+tagName
+	: AT identifier
 	;
 
 tagID
-	: ID
-	;
+  : optionalTagID
+  | identifier
+  ;
+
+optionalTagID
+  : identifier QUESTION
+  ;
 
 tagBody
 	: description
 	| inlineTag
 	;
-/*
-    This would enable multiline descriptions.
-    But, to encourage short descriptions, it is disabled.
-*/
-//	| NEWLINE
-//	;
 
-//description
-//    : descriptionElement+
-//    ;
-//
-//descriptionElement
-//    : TEXT_CONTENT
-//    | SPACE
-//    | ID
-//    | MINUS
-//    ;
+/* Assignments */
+assignmentDelimiter
+  : EQUAL
+  ;
+
+/* Types */
+
+typeDelimiter
+  : COLON
+  ;
+
+type
+  : identifier
+  | identifier (SPACE? (AMP | PIPE) SPACE? type)*
+  | PAREN_OPEN SPACE? type SPACE? PAREN_CLOSE
+  | lambda
+  ;
+
+lambda
+  : PAREN_OPEN SPACE? formalParameterSequence SPACE? PAREN_CLOSE SPACE? ARROW SPACE? type
+  ;
+
+formalParameterSequence
+  : parameter (COMMA SPACE? parameter)*
+  ;
+
+parameter
+  : identifier (SPACE? COLON SPACE? type)?
+  ;
+
+/* Descriptions */
+descriptionDelimiter
+  : MINUS
+  ;
 
 description
 	: descriptionLine (/*descriptionNewline+ */ descriptionLine)*
@@ -103,9 +111,9 @@ descriptionText
 	| BRACE_OPEN
 	| BRACE_CLOSE
 	| COLON
-    | MINUS
-    | PERIOD
-    ;
+  | MINUS
+  | PERIOD
+  ;
 
 descriptionLineElement
 	: inlineTag
@@ -116,16 +124,12 @@ descriptionLineText
 	: (descriptionText | SPACE | AT)+
 	;
 
-//descriptionNewline
-//	: NEWLINE
-//	;
-
 inlineTag
 	: INLINE_TAG_START inlineTagID SPACE* inlineTagBody? BRACE_CLOSE
 	;
 
 inlineTagID
-	: ID
+	: identifier
 	;
 
 inlineTagBody
@@ -149,3 +153,30 @@ braceText
 	| NEWLINE
 	| PERIOD
 	;
+
+/* Expressions */
+
+expression
+  : unaryExpression
+  | expression SPACE? (STAR | FORWARD_SLASH) SPACE? expression
+  | expression  SPACE? (PLUS | MINUS) SPACE? expression
+  | literal
+  ;
+
+unaryExpression
+  : (PLUS | MINUS | EXCLAMATION) expression
+  ;
+
+literal
+  : IntegerLiteral
+  |	FloatingPointLiteral
+  |	BooleanLiteral
+  |	CharacterLiteral
+  |	StringLiteral
+  |	NullLiteral
+  ;
+
+
+identifier
+  : ID
+  ;

@@ -57,7 +57,7 @@ I've seen some pretty confusing (in my opinion) syntax such as `@type {Array.<My
 
 ### Writing Documentation
 
-The way documentation is written is mostly inspired by [Rust](https://doc.rust-lang.org/book/second-edition/ch14-02-publishing-to-crates-io.html#making-useful-documentation-comments). Proper and consistent documentation leads to better understanding of one's code and the purpose of the code. In Mr. Doc, we will follow Rust's concept of writing the documentation using Markdown. The documentation must begin with a summary or a short description of the code. It should also be properly punctuated.
+The way documentation is written is mostly inspired by [Rust](https://doc.rust-lang.org/book/second-edition/ch14-02-publishing-to-crates-io.html#making-useful-documentation-comments). Proper and consistent documentation leads to better understanding of one's code and the purpose of the code. In Mr. Doc, we will follow Rust's concept of writing the documentation using Markdown. The documentation must begin with a summary or a short description of the code. It should also be punctuated properly.
 
 ```javascript
 [Use a single star block comment]
@@ -67,7 +67,8 @@ The way documentation is written is mostly inspired by [Rust](https://doc.rust-l
     # API
     
     ```
-    @class Car.
+
+    @class [protected] Car.
     @param make?: string - The maker of the car.
     @param year?: string - The year of the car.
     ```
@@ -87,7 +88,7 @@ class Car {
         this.year = year ? year : "";
     }
     /*
-        Moves the car toward a certain point.
+        Moves the car toward a certain direction.
 
         # API
         
@@ -95,26 +96,58 @@ class Car {
         @method run
         @param x: Number - The distance towards "x".
         @param y: Number - The distance towards "y".
+        @param speed: Number - The speed of the car.
         ```
         
         # Examples
 
         ```
-        car.run(10, 10);
+        car.run(10, 10, 50);
         ```
 
     */
-    run (x, y) {
+    run (x, y, speed) {
         // ...
     }
-    // ...
+    /*
+      Slows down the car.
+
+      # API
+
+      ```
+      @method brake
+      @param pressure?: Number - The pressure to apply on the brake.
+      ```
+
+      # Examples
+
+      ```
+      car.brake(10)
+      ```
+
+      # Remark
+
+      When no argument is passed, the default brake pressure is 5.
+    */
+
+   brake(pressure) {
+     // ...
+   }
+
+}
+
+
+/*
+    An improved version of Car.
+*/
+class MySuperCar extends Car {
 
 }
 
 ```
 
 
-### Grammar
+### Grammar (Rough Draft)
 
 
 ```
