@@ -126,6 +126,7 @@ descriptionText
 	| COLON
   | MINUS
   | PERIOD
+  | literal
   ;
 
 descriptionLineElement
