@@ -9,7 +9,7 @@ import { DocOptions } from 'mr-doc-utils/src/option';
 import Parser, { IParser } from 'mr-doc-parser/';
 import { Buffer } from 'buffer';
 import * as deptree from 'dependency-tree';
-import { CommentParser, Generator } from '../tom/index';
+// import { CommentParser, Generator } from '../tom/index';
 
 const { Option, Log } = Utils;
 const log = new Log();
@@ -92,12 +92,12 @@ export default class Output {
       // IDEA: May need to rewrite the scanner
       // to support RustDoc like comments. Basically,
       // assume everything is a markdown comment.
-      result.comments.map(comment => _.merge(comment, {
-        ast: new CommentParser(`/*${comment.value}*/`).parse()
-          .map(statement => new Generator().print(statement))
-          .map(statement => JSON.parse(statement)),
-      }))
-      console.log(JSON.stringify(result.comments, null, 2));
+      // result.comments.map(comment => _.merge(comment, {
+      //   ast: new CommentParser(`/*${comment.value}*/`).parse()
+      //     .map(statement => new Generator().print(statement))
+      //     .map(statement => JSON.parse(statement)),
+      // }))
+      // console.log(JSON.stringify(result.comments, null, 2));
     });
     return files;
   }

@@ -284,7 +284,7 @@ ID
     if(getText() == "true" || getText() == "false") setType(BooleanLiteral);
     if (getText() == "null" || getText() == "undefined") setType(NullLiteral);
 
-  } LETTER (LETTER | DIGIT)* { System.out.println("Hello"); }
+  } LETTER (LETTER | DIGIT)*
 	;
 
 NEWLINE

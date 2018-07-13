@@ -13,7 +13,7 @@
 
   "antlr4.generation": {
     "mode": "internal",
-    "language": "Java",
+    "language": "TypeScript",
     "listeners": true,
     "visitors": false
   }

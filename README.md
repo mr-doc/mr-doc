@@ -80,7 +80,7 @@ The way documentation is written is mostly inspired by [Rust](https://doc.rust-l
     # Examples
 
     ```
-    const car = new Car();
+    const car = new Car("Honda", "2019");
     car.honk();
     ```
 

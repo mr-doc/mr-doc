@@ -4,7 +4,7 @@ const Through = require("through2");
 const _ = require("lodash");
 const mr_doc_utils_1 = require("mr-doc-utils");
 const deptree = require("dependency-tree");
-const index_1 = require("../tom/index");
+// import { CommentParser, Generator } from '../tom/index';
 const { Option, Log } = mr_doc_utils_1.default;
 const log = new Log();
 /**
@@ -77,12 +77,12 @@ class Output {
             // IDEA: May need to rewrite the scanner
             // to support RustDoc like comments. Basically,
             // assume everything is a markdown comment.
-            result.comments.map(comment => _.merge(comment, {
-                ast: new index_1.CommentParser(`/*${comment.value}*/`).parse()
-                    .map(statement => new index_1.Generator().print(statement))
-                    .map(statement => JSON.parse(statement)),
-            }));
-            console.log(JSON.stringify(result.comments, null, 2));
+            // result.comments.map(comment => _.merge(comment, {
+            //   ast: new CommentParser(`/*${comment.value}*/`).parse()
+            //     .map(statement => new Generator().print(statement))
+            //     .map(statement => JSON.parse(statement)),
+            // }))
+            // console.log(JSON.stringify(result.comments, null, 2));
         });
         return files;
     }

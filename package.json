@@ -24,7 +24,7 @@
   },
   "scripts": {
     "test": "gulp",
-    "build": "tsc"
+    "build": "cd src/tom/grammar/ && antlr4ts -visitor *.g4 && mv *.ts *.tokens ../ && tsc"
   },
   "engines": {
     "node": ">= 5.0.0"
@@ -56,10 +56,12 @@
     "@types/rc": "0.0.1",
     "@types/through2": "^2.0.33",
     "@types/vinyl-fs": "^2.4.8",
+    "antlr4ts-cli": "^0.4.0-alpha.4",
     "chai": "^4.1.2",
     "eslint-config-airbnb": "^17.0.0",
+    "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-react": "^7.10.0",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.0",
     "gulp-eslint": "^4.0.2",
     "gulp-mocha": "^6.0.0"
   },
