@@ -18,20 +18,6 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Scanner",
-      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
-      "args": [
-        "${workspaceRoot}/test/scanner.js"
-      ],
-      "sourceMaps": true,
-      "outFiles": [
-        "${workspaceRoot}/src/**/*.js",
-        "${workspaceRoot}/test/**/*.js"
-      ]
-    },
-    {
-      "type": "node",
-      "request": "launch",
       "name": "Parser",
       "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
       "args": [

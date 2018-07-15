@@ -31,19 +31,18 @@ class TomParser extends Parser_1.Parser {
     get grammarFileName() { return "TomParser.g4"; }
     get ruleNames() { return TomParser.ruleNames; }
     get serializedATN() { return TomParser._serializedATN; }
-    // @RuleVersion(0)
     documentation() {
         let _localctx = new DocumentationContext(this._ctx, this.state);
         this.enterRule(_localctx, 0, TomParser.RULE_documentation);
         let _la;
         try {
-            this.state = 85;
+            this.state = 89;
             this._errHandler.sync(this);
             switch (this._input.LA(1)) {
                 case TomParser.EOF:
                     this.enterOuterAlt(_localctx, 1);
                     {
-                        this.state = 78;
+                        this.state = 82;
                         this.match(TomParser.EOF);
                     }
                     break;
@@ -52,18 +51,18 @@ class TomParser extends Parser_1.Parser {
                 case TomParser.AT:
                     this.enterOuterAlt(_localctx, 2);
                     {
-                        this.state = 79;
+                        this.state = 83;
                         this.body();
-                        this.state = 81;
+                        this.state = 85;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
                         if (_la === TomParser.NEWLINE) {
                             {
-                                this.state = 80;
+                                this.state = 84;
                                 this.match(TomParser.NEWLINE);
                             }
                         }
-                        this.state = 83;
+                        this.state = 87;
                         this.match(TomParser.EOF);
                     }
                     break;
@@ -86,7 +85,6 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     body() {
         let _localctx = new BodyContext(this._ctx, this.state);
         this.enterRule(_localctx, 2, TomParser.RULE_body);
@@ -94,21 +92,21 @@ class TomParser extends Parser_1.Parser {
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 90;
+                this.state = 94;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
                 while (_la === TomParser.NEWLINE || _la === TomParser.SPACE) {
                     {
                         {
-                            this.state = 87;
+                            this.state = 91;
                             this.whitespace();
                         }
                     }
-                    this.state = 92;
+                    this.state = 96;
                     this._errHandler.sync(this);
                     _la = this._input.LA(1);
                 }
-                this.state = 93;
+                this.state = 97;
                 this.annotations();
             }
         }
@@ -127,7 +125,6 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     whitespace() {
         let _localctx = new WhitespaceContext(this._ctx, this.state);
         this.enterRule(_localctx, 4, TomParser.RULE_whitespace);
@@ -135,7 +132,7 @@ class TomParser extends Parser_1.Parser {
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 95;
+                this.state = 99;
                 _la = this._input.LA(1);
                 if (!(_la === TomParser.NEWLINE || _la === TomParser.SPACE)) {
                     this._errHandler.recoverInline(this);
@@ -164,7 +161,6 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     annotations() {
         let _localctx = new AnnotationsContext(this._ctx, this.state);
         this.enterRule(_localctx, 6, TomParser.RULE_annotations);
@@ -172,23 +168,23 @@ class TomParser extends Parser_1.Parser {
             let _alt;
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 97;
+                this.state = 101;
                 this.tag();
-                this.state = 102;
+                this.state = 106;
                 this._errHandler.sync(this);
                 _alt = this.interpreter.adaptivePredict(this._input, 3, this._ctx);
                 while (_alt !== 2 && _alt !== ATN_1.ATN.INVALID_ALT_NUMBER) {
                     if (_alt === 1) {
                         {
                             {
-                                this.state = 98;
+                                this.state = 102;
                                 this.match(TomParser.NEWLINE);
-                                this.state = 99;
+                                this.state = 103;
                                 this.tag();
                             }
                         }
                     }
-                    this.state = 104;
+                    this.state = 108;
                     this._errHandler.sync(this);
                     _alt = this.interpreter.adaptivePredict(this._input, 3, this._ctx);
                 }
@@ -209,68 +205,56 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     tag() {
         let _localctx = new TagContext(this._ctx, this.state);
         this.enterRule(_localctx, 8, TomParser.RULE_tag);
         let _la;
         try {
-            this.state = 222;
+            this.state = 226;
             this._errHandler.sync(this);
             switch (this.interpreter.adaptivePredict(this._input, 19, this._ctx)) {
                 case 1:
                     this.enterOuterAlt(_localctx, 1);
                     {
-                        this.state = 105;
+                        this.state = 109;
                         this.tagName();
                     }
                     break;
                 case 2:
                     this.enterOuterAlt(_localctx, 2);
                     {
-                        this.state = 106;
+                        this.state = 110;
                         this.tagName();
-                        this.state = 107;
+                        this.state = 111;
                         this.match(TomParser.SPACE);
-                        this.state = 108;
+                        this.state = 112;
                         this.tagID();
                     }
                     break;
                 case 3:
                     this.enterOuterAlt(_localctx, 3);
                     {
-                        this.state = 110;
-                        this.tagName();
-                        this.state = 111;
-                        this.match(TomParser.SPACE);
-                        this.state = 112;
-                        this.descriptionDelimiter();
-                        this.state = 113;
-                        this.match(TomParser.SPACE);
                         this.state = 114;
+                        this.tagName();
+                        this.state = 115;
+                        this.match(TomParser.SPACE);
+                        this.state = 116;
+                        this.descriptionDelimiter();
+                        this.state = 117;
+                        this.match(TomParser.SPACE);
+                        this.state = 118;
                         this.tagBody();
                     }
                     break;
                 case 4:
                     this.enterOuterAlt(_localctx, 4);
                     {
-                        this.state = 116;
-                        this.tagName();
-                        this.state = 117;
-                        this.match(TomParser.SPACE);
-                        this.state = 118;
-                        this.tagID();
                         this.state = 120;
-                        this._errHandler.sync(this);
-                        _la = this._input.LA(1);
-                        if (_la === TomParser.SPACE) {
-                            {
-                                this.state = 119;
-                                this.match(TomParser.SPACE);
-                            }
-                        }
+                        this.tagName();
+                        this.state = 121;
+                        this.match(TomParser.SPACE);
                         this.state = 122;
-                        this.assignmentDelimiter();
+                        this.tagID();
                         this.state = 124;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
@@ -281,82 +265,82 @@ class TomParser extends Parser_1.Parser {
                             }
                         }
                         this.state = 126;
+                        this.assignmentDelimiter();
+                        this.state = 128;
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if (_la === TomParser.SPACE) {
+                            {
+                                this.state = 127;
+                                this.match(TomParser.SPACE);
+                            }
+                        }
+                        this.state = 130;
                         this.expression(0);
                     }
                     break;
                 case 5:
                     this.enterOuterAlt(_localctx, 5);
                     {
-                        this.state = 128;
-                        this.tagName();
-                        this.state = 129;
-                        this.match(TomParser.SPACE);
-                        this.state = 130;
-                        this.tagID();
-                        this.state = 131;
-                        this.match(TomParser.SPACE);
                         this.state = 132;
-                        this.descriptionDelimiter();
+                        this.tagName();
                         this.state = 133;
                         this.match(TomParser.SPACE);
                         this.state = 134;
+                        this.tagID();
+                        this.state = 135;
+                        this.match(TomParser.SPACE);
+                        this.state = 136;
+                        this.descriptionDelimiter();
+                        this.state = 137;
+                        this.match(TomParser.SPACE);
+                        this.state = 138;
                         this.tagBody();
                     }
                     break;
                 case 6:
                     this.enterOuterAlt(_localctx, 6);
                     {
-                        this.state = 136;
-                        this.tagName();
-                        this.state = 137;
-                        this.match(TomParser.SPACE);
-                        this.state = 138;
-                        this.tagID();
-                        this.state = 139;
-                        this.match(TomParser.SPACE);
                         this.state = 140;
-                        this.assignmentDelimiter();
+                        this.tagName();
+                        this.state = 141;
+                        this.match(TomParser.SPACE);
                         this.state = 142;
+                        this.tagID();
+                        this.state = 143;
+                        this.match(TomParser.SPACE);
+                        this.state = 144;
+                        this.assignmentDelimiter();
+                        this.state = 146;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
                         if (_la === TomParser.SPACE) {
                             {
-                                this.state = 141;
+                                this.state = 145;
                                 this.match(TomParser.SPACE);
                             }
                         }
-                        this.state = 144;
-                        this.expression(0);
-                        this.state = 145;
-                        this.match(TomParser.SPACE);
-                        this.state = 146;
-                        this.descriptionDelimiter();
-                        this.state = 147;
-                        this.match(TomParser.SPACE);
                         this.state = 148;
+                        this.expression(0);
+                        this.state = 149;
+                        this.match(TomParser.SPACE);
+                        this.state = 150;
+                        this.descriptionDelimiter();
+                        this.state = 151;
+                        this.match(TomParser.SPACE);
+                        this.state = 152;
                         this.tagBody();
                     }
                     break;
                 case 7:
                     this.enterOuterAlt(_localctx, 7);
                     {
-                        this.state = 150;
-                        this.tagName();
-                        this.state = 151;
-                        this.match(TomParser.SPACE);
-                        this.state = 152;
-                        this.tagID();
                         this.state = 154;
-                        this._errHandler.sync(this);
-                        _la = this._input.LA(1);
-                        if (_la === TomParser.SPACE) {
-                            {
-                                this.state = 153;
-                                this.match(TomParser.SPACE);
-                            }
-                        }
+                        this.tagName();
+                        this.state = 155;
+                        this.match(TomParser.SPACE);
                         this.state = 156;
-                        this.typeDelimiter();
+                        this.tagID();
                         this.state = 158;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
@@ -367,29 +351,29 @@ class TomParser extends Parser_1.Parser {
                             }
                         }
                         this.state = 160;
-                        this.type();
+                        this.typeDelimiter();
+                        this.state = 162;
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if (_la === TomParser.SPACE) {
+                            {
+                                this.state = 161;
+                                this.match(TomParser.SPACE);
+                            }
+                        }
+                        this.state = 164;
+                        this.type(0);
                     }
                     break;
                 case 8:
                     this.enterOuterAlt(_localctx, 8);
                     {
-                        this.state = 162;
-                        this.tagName();
-                        this.state = 163;
-                        this.match(TomParser.SPACE);
-                        this.state = 164;
-                        this.tagID();
                         this.state = 166;
-                        this._errHandler.sync(this);
-                        _la = this._input.LA(1);
-                        if (_la === TomParser.SPACE) {
-                            {
-                                this.state = 165;
-                                this.match(TomParser.SPACE);
-                            }
-                        }
+                        this.tagName();
+                        this.state = 167;
+                        this.match(TomParser.SPACE);
                         this.state = 168;
-                        this.typeDelimiter();
+                        this.tagID();
                         this.state = 170;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
@@ -400,7 +384,7 @@ class TomParser extends Parser_1.Parser {
                             }
                         }
                         this.state = 172;
-                        this.type();
+                        this.typeDelimiter();
                         this.state = 174;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
@@ -411,7 +395,7 @@ class TomParser extends Parser_1.Parser {
                             }
                         }
                         this.state = 176;
-                        this.assignmentDelimiter();
+                        this.type(0);
                         this.state = 178;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
@@ -422,29 +406,29 @@ class TomParser extends Parser_1.Parser {
                             }
                         }
                         this.state = 180;
+                        this.assignmentDelimiter();
+                        this.state = 182;
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if (_la === TomParser.SPACE) {
+                            {
+                                this.state = 181;
+                                this.match(TomParser.SPACE);
+                            }
+                        }
+                        this.state = 184;
                         this.expression(0);
                     }
                     break;
                 case 9:
                     this.enterOuterAlt(_localctx, 9);
                     {
-                        this.state = 182;
-                        this.tagName();
-                        this.state = 183;
-                        this.match(TomParser.SPACE);
-                        this.state = 184;
-                        this.tagID();
                         this.state = 186;
-                        this._errHandler.sync(this);
-                        _la = this._input.LA(1);
-                        if (_la === TomParser.SPACE) {
-                            {
-                                this.state = 185;
-                                this.match(TomParser.SPACE);
-                            }
-                        }
+                        this.tagName();
+                        this.state = 187;
+                        this.match(TomParser.SPACE);
                         this.state = 188;
-                        this.typeDelimiter();
+                        this.tagID();
                         this.state = 190;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
@@ -455,37 +439,37 @@ class TomParser extends Parser_1.Parser {
                             }
                         }
                         this.state = 192;
-                        this.type();
-                        this.state = 193;
-                        this.match(TomParser.SPACE);
+                        this.typeDelimiter();
                         this.state = 194;
-                        this.descriptionDelimiter();
-                        this.state = 195;
-                        this.match(TomParser.SPACE);
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if (_la === TomParser.SPACE) {
+                            {
+                                this.state = 193;
+                                this.match(TomParser.SPACE);
+                            }
+                        }
                         this.state = 196;
+                        this.type(0);
+                        this.state = 197;
+                        this.match(TomParser.SPACE);
+                        this.state = 198;
+                        this.descriptionDelimiter();
+                        this.state = 199;
+                        this.match(TomParser.SPACE);
+                        this.state = 200;
                         this.tagBody();
                     }
                     break;
                 case 10:
                     this.enterOuterAlt(_localctx, 10);
                     {
-                        this.state = 198;
-                        this.tagName();
-                        this.state = 199;
-                        this.match(TomParser.SPACE);
-                        this.state = 200;
-                        this.tagID();
                         this.state = 202;
-                        this._errHandler.sync(this);
-                        _la = this._input.LA(1);
-                        if (_la === TomParser.SPACE) {
-                            {
-                                this.state = 201;
-                                this.match(TomParser.SPACE);
-                            }
-                        }
+                        this.tagName();
+                        this.state = 203;
+                        this.match(TomParser.SPACE);
                         this.state = 204;
-                        this.typeDelimiter();
+                        this.tagID();
                         this.state = 206;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
@@ -496,7 +480,7 @@ class TomParser extends Parser_1.Parser {
                             }
                         }
                         this.state = 208;
-                        this.type();
+                        this.typeDelimiter();
                         this.state = 210;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
@@ -507,7 +491,7 @@ class TomParser extends Parser_1.Parser {
                             }
                         }
                         this.state = 212;
-                        this.assignmentDelimiter();
+                        this.type(0);
                         this.state = 214;
                         this._errHandler.sync(this);
                         _la = this._input.LA(1);
@@ -518,14 +502,25 @@ class TomParser extends Parser_1.Parser {
                             }
                         }
                         this.state = 216;
-                        this.expression(0);
-                        this.state = 217;
-                        this.match(TomParser.SPACE);
+                        this.assignmentDelimiter();
                         this.state = 218;
-                        this.descriptionDelimiter();
-                        this.state = 219;
-                        this.match(TomParser.SPACE);
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if (_la === TomParser.SPACE) {
+                            {
+                                this.state = 217;
+                                this.match(TomParser.SPACE);
+                            }
+                        }
                         this.state = 220;
+                        this.expression(0);
+                        this.state = 221;
+                        this.match(TomParser.SPACE);
+                        this.state = 222;
+                        this.descriptionDelimiter();
+                        this.state = 223;
+                        this.match(TomParser.SPACE);
+                        this.state = 224;
                         this.tagBody();
                     }
                     break;
@@ -546,16 +541,15 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     tagName() {
         let _localctx = new TagNameContext(this._ctx, this.state);
         this.enterRule(_localctx, 10, TomParser.RULE_tagName);
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 224;
+                this.state = 228;
                 this.match(TomParser.AT);
-                this.state = 225;
+                this.state = 229;
                 this.identifier();
             }
         }
@@ -574,25 +568,24 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     tagID() {
         let _localctx = new TagIDContext(this._ctx, this.state);
         this.enterRule(_localctx, 12, TomParser.RULE_tagID);
         try {
-            this.state = 229;
+            this.state = 233;
             this._errHandler.sync(this);
             switch (this.interpreter.adaptivePredict(this._input, 20, this._ctx)) {
                 case 1:
                     this.enterOuterAlt(_localctx, 1);
                     {
-                        this.state = 227;
+                        this.state = 231;
                         this.optionalTagID();
                     }
                     break;
                 case 2:
                     this.enterOuterAlt(_localctx, 2);
                     {
-                        this.state = 228;
+                        this.state = 232;
                         this.identifier();
                     }
                     break;
@@ -613,16 +606,15 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     optionalTagID() {
         let _localctx = new OptionalTagIDContext(this._ctx, this.state);
         this.enterRule(_localctx, 14, TomParser.RULE_optionalTagID);
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 231;
+                this.state = 235;
                 this.identifier();
-                this.state = 232;
+                this.state = 236;
                 this.match(TomParser.QUESTION);
             }
         }
@@ -641,28 +633,14 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     tagBody() {
         let _localctx = new TagBodyContext(this._ctx, this.state);
         this.enterRule(_localctx, 16, TomParser.RULE_tagBody);
         try {
-            this.state = 236;
-            this._errHandler.sync(this);
-            switch (this.interpreter.adaptivePredict(this._input, 21, this._ctx)) {
-                case 1:
-                    this.enterOuterAlt(_localctx, 1);
-                    {
-                        this.state = 234;
-                        this.description();
-                    }
-                    break;
-                case 2:
-                    this.enterOuterAlt(_localctx, 2);
-                    {
-                        this.state = 235;
-                        this.inlineTag();
-                    }
-                    break;
+            this.enterOuterAlt(_localctx, 1);
+            {
+                this.state = 238;
+                this.description();
             }
         }
         catch (re) {
@@ -680,14 +658,13 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     assignmentDelimiter() {
         let _localctx = new AssignmentDelimiterContext(this._ctx, this.state);
         this.enterRule(_localctx, 18, TomParser.RULE_assignmentDelimiter);
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 238;
+                this.state = 240;
                 this.match(TomParser.EQUAL);
             }
         }
@@ -706,14 +683,13 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     typeDelimiter() {
         let _localctx = new TypeDelimiterContext(this._ctx, this.state);
         this.enterRule(_localctx, 20, TomParser.RULE_typeDelimiter);
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 240;
+                this.state = 242;
                 this.match(TomParser.COLON);
             }
         }
@@ -732,124 +708,142 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
-    type() {
-        let _localctx = new TypeContext(this._ctx, this.state);
-        this.enterRule(_localctx, 22, TomParser.RULE_type);
+    type(_p) {
+        if (_p === undefined) {
+            _p = 0;
+        }
+        let _parentctx = this._ctx;
+        let _parentState = this.state;
+        let _localctx = new TypeContext(this._ctx, _parentState);
+        let _prevctx = _localctx;
+        let _startState = 22;
+        this.enterRecursionRule(_localctx, 22, TomParser.RULE_type, _p);
         let _la;
         try {
             let _alt;
-            this.state = 270;
+            this.enterOuterAlt(_localctx, 1);
+            {
+                this.state = 247;
+                this._errHandler.sync(this);
+                switch (this.interpreter.adaptivePredict(this._input, 21, this._ctx)) {
+                    case 1:
+                        {
+                            this.state = 245;
+                            this.lambdaType();
+                        }
+                        break;
+                    case 2:
+                        {
+                            this.state = 246;
+                            this.primaryType();
+                        }
+                        break;
+                }
+                this._ctx._stop = this._input.tryLT(-1);
+                this.state = 260;
+                this._errHandler.sync(this);
+                _alt = this.interpreter.adaptivePredict(this._input, 24, this._ctx);
+                while (_alt !== 2 && _alt !== ATN_1.ATN.INVALID_ALT_NUMBER) {
+                    if (_alt === 1) {
+                        if (this._parseListeners != null)
+                            this.triggerExitRuleEvent();
+                        _prevctx = _localctx;
+                        {
+                            {
+                                _localctx = new TypeContext(_parentctx, _parentState);
+                                this.pushNewRecursionContext(_localctx, _startState, TomParser.RULE_type);
+                                this.state = 249;
+                                if (!(this.precpred(this._ctx, 3)))
+                                    throw new FailedPredicateException_1.FailedPredicateException(this, "this.precpred(this._ctx, 3)");
+                                this.state = 251;
+                                this._errHandler.sync(this);
+                                _la = this._input.LA(1);
+                                if (_la === TomParser.SPACE) {
+                                    {
+                                        this.state = 250;
+                                        this.match(TomParser.SPACE);
+                                    }
+                                }
+                                this.state = 253;
+                                _la = this._input.LA(1);
+                                if (!(_la === TomParser.AMP || _la === TomParser.PIPE)) {
+                                    this._errHandler.recoverInline(this);
+                                }
+                                else {
+                                    if (this._input.LA(1) === Token_1.Token.EOF) {
+                                        this.matchedEOF = true;
+                                    }
+                                    this._errHandler.reportMatch(this);
+                                    this.consume();
+                                }
+                                this.state = 255;
+                                this._errHandler.sync(this);
+                                _la = this._input.LA(1);
+                                if (_la === TomParser.SPACE) {
+                                    {
+                                        this.state = 254;
+                                        this.match(TomParser.SPACE);
+                                    }
+                                }
+                                this.state = 257;
+                                this.type(4);
+                            }
+                        }
+                    }
+                    this.state = 262;
+                    this._errHandler.sync(this);
+                    _alt = this.interpreter.adaptivePredict(this._input, 24, this._ctx);
+                }
+            }
+        }
+        catch (re) {
+            if (re instanceof RecognitionException_1.RecognitionException) {
+                _localctx.exception = re;
+                this._errHandler.reportError(this, re);
+                this._errHandler.recover(this, re);
+            }
+            else {
+                throw re;
+            }
+        }
+        finally {
+            this.unrollRecursionContexts(_parentctx);
+        }
+        return _localctx;
+    }
+    primaryType() {
+        let _localctx = new PrimaryTypeContext(this._ctx, this.state);
+        this.enterRule(_localctx, 24, TomParser.RULE_primaryType);
+        try {
+            this.state = 267;
             this._errHandler.sync(this);
-            switch (this.interpreter.adaptivePredict(this._input, 27, this._ctx)) {
+            switch (this.interpreter.adaptivePredict(this._input, 25, this._ctx)) {
                 case 1:
                     this.enterOuterAlt(_localctx, 1);
                     {
-                        this.state = 242;
-                        this.identifier();
+                        this.state = 263;
+                        this.parenthesizedType();
                     }
                     break;
                 case 2:
                     this.enterOuterAlt(_localctx, 2);
                     {
-                        this.state = 243;
-                        this.identifier();
-                        this.state = 254;
-                        this._errHandler.sync(this);
-                        _alt = this.interpreter.adaptivePredict(this._input, 24, this._ctx);
-                        while (_alt !== 2 && _alt !== ATN_1.ATN.INVALID_ALT_NUMBER) {
-                            if (_alt === 1) {
-                                {
-                                    {
-                                        this.state = 245;
-                                        this._errHandler.sync(this);
-                                        _la = this._input.LA(1);
-                                        if (_la === TomParser.SPACE) {
-                                            {
-                                                this.state = 244;
-                                                this.match(TomParser.SPACE);
-                                            }
-                                        }
-                                        this.state = 247;
-                                        _la = this._input.LA(1);
-                                        if (!(_la === TomParser.AMP || _la === TomParser.PIPE)) {
-                                            this._errHandler.recoverInline(this);
-                                        }
-                                        else {
-                                            if (this._input.LA(1) === Token_1.Token.EOF) {
-                                                this.matchedEOF = true;
-                                            }
-                                            this._errHandler.reportMatch(this);
-                                            this.consume();
-                                        }
-                                        this.state = 249;
-                                        this._errHandler.sync(this);
-                                        _la = this._input.LA(1);
-                                        if (_la === TomParser.SPACE) {
-                                            {
-                                                this.state = 248;
-                                                this.match(TomParser.SPACE);
-                                            }
-                                        }
-                                        this.state = 251;
-                                        this.type();
-                                    }
-                                }
-                            }
-                            this.state = 256;
-                            this._errHandler.sync(this);
-                            _alt = this.interpreter.adaptivePredict(this._input, 24, this._ctx);
-                        }
+                        this.state = 264;
+                        this.objectType();
                     }
                     break;
                 case 3:
                     this.enterOuterAlt(_localctx, 3);
                     {
-                        this.state = 257;
-                        this.match(TomParser.PAREN_OPEN);
-                        this.state = 259;
-                        this._errHandler.sync(this);
-                        _la = this._input.LA(1);
-                        if (_la === TomParser.SPACE) {
-                            {
-                                this.state = 258;
-                                this.match(TomParser.SPACE);
-                            }
-                        }
-                        this.state = 261;
-                        this.type();
-                        this.state = 263;
-                        this._errHandler.sync(this);
-                        _la = this._input.LA(1);
-                        if (_la === TomParser.SPACE) {
-                            {
-                                this.state = 262;
-                                this.match(TomParser.SPACE);
-                            }
-                        }
                         this.state = 265;
-                        this.match(TomParser.PAREN_CLOSE);
+                        this.arrayType();
                     }
                     break;
                 case 4:
                     this.enterOuterAlt(_localctx, 4);
                     {
-                        this.state = 267;
-                        this.lambdaType();
-                    }
-                    break;
-                case 5:
-                    this.enterOuterAlt(_localctx, 5);
-                    {
-                        this.state = 268;
-                        this.arrayType();
-                    }
-                    break;
-                case 6:
-                    this.enterOuterAlt(_localctx, 6);
-                    {
-                        this.state = 269;
-                        this.objectType();
+                        this.state = 266;
+                        this.identifier();
                     }
                     break;
             }
@@ -869,60 +863,144 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
+    parenthesizedType() {
+        let _localctx = new ParenthesizedTypeContext(this._ctx, this.state);
+        this.enterRule(_localctx, 26, TomParser.RULE_parenthesizedType);
+        let _la;
+        try {
+            this.enterOuterAlt(_localctx, 1);
+            {
+                this.state = 269;
+                this.match(TomParser.PAREN_OPEN);
+                this.state = 271;
+                this._errHandler.sync(this);
+                _la = this._input.LA(1);
+                if (_la === TomParser.SPACE) {
+                    {
+                        this.state = 270;
+                        this.match(TomParser.SPACE);
+                    }
+                }
+                this.state = 273;
+                this.type(0);
+                this.state = 275;
+                this._errHandler.sync(this);
+                _la = this._input.LA(1);
+                if (_la === TomParser.SPACE) {
+                    {
+                        this.state = 274;
+                        this.match(TomParser.SPACE);
+                    }
+                }
+                this.state = 277;
+                this.match(TomParser.PAREN_CLOSE);
+            }
+        }
+        catch (re) {
+            if (re instanceof RecognitionException_1.RecognitionException) {
+                _localctx.exception = re;
+                this._errHandler.reportError(this, re);
+                this._errHandler.recover(this, re);
+            }
+            else {
+                throw re;
+            }
+        }
+        finally {
+            this.exitRule();
+        }
+        return _localctx;
+    }
     lambdaType() {
         let _localctx = new LambdaTypeContext(this._ctx, this.state);
-        this.enterRule(_localctx, 24, TomParser.RULE_lambdaType);
+        this.enterRule(_localctx, 28, TomParser.RULE_lambdaType);
         let _la;
         try {
-            this.enterOuterAlt(_localctx, 1);
-            {
-                this.state = 272;
-                this.match(TomParser.PAREN_OPEN);
-                this.state = 274;
-                this._errHandler.sync(this);
-                _la = this._input.LA(1);
-                if (_la === TomParser.SPACE) {
+            this.state = 307;
+            this._errHandler.sync(this);
+            switch (this._input.LA(1)) {
+                case TomParser.PAREN_OPEN:
+                    this.enterOuterAlt(_localctx, 1);
                     {
-                        this.state = 273;
-                        this.match(TomParser.SPACE);
-                    }
-                }
-                this.state = 276;
-                this.formalParameterSequence();
-                this.state = 278;
-                this._errHandler.sync(this);
-                _la = this._input.LA(1);
-                if (_la === TomParser.SPACE) {
-                    {
-                        this.state = 277;
-                        this.match(TomParser.SPACE);
-                    }
-                }
-                this.state = 280;
-                this.match(TomParser.PAREN_CLOSE);
-                this.state = 282;
-                this._errHandler.sync(this);
-                _la = this._input.LA(1);
-                if (_la === TomParser.SPACE) {
-                    {
+                        this.state = 279;
+                        this.match(TomParser.PAREN_OPEN);
                         this.state = 281;
-                        this.match(TomParser.SPACE);
-                    }
-                }
-                this.state = 284;
-                this.match(TomParser.ARROW);
-                this.state = 286;
-                this._errHandler.sync(this);
-                _la = this._input.LA(1);
-                if (_la === TomParser.SPACE) {
-                    {
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if (_la === TomParser.SPACE) {
+                            {
+                                this.state = 280;
+                                this.match(TomParser.SPACE);
+                            }
+                        }
+                        this.state = 283;
+                        this.formalParameterSequence();
                         this.state = 285;
-                        this.match(TomParser.SPACE);
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if (_la === TomParser.SPACE) {
+                            {
+                                this.state = 284;
+                                this.match(TomParser.SPACE);
+                            }
+                        }
+                        this.state = 287;
+                        this.match(TomParser.PAREN_CLOSE);
+                        this.state = 289;
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if (_la === TomParser.SPACE) {
+                            {
+                                this.state = 288;
+                                this.match(TomParser.SPACE);
+                            }
+                        }
+                        this.state = 291;
+                        this.match(TomParser.ARROW);
+                        this.state = 293;
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if (_la === TomParser.SPACE) {
+                            {
+                                this.state = 292;
+                                this.match(TomParser.SPACE);
+                            }
+                        }
+                        this.state = 295;
+                        this.type(0);
                     }
-                }
-                this.state = 288;
-                this.type();
+                    break;
+                case TomParser.ID:
+                    this.enterOuterAlt(_localctx, 2);
+                    {
+                        this.state = 297;
+                        this.parameter();
+                        this.state = 299;
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if (_la === TomParser.SPACE) {
+                            {
+                                this.state = 298;
+                                this.match(TomParser.SPACE);
+                            }
+                        }
+                        this.state = 301;
+                        this.match(TomParser.ARROW);
+                        this.state = 303;
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if (_la === TomParser.SPACE) {
+                            {
+                                this.state = 302;
+                                this.match(TomParser.SPACE);
+                            }
+                        }
+                        this.state = 305;
+                        this.type(0);
+                    }
+                    break;
+                default:
+                    throw new NoViableAltException_1.NoViableAltException(this);
             }
         }
         catch (re) {
@@ -940,180 +1018,40 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     formalParameterSequence() {
         let _localctx = new FormalParameterSequenceContext(this._ctx, this.state);
-        this.enterRule(_localctx, 26, TomParser.RULE_formalParameterSequence);
+        this.enterRule(_localctx, 30, TomParser.RULE_formalParameterSequence);
         let _la;
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 290;
+                this.state = 309;
                 this.parameter();
-                this.state = 298;
-                this._errHandler.sync(this);
-                _la = this._input.LA(1);
-                while (_la === TomParser.COMMA) {
-                    {
-                        {
-                            this.state = 291;
-                            this.match(TomParser.COMMA);
-                            this.state = 293;
-                            this._errHandler.sync(this);
-                            _la = this._input.LA(1);
-                            if (_la === TomParser.SPACE) {
-                                {
-                                    this.state = 292;
-                                    this.match(TomParser.SPACE);
-                                }
-                            }
-                            this.state = 295;
-                            this.parameter();
-                        }
-                    }
-                    this.state = 300;
-                    this._errHandler.sync(this);
-                    _la = this._input.LA(1);
-                }
-            }
-        }
-        catch (re) {
-            if (re instanceof RecognitionException_1.RecognitionException) {
-                _localctx.exception = re;
-                this._errHandler.reportError(this, re);
-                this._errHandler.recover(this, re);
-            }
-            else {
-                throw re;
-            }
-        }
-        finally {
-            this.exitRule();
-        }
-        return _localctx;
-    }
-    // @RuleVersion(0)
-    parameter() {
-        let _localctx = new ParameterContext(this._ctx, this.state);
-        this.enterRule(_localctx, 28, TomParser.RULE_parameter);
-        let _la;
-        try {
-            this.enterOuterAlt(_localctx, 1);
-            {
-                this.state = 301;
-                this.identifier();
-                this.state = 310;
-                this._errHandler.sync(this);
-                switch (this.interpreter.adaptivePredict(this._input, 36, this._ctx)) {
-                    case 1:
-                        {
-                            this.state = 303;
-                            this._errHandler.sync(this);
-                            _la = this._input.LA(1);
-                            if (_la === TomParser.SPACE) {
-                                {
-                                    this.state = 302;
-                                    this.match(TomParser.SPACE);
-                                }
-                            }
-                            this.state = 305;
-                            this.match(TomParser.COLON);
-                            this.state = 307;
-                            this._errHandler.sync(this);
-                            _la = this._input.LA(1);
-                            if (_la === TomParser.SPACE) {
-                                {
-                                    this.state = 306;
-                                    this.match(TomParser.SPACE);
-                                }
-                            }
-                            this.state = 309;
-                            this.type();
-                        }
-                        break;
-                }
-            }
-        }
-        catch (re) {
-            if (re instanceof RecognitionException_1.RecognitionException) {
-                _localctx.exception = re;
-                this._errHandler.reportError(this, re);
-                this._errHandler.recover(this, re);
-            }
-            else {
-                throw re;
-            }
-        }
-        finally {
-            this.exitRule();
-        }
-        return _localctx;
-    }
-    // @RuleVersion(0)
-    arrayType() {
-        let _localctx = new ArrayTypeContext(this._ctx, this.state);
-        this.enterRule(_localctx, 30, TomParser.RULE_arrayType);
-        let _la;
-        try {
-            this.enterOuterAlt(_localctx, 1);
-            {
-                this.state = 312;
-                this.match(TomParser.BRACKET_OPEN);
-                this.state = 314;
-                this._errHandler.sync(this);
-                switch (this.interpreter.adaptivePredict(this._input, 37, this._ctx)) {
-                    case 1:
-                        {
-                            this.state = 313;
-                            this.match(TomParser.SPACE);
-                        }
-                        break;
-                }
                 this.state = 317;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
-                if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.ID) | (1 << TomParser.BRACE_OPEN) | (1 << TomParser.PAREN_OPEN) | (1 << TomParser.BRACKET_OPEN))) !== 0)) {
-                    {
-                        this.state = 316;
-                        this.type();
-                    }
-                }
-                this.state = 326;
-                this._errHandler.sync(this);
-                _la = this._input.LA(1);
                 while (_la === TomParser.COMMA) {
                     {
                         {
-                            this.state = 319;
+                            this.state = 310;
                             this.match(TomParser.COMMA);
-                            this.state = 321;
+                            this.state = 312;
                             this._errHandler.sync(this);
                             _la = this._input.LA(1);
                             if (_la === TomParser.SPACE) {
                                 {
-                                    this.state = 320;
+                                    this.state = 311;
                                     this.match(TomParser.SPACE);
                                 }
                             }
-                            this.state = 323;
-                            this.type();
+                            this.state = 314;
+                            this.parameter();
                         }
                     }
-                    this.state = 328;
+                    this.state = 319;
                     this._errHandler.sync(this);
                     _la = this._input.LA(1);
                 }
-                this.state = 330;
-                this._errHandler.sync(this);
-                _la = this._input.LA(1);
-                if (_la === TomParser.SPACE) {
-                    {
-                        this.state = 329;
-                        this.match(TomParser.SPACE);
-                    }
-                }
-                this.state = 332;
-                this.match(TomParser.BRACKET_CLOSE);
             }
         }
         catch (re) {
@@ -1131,45 +1069,200 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
-    objectType() {
-        let _localctx = new ObjectTypeContext(this._ctx, this.state);
-        this.enterRule(_localctx, 32, TomParser.RULE_objectType);
+    parameter() {
+        let _localctx = new ParameterContext(this._ctx, this.state);
+        this.enterRule(_localctx, 32, TomParser.RULE_parameter);
         let _la;
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 334;
-                this.match(TomParser.BRACE_OPEN);
-                this.state = 336;
+                this.state = 320;
+                this.identifier();
+                this.state = 329;
                 this._errHandler.sync(this);
-                switch (this.interpreter.adaptivePredict(this._input, 42, this._ctx)) {
+                switch (this.interpreter.adaptivePredict(this._input, 39, this._ctx)) {
                     case 1:
                         {
-                            this.state = 335;
+                            this.state = 322;
+                            this._errHandler.sync(this);
+                            _la = this._input.LA(1);
+                            if (_la === TomParser.SPACE) {
+                                {
+                                    this.state = 321;
+                                    this.match(TomParser.SPACE);
+                                }
+                            }
+                            this.state = 324;
+                            this.match(TomParser.COLON);
+                            this.state = 326;
+                            this._errHandler.sync(this);
+                            _la = this._input.LA(1);
+                            if (_la === TomParser.SPACE) {
+                                {
+                                    this.state = 325;
+                                    this.match(TomParser.SPACE);
+                                }
+                            }
+                            this.state = 328;
+                            this.type(0);
+                        }
+                        break;
+                }
+            }
+        }
+        catch (re) {
+            if (re instanceof RecognitionException_1.RecognitionException) {
+                _localctx.exception = re;
+                this._errHandler.reportError(this, re);
+                this._errHandler.recover(this, re);
+            }
+            else {
+                throw re;
+            }
+        }
+        finally {
+            this.exitRule();
+        }
+        return _localctx;
+    }
+    arrayType() {
+        let _localctx = new ArrayTypeContext(this._ctx, this.state);
+        this.enterRule(_localctx, 34, TomParser.RULE_arrayType);
+        let _la;
+        try {
+            this.state = 356;
+            this._errHandler.sync(this);
+            switch (this._input.LA(1)) {
+                case TomParser.BRACKET_OPEN:
+                    this.enterOuterAlt(_localctx, 1);
+                    {
+                        this.state = 331;
+                        this.match(TomParser.BRACKET_OPEN);
+                        this.state = 333;
+                        this._errHandler.sync(this);
+                        switch (this.interpreter.adaptivePredict(this._input, 40, this._ctx)) {
+                            case 1:
+                                {
+                                    this.state = 332;
+                                    this.match(TomParser.SPACE);
+                                }
+                                break;
+                        }
+                        this.state = 336;
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.ID) | (1 << TomParser.BRACE_OPEN) | (1 << TomParser.PAREN_OPEN) | (1 << TomParser.BRACKET_OPEN))) !== 0)) {
+                            {
+                                this.state = 335;
+                                this.type(0);
+                            }
+                        }
+                        this.state = 345;
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        while (_la === TomParser.COMMA) {
+                            {
+                                {
+                                    this.state = 338;
+                                    this.match(TomParser.COMMA);
+                                    this.state = 340;
+                                    this._errHandler.sync(this);
+                                    _la = this._input.LA(1);
+                                    if (_la === TomParser.SPACE) {
+                                        {
+                                            this.state = 339;
+                                            this.match(TomParser.SPACE);
+                                        }
+                                    }
+                                    this.state = 342;
+                                    this.type(0);
+                                }
+                            }
+                            this.state = 347;
+                            this._errHandler.sync(this);
+                            _la = this._input.LA(1);
+                        }
+                        this.state = 349;
+                        this._errHandler.sync(this);
+                        _la = this._input.LA(1);
+                        if (_la === TomParser.SPACE) {
+                            {
+                                this.state = 348;
+                                this.match(TomParser.SPACE);
+                            }
+                        }
+                        this.state = 351;
+                        this.match(TomParser.BRACKET_CLOSE);
+                    }
+                    break;
+                case TomParser.ID:
+                    this.enterOuterAlt(_localctx, 2);
+                    {
+                        this.state = 352;
+                        this.identifier();
+                        this.state = 353;
+                        this.match(TomParser.BRACKET_OPEN);
+                        this.state = 354;
+                        this.match(TomParser.BRACKET_CLOSE);
+                    }
+                    break;
+                default:
+                    throw new NoViableAltException_1.NoViableAltException(this);
+            }
+        }
+        catch (re) {
+            if (re instanceof RecognitionException_1.RecognitionException) {
+                _localctx.exception = re;
+                this._errHandler.reportError(this, re);
+                this._errHandler.recover(this, re);
+            }
+            else {
+                throw re;
+            }
+        }
+        finally {
+            this.exitRule();
+        }
+        return _localctx;
+    }
+    objectType() {
+        let _localctx = new ObjectTypeContext(this._ctx, this.state);
+        this.enterRule(_localctx, 36, TomParser.RULE_objectType);
+        let _la;
+        try {
+            this.enterOuterAlt(_localctx, 1);
+            {
+                this.state = 358;
+                this.match(TomParser.BRACE_OPEN);
+                this.state = 360;
+                this._errHandler.sync(this);
+                switch (this.interpreter.adaptivePredict(this._input, 46, this._ctx)) {
+                    case 1:
+                        {
+                            this.state = 359;
                             this.match(TomParser.SPACE);
                         }
                         break;
                 }
-                this.state = 339;
+                this.state = 363;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
                 if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.ID) | (1 << TomParser.BRACE_OPEN) | (1 << TomParser.PAREN_OPEN) | (1 << TomParser.BRACKET_OPEN))) !== 0)) {
                     {
-                        this.state = 338;
+                        this.state = 362;
                         this.objectPairType();
                     }
                 }
-                this.state = 342;
+                this.state = 366;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
                 if (_la === TomParser.SPACE) {
                     {
-                        this.state = 341;
+                        this.state = 365;
                         this.match(TomParser.SPACE);
                     }
                 }
-                this.state = 344;
+                this.state = 368;
                 this.match(TomParser.BRACE_CLOSE);
             }
         }
@@ -1188,38 +1281,37 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     objectPairType() {
         let _localctx = new ObjectPairTypeContext(this._ctx, this.state);
-        this.enterRule(_localctx, 34, TomParser.RULE_objectPairType);
+        this.enterRule(_localctx, 38, TomParser.RULE_objectPairType);
         let _la;
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 346;
-                this.type();
-                this.state = 348;
+                this.state = 370;
+                this.type(0);
+                this.state = 372;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
                 if (_la === TomParser.SPACE) {
                     {
-                        this.state = 347;
+                        this.state = 371;
                         this.match(TomParser.SPACE);
                     }
                 }
-                this.state = 350;
+                this.state = 374;
                 this.match(TomParser.COLON);
-                this.state = 352;
+                this.state = 376;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
                 if (_la === TomParser.SPACE) {
                     {
-                        this.state = 351;
+                        this.state = 375;
                         this.match(TomParser.SPACE);
                     }
                 }
-                this.state = 354;
-                this.type();
+                this.state = 378;
+                this.type(0);
             }
         }
         catch (re) {
@@ -1237,14 +1329,13 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     descriptionDelimiter() {
         let _localctx = new DescriptionDelimiterContext(this._ctx, this.state);
-        this.enterRule(_localctx, 36, TomParser.RULE_descriptionDelimiter);
+        this.enterRule(_localctx, 40, TomParser.RULE_descriptionDelimiter);
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 356;
+                this.state = 380;
                 this.match(TomParser.MINUS);
             }
         }
@@ -1263,30 +1354,14 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     description() {
         let _localctx = new DescriptionContext(this._ctx, this.state);
-        this.enterRule(_localctx, 38, TomParser.RULE_description);
-        let _la;
+        this.enterRule(_localctx, 42, TomParser.RULE_description);
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 358;
+                this.state = 382;
                 this.descriptionLine();
-                this.state = 362;
-                this._errHandler.sync(this);
-                _la = this._input.LA(1);
-                while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.ID) | (1 << TomParser.SPACE) | (1 << TomParser.TEXT_CONTENT) | (1 << TomParser.MINUS) | (1 << TomParser.FORWARD_SLASH) | (1 << TomParser.COLON) | (1 << TomParser.PERIOD) | (1 << TomParser.INLINE_TAG_START) | (1 << TomParser.BRACE_OPEN) | (1 << TomParser.BRACE_CLOSE))) !== 0)) {
-                    {
-                        {
-                            this.state = 359;
-                            this.descriptionLine();
-                        }
-                    }
-                    this.state = 364;
-                    this._errHandler.sync(this);
-                    _la = this._input.LA(1);
-                }
             }
         }
         catch (re) {
@@ -1304,15 +1379,20 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     descriptionLine() {
         let _localctx = new DescriptionLineContext(this._ctx, this.state);
-        this.enterRule(_localctx, 40, TomParser.RULE_descriptionLine);
+        this.enterRule(_localctx, 44, TomParser.RULE_descriptionLine);
+        let _la;
         try {
-            let _alt;
-            this.state = 379;
+            this.state = 398;
             this._errHandler.sync(this);
             switch (this._input.LA(1)) {
+                case TomParser.IntegerLiteral:
+                case TomParser.FloatingPointLiteral:
+                case TomParser.BooleanLiteral:
+                case TomParser.CharacterLiteral:
+                case TomParser.StringLiteral:
+                case TomParser.NullLiteral:
                 case TomParser.ID:
                 case TomParser.SPACE:
                 case TomParser.TEXT_CONTENT:
@@ -1324,46 +1404,42 @@ class TomParser extends Parser_1.Parser {
                 case TomParser.BRACE_CLOSE:
                     this.enterOuterAlt(_localctx, 1);
                     {
-                        this.state = 365;
+                        this.state = 384;
                         this.descriptionLineStart();
-                        this.state = 369;
+                        this.state = 388;
                         this._errHandler.sync(this);
-                        _alt = this.interpreter.adaptivePredict(this._input, 48, this._ctx);
-                        while (_alt !== 2 && _alt !== ATN_1.ATN.INVALID_ALT_NUMBER) {
-                            if (_alt === 1) {
+                        _la = this._input.LA(1);
+                        while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.IntegerLiteral) | (1 << TomParser.FloatingPointLiteral) | (1 << TomParser.BooleanLiteral) | (1 << TomParser.CharacterLiteral) | (1 << TomParser.StringLiteral) | (1 << TomParser.NullLiteral) | (1 << TomParser.ID) | (1 << TomParser.SPACE) | (1 << TomParser.TEXT_CONTENT) | (1 << TomParser.AT) | (1 << TomParser.MINUS) | (1 << TomParser.FORWARD_SLASH) | (1 << TomParser.COLON) | (1 << TomParser.PERIOD) | (1 << TomParser.INLINE_TAG_START) | (1 << TomParser.BRACE_OPEN) | (1 << TomParser.BRACE_CLOSE))) !== 0)) {
+                            {
                                 {
-                                    {
-                                        this.state = 366;
-                                        this.descriptionLineElement();
-                                    }
+                                    this.state = 385;
+                                    this.descriptionLineElement();
                                 }
                             }
-                            this.state = 371;
+                            this.state = 390;
                             this._errHandler.sync(this);
-                            _alt = this.interpreter.adaptivePredict(this._input, 48, this._ctx);
+                            _la = this._input.LA(1);
                         }
                     }
                     break;
                 case TomParser.INLINE_TAG_START:
                     this.enterOuterAlt(_localctx, 2);
                     {
-                        this.state = 372;
+                        this.state = 391;
                         this.inlineTag();
-                        this.state = 376;
+                        this.state = 395;
                         this._errHandler.sync(this);
-                        _alt = this.interpreter.adaptivePredict(this._input, 49, this._ctx);
-                        while (_alt !== 2 && _alt !== ATN_1.ATN.INVALID_ALT_NUMBER) {
-                            if (_alt === 1) {
+                        _la = this._input.LA(1);
+                        while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.IntegerLiteral) | (1 << TomParser.FloatingPointLiteral) | (1 << TomParser.BooleanLiteral) | (1 << TomParser.CharacterLiteral) | (1 << TomParser.StringLiteral) | (1 << TomParser.NullLiteral) | (1 << TomParser.ID) | (1 << TomParser.SPACE) | (1 << TomParser.TEXT_CONTENT) | (1 << TomParser.AT) | (1 << TomParser.MINUS) | (1 << TomParser.FORWARD_SLASH) | (1 << TomParser.COLON) | (1 << TomParser.PERIOD) | (1 << TomParser.INLINE_TAG_START) | (1 << TomParser.BRACE_OPEN) | (1 << TomParser.BRACE_CLOSE))) !== 0)) {
+                            {
                                 {
-                                    {
-                                        this.state = 373;
-                                        this.descriptionLineElement();
-                                    }
+                                    this.state = 392;
+                                    this.descriptionLineElement();
                                 }
                             }
-                            this.state = 378;
+                            this.state = 397;
                             this._errHandler.sync(this);
-                            _alt = this.interpreter.adaptivePredict(this._input, 49, this._ctx);
+                            _la = this._input.LA(1);
                         }
                     }
                     break;
@@ -1386,25 +1462,24 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     descriptionLineStart() {
         let _localctx = new DescriptionLineStartContext(this._ctx, this.state);
-        this.enterRule(_localctx, 42, TomParser.RULE_descriptionLineStart);
+        this.enterRule(_localctx, 46, TomParser.RULE_descriptionLineStart);
         let _la;
         try {
             let _alt;
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 382;
+                this.state = 401;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
                 if (_la === TomParser.SPACE) {
                     {
-                        this.state = 381;
+                        this.state = 400;
                         this.match(TomParser.SPACE);
                     }
                 }
-                this.state = 385;
+                this.state = 404;
                 this._errHandler.sync(this);
                 _alt = 1;
                 do {
@@ -1412,7 +1487,7 @@ class TomParser extends Parser_1.Parser {
                         case 1:
                             {
                                 {
-                                    this.state = 384;
+                                    this.state = 403;
                                     this.descriptionText();
                                 }
                             }
@@ -1420,19 +1495,25 @@ class TomParser extends Parser_1.Parser {
                         default:
                             throw new NoViableAltException_1.NoViableAltException(this);
                     }
-                    this.state = 387;
+                    this.state = 406;
                     this._errHandler.sync(this);
-                    _alt = this.interpreter.adaptivePredict(this._input, 52, this._ctx);
+                    _alt = this.interpreter.adaptivePredict(this._input, 55, this._ctx);
                 } while (_alt !== 2 && _alt !== ATN_1.ATN.INVALID_ALT_NUMBER);
-                this.state = 394;
+                this.state = 413;
                 this._errHandler.sync(this);
-                _alt = this.interpreter.adaptivePredict(this._input, 54, this._ctx);
+                _alt = this.interpreter.adaptivePredict(this._input, 57, this._ctx);
                 while (_alt !== 2 && _alt !== ATN_1.ATN.INVALID_ALT_NUMBER) {
                     if (_alt === 1) {
                         {
-                            this.state = 392;
+                            this.state = 411;
                             this._errHandler.sync(this);
                             switch (this._input.LA(1)) {
+                                case TomParser.IntegerLiteral:
+                                case TomParser.FloatingPointLiteral:
+                                case TomParser.BooleanLiteral:
+                                case TomParser.CharacterLiteral:
+                                case TomParser.StringLiteral:
+                                case TomParser.NullLiteral:
                                 case TomParser.ID:
                                 case TomParser.TEXT_CONTENT:
                                 case TomParser.MINUS:
@@ -1442,19 +1523,19 @@ class TomParser extends Parser_1.Parser {
                                 case TomParser.BRACE_OPEN:
                                 case TomParser.BRACE_CLOSE:
                                     {
-                                        this.state = 389;
+                                        this.state = 408;
                                         this.descriptionText();
                                     }
                                     break;
                                 case TomParser.SPACE:
                                     {
-                                        this.state = 390;
+                                        this.state = 409;
                                         this.match(TomParser.SPACE);
                                     }
                                     break;
                                 case TomParser.AT:
                                     {
-                                        this.state = 391;
+                                        this.state = 410;
                                         this.match(TomParser.AT);
                                     }
                                     break;
@@ -1463,9 +1544,9 @@ class TomParser extends Parser_1.Parser {
                             }
                         }
                     }
-                    this.state = 396;
+                    this.state = 415;
                     this._errHandler.sync(this);
-                    _alt = this.interpreter.adaptivePredict(this._input, 54, this._ctx);
+                    _alt = this.interpreter.adaptivePredict(this._input, 57, this._ctx);
                 }
             }
         }
@@ -1484,26 +1565,83 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     descriptionText() {
         let _localctx = new DescriptionTextContext(this._ctx, this.state);
-        this.enterRule(_localctx, 44, TomParser.RULE_descriptionText);
-        let _la;
+        this.enterRule(_localctx, 48, TomParser.RULE_descriptionText);
         try {
-            this.enterOuterAlt(_localctx, 1);
-            {
-                this.state = 397;
-                _la = this._input.LA(1);
-                if (!((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.ID) | (1 << TomParser.TEXT_CONTENT) | (1 << TomParser.MINUS) | (1 << TomParser.FORWARD_SLASH) | (1 << TomParser.COLON) | (1 << TomParser.PERIOD) | (1 << TomParser.BRACE_OPEN) | (1 << TomParser.BRACE_CLOSE))) !== 0))) {
-                    this._errHandler.recoverInline(this);
-                }
-                else {
-                    if (this._input.LA(1) === Token_1.Token.EOF) {
-                        this.matchedEOF = true;
+            this.state = 425;
+            this._errHandler.sync(this);
+            switch (this._input.LA(1)) {
+                case TomParser.TEXT_CONTENT:
+                    this.enterOuterAlt(_localctx, 1);
+                    {
+                        this.state = 416;
+                        this.match(TomParser.TEXT_CONTENT);
                     }
-                    this._errHandler.reportMatch(this);
-                    this.consume();
-                }
+                    break;
+                case TomParser.ID:
+                    this.enterOuterAlt(_localctx, 2);
+                    {
+                        this.state = 417;
+                        this.match(TomParser.ID);
+                    }
+                    break;
+                case TomParser.FORWARD_SLASH:
+                    this.enterOuterAlt(_localctx, 3);
+                    {
+                        this.state = 418;
+                        this.match(TomParser.FORWARD_SLASH);
+                    }
+                    break;
+                case TomParser.BRACE_OPEN:
+                    this.enterOuterAlt(_localctx, 4);
+                    {
+                        this.state = 419;
+                        this.match(TomParser.BRACE_OPEN);
+                    }
+                    break;
+                case TomParser.BRACE_CLOSE:
+                    this.enterOuterAlt(_localctx, 5);
+                    {
+                        this.state = 420;
+                        this.match(TomParser.BRACE_CLOSE);
+                    }
+                    break;
+                case TomParser.COLON:
+                    this.enterOuterAlt(_localctx, 6);
+                    {
+                        this.state = 421;
+                        this.match(TomParser.COLON);
+                    }
+                    break;
+                case TomParser.MINUS:
+                    this.enterOuterAlt(_localctx, 7);
+                    {
+                        this.state = 422;
+                        this.match(TomParser.MINUS);
+                    }
+                    break;
+                case TomParser.PERIOD:
+                    this.enterOuterAlt(_localctx, 8);
+                    {
+                        this.state = 423;
+                        this.match(TomParser.PERIOD);
+                    }
+                    break;
+                case TomParser.IntegerLiteral:
+                case TomParser.FloatingPointLiteral:
+                case TomParser.BooleanLiteral:
+                case TomParser.CharacterLiteral:
+                case TomParser.StringLiteral:
+                case TomParser.NullLiteral:
+                    this.enterOuterAlt(_localctx, 9);
+                    {
+                        this.state = 424;
+                        this.literal();
+                    }
+                    break;
+                default:
+                    throw new NoViableAltException_1.NoViableAltException(this);
             }
         }
         catch (re) {
@@ -1521,21 +1659,26 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     descriptionLineElement() {
         let _localctx = new DescriptionLineElementContext(this._ctx, this.state);
-        this.enterRule(_localctx, 46, TomParser.RULE_descriptionLineElement);
+        this.enterRule(_localctx, 50, TomParser.RULE_descriptionLineElement);
         try {
-            this.state = 401;
+            this.state = 429;
             this._errHandler.sync(this);
             switch (this._input.LA(1)) {
                 case TomParser.INLINE_TAG_START:
                     this.enterOuterAlt(_localctx, 1);
                     {
-                        this.state = 399;
+                        this.state = 427;
                         this.inlineTag();
                     }
                     break;
+                case TomParser.IntegerLiteral:
+                case TomParser.FloatingPointLiteral:
+                case TomParser.BooleanLiteral:
+                case TomParser.CharacterLiteral:
+                case TomParser.StringLiteral:
+                case TomParser.NullLiteral:
                 case TomParser.ID:
                 case TomParser.SPACE:
                 case TomParser.TEXT_CONTENT:
@@ -1548,7 +1691,7 @@ class TomParser extends Parser_1.Parser {
                 case TomParser.BRACE_CLOSE:
                     this.enterOuterAlt(_localctx, 2);
                     {
-                        this.state = 400;
+                        this.state = 428;
                         this.descriptionLineText();
                     }
                     break;
@@ -1571,24 +1714,29 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     descriptionLineText() {
         let _localctx = new DescriptionLineTextContext(this._ctx, this.state);
-        this.enterRule(_localctx, 48, TomParser.RULE_descriptionLineText);
+        this.enterRule(_localctx, 52, TomParser.RULE_descriptionLineText);
         try {
             let _alt;
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 406;
+                this.state = 434;
                 this._errHandler.sync(this);
                 _alt = 1;
                 do {
                     switch (_alt) {
                         case 1:
                             {
-                                this.state = 406;
+                                this.state = 434;
                                 this._errHandler.sync(this);
                                 switch (this._input.LA(1)) {
+                                    case TomParser.IntegerLiteral:
+                                    case TomParser.FloatingPointLiteral:
+                                    case TomParser.BooleanLiteral:
+                                    case TomParser.CharacterLiteral:
+                                    case TomParser.StringLiteral:
+                                    case TomParser.NullLiteral:
                                     case TomParser.ID:
                                     case TomParser.TEXT_CONTENT:
                                     case TomParser.MINUS:
@@ -1598,19 +1746,19 @@ class TomParser extends Parser_1.Parser {
                                     case TomParser.BRACE_OPEN:
                                     case TomParser.BRACE_CLOSE:
                                         {
-                                            this.state = 403;
+                                            this.state = 431;
                                             this.descriptionText();
                                         }
                                         break;
                                     case TomParser.SPACE:
                                         {
-                                            this.state = 404;
+                                            this.state = 432;
                                             this.match(TomParser.SPACE);
                                         }
                                         break;
                                     case TomParser.AT:
                                         {
-                                            this.state = 405;
+                                            this.state = 433;
                                             this.match(TomParser.AT);
                                         }
                                         break;
@@ -1622,9 +1770,9 @@ class TomParser extends Parser_1.Parser {
                         default:
                             throw new NoViableAltException_1.NoViableAltException(this);
                     }
-                    this.state = 408;
+                    this.state = 436;
                     this._errHandler.sync(this);
-                    _alt = this.interpreter.adaptivePredict(this._input, 57, this._ctx);
+                    _alt = this.interpreter.adaptivePredict(this._input, 61, this._ctx);
                 } while (_alt !== 2 && _alt !== ATN_1.ATN.INVALID_ALT_NUMBER);
             }
         }
@@ -1643,45 +1791,29 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     inlineTag() {
         let _localctx = new InlineTagContext(this._ctx, this.state);
-        this.enterRule(_localctx, 50, TomParser.RULE_inlineTag);
+        this.enterRule(_localctx, 54, TomParser.RULE_inlineTag);
         let _la;
         try {
-            let _alt;
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 410;
+                this.state = 438;
                 this.match(TomParser.INLINE_TAG_START);
-                this.state = 411;
-                this.inlineTagID();
-                this.state = 415;
-                this._errHandler.sync(this);
-                _alt = this.interpreter.adaptivePredict(this._input, 58, this._ctx);
-                while (_alt !== 2 && _alt !== ATN_1.ATN.INVALID_ALT_NUMBER) {
-                    if (_alt === 1) {
-                        {
-                            {
-                                this.state = 412;
-                                this.match(TomParser.SPACE);
-                            }
-                        }
-                    }
-                    this.state = 417;
-                    this._errHandler.sync(this);
-                    _alt = this.interpreter.adaptivePredict(this._input, 58, this._ctx);
-                }
-                this.state = 419;
+                this.state = 439;
+                this.inlineTagName();
+                this.state = 440;
+                this.match(TomParser.SPACE);
+                this.state = 442;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
                 if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.ID) | (1 << TomParser.NEWLINE) | (1 << TomParser.SPACE) | (1 << TomParser.TEXT_CONTENT) | (1 << TomParser.FORWARD_SLASH) | (1 << TomParser.PERIOD) | (1 << TomParser.BRACE_OPEN))) !== 0)) {
                     {
-                        this.state = 418;
+                        this.state = 441;
                         this.inlineTagBody();
                     }
                 }
-                this.state = 421;
+                this.state = 444;
                 this.match(TomParser.BRACE_CLOSE);
             }
         }
@@ -1700,14 +1832,13 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
-    inlineTagID() {
-        let _localctx = new InlineTagIDContext(this._ctx, this.state);
-        this.enterRule(_localctx, 52, TomParser.RULE_inlineTagID);
+    inlineTagName() {
+        let _localctx = new InlineTagNameContext(this._ctx, this.state);
+        this.enterRule(_localctx, 56, TomParser.RULE_inlineTagName);
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 423;
+                this.state = 446;
                 this.identifier();
             }
         }
@@ -1726,25 +1857,24 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     inlineTagBody() {
         let _localctx = new InlineTagBodyContext(this._ctx, this.state);
-        this.enterRule(_localctx, 54, TomParser.RULE_inlineTagBody);
+        this.enterRule(_localctx, 58, TomParser.RULE_inlineTagBody);
         let _la;
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 426;
+                this.state = 449;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
                 do {
                     {
                         {
-                            this.state = 425;
+                            this.state = 448;
                             this.braceBody();
                         }
                     }
-                    this.state = 428;
+                    this.state = 451;
                     this._errHandler.sync(this);
                     _la = this._input.LA(1);
                 } while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.ID) | (1 << TomParser.NEWLINE) | (1 << TomParser.SPACE) | (1 << TomParser.TEXT_CONTENT) | (1 << TomParser.FORWARD_SLASH) | (1 << TomParser.PERIOD) | (1 << TomParser.BRACE_OPEN))) !== 0));
@@ -1765,31 +1895,30 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     braceExpression() {
         let _localctx = new BraceExpressionContext(this._ctx, this.state);
-        this.enterRule(_localctx, 56, TomParser.RULE_braceExpression);
+        this.enterRule(_localctx, 60, TomParser.RULE_braceExpression);
         let _la;
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 430;
+                this.state = 453;
                 this.match(TomParser.BRACE_OPEN);
-                this.state = 434;
+                this.state = 457;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
                 while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.ID) | (1 << TomParser.NEWLINE) | (1 << TomParser.SPACE) | (1 << TomParser.TEXT_CONTENT) | (1 << TomParser.FORWARD_SLASH) | (1 << TomParser.PERIOD) | (1 << TomParser.BRACE_OPEN))) !== 0)) {
                     {
                         {
-                            this.state = 431;
+                            this.state = 454;
                             this.braceBody();
                         }
                     }
-                    this.state = 436;
+                    this.state = 459;
                     this._errHandler.sync(this);
                     _la = this._input.LA(1);
                 }
-                this.state = 437;
+                this.state = 460;
                 this.match(TomParser.BRACE_CLOSE);
             }
         }
@@ -1808,19 +1937,18 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     braceBody() {
         let _localctx = new BraceBodyContext(this._ctx, this.state);
-        this.enterRule(_localctx, 58, TomParser.RULE_braceBody);
+        this.enterRule(_localctx, 62, TomParser.RULE_braceBody);
         try {
             let _alt;
-            this.state = 453;
+            this.state = 471;
             this._errHandler.sync(this);
             switch (this._input.LA(1)) {
                 case TomParser.BRACE_OPEN:
                     this.enterOuterAlt(_localctx, 1);
                     {
-                        this.state = 439;
+                        this.state = 462;
                         this.braceExpression();
                     }
                     break;
@@ -1832,39 +1960,25 @@ class TomParser extends Parser_1.Parser {
                 case TomParser.PERIOD:
                     this.enterOuterAlt(_localctx, 2);
                     {
-                        this.state = 440;
+                        this.state = 463;
                         this.braceText();
-                        this.state = 450;
+                        this.state = 468;
                         this._errHandler.sync(this);
-                        _alt = this.interpreter.adaptivePredict(this._input, 63, this._ctx);
+                        _alt = this.interpreter.adaptivePredict(this._input, 65, this._ctx);
                         while (_alt !== 2 && _alt !== ATN_1.ATN.INVALID_ALT_NUMBER) {
                             if (_alt === 1) {
                                 {
                                     {
-                                        this.state = 444;
-                                        this._errHandler.sync(this);
-                                        _alt = this.interpreter.adaptivePredict(this._input, 62, this._ctx);
-                                        while (_alt !== 2 && _alt !== ATN_1.ATN.INVALID_ALT_NUMBER) {
-                                            if (_alt === 1) {
-                                                {
-                                                    {
-                                                        this.state = 441;
-                                                        this.match(TomParser.NEWLINE);
-                                                    }
-                                                }
-                                            }
-                                            this.state = 446;
-                                            this._errHandler.sync(this);
-                                            _alt = this.interpreter.adaptivePredict(this._input, 62, this._ctx);
-                                        }
-                                        this.state = 447;
+                                        this.state = 464;
+                                        this.match(TomParser.NEWLINE);
+                                        this.state = 465;
                                         this.braceText();
                                     }
                                 }
                             }
-                            this.state = 452;
+                            this.state = 470;
                             this._errHandler.sync(this);
-                            _alt = this.interpreter.adaptivePredict(this._input, 63, this._ctx);
+                            _alt = this.interpreter.adaptivePredict(this._input, 65, this._ctx);
                         }
                     }
                     break;
@@ -1887,15 +2001,14 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     braceText() {
         let _localctx = new BraceTextContext(this._ctx, this.state);
-        this.enterRule(_localctx, 60, TomParser.RULE_braceText);
+        this.enterRule(_localctx, 64, TomParser.RULE_braceText);
         let _la;
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 455;
+                this.state = 473;
                 _la = this._input.LA(1);
                 if (!((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.ID) | (1 << TomParser.NEWLINE) | (1 << TomParser.SPACE) | (1 << TomParser.TEXT_CONTENT) | (1 << TomParser.FORWARD_SLASH) | (1 << TomParser.PERIOD))) !== 0))) {
                     this._errHandler.recoverInline(this);
@@ -1924,7 +2037,6 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     expression(_p) {
         if (_p === undefined) {
             _p = 0;
@@ -1933,33 +2045,32 @@ class TomParser extends Parser_1.Parser {
         let _parentState = this.state;
         let _localctx = new ExpressionContext(this._ctx, _parentState);
         let _prevctx = _localctx;
-        let _startState = 62;
-        this.enterRecursionRule(_localctx, 62, TomParser.RULE_expression, _p);
+        let _startState = 66;
+        this.enterRecursionRule(_localctx, 66, TomParser.RULE_expression, _p);
         let _la;
         try {
             let _alt;
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 462;
+                this.state = 481;
                 this._errHandler.sync(this);
                 switch (this._input.LA(1)) {
                     case TomParser.PLUS:
                     case TomParser.MINUS:
-                    case TomParser.EXCLAMATION:
                         {
-                            this.state = 458;
+                            this.state = 476;
                             this.unaryExpression();
                         }
                         break;
                     case TomParser.BRACKET_OPEN:
                         {
-                            this.state = 459;
+                            this.state = 477;
                             this.arrayExpression();
                         }
                         break;
                     case TomParser.BRACE_OPEN:
                         {
-                            this.state = 460;
+                            this.state = 478;
                             this.objectExpression();
                         }
                         break;
@@ -1970,43 +2081,49 @@ class TomParser extends Parser_1.Parser {
                     case TomParser.StringLiteral:
                     case TomParser.NullLiteral:
                         {
-                            this.state = 461;
+                            this.state = 479;
                             this.literal();
+                        }
+                        break;
+                    case TomParser.PAREN_OPEN:
+                        {
+                            this.state = 480;
+                            this.parenthesizedExpression();
                         }
                         break;
                     default:
                         throw new NoViableAltException_1.NoViableAltException(this);
                 }
                 this._ctx._stop = this._input.tryLT(-1);
-                this.state = 484;
+                this.state = 503;
                 this._errHandler.sync(this);
-                _alt = this.interpreter.adaptivePredict(this._input, 71, this._ctx);
+                _alt = this.interpreter.adaptivePredict(this._input, 73, this._ctx);
                 while (_alt !== 2 && _alt !== ATN_1.ATN.INVALID_ALT_NUMBER) {
                     if (_alt === 1) {
                         if (this._parseListeners != null)
                             this.triggerExitRuleEvent();
                         _prevctx = _localctx;
                         {
-                            this.state = 482;
+                            this.state = 501;
                             this._errHandler.sync(this);
-                            switch (this.interpreter.adaptivePredict(this._input, 70, this._ctx)) {
+                            switch (this.interpreter.adaptivePredict(this._input, 72, this._ctx)) {
                                 case 1:
                                     {
                                         _localctx = new ExpressionContext(_parentctx, _parentState);
                                         this.pushNewRecursionContext(_localctx, _startState, TomParser.RULE_expression);
-                                        this.state = 464;
-                                        if (!(this.precpred(this._ctx, 5)))
-                                            throw new FailedPredicateException_1.FailedPredicateException(this, "this.precpred(this._ctx, 5)");
-                                        this.state = 466;
+                                        this.state = 483;
+                                        if (!(this.precpred(this._ctx, 6)))
+                                            throw new FailedPredicateException_1.FailedPredicateException(this, "this.precpred(this._ctx, 6)");
+                                        this.state = 485;
                                         this._errHandler.sync(this);
                                         _la = this._input.LA(1);
                                         if (_la === TomParser.SPACE) {
                                             {
-                                                this.state = 465;
+                                                this.state = 484;
                                                 this.match(TomParser.SPACE);
                                             }
                                         }
-                                        this.state = 468;
+                                        this.state = 487;
                                         _la = this._input.LA(1);
                                         if (!(_la === TomParser.STAR || _la === TomParser.FORWARD_SLASH)) {
                                             this._errHandler.recoverInline(this);
@@ -2018,36 +2135,36 @@ class TomParser extends Parser_1.Parser {
                                             this._errHandler.reportMatch(this);
                                             this.consume();
                                         }
-                                        this.state = 470;
+                                        this.state = 489;
                                         this._errHandler.sync(this);
                                         _la = this._input.LA(1);
                                         if (_la === TomParser.SPACE) {
                                             {
-                                                this.state = 469;
+                                                this.state = 488;
                                                 this.match(TomParser.SPACE);
                                             }
                                         }
-                                        this.state = 472;
-                                        this.expression(6);
+                                        this.state = 491;
+                                        this.expression(7);
                                     }
                                     break;
                                 case 2:
                                     {
                                         _localctx = new ExpressionContext(_parentctx, _parentState);
                                         this.pushNewRecursionContext(_localctx, _startState, TomParser.RULE_expression);
-                                        this.state = 473;
-                                        if (!(this.precpred(this._ctx, 4)))
-                                            throw new FailedPredicateException_1.FailedPredicateException(this, "this.precpred(this._ctx, 4)");
-                                        this.state = 475;
+                                        this.state = 492;
+                                        if (!(this.precpred(this._ctx, 5)))
+                                            throw new FailedPredicateException_1.FailedPredicateException(this, "this.precpred(this._ctx, 5)");
+                                        this.state = 494;
                                         this._errHandler.sync(this);
                                         _la = this._input.LA(1);
                                         if (_la === TomParser.SPACE) {
                                             {
-                                                this.state = 474;
+                                                this.state = 493;
                                                 this.match(TomParser.SPACE);
                                             }
                                         }
-                                        this.state = 477;
+                                        this.state = 496;
                                         _la = this._input.LA(1);
                                         if (!(_la === TomParser.PLUS || _la === TomParser.MINUS)) {
                                             this._errHandler.recoverInline(this);
@@ -2059,25 +2176,25 @@ class TomParser extends Parser_1.Parser {
                                             this._errHandler.reportMatch(this);
                                             this.consume();
                                         }
-                                        this.state = 479;
+                                        this.state = 498;
                                         this._errHandler.sync(this);
                                         _la = this._input.LA(1);
                                         if (_la === TomParser.SPACE) {
                                             {
-                                                this.state = 478;
+                                                this.state = 497;
                                                 this.match(TomParser.SPACE);
                                             }
                                         }
-                                        this.state = 481;
-                                        this.expression(5);
+                                        this.state = 500;
+                                        this.expression(6);
                                     }
                                     break;
                             }
                         }
                     }
-                    this.state = 486;
+                    this.state = 505;
                     this._errHandler.sync(this);
-                    _alt = this.interpreter.adaptivePredict(this._input, 71, this._ctx);
+                    _alt = this.interpreter.adaptivePredict(this._input, 73, this._ctx);
                 }
             }
         }
@@ -2096,17 +2213,16 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     unaryExpression() {
         let _localctx = new UnaryExpressionContext(this._ctx, this.state);
-        this.enterRule(_localctx, 64, TomParser.RULE_unaryExpression);
+        this.enterRule(_localctx, 68, TomParser.RULE_unaryExpression);
         let _la;
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 487;
+                this.state = 506;
                 _la = this._input.LA(1);
-                if (!((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.PLUS) | (1 << TomParser.MINUS) | (1 << TomParser.EXCLAMATION))) !== 0))) {
+                if (!(_la === TomParser.PLUS || _la === TomParser.MINUS)) {
                     this._errHandler.recoverInline(this);
                 }
                 else {
@@ -2116,7 +2232,7 @@ class TomParser extends Parser_1.Parser {
                     this._errHandler.reportMatch(this);
                     this.consume();
                 }
-                this.state = 488;
+                this.state = 507;
                 this.expression(0);
             }
         }
@@ -2135,51 +2251,50 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     arrayExpression() {
         let _localctx = new ArrayExpressionContext(this._ctx, this.state);
-        this.enterRule(_localctx, 66, TomParser.RULE_arrayExpression);
+        this.enterRule(_localctx, 70, TomParser.RULE_arrayExpression);
         let _la;
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 490;
+                this.state = 509;
                 this.match(TomParser.BRACKET_OPEN);
-                this.state = 492;
+                this.state = 511;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
-                if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.IntegerLiteral) | (1 << TomParser.FloatingPointLiteral) | (1 << TomParser.BooleanLiteral) | (1 << TomParser.CharacterLiteral) | (1 << TomParser.StringLiteral) | (1 << TomParser.NullLiteral) | (1 << TomParser.PLUS) | (1 << TomParser.MINUS) | (1 << TomParser.EXCLAMATION) | (1 << TomParser.BRACE_OPEN) | (1 << TomParser.BRACKET_OPEN))) !== 0)) {
+                if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.IntegerLiteral) | (1 << TomParser.FloatingPointLiteral) | (1 << TomParser.BooleanLiteral) | (1 << TomParser.CharacterLiteral) | (1 << TomParser.StringLiteral) | (1 << TomParser.NullLiteral) | (1 << TomParser.PLUS) | (1 << TomParser.MINUS) | (1 << TomParser.BRACE_OPEN) | (1 << TomParser.PAREN_OPEN) | (1 << TomParser.BRACKET_OPEN))) !== 0)) {
                     {
-                        this.state = 491;
+                        this.state = 510;
                         this.expression(0);
                     }
                 }
-                this.state = 501;
+                this.state = 520;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
                 while (_la === TomParser.COMMA) {
                     {
                         {
-                            this.state = 494;
+                            this.state = 513;
                             this.match(TomParser.COMMA);
-                            this.state = 496;
+                            this.state = 515;
                             this._errHandler.sync(this);
                             _la = this._input.LA(1);
                             if (_la === TomParser.SPACE) {
                                 {
-                                    this.state = 495;
+                                    this.state = 514;
                                     this.match(TomParser.SPACE);
                                 }
                             }
-                            this.state = 498;
+                            this.state = 517;
                             this.expression(0);
                         }
                     }
-                    this.state = 503;
+                    this.state = 522;
                     this._errHandler.sync(this);
                     _la = this._input.LA(1);
                 }
-                this.state = 504;
+                this.state = 523;
                 this.match(TomParser.BRACKET_CLOSE);
             }
         }
@@ -2198,45 +2313,44 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     objectExpression() {
         let _localctx = new ObjectExpressionContext(this._ctx, this.state);
-        this.enterRule(_localctx, 68, TomParser.RULE_objectExpression);
+        this.enterRule(_localctx, 72, TomParser.RULE_objectExpression);
         let _la;
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 506;
+                this.state = 525;
                 this.match(TomParser.BRACE_OPEN);
-                this.state = 508;
+                this.state = 527;
                 this._errHandler.sync(this);
-                switch (this.interpreter.adaptivePredict(this._input, 75, this._ctx)) {
+                switch (this.interpreter.adaptivePredict(this._input, 77, this._ctx)) {
                     case 1:
                         {
-                            this.state = 507;
+                            this.state = 526;
                             this.match(TomParser.SPACE);
                         }
                         break;
                 }
-                this.state = 511;
+                this.state = 530;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
                 if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.IntegerLiteral) | (1 << TomParser.FloatingPointLiteral) | (1 << TomParser.BooleanLiteral) | (1 << TomParser.CharacterLiteral) | (1 << TomParser.StringLiteral) | (1 << TomParser.NullLiteral))) !== 0)) {
                     {
-                        this.state = 510;
+                        this.state = 529;
                         this.objectPair();
                     }
                 }
-                this.state = 514;
+                this.state = 533;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
                 if (_la === TomParser.SPACE) {
                     {
-                        this.state = 513;
+                        this.state = 532;
                         this.match(TomParser.SPACE);
                     }
                 }
-                this.state = 516;
+                this.state = 535;
                 this.match(TomParser.BRACE_CLOSE);
             }
         }
@@ -2255,37 +2369,36 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
     objectPair() {
         let _localctx = new ObjectPairContext(this._ctx, this.state);
-        this.enterRule(_localctx, 70, TomParser.RULE_objectPair);
+        this.enterRule(_localctx, 74, TomParser.RULE_objectPair);
         let _la;
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 518;
+                this.state = 537;
                 this.literal();
-                this.state = 520;
+                this.state = 539;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
                 if (_la === TomParser.SPACE) {
                     {
-                        this.state = 519;
+                        this.state = 538;
                         this.match(TomParser.SPACE);
                     }
                 }
-                this.state = 522;
+                this.state = 541;
                 this.match(TomParser.COLON);
-                this.state = 524;
+                this.state = 543;
                 this._errHandler.sync(this);
                 _la = this._input.LA(1);
                 if (_la === TomParser.SPACE) {
                     {
-                        this.state = 523;
+                        this.state = 542;
                         this.match(TomParser.SPACE);
                     }
                 }
-                this.state = 526;
+                this.state = 545;
                 this.literal();
             }
         }
@@ -2304,52 +2417,14 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
-    number() {
-        let _localctx = new NumberContext(this._ctx, this.state);
-        this.enterRule(_localctx, 72, TomParser.RULE_number);
-        let _la;
-        try {
-            this.enterOuterAlt(_localctx, 1);
-            {
-                this.state = 528;
-                _la = this._input.LA(1);
-                if (!(_la === TomParser.IntegerLiteral || _la === TomParser.FloatingPointLiteral)) {
-                    this._errHandler.recoverInline(this);
-                }
-                else {
-                    if (this._input.LA(1) === Token_1.Token.EOF) {
-                        this.matchedEOF = true;
-                    }
-                    this._errHandler.reportMatch(this);
-                    this.consume();
-                }
-            }
-        }
-        catch (re) {
-            if (re instanceof RecognitionException_1.RecognitionException) {
-                _localctx.exception = re;
-                this._errHandler.reportError(this, re);
-                this._errHandler.recover(this, re);
-            }
-            else {
-                throw re;
-            }
-        }
-        finally {
-            this.exitRule();
-        }
-        return _localctx;
-    }
-    // @RuleVersion(0)
     literal() {
         let _localctx = new LiteralContext(this._ctx, this.state);
-        this.enterRule(_localctx, 74, TomParser.RULE_literal);
+        this.enterRule(_localctx, 76, TomParser.RULE_literal);
         let _la;
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 530;
+                this.state = 547;
                 _la = this._input.LA(1);
                 if (!((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << TomParser.IntegerLiteral) | (1 << TomParser.FloatingPointLiteral) | (1 << TomParser.BooleanLiteral) | (1 << TomParser.CharacterLiteral) | (1 << TomParser.StringLiteral) | (1 << TomParser.NullLiteral))) !== 0))) {
                     this._errHandler.recoverInline(this);
@@ -2378,14 +2453,61 @@ class TomParser extends Parser_1.Parser {
         }
         return _localctx;
     }
-    // @RuleVersion(0)
-    identifier() {
-        let _localctx = new IdentifierContext(this._ctx, this.state);
-        this.enterRule(_localctx, 76, TomParser.RULE_identifier);
+    parenthesizedExpression() {
+        let _localctx = new ParenthesizedExpressionContext(this._ctx, this.state);
+        this.enterRule(_localctx, 78, TomParser.RULE_parenthesizedExpression);
+        let _la;
         try {
             this.enterOuterAlt(_localctx, 1);
             {
-                this.state = 532;
+                this.state = 549;
+                this.match(TomParser.PAREN_OPEN);
+                this.state = 551;
+                this._errHandler.sync(this);
+                _la = this._input.LA(1);
+                if (_la === TomParser.SPACE) {
+                    {
+                        this.state = 550;
+                        this.match(TomParser.SPACE);
+                    }
+                }
+                this.state = 553;
+                this.expression(0);
+                this.state = 555;
+                this._errHandler.sync(this);
+                _la = this._input.LA(1);
+                if (_la === TomParser.SPACE) {
+                    {
+                        this.state = 554;
+                        this.match(TomParser.SPACE);
+                    }
+                }
+                this.state = 557;
+                this.match(TomParser.PAREN_CLOSE);
+            }
+        }
+        catch (re) {
+            if (re instanceof RecognitionException_1.RecognitionException) {
+                _localctx.exception = re;
+                this._errHandler.reportError(this, re);
+                this._errHandler.recover(this, re);
+            }
+            else {
+                throw re;
+            }
+        }
+        finally {
+            this.exitRule();
+        }
+        return _localctx;
+    }
+    identifier() {
+        let _localctx = new IdentifierContext(this._ctx, this.state);
+        this.enterRule(_localctx, 80, TomParser.RULE_identifier);
+        try {
+            this.enterOuterAlt(_localctx, 1);
+            {
+                this.state = 559;
                 this.match(TomParser.ID);
             }
         }
@@ -2406,17 +2528,26 @@ class TomParser extends Parser_1.Parser {
     }
     sempred(_localctx, ruleIndex, predIndex) {
         switch (ruleIndex) {
-            case 31:
+            case 11:
+                return this.type_sempred(_localctx, predIndex);
+            case 33:
                 return this.expression_sempred(_localctx, predIndex);
+        }
+        return true;
+    }
+    type_sempred(_localctx, predIndex) {
+        switch (predIndex) {
+            case 0:
+                return this.precpred(this._ctx, 3);
         }
         return true;
     }
     expression_sempred(_localctx, predIndex) {
         switch (predIndex) {
-            case 0:
-                return this.precpred(this._ctx, 5);
             case 1:
-                return this.precpred(this._ctx, 4);
+                return this.precpred(this._ctx, 6);
+            case 2:
+                return this.precpred(this._ctx, 5);
         }
         return true;
     }
@@ -2470,42 +2601,45 @@ TomParser.RULE_tagBody = 8;
 TomParser.RULE_assignmentDelimiter = 9;
 TomParser.RULE_typeDelimiter = 10;
 TomParser.RULE_type = 11;
-TomParser.RULE_lambdaType = 12;
-TomParser.RULE_formalParameterSequence = 13;
-TomParser.RULE_parameter = 14;
-TomParser.RULE_arrayType = 15;
-TomParser.RULE_objectType = 16;
-TomParser.RULE_objectPairType = 17;
-TomParser.RULE_descriptionDelimiter = 18;
-TomParser.RULE_description = 19;
-TomParser.RULE_descriptionLine = 20;
-TomParser.RULE_descriptionLineStart = 21;
-TomParser.RULE_descriptionText = 22;
-TomParser.RULE_descriptionLineElement = 23;
-TomParser.RULE_descriptionLineText = 24;
-TomParser.RULE_inlineTag = 25;
-TomParser.RULE_inlineTagID = 26;
-TomParser.RULE_inlineTagBody = 27;
-TomParser.RULE_braceExpression = 28;
-TomParser.RULE_braceBody = 29;
-TomParser.RULE_braceText = 30;
-TomParser.RULE_expression = 31;
-TomParser.RULE_unaryExpression = 32;
-TomParser.RULE_arrayExpression = 33;
-TomParser.RULE_objectExpression = 34;
-TomParser.RULE_objectPair = 35;
-TomParser.RULE_number = 36;
-TomParser.RULE_literal = 37;
-TomParser.RULE_identifier = 38;
+TomParser.RULE_primaryType = 12;
+TomParser.RULE_parenthesizedType = 13;
+TomParser.RULE_lambdaType = 14;
+TomParser.RULE_formalParameterSequence = 15;
+TomParser.RULE_parameter = 16;
+TomParser.RULE_arrayType = 17;
+TomParser.RULE_objectType = 18;
+TomParser.RULE_objectPairType = 19;
+TomParser.RULE_descriptionDelimiter = 20;
+TomParser.RULE_description = 21;
+TomParser.RULE_descriptionLine = 22;
+TomParser.RULE_descriptionLineStart = 23;
+TomParser.RULE_descriptionText = 24;
+TomParser.RULE_descriptionLineElement = 25;
+TomParser.RULE_descriptionLineText = 26;
+TomParser.RULE_inlineTag = 27;
+TomParser.RULE_inlineTagName = 28;
+TomParser.RULE_inlineTagBody = 29;
+TomParser.RULE_braceExpression = 30;
+TomParser.RULE_braceBody = 31;
+TomParser.RULE_braceText = 32;
+TomParser.RULE_expression = 33;
+TomParser.RULE_unaryExpression = 34;
+TomParser.RULE_arrayExpression = 35;
+TomParser.RULE_objectExpression = 36;
+TomParser.RULE_objectPair = 37;
+TomParser.RULE_literal = 38;
+TomParser.RULE_parenthesizedExpression = 39;
+TomParser.RULE_identifier = 40;
 TomParser.ruleNames = [
     "documentation", "body", "whitespace", "annotations", "tag", "tagName",
     "tagID", "optionalTagID", "tagBody", "assignmentDelimiter", "typeDelimiter",
-    "type", "lambdaType", "formalParameterSequence", "parameter", "arrayType",
-    "objectType", "objectPairType", "descriptionDelimiter", "description",
-    "descriptionLine", "descriptionLineStart", "descriptionText", "descriptionLineElement",
-    "descriptionLineText", "inlineTag", "inlineTagID", "inlineTagBody", "braceExpression",
-    "braceBody", "braceText", "expression", "unaryExpression", "arrayExpression",
-    "objectExpression", "objectPair", "number", "literal", "identifier"
+    "type", "primaryType", "parenthesizedType", "lambdaType", "formalParameterSequence",
+    "parameter", "arrayType", "objectType", "objectPairType", "descriptionDelimiter",
+    "description", "descriptionLine", "descriptionLineStart", "descriptionText",
+    "descriptionLineElement", "descriptionLineText", "inlineTag", "inlineTagName",
+    "inlineTagBody", "braceExpression", "braceBody", "braceText", "expression",
+    "unaryExpression", "arrayExpression", "objectExpression", "objectPair",
+    "literal", "parenthesizedExpression", "identifier"
 ];
 TomParser._LITERAL_NAMES = [
     undefined, undefined, undefined, undefined, undefined, undefined, undefined,
@@ -2522,282 +2656,303 @@ TomParser._SYMBOLIC_NAMES = [
     "BRACKET_OPEN", "BRACKET_CLOSE"
 ];
 TomParser.VOCABULARY = new VocabularyImpl_1.VocabularyImpl(TomParser._LITERAL_NAMES, TomParser._SYMBOLIC_NAMES, []);
-TomParser._serializedATN = "\x03\uAF6F\u8320\u479D\uB75C\u4880\u1605\u191C\uAB37\x03!\u0219\x04\x02" +
+TomParser._serializedATNSegments = 2;
+TomParser._serializedATNSegment0 = "\x03\uAF6F\u8320\u479D\uB75C\u4880\u1605\u191C\uAB37\x03!\u0234\x04\x02" +
     "\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06\x04\x07" +
     "\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r\t\r\x04" +
     "\x0E\t\x0E\x04\x0F\t\x0F\x04\x10\t\x10\x04\x11\t\x11\x04\x12\t\x12\x04" +
     "\x13\t\x13\x04\x14\t\x14\x04\x15\t\x15\x04\x16\t\x16\x04\x17\t\x17\x04" +
     "\x18\t\x18\x04\x19\t\x19\x04\x1A\t\x1A\x04\x1B\t\x1B\x04\x1C\t\x1C\x04" +
     "\x1D\t\x1D\x04\x1E\t\x1E\x04\x1F\t\x1F\x04 \t \x04!\t!\x04\"\t\"\x04#" +
-    "\t#\x04$\t$\x04%\t%\x04&\t&\x04\'\t\'\x04(\t(\x03\x02\x03\x02\x03\x02" +
-    "\x05\x02T\n\x02\x03\x02\x03\x02\x05\x02X\n\x02\x03\x03\x07\x03[\n\x03" +
-    "\f\x03\x0E\x03^\v\x03\x03\x03\x03\x03\x03\x04\x03\x04\x03\x05\x03\x05" +
-    "\x03\x05\x07\x05g\n\x05\f\x05\x0E\x05j\v\x05\x03\x06\x03\x06\x03\x06\x03" +
-    "\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03" +
-    "\x06\x03\x06\x03\x06\x05\x06{\n\x06\x03\x06\x03\x06\x05\x06\x7F\n\x06" +
+    "\t#\x04$\t$\x04%\t%\x04&\t&\x04\'\t\'\x04(\t(\x04)\t)\x04*\t*\x03\x02" +
+    "\x03\x02\x03\x02\x05\x02X\n\x02\x03\x02\x03\x02\x05\x02\\\n\x02\x03\x03" +
+    "\x07\x03_\n\x03\f\x03\x0E\x03b\v\x03\x03\x03\x03\x03\x03\x04\x03\x04\x03" +
+    "\x05\x03\x05\x03\x05\x07\x05k\n\x05\f\x05\x0E\x05n\v\x05\x03\x06\x03\x06" +
     "\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06" +
-    "\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x05\x06\x91\n" +
+    "\x03\x06\x03\x06\x03\x06\x03\x06\x05\x06\x7F\n\x06\x03\x06\x03\x06\x05" +
+    "\x06\x83\n\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06" +
+    "\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06" +
+    "\x05\x06\x95\n\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03" +
+    "\x06\x03\x06\x03\x06\x03\x06\x05\x06\xA1\n\x06\x03\x06\x03\x06\x05\x06" +
+    "\xA5\n\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x05\x06\xAD" +
+    "\n\x06\x03\x06\x03\x06\x05\x06\xB1\n\x06\x03\x06\x03\x06\x05\x06\xB5\n" +
+    "\x06\x03\x06\x03\x06\x05\x06\xB9\n\x06\x03\x06\x03\x06\x03\x06\x03\x06" +
+    "\x03\x06\x03\x06\x05\x06\xC1\n\x06\x03\x06\x03\x06\x05\x06\xC5\n\x06\x03" +
     "\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03" +
-    "\x06\x03\x06\x05\x06\x9D\n\x06\x03\x06\x03\x06\x05\x06\xA1\n\x06\x03\x06" +
-    "\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x05\x06\xA9\n\x06\x03\x06\x03" +
-    "\x06\x05\x06\xAD\n\x06\x03\x06\x03\x06\x05\x06\xB1\n\x06\x03\x06\x03\x06" +
-    "\x05\x06\xB5\n\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x05" +
-    "\x06\xBD\n\x06\x03\x06\x03\x06\x05\x06\xC1\n\x06\x03\x06\x03\x06\x03\x06" +
-    "\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x06\x05\x06\xCD\n" +
-    "\x06\x03\x06\x03\x06\x05\x06\xD1\n\x06\x03\x06\x03\x06\x05\x06\xD5\n\x06" +
-    "\x03\x06\x03\x06\x05\x06\xD9\n\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03" +
-    "\x06\x03\x06\x05\x06\xE1\n\x06\x03\x07\x03\x07\x03\x07\x03\b\x03\b\x05" +
-    "\b\xE8\n\b\x03\t\x03\t\x03\t\x03\n\x03\n\x05\n\xEF\n\n\x03\v\x03\v\x03" +
-    "\f\x03\f\x03\r\x03\r\x03\r\x05\r\xF8\n\r\x03\r\x03\r\x05\r\xFC\n\r\x03" +
-    "\r\x07\r\xFF\n\r\f\r\x0E\r\u0102\v\r\x03\r\x03\r\x05\r\u0106\n\r\x03\r" +
-    "\x03\r\x05\r\u010A\n\r\x03\r\x03\r\x03\r\x03\r\x03\r\x05\r\u0111\n\r\x03" +
-    "\x0E\x03\x0E\x05\x0E\u0115\n\x0E\x03\x0E\x03\x0E\x05\x0E\u0119\n\x0E\x03" +
-    "\x0E\x03\x0E\x05\x0E\u011D\n\x0E\x03\x0E\x03\x0E\x05\x0E\u0121\n\x0E\x03" +
-    "\x0E\x03\x0E\x03\x0F\x03\x0F\x03\x0F\x05\x0F\u0128\n\x0F\x03\x0F\x07\x0F" +
-    "\u012B\n\x0F\f\x0F\x0E\x0F\u012E\v\x0F\x03\x10\x03\x10\x05\x10\u0132\n" +
-    "\x10\x03\x10\x03\x10\x05\x10\u0136\n\x10\x03\x10\x05\x10\u0139\n\x10\x03" +
-    "\x11\x03\x11\x05\x11\u013D\n\x11\x03\x11\x05\x11\u0140\n\x11\x03\x11\x03" +
-    "\x11\x05\x11\u0144\n\x11\x03\x11\x07\x11\u0147\n\x11\f\x11\x0E\x11\u014A" +
-    "\v\x11\x03\x11\x05\x11\u014D\n\x11\x03\x11\x03\x11\x03\x12\x03\x12\x05" +
-    "\x12\u0153\n\x12\x03\x12\x05\x12\u0156\n\x12\x03\x12\x05\x12\u0159\n\x12" +
-    "\x03\x12\x03\x12\x03\x13\x03\x13\x05\x13\u015F\n\x13\x03\x13\x03\x13\x05" +
-    "\x13\u0163\n\x13\x03\x13\x03\x13\x03\x14\x03\x14\x03\x15\x03\x15\x07\x15" +
-    "\u016B\n\x15\f\x15\x0E\x15\u016E\v\x15\x03\x16\x03\x16\x07\x16\u0172\n" +
-    "\x16\f\x16\x0E\x16\u0175\v\x16\x03\x16\x03\x16\x07\x16\u0179\n\x16\f\x16" +
-    "\x0E\x16\u017C\v\x16\x05\x16\u017E\n\x16\x03\x17\x05\x17\u0181\n\x17\x03" +
-    "\x17\x06\x17\u0184\n\x17\r\x17\x0E\x17\u0185\x03\x17\x03\x17\x03\x17\x07" +
-    "\x17\u018B\n\x17\f\x17\x0E\x17\u018E\v\x17\x03\x18\x03\x18\x03\x19\x03" +
-    "\x19\x05\x19\u0194\n\x19\x03\x1A\x03\x1A\x03\x1A\x06\x1A\u0199\n\x1A\r" +
-    "\x1A\x0E\x1A\u019A\x03\x1B\x03\x1B\x03\x1B\x07\x1B\u01A0\n\x1B\f\x1B\x0E" +
-    "\x1B\u01A3\v\x1B\x03\x1B\x05\x1B\u01A6\n\x1B\x03\x1B\x03\x1B\x03\x1C\x03" +
-    "\x1C\x03\x1D\x06\x1D\u01AD\n\x1D\r\x1D\x0E\x1D\u01AE\x03\x1E\x03\x1E\x07" +
-    "\x1E\u01B3\n\x1E\f\x1E\x0E\x1E\u01B6\v\x1E\x03\x1E\x03\x1E\x03\x1F\x03" +
-    "\x1F\x03\x1F\x07\x1F\u01BD\n\x1F\f\x1F\x0E\x1F\u01C0\v\x1F\x03\x1F\x07" +
-    "\x1F\u01C3\n\x1F\f\x1F\x0E\x1F\u01C6\v\x1F\x05\x1F\u01C8\n\x1F\x03 \x03" +
-    " \x03!\x03!\x03!\x03!\x03!\x05!\u01D1\n!\x03!\x03!\x05!\u01D5\n!\x03!" +
-    "\x03!\x05!\u01D9\n!\x03!\x03!\x03!\x05!\u01DE\n!\x03!\x03!\x05!\u01E2" +
-    "\n!\x03!\x07!\u01E5\n!\f!\x0E!\u01E8\v!\x03\"\x03\"\x03\"\x03#\x03#\x05" +
-    "#\u01EF\n#\x03#\x03#\x05#\u01F3\n#\x03#\x07#\u01F6\n#\f#\x0E#\u01F9\v" +
-    "#\x03#\x03#\x03$\x03$\x05$\u01FF\n$\x03$\x05$\u0202\n$\x03$\x05$\u0205" +
-    "\n$\x03$\x03$\x03%\x03%\x05%\u020B\n%\x03%\x03%\x05%\u020F\n%\x03%\x03" +
-    "%\x03&\x03&\x03\'\x03\'\x03(\x03(\x03(\x02\x02\x03@)\x02\x02\x04\x02\x06" +
-    "\x02\b\x02\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14\x02\x16\x02\x18\x02" +
-    "\x1A\x02\x1C\x02\x1E\x02 \x02\"\x02$\x02&\x02(\x02*\x02,\x02.\x020\x02" +
-    "2\x024\x026\x028\x02:\x02<\x02>\x02@\x02B\x02D\x02F\x02H\x02J\x02L\x02" +
-    "N\x02\x02\v\x03\x02\n\v\x03\x02\x17\x18\x07\x02\t\t\f\f\x0F\x0F\x11\x13" +
-    "\x1C\x1D\x05\x02\t\f\x11\x11\x13\x13\x03\x02\x10\x11\x03\x02\x0E\x0F\x04" +
-    "\x02\x0E\x0F\x1A\x1A\x03\x02\x03\x04\x03\x02\x03\b\u0251\x02W\x03\x02" +
-    "\x02\x02\x04\\\x03\x02\x02\x02\x06a\x03\x02\x02\x02\bc\x03\x02\x02\x02" +
-    "\n\xE0\x03\x02\x02\x02\f\xE2\x03\x02\x02\x02\x0E\xE7\x03\x02\x02\x02\x10" +
-    "\xE9\x03\x02\x02\x02\x12\xEE\x03\x02\x02\x02\x14\xF0\x03\x02\x02\x02\x16" +
-    "\xF2\x03\x02\x02\x02\x18\u0110\x03\x02\x02\x02\x1A\u0112\x03\x02\x02\x02" +
-    "\x1C\u0124\x03\x02\x02\x02\x1E\u012F\x03\x02\x02\x02 \u013A\x03\x02\x02" +
-    "\x02\"\u0150\x03\x02\x02\x02$\u015C\x03\x02\x02\x02&\u0166\x03\x02\x02" +
-    "\x02(\u0168\x03\x02\x02\x02*\u017D\x03\x02\x02\x02,\u0180\x03\x02\x02" +
-    "\x02.\u018F\x03\x02\x02\x020\u0193\x03\x02\x02\x022\u0198\x03\x02\x02" +
-    "\x024\u019C\x03\x02\x02\x026\u01A9\x03\x02\x02\x028\u01AC\x03\x02\x02" +
-    "\x02:\u01B0\x03\x02\x02\x02<\u01C7\x03\x02\x02\x02>\u01C9\x03\x02\x02" +
-    "\x02@\u01D0\x03\x02\x02\x02B\u01E9\x03\x02\x02\x02D\u01EC\x03\x02\x02" +
-    "\x02F\u01FC\x03\x02\x02\x02H\u0208\x03\x02\x02\x02J\u0212\x03\x02\x02" +
-    "\x02L\u0214\x03\x02\x02\x02N\u0216\x03\x02\x02\x02PX\x07\x02\x02\x03Q" +
-    "S\x05\x04\x03\x02RT\x07\n\x02\x02SR\x03\x02\x02\x02ST\x03\x02\x02\x02" +
-    "TU\x03\x02\x02\x02UV\x07\x02\x02\x03VX\x03\x02\x02\x02WP\x03\x02\x02\x02" +
-    "WQ\x03\x02\x02\x02X\x03\x03\x02\x02\x02Y[\x05\x06\x04\x02ZY\x03\x02\x02" +
-    "\x02[^\x03\x02\x02\x02\\Z\x03\x02\x02\x02\\]\x03\x02\x02\x02]_\x03\x02" +
-    "\x02\x02^\\\x03\x02\x02\x02_`\x05\b\x05\x02`\x05\x03\x02\x02\x02ab\t\x02" +
-    "\x02\x02b\x07\x03\x02\x02\x02ch\x05\n\x06\x02de\x07\n\x02\x02eg\x05\n" +
-    "\x06\x02fd\x03\x02\x02\x02gj\x03\x02\x02\x02hf\x03\x02\x02\x02hi\x03\x02" +
-    "\x02\x02i\t\x03\x02\x02\x02jh\x03\x02\x02\x02k\xE1\x05\f\x07\x02lm\x05" +
-    "\f\x07\x02mn\x07\v\x02\x02no\x05\x0E\b\x02o\xE1\x03\x02\x02\x02pq\x05" +
-    "\f\x07\x02qr\x07\v\x02\x02rs\x05&\x14\x02st\x07\v\x02\x02tu\x05\x12\n" +
-    "\x02u\xE1\x03\x02\x02\x02vw\x05\f\x07\x02wx\x07\v\x02\x02xz\x05\x0E\b" +
-    "\x02y{\x07\v\x02\x02zy\x03\x02\x02\x02z{\x03\x02\x02\x02{|\x03\x02\x02" +
-    "\x02|~\x05\x14\v\x02}\x7F\x07\v\x02\x02~}\x03\x02\x02\x02~\x7F\x03\x02" +
-    "\x02\x02\x7F\x80\x03\x02\x02\x02\x80\x81\x05@!\x02\x81\xE1\x03\x02\x02" +
-    "\x02\x82\x83\x05\f\x07\x02\x83\x84\x07\v\x02\x02\x84\x85\x05\x0E\b\x02" +
-    "\x85\x86\x07\v\x02\x02\x86\x87\x05&\x14\x02\x87\x88\x07\v\x02\x02\x88" +
-    "\x89\x05\x12\n\x02\x89\xE1\x03\x02\x02\x02\x8A\x8B\x05\f\x07\x02\x8B\x8C" +
-    "\x07\v\x02\x02\x8C\x8D\x05\x0E\b\x02\x8D\x8E\x07\v\x02\x02\x8E\x90\x05" +
-    "\x14\v\x02\x8F\x91\x07\v\x02\x02\x90\x8F\x03\x02\x02\x02\x90\x91\x03\x02" +
-    "\x02\x02\x91\x92\x03\x02\x02\x02\x92\x93\x05@!\x02\x93\x94\x07\v\x02\x02" +
-    "\x94\x95\x05&\x14\x02\x95\x96\x07\v\x02\x02\x96\x97\x05\x12\n\x02\x97" +
-    "\xE1\x03\x02\x02\x02\x98\x99\x05\f\x07\x02\x99\x9A\x07\v\x02\x02\x9A\x9C" +
-    "\x05\x0E\b\x02\x9B\x9D\x07\v\x02\x02\x9C\x9B\x03\x02\x02\x02\x9C\x9D\x03" +
-    "\x02\x02\x02\x9D\x9E\x03\x02\x02\x02\x9E\xA0\x05\x16\f\x02\x9F\xA1\x07" +
-    "\v\x02\x02\xA0\x9F\x03\x02\x02\x02\xA0\xA1\x03\x02\x02\x02\xA1\xA2\x03" +
-    "\x02\x02\x02\xA2\xA3\x05\x18\r\x02\xA3\xE1\x03\x02\x02\x02\xA4\xA5\x05" +
-    "\f\x07\x02\xA5\xA6\x07\v\x02\x02\xA6\xA8\x05\x0E\b\x02\xA7\xA9\x07\v\x02" +
-    "\x02\xA8\xA7\x03\x02\x02\x02\xA8\xA9\x03\x02\x02\x02\xA9\xAA\x03\x02\x02" +
-    "\x02\xAA\xAC\x05\x16\f\x02\xAB\xAD\x07\v\x02\x02\xAC\xAB\x03\x02\x02\x02" +
-    "\xAC\xAD\x03\x02\x02\x02\xAD\xAE\x03\x02\x02\x02\xAE\xB0\x05\x18\r\x02" +
-    "\xAF\xB1\x07\v\x02\x02\xB0\xAF\x03\x02\x02\x02\xB0\xB1\x03\x02\x02\x02" +
-    "\xB1\xB2\x03\x02\x02\x02\xB2\xB4\x05\x14\v\x02\xB3\xB5\x07\v\x02\x02\xB4" +
-    "\xB3\x03\x02\x02\x02\xB4\xB5\x03\x02\x02\x02\xB5\xB6\x03\x02\x02\x02\xB6" +
-    "\xB7\x05@!\x02\xB7\xE1\x03\x02\x02\x02\xB8\xB9\x05\f\x07\x02\xB9\xBA\x07" +
-    "\v\x02\x02\xBA\xBC\x05\x0E\b\x02\xBB\xBD\x07\v\x02\x02\xBC\xBB\x03\x02" +
-    "\x02\x02\xBC\xBD\x03\x02\x02\x02\xBD\xBE\x03\x02\x02\x02\xBE\xC0\x05\x16" +
-    "\f\x02\xBF\xC1\x07\v\x02\x02\xC0\xBF\x03\x02\x02\x02\xC0\xC1\x03\x02\x02" +
-    "\x02\xC1\xC2\x03\x02\x02\x02\xC2\xC3\x05\x18\r\x02\xC3\xC4\x07\v\x02\x02" +
-    "\xC4\xC5\x05&\x14\x02\xC5\xC6\x07\v\x02\x02\xC6\xC7\x05\x12\n\x02\xC7" +
-    "\xE1\x03\x02\x02\x02\xC8\xC9\x05\f\x07\x02\xC9\xCA\x07\v\x02\x02\xCA\xCC" +
-    "\x05\x0E\b\x02\xCB\xCD\x07\v\x02\x02\xCC\xCB\x03\x02\x02\x02\xCC\xCD\x03" +
-    "\x02\x02\x02\xCD\xCE\x03\x02\x02\x02\xCE\xD0\x05\x16\f\x02\xCF\xD1\x07" +
-    "\v\x02\x02\xD0\xCF\x03\x02\x02\x02\xD0\xD1\x03\x02\x02\x02\xD1\xD2\x03" +
-    "\x02\x02\x02\xD2\xD4\x05\x18\r\x02\xD3\xD5\x07\v\x02\x02\xD4\xD3\x03\x02" +
-    "\x02\x02\xD4\xD5\x03\x02\x02\x02\xD5\xD6\x03\x02\x02\x02\xD6\xD8\x05\x14" +
-    "\v\x02\xD7\xD9\x07\v\x02\x02\xD8\xD7\x03\x02\x02\x02\xD8\xD9\x03\x02\x02" +
-    "\x02\xD9\xDA\x03\x02\x02\x02\xDA\xDB\x05@!\x02\xDB\xDC\x07\v\x02\x02\xDC" +
-    "\xDD\x05&\x14\x02\xDD\xDE\x07\v\x02\x02\xDE\xDF\x05\x12\n\x02\xDF\xE1" +
-    "\x03\x02\x02\x02\xE0k\x03\x02\x02\x02\xE0l\x03\x02\x02\x02\xE0p\x03\x02" +
-    "\x02\x02\xE0v\x03\x02\x02\x02\xE0\x82\x03\x02\x02\x02\xE0\x8A\x03\x02" +
-    "\x02\x02\xE0\x98\x03\x02\x02\x02\xE0\xA4\x03\x02\x02\x02\xE0\xB8\x03\x02" +
-    "\x02\x02\xE0\xC8\x03\x02\x02\x02\xE1\v\x03\x02\x02\x02\xE2\xE3\x07\r\x02" +
-    "\x02\xE3\xE4\x05N(\x02\xE4\r\x03\x02\x02\x02\xE5\xE8\x05\x10\t\x02\xE6" +
-    "\xE8\x05N(\x02\xE7\xE5\x03\x02\x02\x02\xE7\xE6\x03\x02\x02\x02\xE8\x0F" +
-    "\x03\x02\x02\x02\xE9\xEA\x05N(\x02\xEA\xEB\x07\x16\x02\x02\xEB\x11\x03" +
-    "\x02\x02\x02\xEC\xEF\x05(\x15\x02\xED\xEF\x054\x1B\x02\xEE\xEC\x03\x02" +
-    "\x02\x02\xEE\xED\x03\x02\x02\x02\xEF\x13\x03\x02\x02\x02\xF0\xF1\x07\x15" +
-    "\x02\x02\xF1\x15\x03\x02\x02\x02\xF2\xF3\x07\x12\x02\x02\xF3\x17\x03\x02" +
-    "\x02\x02\xF4\u0111\x05N(\x02\xF5\u0100\x05N(\x02\xF6\xF8\x07\v\x02\x02" +
-    "\xF7\xF6\x03\x02\x02\x02\xF7\xF8\x03\x02\x02\x02\xF8\xF9\x03\x02\x02\x02" +
-    "\xF9\xFB\t\x03\x02\x02\xFA\xFC\x07\v\x02\x02\xFB\xFA\x03\x02\x02\x02\xFB" +
-    "\xFC\x03\x02\x02\x02\xFC\xFD\x03\x02\x02\x02\xFD\xFF\x05\x18\r\x02\xFE" +
-    "\xF7\x03\x02\x02\x02\xFF\u0102\x03\x02\x02\x02\u0100\xFE\x03\x02\x02\x02" +
-    "\u0100\u0101\x03\x02\x02\x02\u0101\u0111\x03\x02\x02\x02\u0102\u0100\x03" +
-    "\x02\x02\x02\u0103\u0105\x07\x1E\x02\x02\u0104\u0106\x07\v\x02\x02\u0105" +
-    "\u0104\x03\x02\x02\x02\u0105\u0106\x03\x02\x02\x02\u0106\u0107\x03\x02" +
-    "\x02\x02\u0107\u0109\x05\x18\r\x02\u0108\u010A\x07\v\x02\x02\u0109\u0108" +
-    "\x03\x02\x02\x02\u0109\u010A\x03\x02\x02\x02\u010A\u010B\x03\x02\x02\x02" +
-    "\u010B\u010C\x07\x1F\x02\x02\u010C\u0111\x03\x02\x02\x02\u010D\u0111\x05" +
-    "\x1A\x0E\x02\u010E\u0111\x05 \x11\x02\u010F\u0111\x05\"\x12\x02\u0110" +
-    "\xF4\x03\x02\x02\x02\u0110\xF5\x03\x02\x02\x02\u0110\u0103\x03\x02\x02" +
-    "\x02\u0110\u010D\x03\x02\x02\x02\u0110\u010E\x03\x02\x02\x02\u0110\u010F" +
-    "\x03\x02\x02\x02\u0111\x19\x03\x02\x02\x02\u0112\u0114\x07\x1E\x02\x02" +
-    "\u0113\u0115\x07\v\x02\x02\u0114\u0113\x03\x02\x02\x02\u0114\u0115\x03" +
-    "\x02\x02\x02\u0115\u0116\x03\x02\x02\x02\u0116\u0118\x05\x1C\x0F\x02\u0117" +
-    "\u0119\x07\v\x02\x02\u0118\u0117\x03\x02\x02\x02\u0118\u0119\x03\x02\x02" +
-    "\x02\u0119\u011A\x03\x02\x02\x02\u011A\u011C\x07\x1F\x02\x02\u011B\u011D" +
-    "\x07\v\x02\x02\u011C\u011B\x03\x02\x02\x02\u011C\u011D\x03\x02\x02\x02" +
-    "\u011D\u011E\x03\x02\x02\x02\u011E\u0120\x07\x19\x02\x02\u011F\u0121\x07" +
-    "\v\x02\x02\u0120\u011F\x03\x02\x02\x02\u0120\u0121\x03\x02\x02\x02\u0121" +
-    "\u0122\x03\x02\x02\x02\u0122\u0123\x05\x18\r\x02\u0123\x1B\x03\x02\x02" +
-    "\x02\u0124\u012C\x05\x1E\x10\x02\u0125\u0127\x07\x14\x02\x02\u0126\u0128" +
-    "\x07\v\x02\x02\u0127\u0126\x03\x02\x02\x02\u0127\u0128\x03\x02\x02\x02" +
-    "\u0128\u0129\x03\x02\x02\x02\u0129\u012B\x05\x1E\x10\x02\u012A\u0125\x03" +
-    "\x02\x02\x02\u012B\u012E\x03\x02\x02\x02\u012C\u012A\x03\x02\x02\x02\u012C" +
-    "\u012D\x03\x02\x02\x02\u012D\x1D\x03\x02\x02\x02\u012E\u012C\x03\x02\x02" +
-    "\x02\u012F\u0138\x05N(\x02\u0130\u0132\x07\v\x02\x02\u0131\u0130\x03\x02" +
-    "\x02\x02\u0131\u0132\x03\x02\x02\x02\u0132\u0133\x03\x02\x02\x02\u0133" +
-    "\u0135\x07\x12\x02\x02\u0134\u0136\x07\v\x02\x02\u0135\u0134\x03\x02\x02" +
-    "\x02\u0135\u0136\x03\x02\x02\x02\u0136\u0137\x03\x02\x02\x02\u0137\u0139" +
-    "\x05\x18\r\x02\u0138\u0131\x03\x02\x02\x02\u0138\u0139\x03\x02\x02\x02" +
-    "\u0139\x1F\x03\x02\x02\x02\u013A\u013C\x07 \x02\x02\u013B\u013D\x07\v" +
-    "\x02\x02\u013C\u013B\x03\x02\x02\x02\u013C\u013D\x03\x02\x02\x02\u013D" +
-    "\u013F\x03\x02\x02\x02\u013E\u0140\x05\x18\r\x02\u013F\u013E\x03\x02\x02" +
-    "\x02\u013F\u0140\x03\x02\x02\x02\u0140\u0148\x03\x02\x02\x02\u0141\u0143" +
-    "\x07\x14\x02\x02\u0142\u0144\x07\v\x02\x02\u0143\u0142\x03\x02\x02\x02" +
-    "\u0143\u0144\x03\x02\x02\x02\u0144\u0145\x03\x02\x02\x02\u0145\u0147\x05" +
-    "\x18\r\x02\u0146\u0141\x03\x02\x02\x02\u0147\u014A\x03\x02\x02\x02\u0148" +
-    "\u0146\x03\x02\x02\x02\u0148\u0149\x03\x02\x02\x02\u0149\u014C\x03\x02" +
-    "\x02\x02\u014A\u0148\x03\x02\x02\x02\u014B\u014D\x07\v\x02\x02\u014C\u014B" +
-    "\x03\x02\x02\x02\u014C\u014D\x03\x02\x02\x02\u014D\u014E\x03\x02\x02\x02" +
-    "\u014E\u014F\x07!\x02\x02\u014F!\x03\x02\x02\x02\u0150\u0152\x07\x1C\x02" +
-    "\x02\u0151\u0153\x07\v\x02\x02\u0152\u0151\x03\x02\x02\x02\u0152\u0153" +
-    "\x03\x02\x02\x02\u0153\u0155\x03\x02\x02\x02\u0154\u0156\x05$\x13\x02" +
-    "\u0155\u0154\x03\x02\x02\x02\u0155\u0156\x03\x02\x02\x02\u0156\u0158\x03" +
-    "\x02\x02\x02\u0157\u0159\x07\v\x02\x02\u0158\u0157\x03\x02\x02\x02\u0158" +
-    "\u0159\x03\x02\x02\x02\u0159\u015A\x03\x02\x02\x02\u015A\u015B\x07\x1D" +
-    "\x02\x02\u015B#\x03\x02\x02\x02\u015C\u015E\x05\x18\r\x02\u015D\u015F" +
-    "\x07\v\x02\x02\u015E\u015D\x03\x02\x02\x02\u015E\u015F\x03\x02\x02\x02" +
-    "\u015F\u0160\x03\x02\x02\x02\u0160\u0162\x07\x12\x02\x02\u0161\u0163\x07" +
-    "\v\x02\x02\u0162\u0161\x03\x02\x02\x02\u0162\u0163\x03\x02\x02\x02\u0163" +
-    "\u0164\x03\x02\x02\x02\u0164\u0165\x05\x18\r\x02\u0165%\x03\x02\x02\x02" +
-    "\u0166\u0167\x07\x0F\x02\x02\u0167\'\x03\x02\x02\x02\u0168\u016C\x05*" +
-    "\x16\x02\u0169\u016B\x05*\x16\x02\u016A\u0169\x03\x02\x02\x02\u016B\u016E" +
-    "\x03\x02\x02\x02\u016C\u016A\x03\x02\x02\x02\u016C\u016D\x03\x02\x02\x02" +
-    "\u016D)\x03\x02\x02\x02\u016E\u016C\x03\x02\x02\x02\u016F\u0173\x05,\x17" +
-    "\x02\u0170\u0172\x050\x19\x02\u0171\u0170\x03\x02\x02\x02\u0172\u0175" +
-    "\x03\x02\x02\x02\u0173\u0171\x03\x02\x02\x02\u0173\u0174\x03\x02\x02\x02" +
-    "\u0174\u017E\x03\x02\x02\x02\u0175\u0173\x03\x02\x02\x02\u0176\u017A\x05" +
-    "4\x1B\x02\u0177\u0179\x050\x19\x02\u0178\u0177\x03\x02\x02\x02\u0179\u017C" +
-    "\x03\x02\x02\x02\u017A\u0178\x03\x02\x02\x02\u017A\u017B\x03\x02\x02\x02" +
-    "\u017B\u017E\x03\x02\x02\x02\u017C\u017A\x03\x02\x02\x02\u017D\u016F\x03" +
-    "\x02\x02\x02\u017D\u0176\x03\x02\x02\x02\u017E+\x03\x02\x02\x02\u017F" +
-    "\u0181\x07\v\x02\x02\u0180\u017F\x03\x02\x02\x02\u0180\u0181\x03\x02\x02" +
-    "\x02\u0181\u0183\x03\x02\x02\x02\u0182\u0184\x05.\x18\x02\u0183\u0182" +
-    "\x03\x02\x02\x02\u0184\u0185\x03\x02\x02\x02\u0185\u0183\x03\x02\x02\x02" +
-    "\u0185\u0186\x03\x02\x02\x02\u0186\u018C\x03\x02\x02\x02\u0187\u018B\x05" +
-    ".\x18\x02\u0188\u018B\x07\v\x02\x02\u0189\u018B\x07\r\x02\x02\u018A\u0187" +
-    "\x03\x02\x02\x02\u018A\u0188\x03\x02\x02\x02\u018A\u0189\x03\x02\x02\x02" +
-    "\u018B\u018E\x03\x02\x02\x02\u018C\u018A\x03\x02\x02\x02\u018C\u018D\x03" +
-    "\x02\x02\x02\u018D-\x03\x02\x02\x02\u018E\u018C\x03\x02\x02\x02\u018F" +
-    "\u0190\t\x04\x02\x02\u0190/\x03\x02\x02\x02\u0191\u0194\x054\x1B\x02\u0192" +
-    "\u0194\x052\x1A\x02\u0193\u0191\x03\x02\x02\x02\u0193\u0192\x03\x02\x02" +
-    "\x02\u01941\x03\x02\x02\x02\u0195\u0199\x05.\x18\x02\u0196\u0199\x07\v" +
-    "\x02\x02\u0197\u0199\x07\r\x02\x02\u0198\u0195\x03\x02\x02\x02\u0198\u0196" +
-    "\x03\x02\x02\x02\u0198\u0197\x03\x02\x02\x02\u0199\u019A\x03\x02\x02\x02" +
-    "\u019A\u0198\x03\x02\x02\x02\u019A\u019B\x03\x02\x02\x02\u019B3\x03\x02" +
-    "\x02\x02\u019C\u019D\x07\x1B\x02\x02\u019D\u01A1\x056\x1C\x02\u019E\u01A0" +
-    "\x07\v\x02\x02\u019F\u019E\x03\x02\x02\x02\u01A0\u01A3\x03\x02\x02\x02" +
-    "\u01A1\u019F\x03\x02\x02\x02\u01A1\u01A2\x03\x02\x02\x02\u01A2\u01A5\x03" +
-    "\x02\x02\x02\u01A3\u01A1\x03\x02\x02\x02\u01A4\u01A6\x058\x1D\x02\u01A5" +
-    "\u01A4\x03\x02\x02\x02\u01A5\u01A6\x03\x02\x02\x02\u01A6\u01A7\x03\x02" +
-    "\x02\x02\u01A7\u01A8\x07\x1D\x02\x02\u01A85\x03\x02\x02\x02\u01A9\u01AA" +
-    "\x05N(\x02\u01AA7\x03\x02\x02\x02\u01AB\u01AD\x05<\x1F\x02\u01AC\u01AB" +
-    "\x03\x02\x02\x02\u01AD\u01AE\x03\x02\x02\x02\u01AE\u01AC\x03\x02\x02\x02" +
-    "\u01AE\u01AF\x03\x02\x02\x02\u01AF9\x03\x02\x02\x02\u01B0\u01B4\x07\x1C" +
-    "\x02\x02\u01B1\u01B3\x05<\x1F\x02\u01B2\u01B1\x03\x02\x02\x02\u01B3\u01B6" +
-    "\x03\x02\x02\x02\u01B4\u01B2\x03\x02\x02\x02\u01B4\u01B5\x03\x02\x02\x02" +
-    "\u01B5\u01B7\x03\x02\x02\x02\u01B6\u01B4\x03\x02\x02\x02\u01B7\u01B8\x07" +
-    "\x1D\x02\x02\u01B8;\x03\x02\x02\x02\u01B9\u01C8\x05:\x1E\x02\u01BA\u01C4" +
-    "\x05> \x02\u01BB\u01BD\x07\n\x02\x02\u01BC\u01BB\x03\x02\x02\x02\u01BD" +
-    "\u01C0\x03\x02\x02\x02\u01BE\u01BC\x03\x02\x02\x02\u01BE\u01BF\x03\x02" +
-    "\x02\x02\u01BF\u01C1\x03\x02\x02\x02\u01C0\u01BE\x03\x02\x02\x02\u01C1" +
-    "\u01C3\x05> \x02\u01C2\u01BE\x03\x02\x02\x02\u01C3\u01C6\x03\x02\x02\x02" +
-    "\u01C4\u01C2\x03\x02\x02\x02\u01C4\u01C5\x03\x02\x02\x02\u01C5\u01C8\x03" +
-    "\x02\x02\x02\u01C6\u01C4\x03\x02\x02\x02\u01C7\u01B9\x03\x02\x02\x02\u01C7" +
-    "\u01BA\x03\x02\x02\x02\u01C8=\x03\x02\x02\x02\u01C9\u01CA\t\x05\x02\x02" +
-    "\u01CA?\x03\x02\x02\x02\u01CB\u01CC\b!\x01\x02\u01CC\u01D1\x05B\"\x02" +
-    "\u01CD\u01D1\x05D#\x02\u01CE\u01D1\x05F$\x02\u01CF\u01D1\x05L\'\x02\u01D0" +
-    "\u01CB\x03\x02\x02\x02\u01D0\u01CD\x03\x02\x02\x02\u01D0\u01CE\x03\x02" +
-    "\x02\x02\u01D0\u01CF\x03\x02\x02\x02\u01D1\u01E6\x03\x02\x02\x02\u01D2" +
-    "\u01D4\f\x07\x02\x02\u01D3\u01D5\x07\v\x02\x02\u01D4\u01D3\x03\x02\x02" +
-    "\x02\u01D4\u01D5\x03\x02\x02\x02\u01D5\u01D6\x03\x02\x02\x02\u01D6\u01D8" +
-    "\t\x06\x02\x02\u01D7\u01D9\x07\v\x02\x02\u01D8\u01D7\x03\x02\x02\x02\u01D8" +
-    "\u01D9\x03\x02\x02\x02\u01D9\u01DA\x03\x02\x02\x02\u01DA\u01E5\x05@!\b" +
-    "\u01DB\u01DD\f\x06\x02\x02\u01DC\u01DE\x07\v\x02\x02\u01DD\u01DC\x03\x02" +
-    "\x02\x02\u01DD\u01DE\x03\x02\x02\x02\u01DE\u01DF\x03\x02\x02\x02\u01DF" +
-    "\u01E1\t\x07\x02\x02\u01E0\u01E2\x07\v\x02\x02\u01E1\u01E0\x03\x02\x02" +
-    "\x02\u01E1\u01E2\x03\x02\x02\x02\u01E2\u01E3\x03\x02\x02\x02\u01E3\u01E5" +
-    "\x05@!\x07\u01E4\u01D2\x03\x02\x02\x02\u01E4\u01DB\x03\x02\x02\x02\u01E5" +
-    "\u01E8\x03\x02\x02\x02\u01E6\u01E4\x03\x02\x02\x02\u01E6\u01E7\x03\x02" +
-    "\x02\x02\u01E7A\x03\x02\x02\x02\u01E8\u01E6\x03\x02\x02\x02\u01E9\u01EA" +
-    "\t\b\x02\x02\u01EA\u01EB\x05@!\x02\u01EBC\x03\x02\x02\x02\u01EC\u01EE" +
-    "\x07 \x02\x02\u01ED\u01EF\x05@!\x02\u01EE\u01ED\x03\x02\x02\x02\u01EE" +
-    "\u01EF\x03\x02\x02\x02\u01EF\u01F7\x03\x02\x02\x02\u01F0\u01F2\x07\x14" +
-    "\x02\x02\u01F1\u01F3\x07\v\x02\x02\u01F2\u01F1\x03\x02\x02\x02\u01F2\u01F3" +
-    "\x03\x02\x02\x02\u01F3\u01F4\x03\x02\x02\x02\u01F4\u01F6\x05@!\x02\u01F5" +
-    "\u01F0\x03\x02\x02\x02\u01F6\u01F9\x03\x02\x02\x02\u01F7\u01F5\x03\x02" +
-    "\x02\x02\u01F7\u01F8\x03\x02\x02\x02\u01F8\u01FA\x03\x02\x02\x02\u01F9" +
-    "\u01F7\x03\x02\x02\x02\u01FA\u01FB\x07!\x02\x02\u01FBE\x03\x02\x02\x02" +
-    "\u01FC\u01FE\x07\x1C\x02\x02\u01FD\u01FF\x07\v\x02\x02\u01FE\u01FD\x03" +
-    "\x02\x02\x02\u01FE\u01FF\x03\x02\x02\x02\u01FF\u0201\x03\x02\x02\x02\u0200" +
-    "\u0202\x05H%\x02\u0201\u0200\x03\x02\x02\x02\u0201\u0202\x03\x02\x02\x02" +
-    "\u0202\u0204\x03\x02\x02\x02\u0203\u0205\x07\v\x02\x02\u0204\u0203\x03" +
-    "\x02\x02\x02\u0204\u0205\x03\x02\x02\x02\u0205\u0206\x03\x02\x02\x02\u0206" +
-    "\u0207\x07\x1D\x02\x02\u0207G\x03\x02\x02\x02\u0208\u020A\x05L\'\x02\u0209" +
-    "\u020B\x07\v\x02\x02\u020A\u0209\x03\x02\x02\x02\u020A\u020B\x03\x02\x02" +
-    "\x02\u020B\u020C\x03\x02\x02\x02\u020C\u020E\x07\x12\x02\x02\u020D\u020F" +
-    "\x07\v\x02\x02\u020E\u020D\x03\x02\x02\x02\u020E\u020F\x03\x02\x02\x02" +
-    "\u020F\u0210\x03\x02\x02\x02\u0210\u0211\x05L\'\x02\u0211I\x03\x02\x02" +
-    "\x02\u0212\u0213\t\t\x02\x02\u0213K\x03\x02\x02\x02\u0214\u0215\t\n\x02" +
-    "\x02\u0215M\x03\x02\x02\x02\u0216\u0217\x07\t\x02\x02\u0217O\x03\x02\x02" +
-    "\x02RSW\\hz~\x90\x9C\xA0\xA8\xAC\xB0\xB4\xBC\xC0\xCC\xD0\xD4\xD8\xE0\xE7" +
-    "\xEE\xF7\xFB\u0100\u0105\u0109\u0110\u0114\u0118\u011C\u0120\u0127\u012C" +
-    "\u0131\u0135\u0138\u013C\u013F\u0143\u0148\u014C\u0152\u0155\u0158\u015E" +
-    "\u0162\u016C\u0173\u017A\u017D\u0180\u0185\u018A\u018C\u0193\u0198\u019A" +
-    "\u01A1\u01A5\u01AE\u01B4\u01BE\u01C4\u01C7\u01D0\u01D4\u01D8\u01DD\u01E1" +
-    "\u01E4\u01E6\u01EE\u01F2\u01F7\u01FE\u0201\u0204\u020A\u020E";
+    "\x06\x05\x06\xD1\n\x06\x03\x06\x03\x06\x05\x06\xD5\n\x06\x03\x06\x03\x06" +
+    "\x05\x06\xD9\n\x06\x03\x06\x03\x06\x05\x06\xDD\n\x06\x03\x06\x03\x06\x03" +
+    "\x06\x03\x06\x03\x06\x03\x06\x05\x06\xE5\n\x06\x03\x07\x03\x07\x03\x07" +
+    "\x03\b\x03\b\x05\b\xEC\n\b\x03\t\x03\t\x03\t\x03\n\x03\n\x03\v\x03\v\x03" +
+    "\f\x03\f\x03\r\x03\r\x03\r\x05\r\xFA\n\r\x03\r\x03\r\x05\r\xFE\n\r\x03" +
+    "\r\x03\r\x05\r\u0102\n\r\x03\r\x07\r\u0105\n\r\f\r\x0E\r\u0108\v\r\x03" +
+    "\x0E\x03\x0E\x03\x0E\x03\x0E\x05\x0E\u010E\n\x0E\x03\x0F\x03\x0F\x05\x0F" +
+    "\u0112\n\x0F\x03\x0F\x03\x0F\x05\x0F\u0116\n\x0F\x03\x0F\x03\x0F\x03\x10" +
+    "\x03\x10\x05\x10\u011C\n\x10\x03\x10\x03\x10\x05\x10\u0120\n\x10\x03\x10" +
+    "\x03\x10\x05\x10\u0124\n\x10\x03\x10\x03\x10\x05\x10\u0128\n\x10\x03\x10" +
+    "\x03\x10\x03\x10\x03\x10\x05\x10\u012E\n\x10\x03\x10\x03\x10\x05\x10\u0132" +
+    "\n\x10\x03\x10\x03\x10\x05\x10\u0136\n\x10\x03\x11\x03\x11\x03\x11\x05" +
+    "\x11\u013B\n\x11\x03\x11\x07\x11\u013E\n\x11\f\x11\x0E\x11\u0141\v\x11" +
+    "\x03\x12\x03\x12\x05\x12\u0145\n\x12\x03\x12\x03\x12\x05\x12\u0149\n\x12" +
+    "\x03\x12\x05\x12\u014C\n\x12\x03\x13\x03\x13\x05\x13\u0150\n\x13\x03\x13" +
+    "\x05\x13\u0153\n\x13\x03\x13\x03\x13\x05\x13\u0157\n\x13\x03\x13\x07\x13" +
+    "\u015A\n\x13\f\x13\x0E\x13\u015D\v\x13\x03\x13\x05\x13\u0160\n\x13\x03" +
+    "\x13\x03\x13\x03\x13\x03\x13\x03\x13\x05\x13\u0167\n\x13\x03\x14\x03\x14" +
+    "\x05\x14\u016B\n\x14\x03\x14\x05\x14\u016E\n\x14\x03\x14\x05\x14\u0171" +
+    "\n\x14\x03\x14\x03\x14\x03\x15\x03\x15\x05\x15\u0177\n\x15\x03\x15\x03" +
+    "\x15\x05\x15\u017B\n\x15\x03\x15\x03\x15\x03\x16\x03\x16\x03\x17\x03\x17" +
+    "\x03\x18\x03\x18\x07\x18\u0185\n\x18\f\x18\x0E\x18\u0188\v\x18\x03\x18" +
+    "\x03\x18\x07\x18\u018C\n\x18\f\x18\x0E\x18\u018F\v\x18\x05\x18\u0191\n" +
+    "\x18\x03\x19\x05\x19\u0194\n\x19\x03\x19\x06\x19\u0197\n\x19\r\x19\x0E" +
+    "\x19\u0198\x03\x19\x03\x19\x03\x19\x07\x19\u019E\n\x19\f\x19\x0E\x19\u01A1" +
+    "\v\x19\x03\x1A\x03\x1A\x03\x1A\x03\x1A\x03\x1A\x03\x1A\x03\x1A\x03\x1A" +
+    "\x03\x1A\x05\x1A\u01AC\n\x1A\x03\x1B\x03\x1B\x05\x1B\u01B0\n\x1B\x03\x1C" +
+    "\x03\x1C\x03\x1C\x06\x1C\u01B5\n\x1C\r\x1C\x0E\x1C\u01B6\x03\x1D\x03\x1D" +
+    "\x03\x1D\x03\x1D\x05\x1D\u01BD\n\x1D\x03\x1D\x03\x1D\x03\x1E\x03\x1E\x03" +
+    "\x1F\x06\x1F\u01C4\n\x1F\r\x1F\x0E\x1F\u01C5\x03 \x03 \x07 \u01CA\n \f" +
+    " \x0E \u01CD\v \x03 \x03 \x03!\x03!\x03!\x03!\x07!\u01D5\n!\f!\x0E!\u01D8" +
+    "\v!\x05!\u01DA\n!\x03\"\x03\"\x03#\x03#\x03#\x03#\x03#\x03#\x05#\u01E4" +
+    "\n#\x03#\x03#\x05#\u01E8\n#\x03#\x03#\x05#\u01EC\n#\x03#\x03#\x03#\x05" +
+    "#\u01F1\n#\x03#\x03#\x05#\u01F5\n#\x03#\x07#\u01F8\n#\f#\x0E#\u01FB\v" +
+    "#\x03$\x03$\x03$\x03%\x03%\x05%\u0202\n%\x03%\x03%\x05%\u0206\n%\x03%" +
+    "\x07%\u0209\n%\f%\x0E%\u020C\v%\x03%\x03%\x03&\x03&\x05&\u0212\n&\x03" +
+    "&\x05&\u0215\n&\x03&\x05&\u0218\n&\x03&\x03&\x03\'\x03\'\x05\'\u021E\n" +
+    "\'\x03\'\x03\'\x05\'\u0222\n\'\x03\'\x03\'\x03(\x03(\x03)\x03)\x05)\u022A" +
+    "\n)\x03)\x03)\x05)\u022E\n)\x03)\x03)\x03*\x03*\x03*\x02\x02\x04\x18D" +
+    "+\x02\x02\x04\x02\x06\x02\b\x02\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14" +
+    "\x02\x16\x02\x18\x02\x1A\x02\x1C\x02\x1E\x02 \x02\"\x02$\x02&\x02(\x02" +
+    "*\x02,\x02.\x020\x022\x024\x026\x028\x02:\x02<\x02>\x02@\x02B\x02D\x02" +
+    "F\x02H\x02J\x02L\x02N\x02P\x02R\x02\x02\b\x03\x02\n\v\x03\x02\x17\x18" +
+    "\x05\x02\t\f\x11\x11\x13\x13\x03\x02\x10\x11\x03\x02\x0E\x0F\x03\x02\x03" +
+    "\b\u0274\x02[\x03\x02\x02\x02\x04`\x03\x02\x02\x02\x06e\x03\x02\x02\x02" +
+    "\bg\x03\x02\x02\x02\n\xE4\x03\x02\x02\x02\f\xE6\x03\x02\x02\x02\x0E\xEB" +
+    "\x03\x02\x02\x02\x10\xED\x03\x02\x02\x02\x12\xF0\x03\x02\x02\x02\x14\xF2" +
+    "\x03\x02\x02\x02\x16\xF4\x03\x02\x02\x02\x18\xF9\x03\x02\x02\x02\x1A\u010D" +
+    "\x03\x02\x02\x02\x1C\u010F\x03\x02\x02\x02\x1E\u0135\x03\x02\x02\x02 " +
+    "\u0137\x03\x02\x02\x02\"\u0142\x03\x02\x02\x02$\u0166\x03\x02\x02\x02" +
+    "&\u0168\x03\x02\x02\x02(\u0174\x03\x02\x02\x02*\u017E\x03\x02\x02\x02" +
+    ",\u0180\x03\x02\x02\x02.\u0190\x03\x02\x02\x020\u0193\x03\x02\x02\x02" +
+    "2\u01AB\x03\x02\x02\x024\u01AF\x03\x02\x02\x026\u01B4\x03\x02\x02\x02" +
+    "8\u01B8\x03\x02\x02\x02:\u01C0\x03\x02\x02\x02<\u01C3\x03\x02\x02\x02" +
+    ">\u01C7\x03\x02\x02\x02@\u01D9\x03\x02\x02\x02B\u01DB\x03\x02\x02\x02" +
+    "D\u01E3\x03\x02\x02\x02F\u01FC\x03\x02\x02\x02H\u01FF\x03\x02\x02\x02" +
+    "J\u020F\x03\x02\x02\x02L\u021B\x03\x02\x02\x02N\u0225\x03\x02\x02\x02" +
+    "P\u0227\x03\x02\x02\x02R\u0231\x03\x02\x02\x02T\\\x07\x02\x02\x03UW\x05" +
+    "\x04\x03\x02VX\x07\n\x02\x02WV\x03\x02\x02\x02WX\x03\x02\x02\x02XY\x03" +
+    "\x02\x02\x02YZ\x07\x02\x02\x03Z\\\x03\x02\x02\x02[T\x03\x02\x02\x02[U" +
+    "\x03\x02\x02\x02\\\x03\x03\x02\x02\x02]_\x05\x06\x04\x02^]\x03\x02\x02" +
+    "\x02_b\x03\x02\x02\x02`^\x03\x02\x02\x02`a\x03\x02\x02\x02ac\x03\x02\x02" +
+    "\x02b`\x03\x02\x02\x02cd\x05\b\x05\x02d\x05\x03\x02\x02\x02ef\t\x02\x02" +
+    "\x02f\x07\x03\x02\x02\x02gl\x05\n\x06\x02hi\x07\n\x02\x02ik\x05\n\x06" +
+    "\x02jh\x03\x02\x02\x02kn\x03\x02\x02\x02lj\x03\x02\x02\x02lm\x03\x02\x02" +
+    "\x02m\t\x03\x02\x02\x02nl\x03\x02\x02\x02o\xE5\x05\f\x07\x02pq\x05\f\x07" +
+    "\x02qr\x07\v\x02\x02rs\x05\x0E\b\x02s\xE5\x03\x02\x02\x02tu\x05\f\x07" +
+    "\x02uv\x07\v\x02\x02vw\x05*\x16\x02wx\x07\v\x02\x02xy\x05\x12\n\x02y\xE5" +
+    "\x03\x02\x02\x02z{\x05\f\x07\x02{|\x07\v\x02\x02|~\x05\x0E\b\x02}\x7F" +
+    "\x07\v\x02\x02~}\x03\x02\x02\x02~\x7F\x03\x02\x02\x02\x7F\x80\x03\x02" +
+    "\x02\x02\x80\x82\x05\x14\v\x02\x81\x83\x07\v\x02\x02\x82\x81\x03\x02\x02" +
+    "\x02\x82\x83\x03\x02\x02\x02\x83\x84\x03\x02\x02\x02\x84\x85\x05D#\x02" +
+    "\x85\xE5\x03\x02\x02\x02\x86\x87\x05\f\x07\x02\x87\x88\x07\v\x02\x02\x88" +
+    "\x89\x05\x0E\b\x02\x89\x8A\x07\v\x02\x02\x8A\x8B\x05*\x16\x02\x8B\x8C" +
+    "\x07\v\x02\x02\x8C\x8D\x05\x12\n\x02\x8D\xE5\x03\x02\x02\x02\x8E\x8F\x05" +
+    "\f\x07\x02\x8F\x90\x07\v\x02\x02\x90\x91\x05\x0E\b\x02\x91\x92\x07\v\x02" +
+    "\x02\x92\x94\x05\x14\v\x02\x93\x95\x07\v\x02\x02\x94\x93\x03\x02\x02\x02" +
+    "\x94\x95\x03\x02\x02\x02\x95\x96\x03\x02\x02\x02\x96\x97\x05D#\x02\x97" +
+    "\x98\x07\v\x02\x02\x98\x99\x05*\x16\x02\x99\x9A\x07\v\x02\x02\x9A\x9B" +
+    "\x05\x12\n\x02\x9B\xE5\x03\x02\x02\x02\x9C\x9D\x05\f\x07\x02\x9D\x9E\x07" +
+    "\v\x02\x02\x9E\xA0\x05\x0E\b\x02\x9F\xA1\x07\v\x02\x02\xA0\x9F\x03\x02" +
+    "\x02\x02\xA0\xA1\x03\x02\x02\x02\xA1\xA2\x03\x02\x02\x02\xA2\xA4\x05\x16" +
+    "\f\x02\xA3\xA5\x07\v\x02\x02\xA4\xA3\x03\x02\x02\x02\xA4\xA5\x03\x02\x02" +
+    "\x02\xA5\xA6\x03\x02\x02\x02\xA6\xA7\x05\x18\r\x02\xA7\xE5\x03\x02\x02" +
+    "\x02\xA8\xA9\x05\f\x07\x02\xA9\xAA\x07\v\x02\x02\xAA\xAC\x05\x0E\b\x02" +
+    "\xAB\xAD\x07\v\x02\x02\xAC\xAB\x03\x02\x02\x02\xAC\xAD\x03\x02\x02\x02" +
+    "\xAD\xAE\x03\x02\x02\x02\xAE\xB0\x05\x16\f\x02\xAF\xB1\x07\v\x02\x02\xB0" +
+    "\xAF\x03\x02\x02\x02\xB0\xB1\x03\x02\x02\x02\xB1\xB2\x03\x02\x02\x02\xB2" +
+    "\xB4\x05\x18\r\x02\xB3\xB5\x07\v\x02\x02\xB4\xB3\x03\x02\x02\x02\xB4\xB5" +
+    "\x03\x02\x02\x02\xB5\xB6\x03\x02\x02\x02\xB6\xB8\x05\x14\v\x02\xB7\xB9" +
+    "\x07\v\x02\x02\xB8\xB7\x03\x02\x02\x02\xB8\xB9\x03\x02\x02\x02\xB9\xBA" +
+    "\x03\x02\x02\x02\xBA\xBB\x05D#\x02\xBB\xE5\x03\x02\x02\x02\xBC\xBD\x05" +
+    "\f\x07\x02\xBD\xBE\x07\v\x02\x02\xBE\xC0\x05\x0E\b\x02\xBF\xC1\x07\v\x02" +
+    "\x02\xC0\xBF\x03\x02\x02\x02\xC0\xC1\x03\x02\x02\x02\xC1\xC2\x03\x02\x02" +
+    "\x02\xC2\xC4\x05\x16\f\x02\xC3\xC5\x07\v\x02\x02\xC4\xC3\x03\x02\x02\x02" +
+    "\xC4\xC5\x03\x02\x02\x02\xC5\xC6\x03\x02\x02\x02\xC6\xC7\x05\x18\r\x02" +
+    "\xC7\xC8\x07\v\x02\x02\xC8\xC9\x05*\x16\x02\xC9\xCA\x07\v\x02\x02\xCA" +
+    "\xCB\x05\x12\n\x02\xCB\xE5\x03\x02\x02\x02\xCC\xCD\x05\f\x07\x02\xCD\xCE" +
+    "\x07\v\x02\x02\xCE\xD0\x05\x0E\b\x02\xCF\xD1\x07\v\x02\x02\xD0\xCF\x03" +
+    "\x02\x02\x02\xD0\xD1\x03\x02\x02\x02\xD1\xD2\x03\x02\x02\x02\xD2\xD4\x05" +
+    "\x16\f\x02\xD3\xD5\x07\v\x02\x02\xD4\xD3\x03\x02\x02\x02\xD4\xD5\x03\x02" +
+    "\x02\x02\xD5\xD6\x03\x02\x02\x02\xD6\xD8\x05\x18\r\x02\xD7\xD9\x07\v\x02" +
+    "\x02\xD8\xD7\x03\x02\x02\x02\xD8\xD9\x03\x02\x02\x02\xD9\xDA\x03\x02\x02" +
+    "\x02\xDA\xDC\x05\x14\v\x02\xDB\xDD\x07\v\x02\x02\xDC\xDB\x03\x02\x02\x02" +
+    "\xDC\xDD\x03\x02\x02\x02\xDD\xDE\x03\x02\x02\x02\xDE\xDF\x05D#\x02\xDF" +
+    "\xE0\x07\v\x02\x02\xE0\xE1\x05*\x16\x02\xE1\xE2\x07\v\x02\x02\xE2\xE3" +
+    "\x05\x12\n\x02\xE3\xE5\x03\x02\x02\x02\xE4o\x03\x02\x02\x02\xE4p\x03\x02" +
+    "\x02\x02\xE4t\x03\x02\x02\x02\xE4z\x03\x02\x02\x02\xE4\x86\x03\x02\x02" +
+    "\x02\xE4\x8E\x03\x02\x02\x02\xE4\x9C\x03\x02\x02\x02\xE4\xA8\x03\x02\x02" +
+    "\x02\xE4\xBC\x03\x02\x02\x02\xE4\xCC\x03\x02\x02\x02\xE5\v\x03\x02\x02" +
+    "\x02\xE6\xE7\x07\r\x02\x02\xE7\xE8\x05R*\x02\xE8\r\x03\x02\x02\x02\xE9" +
+    "\xEC\x05\x10\t\x02\xEA\xEC\x05R*\x02\xEB\xE9\x03\x02\x02\x02\xEB\xEA\x03" +
+    "\x02\x02\x02\xEC\x0F\x03\x02\x02\x02\xED\xEE\x05R*\x02\xEE\xEF\x07\x16" +
+    "\x02\x02\xEF\x11\x03\x02\x02\x02\xF0\xF1\x05,\x17\x02\xF1\x13\x03\x02" +
+    "\x02\x02\xF2\xF3\x07\x15\x02\x02\xF3\x15\x03\x02\x02\x02\xF4\xF5\x07\x12" +
+    "\x02\x02\xF5\x17\x03\x02\x02\x02\xF6\xF7\b\r\x01\x02\xF7\xFA\x05\x1E\x10" +
+    "\x02\xF8\xFA\x05\x1A\x0E\x02\xF9\xF6\x03\x02\x02\x02\xF9\xF8\x03\x02\x02" +
+    "\x02\xFA\u0106\x03\x02\x02\x02\xFB\xFD\f\x05\x02\x02\xFC\xFE\x07\v\x02" +
+    "\x02\xFD\xFC\x03\x02\x02\x02\xFD\xFE\x03\x02\x02\x02\xFE\xFF\x03\x02\x02" +
+    "\x02\xFF\u0101\t\x03\x02\x02\u0100\u0102\x07\v\x02\x02\u0101\u0100\x03" +
+    "\x02\x02\x02\u0101\u0102\x03\x02\x02\x02\u0102\u0103\x03\x02\x02\x02\u0103" +
+    "\u0105\x05\x18\r\x06\u0104\xFB\x03\x02\x02\x02\u0105\u0108\x03\x02\x02" +
+    "\x02\u0106\u0104\x03\x02\x02\x02\u0106\u0107\x03\x02\x02\x02\u0107\x19" +
+    "\x03\x02\x02\x02\u0108\u0106\x03\x02\x02\x02\u0109\u010E\x05\x1C\x0F\x02" +
+    "\u010A\u010E\x05&\x14\x02\u010B\u010E\x05$\x13\x02\u010C\u010E\x05R*\x02" +
+    "\u010D\u0109\x03\x02\x02\x02\u010D\u010A\x03\x02\x02\x02\u010D\u010B\x03" +
+    "\x02\x02\x02\u010D\u010C\x03\x02\x02\x02\u010E\x1B\x03\x02\x02\x02\u010F" +
+    "\u0111\x07\x1E\x02\x02\u0110\u0112\x07\v\x02\x02\u0111\u0110\x03\x02\x02" +
+    "\x02\u0111\u0112\x03\x02\x02\x02\u0112\u0113\x03\x02\x02\x02\u0113\u0115" +
+    "\x05\x18\r\x02\u0114\u0116\x07\v\x02\x02\u0115\u0114\x03\x02\x02\x02\u0115" +
+    "\u0116\x03\x02\x02\x02\u0116\u0117\x03\x02\x02\x02\u0117\u0118\x07\x1F" +
+    "\x02\x02\u0118\x1D\x03\x02\x02\x02\u0119\u011B\x07\x1E\x02\x02\u011A\u011C" +
+    "\x07\v\x02\x02\u011B\u011A\x03\x02\x02\x02\u011B\u011C\x03\x02\x02\x02" +
+    "\u011C\u011D\x03\x02\x02\x02\u011D\u011F\x05 \x11\x02\u011E\u0120\x07" +
+    "\v\x02\x02\u011F\u011E\x03\x02\x02\x02\u011F\u0120\x03\x02\x02\x02\u0120" +
+    "\u0121\x03\x02\x02\x02\u0121\u0123\x07\x1F\x02\x02\u0122\u0124\x07\v\x02" +
+    "\x02\u0123\u0122\x03\x02\x02\x02\u0123\u0124\x03\x02\x02\x02\u0124\u0125" +
+    "\x03\x02\x02\x02\u0125\u0127\x07\x19\x02\x02\u0126\u0128\x07\v\x02\x02" +
+    "\u0127\u0126\x03\x02\x02\x02\u0127\u0128\x03\x02\x02\x02\u0128\u0129\x03" +
+    "\x02\x02\x02\u0129\u012A\x05\x18\r\x02\u012A\u0136\x03\x02\x02\x02\u012B" +
+    "\u012D\x05\"\x12\x02\u012C\u012E\x07\v\x02\x02\u012D\u012C\x03\x02\x02" +
+    "\x02\u012D\u012E\x03\x02\x02\x02\u012E\u012F\x03\x02\x02\x02\u012F\u0131" +
+    "\x07\x19\x02\x02\u0130\u0132\x07\v\x02\x02\u0131\u0130\x03\x02\x02\x02" +
+    "\u0131\u0132\x03\x02\x02\x02\u0132\u0133\x03\x02\x02\x02\u0133\u0134\x05" +
+    "\x18\r\x02\u0134\u0136\x03\x02\x02\x02\u0135\u0119\x03\x02\x02\x02\u0135" +
+    "\u012B\x03\x02\x02\x02\u0136\x1F\x03\x02\x02\x02\u0137\u013F\x05\"\x12" +
+    "\x02\u0138\u013A\x07\x14\x02\x02\u0139\u013B\x07\v\x02\x02\u013A\u0139" +
+    "\x03\x02\x02\x02\u013A\u013B\x03\x02\x02\x02\u013B\u013C\x03\x02\x02\x02" +
+    "\u013C\u013E\x05\"\x12\x02\u013D\u0138\x03\x02\x02\x02\u013E\u0141\x03" +
+    "\x02\x02\x02\u013F\u013D\x03\x02\x02\x02\u013F\u0140\x03\x02\x02\x02\u0140" +
+    "!\x03\x02\x02\x02\u0141\u013F\x03\x02\x02\x02\u0142\u014B\x05R*\x02\u0143" +
+    "\u0145\x07\v\x02\x02\u0144\u0143\x03\x02\x02\x02\u0144\u0145\x03\x02\x02" +
+    "\x02\u0145\u0146\x03\x02\x02\x02\u0146\u0148\x07\x12\x02\x02\u0147\u0149" +
+    "\x07\v\x02\x02\u0148\u0147\x03\x02\x02\x02\u0148\u0149\x03\x02\x02\x02" +
+    "\u0149\u014A\x03\x02\x02\x02\u014A\u014C\x05\x18\r\x02\u014B\u0144\x03" +
+    "\x02\x02\x02\u014B\u014C\x03\x02\x02\x02\u014C#\x03\x02\x02\x02\u014D" +
+    "\u014F\x07 \x02\x02\u014E\u0150\x07\v\x02\x02\u014F\u014E\x03\x02\x02" +
+    "\x02\u014F\u0150\x03\x02\x02\x02\u0150\u0152\x03\x02\x02\x02\u0151\u0153" +
+    "\x05\x18\r\x02\u0152\u0151\x03\x02\x02\x02\u0152\u0153\x03\x02\x02\x02" +
+    "\u0153\u015B\x03\x02\x02\x02\u0154\u0156\x07\x14\x02\x02\u0155\u0157\x07" +
+    "\v\x02\x02\u0156\u0155\x03\x02\x02\x02\u0156\u0157\x03\x02\x02\x02\u0157" +
+    "\u0158\x03\x02\x02\x02\u0158\u015A\x05\x18\r\x02\u0159\u0154\x03\x02\x02" +
+    "\x02\u015A\u015D\x03\x02\x02\x02\u015B\u0159\x03\x02\x02\x02\u015B\u015C" +
+    "\x03\x02\x02\x02\u015C\u015F\x03\x02\x02\x02\u015D\u015B\x03\x02\x02\x02" +
+    "\u015E\u0160\x07\v\x02\x02\u015F\u015E\x03\x02\x02\x02\u015F\u0160\x03" +
+    "\x02\x02\x02\u0160\u0161\x03\x02\x02\x02\u0161\u0167\x07!\x02\x02\u0162" +
+    "\u0163\x05R*\x02\u0163\u0164\x07 \x02\x02\u0164\u0165\x07!\x02\x02\u0165" +
+    "\u0167\x03\x02\x02\x02\u0166\u014D\x03\x02\x02\x02\u0166\u0162\x03\x02" +
+    "\x02\x02\u0167%\x03\x02\x02\x02\u0168\u016A\x07\x1C\x02\x02\u0169\u016B" +
+    "\x07\v\x02\x02\u016A\u0169\x03\x02\x02\x02\u016A\u016B\x03\x02\x02\x02" +
+    "\u016B\u016D\x03\x02\x02\x02\u016C\u016E\x05(\x15\x02\u016D\u016C\x03" +
+    "\x02\x02\x02\u016D\u016E\x03\x02\x02\x02\u016E\u0170\x03\x02\x02\x02\u016F" +
+    "\u0171\x07\v\x02\x02\u0170\u016F\x03\x02\x02\x02\u0170\u0171\x03\x02\x02" +
+    "\x02\u0171\u0172\x03\x02\x02\x02\u0172\u0173\x07\x1D\x02\x02\u0173\'\x03" +
+    "\x02\x02\x02\u0174\u0176\x05\x18\r\x02\u0175\u0177\x07\v\x02\x02\u0176" +
+    "\u0175\x03\x02\x02\x02\u0176\u0177\x03\x02\x02\x02\u0177\u0178\x03\x02" +
+    "\x02\x02\u0178\u017A\x07\x12\x02\x02\u0179\u017B\x07\v\x02\x02\u017A\u0179" +
+    "\x03\x02\x02\x02\u017A\u017B\x03\x02\x02\x02\u017B\u017C\x03\x02\x02\x02" +
+    "\u017C\u017D\x05\x18\r\x02\u017D)\x03\x02\x02\x02\u017E\u017F\x07\x0F" +
+    "\x02\x02\u017F+\x03\x02\x02\x02\u0180\u0181\x05.\x18\x02\u0181-\x03\x02" +
+    "\x02\x02\u0182\u0186\x050\x19\x02\u0183\u0185\x054\x1B\x02\u0184\u0183" +
+    "\x03\x02\x02\x02\u0185\u0188\x03\x02\x02\x02\u0186\u0184\x03\x02\x02\x02" +
+    "\u0186\u0187\x03\x02\x02\x02\u0187\u0191\x03\x02\x02\x02\u0188\u0186\x03" +
+    "\x02\x02\x02\u0189\u018D\x058\x1D\x02\u018A\u018C\x054\x1B\x02\u018B\u018A" +
+    "\x03\x02\x02\x02\u018C\u018F\x03\x02\x02\x02\u018D\u018B\x03\x02\x02\x02" +
+    "\u018D\u018E\x03\x02\x02\x02\u018E\u0191\x03\x02\x02\x02\u018F\u018D\x03" +
+    "\x02\x02\x02\u0190\u0182\x03\x02\x02\x02\u0190\u0189\x03\x02\x02\x02\u0191" +
+    "/\x03\x02\x02\x02\u0192\u0194\x07\v\x02\x02\u0193\u0192\x03\x02\x02\x02" +
+    "\u0193\u0194\x03\x02\x02\x02\u0194\u0196\x03\x02\x02\x02\u0195\u0197\x05" +
+    "2\x1A\x02\u0196\u0195\x03\x02\x02\x02\u0197\u0198\x03\x02\x02\x02\u0198" +
+    "\u0196\x03\x02\x02\x02\u0198\u0199\x03\x02\x02\x02\u0199\u019F\x03\x02" +
+    "\x02\x02\u019A\u019E\x052\x1A\x02\u019B\u019E\x07\v\x02\x02\u019C\u019E" +
+    "\x07\r\x02\x02\u019D\u019A\x03\x02\x02\x02\u019D\u019B\x03\x02\x02\x02" +
+    "\u019D\u019C\x03\x02\x02\x02\u019E\u01A1\x03\x02\x02\x02\u019F\u019D\x03" +
+    "\x02\x02\x02\u019F\u01A0\x03\x02\x02\x02\u01A01\x03\x02\x02\x02\u01A1" +
+    "\u019F\x03\x02\x02\x02\u01A2\u01AC\x07\f\x02\x02\u01A3\u01AC\x07\t\x02" +
+    "\x02\u01A4\u01AC\x07\x11\x02\x02\u01A5\u01AC\x07\x1C\x02\x02\u01A6\u01AC" +
+    "\x07\x1D\x02\x02\u01A7\u01AC\x07\x12\x02\x02\u01A8\u01AC\x07\x0F\x02\x02" +
+    "\u01A9\u01AC\x07\x13\x02\x02\u01AA\u01AC\x05N(\x02\u01AB\u01A2\x03\x02" +
+    "\x02\x02\u01AB\u01A3\x03\x02\x02\x02\u01AB\u01A4\x03\x02\x02\x02\u01AB" +
+    "\u01A5\x03\x02\x02\x02\u01AB\u01A6\x03\x02\x02\x02\u01AB\u01A7\x03\x02" +
+    "\x02\x02\u01AB\u01A8\x03\x02\x02\x02\u01AB\u01A9\x03\x02\x02\x02\u01AB" +
+    "\u01AA\x03\x02\x02\x02\u01AC3\x03\x02\x02\x02\u01AD\u01B0\x058\x1D\x02" +
+    "\u01AE\u01B0\x056\x1C\x02\u01AF\u01AD\x03\x02\x02\x02\u01AF\u01AE\x03" +
+    "\x02\x02\x02\u01B05\x03\x02\x02\x02\u01B1\u01B5\x052\x1A\x02\u01B2\u01B5" +
+    "\x07\v\x02\x02\u01B3\u01B5\x07\r\x02\x02\u01B4\u01B1\x03\x02\x02\x02\u01B4" +
+    "\u01B2\x03\x02\x02\x02\u01B4\u01B3\x03\x02\x02\x02\u01B5\u01B6\x03\x02" +
+    "\x02\x02\u01B6\u01B4\x03\x02\x02\x02\u01B6\u01B7\x03\x02\x02\x02\u01B7" +
+    "7\x03\x02\x02\x02\u01B8\u01B9\x07\x1B\x02\x02\u01B9\u01BA\x05:\x1E\x02" +
+    "\u01BA\u01BC\x07\v\x02\x02\u01BB\u01BD\x05<\x1F\x02\u01BC\u01BB\x03\x02" +
+    "\x02\x02\u01BC\u01BD\x03\x02\x02\x02\u01BD\u01BE\x03\x02\x02\x02\u01BE" +
+    "\u01BF\x07\x1D\x02\x02\u01BF9\x03\x02\x02\x02\u01C0\u01C1\x05R*\x02\u01C1" +
+    ";\x03\x02\x02\x02\u01C2\u01C4\x05@!\x02\u01C3\u01C2\x03\x02\x02\x02\u01C4" +
+    "\u01C5\x03\x02\x02\x02\u01C5\u01C3\x03\x02\x02\x02\u01C5\u01C6\x03\x02" +
+    "\x02\x02\u01C6=\x03\x02\x02\x02\u01C7\u01CB\x07\x1C\x02\x02\u01C8\u01CA" +
+    "\x05@!\x02\u01C9\u01C8\x03\x02\x02\x02\u01CA\u01CD\x03\x02\x02\x02\u01CB" +
+    "\u01C9\x03\x02\x02\x02\u01CB\u01CC\x03\x02\x02\x02\u01CC\u01CE\x03\x02" +
+    "\x02\x02\u01CD\u01CB\x03\x02\x02\x02\u01CE\u01CF\x07\x1D\x02\x02\u01CF" +
+    "?\x03\x02\x02\x02\u01D0\u01DA\x05> \x02\u01D1\u01D6\x05B\"\x02\u01D2\u01D3" +
+    "\x07\n\x02\x02\u01D3\u01D5\x05B\"\x02\u01D4\u01D2\x03\x02\x02\x02\u01D5" +
+    "\u01D8\x03\x02\x02\x02\u01D6\u01D4\x03\x02\x02\x02\u01D6\u01D7\x03\x02" +
+    "\x02\x02\u01D7\u01DA\x03\x02\x02\x02\u01D8\u01D6\x03\x02\x02\x02\u01D9" +
+    "\u01D0\x03\x02\x02\x02\u01D9\u01D1\x03\x02\x02\x02\u01DAA\x03\x02\x02" +
+    "\x02\u01DB\u01DC\t\x04\x02\x02\u01DCC\x03\x02\x02\x02\u01DD\u01DE\b#\x01" +
+    "\x02\u01DE\u01E4\x05F$\x02\u01DF\u01E4\x05H%\x02\u01E0\u01E4\x05J&\x02" +
+    "\u01E1\u01E4\x05N(\x02\u01E2\u01E4\x05P)\x02\u01E3\u01DD\x03\x02\x02\x02" +
+    "\u01E3\u01DF\x03\x02\x02\x02\u01E3\u01E0\x03\x02\x02\x02\u01E3\u01E1\x03" +
+    "\x02\x02\x02\u01E3\u01E2\x03\x02\x02\x02\u01E4\u01F9\x03\x02\x02\x02\u01E5" +
+    "\u01E7\f\b\x02\x02\u01E6\u01E8\x07\v\x02\x02\u01E7\u01E6\x03\x02\x02\x02" +
+    "\u01E7\u01E8\x03\x02\x02\x02\u01E8\u01E9\x03\x02\x02\x02\u01E9\u01EB\t" +
+    "\x05\x02\x02\u01EA\u01EC\x07\v\x02\x02\u01EB\u01EA\x03\x02\x02\x02\u01EB" +
+    "\u01EC\x03\x02\x02\x02\u01EC\u01ED\x03\x02\x02\x02\u01ED\u01F8\x05D#\t" +
+    "\u01EE\u01F0\f\x07\x02\x02\u01EF\u01F1\x07\v\x02\x02\u01F0\u01EF\x03\x02" +
+    "\x02\x02\u01F0\u01F1\x03\x02\x02\x02\u01F1\u01F2\x03\x02\x02\x02\u01F2" +
+    "\u01F4\t\x06\x02\x02\u01F3\u01F5\x07\v\x02\x02\u01F4\u01F3\x03\x02\x02" +
+    "\x02\u01F4\u01F5\x03\x02\x02\x02\u01F5\u01F6\x03\x02\x02\x02\u01F6\u01F8" +
+    "\x05D#\b\u01F7\u01E5\x03\x02\x02\x02\u01F7\u01EE\x03\x02\x02\x02\u01F8" +
+    "\u01FB\x03\x02\x02\x02\u01F9\u01F7\x03\x02\x02\x02\u01F9\u01FA\x03\x02" +
+    "\x02\x02\u01FAE\x03\x02\x02\x02\u01FB\u01F9\x03\x02\x02\x02\u01FC\u01FD" +
+    "\t\x06\x02\x02\u01FD\u01FE\x05D#\x02\u01FEG\x03\x02\x02\x02\u01FF\u0201" +
+    "\x07 \x02\x02\u0200\u0202\x05D#\x02\u0201\u0200\x03\x02\x02\x02\u0201" +
+    "\u0202\x03\x02\x02\x02\u0202\u020A\x03\x02\x02\x02\u0203\u0205\x07\x14" +
+    "\x02\x02\u0204\u0206\x07\v\x02\x02\u0205\u0204\x03\x02\x02\x02\u0205\u0206" +
+    "\x03\x02\x02\x02\u0206\u0207\x03\x02\x02\x02\u0207\u0209\x05D#\x02\u0208" +
+    "\u0203\x03\x02\x02\x02\u0209\u020C\x03\x02\x02\x02\u020A\u0208\x03\x02" +
+    "\x02\x02\u020A\u020B\x03\x02\x02\x02\u020B\u020D\x03\x02\x02\x02\u020C" +
+    "\u020A\x03\x02\x02\x02\u020D\u020E\x07!\x02\x02\u020EI\x03\x02\x02\x02" +
+    "\u020F\u0211\x07\x1C\x02\x02\u0210\u0212\x07\v\x02\x02\u0211\u0210\x03" +
+    "\x02\x02\x02\u0211\u0212\x03\x02\x02\x02\u0212\u0214\x03\x02\x02\x02\u0213" +
+    "\u0215\x05L\'\x02\u0214\u0213\x03\x02\x02\x02\u0214\u0215\x03\x02\x02" +
+    "\x02\u0215\u0217\x03\x02\x02\x02\u0216\u0218\x07\v\x02\x02\u0217\u0216" +
+    "\x03\x02\x02\x02\u0217\u0218\x03\x02\x02\x02\u0218\u0219\x03\x02\x02\x02" +
+    "\u0219\u021A\x07\x1D\x02\x02\u021AK\x03\x02\x02\x02\u021B\u021D\x05N(" +
+    "\x02\u021C\u021E\x07\v\x02\x02\u021D\u021C\x03\x02\x02\x02\u021D\u021E" +
+    "\x03\x02\x02\x02\u021E\u021F\x03\x02\x02\x02\u021F\u0221\x07\x12\x02\x02" +
+    "\u0220\u0222\x07\v\x02\x02\u0221\u0220\x03\x02\x02\x02\u0221\u0222\x03" +
+    "\x02\x02\x02\u0222\u0223\x03\x02\x02\x02\u0223";
+TomParser._serializedATNSegment1 = "\u0224\x05N(\x02\u0224M\x03\x02\x02\x02\u0225\u0226\t\x07\x02\x02\u0226" +
+    "O\x03\x02\x02\x02\u0227\u0229\x07\x1E\x02\x02\u0228\u022A\x07\v\x02\x02" +
+    "\u0229\u0228\x03\x02\x02\x02\u0229\u022A\x03\x02\x02\x02\u022A\u022B\x03" +
+    "\x02\x02\x02\u022B\u022D\x05D#\x02\u022C\u022E\x07\v\x02\x02\u022D\u022C" +
+    "\x03\x02\x02\x02\u022D\u022E\x03\x02\x02\x02\u022E\u022F\x03\x02\x02\x02" +
+    "\u022F\u0230\x07\x1F\x02\x02\u0230Q\x03\x02\x02\x02\u0231\u0232\x07\t" +
+    "\x02\x02\u0232S\x03\x02\x02\x02VW[`l~\x82\x94\xA0\xA4\xAC\xB0\xB4\xB8" +
+    "\xC0\xC4\xD0\xD4\xD8\xDC\xE4\xEB\xF9\xFD\u0101\u0106\u010D\u0111\u0115" +
+    "\u011B\u011F\u0123\u0127\u012D\u0131\u0135\u013A\u013F\u0144\u0148\u014B" +
+    "\u014F\u0152\u0156\u015B\u015F\u0166\u016A\u016D\u0170\u0176\u017A\u0186" +
+    "\u018D\u0190\u0193\u0198\u019D\u019F\u01AB\u01AF\u01B4\u01B6\u01BC\u01C5" +
+    "\u01CB\u01D6\u01D9\u01E3\u01E7\u01EB\u01F0\u01F4\u01F7\u01F9\u0201\u0205" +
+    "\u020A\u0211\u0214\u0217\u021D\u0221\u0229\u022D";
+TomParser._serializedATN = Utils.join([
+    TomParser._serializedATNSegment0,
+    TomParser._serializedATNSegment1
+], "");
 __decorate([
     Decorators_2.Override,
     Decorators_1.NotNull
@@ -3161,10 +3316,7 @@ class TagBodyContext extends ParserRuleContext_1.ParserRuleContext {
         super(parent, invokingState);
     }
     description() {
-        return this.tryGetRuleContext(0, DescriptionContext);
-    }
-    inlineTag() {
-        return this.tryGetRuleContext(0, InlineTagContext);
+        return this.getRuleContext(0, DescriptionContext);
     }
     get ruleIndex() { return TomParser.RULE_tagBody; }
     enterRule(listener) {
@@ -3267,9 +3419,6 @@ class TypeContext extends ParserRuleContext_1.ParserRuleContext {
     constructor(parent, invokingState) {
         super(parent, invokingState);
     }
-    identifier() {
-        return this.tryGetRuleContext(0, IdentifierContext);
-    }
     type(i) {
         if (i === undefined) {
             return this.getRuleContexts(TypeContext);
@@ -3278,22 +3427,8 @@ class TypeContext extends ParserRuleContext_1.ParserRuleContext {
             return this.getRuleContext(i, TypeContext);
         }
     }
-    AMP(i) {
-        if (i === undefined) {
-            return this.getTokens(TomParser.AMP);
-        }
-        else {
-            return this.getToken(TomParser.AMP, i);
-        }
-    }
-    PIPE(i) {
-        if (i === undefined) {
-            return this.getTokens(TomParser.PIPE);
-        }
-        else {
-            return this.getToken(TomParser.PIPE, i);
-        }
-    }
+    PIPE() { return this.tryGetToken(TomParser.PIPE, 0); }
+    AMP() { return this.tryGetToken(TomParser.AMP, 0); }
     SPACE(i) {
         if (i === undefined) {
             return this.getTokens(TomParser.SPACE);
@@ -3302,16 +3437,11 @@ class TypeContext extends ParserRuleContext_1.ParserRuleContext {
             return this.getToken(TomParser.SPACE, i);
         }
     }
-    PAREN_OPEN() { return this.tryGetToken(TomParser.PAREN_OPEN, 0); }
-    PAREN_CLOSE() { return this.tryGetToken(TomParser.PAREN_CLOSE, 0); }
     lambdaType() {
         return this.tryGetRuleContext(0, LambdaTypeContext);
     }
-    arrayType() {
-        return this.tryGetRuleContext(0, ArrayTypeContext);
-    }
-    objectType() {
-        return this.tryGetRuleContext(0, ObjectTypeContext);
+    primaryType() {
+        return this.tryGetRuleContext(0, PrimaryTypeContext);
     }
     get ruleIndex() { return TomParser.RULE_type; }
     enterRule(listener) {
@@ -3342,15 +3472,106 @@ __decorate([
     Decorators_2.Override
 ], TypeContext.prototype, "accept", null);
 exports.TypeContext = TypeContext;
-class LambdaTypeContext extends ParserRuleContext_1.ParserRuleContext {
+class PrimaryTypeContext extends ParserRuleContext_1.ParserRuleContext {
+    constructor(parent, invokingState) {
+        super(parent, invokingState);
+    }
+    parenthesizedType() {
+        return this.tryGetRuleContext(0, ParenthesizedTypeContext);
+    }
+    objectType() {
+        return this.tryGetRuleContext(0, ObjectTypeContext);
+    }
+    arrayType() {
+        return this.tryGetRuleContext(0, ArrayTypeContext);
+    }
+    identifier() {
+        return this.tryGetRuleContext(0, IdentifierContext);
+    }
+    get ruleIndex() { return TomParser.RULE_primaryType; }
+    enterRule(listener) {
+        if (listener.enterPrimaryType)
+            listener.enterPrimaryType(this);
+    }
+    exitRule(listener) {
+        if (listener.exitPrimaryType)
+            listener.exitPrimaryType(this);
+    }
+    accept(visitor) {
+        if (visitor.visitPrimaryType)
+            return visitor.visitPrimaryType(this);
+        else
+            return visitor.visitChildren(this);
+    }
+}
+__decorate([
+    Decorators_2.Override
+], PrimaryTypeContext.prototype, "ruleIndex", null);
+__decorate([
+    Decorators_2.Override
+], PrimaryTypeContext.prototype, "enterRule", null);
+__decorate([
+    Decorators_2.Override
+], PrimaryTypeContext.prototype, "exitRule", null);
+__decorate([
+    Decorators_2.Override
+], PrimaryTypeContext.prototype, "accept", null);
+exports.PrimaryTypeContext = PrimaryTypeContext;
+class ParenthesizedTypeContext extends ParserRuleContext_1.ParserRuleContext {
     constructor(parent, invokingState) {
         super(parent, invokingState);
     }
     PAREN_OPEN() { return this.getToken(TomParser.PAREN_OPEN, 0); }
-    formalParameterSequence() {
-        return this.getRuleContext(0, FormalParameterSequenceContext);
+    type() {
+        return this.getRuleContext(0, TypeContext);
     }
     PAREN_CLOSE() { return this.getToken(TomParser.PAREN_CLOSE, 0); }
+    SPACE(i) {
+        if (i === undefined) {
+            return this.getTokens(TomParser.SPACE);
+        }
+        else {
+            return this.getToken(TomParser.SPACE, i);
+        }
+    }
+    get ruleIndex() { return TomParser.RULE_parenthesizedType; }
+    enterRule(listener) {
+        if (listener.enterParenthesizedType)
+            listener.enterParenthesizedType(this);
+    }
+    exitRule(listener) {
+        if (listener.exitParenthesizedType)
+            listener.exitParenthesizedType(this);
+    }
+    accept(visitor) {
+        if (visitor.visitParenthesizedType)
+            return visitor.visitParenthesizedType(this);
+        else
+            return visitor.visitChildren(this);
+    }
+}
+__decorate([
+    Decorators_2.Override
+], ParenthesizedTypeContext.prototype, "ruleIndex", null);
+__decorate([
+    Decorators_2.Override
+], ParenthesizedTypeContext.prototype, "enterRule", null);
+__decorate([
+    Decorators_2.Override
+], ParenthesizedTypeContext.prototype, "exitRule", null);
+__decorate([
+    Decorators_2.Override
+], ParenthesizedTypeContext.prototype, "accept", null);
+exports.ParenthesizedTypeContext = ParenthesizedTypeContext;
+class LambdaTypeContext extends ParserRuleContext_1.ParserRuleContext {
+    constructor(parent, invokingState) {
+        super(parent, invokingState);
+    }
+    PAREN_OPEN() { return this.tryGetToken(TomParser.PAREN_OPEN, 0); }
+    formalParameterSequence() {
+        return this.tryGetRuleContext(0, FormalParameterSequenceContext);
+    }
+    PAREN_CLOSE() { return this.tryGetToken(TomParser.PAREN_CLOSE, 0); }
     ARROW() { return this.getToken(TomParser.ARROW, 0); }
     type() {
         return this.getRuleContext(0, TypeContext);
@@ -3362,6 +3583,9 @@ class LambdaTypeContext extends ParserRuleContext_1.ParserRuleContext {
         else {
             return this.getToken(TomParser.SPACE, i);
         }
+    }
+    parameter() {
+        return this.tryGetRuleContext(0, ParameterContext);
     }
     get ruleIndex() { return TomParser.RULE_lambdaType; }
     enterRule(listener) {
@@ -3527,6 +3751,9 @@ class ArrayTypeContext extends ParserRuleContext_1.ParserRuleContext {
             return this.getToken(TomParser.COMMA, i);
         }
     }
+    identifier() {
+        return this.tryGetRuleContext(0, IdentifierContext);
+    }
     get ruleIndex() { return TomParser.RULE_arrayType; }
     enterRule(listener) {
         if (listener.enterArrayType)
@@ -3690,13 +3917,8 @@ class DescriptionContext extends ParserRuleContext_1.ParserRuleContext {
     constructor(parent, invokingState) {
         super(parent, invokingState);
     }
-    descriptionLine(i) {
-        if (i === undefined) {
-            return this.getRuleContexts(DescriptionLineContext);
-        }
-        else {
-            return this.getRuleContext(i, DescriptionLineContext);
-        }
+    descriptionLine() {
+        return this.getRuleContext(0, DescriptionLineContext);
     }
     get ruleIndex() { return TomParser.RULE_description; }
     enterRule(listener) {
@@ -3843,6 +4065,9 @@ class DescriptionTextContext extends ParserRuleContext_1.ParserRuleContext {
     COLON() { return this.tryGetToken(TomParser.COLON, 0); }
     MINUS() { return this.tryGetToken(TomParser.MINUS, 0); }
     PERIOD() { return this.tryGetToken(TomParser.PERIOD, 0); }
+    literal() {
+        return this.tryGetRuleContext(0, LiteralContext);
+    }
     get ruleIndex() { return TomParser.RULE_descriptionText; }
     enterRule(listener) {
         if (listener.enterDescriptionText)
@@ -3973,18 +4198,11 @@ class InlineTagContext extends ParserRuleContext_1.ParserRuleContext {
         super(parent, invokingState);
     }
     INLINE_TAG_START() { return this.getToken(TomParser.INLINE_TAG_START, 0); }
-    inlineTagID() {
-        return this.getRuleContext(0, InlineTagIDContext);
+    inlineTagName() {
+        return this.getRuleContext(0, InlineTagNameContext);
     }
+    SPACE() { return this.getToken(TomParser.SPACE, 0); }
     BRACE_CLOSE() { return this.getToken(TomParser.BRACE_CLOSE, 0); }
-    SPACE(i) {
-        if (i === undefined) {
-            return this.getTokens(TomParser.SPACE);
-        }
-        else {
-            return this.getToken(TomParser.SPACE, i);
-        }
-    }
     inlineTagBody() {
         return this.tryGetRuleContext(0, InlineTagBodyContext);
     }
@@ -4017,42 +4235,42 @@ __decorate([
     Decorators_2.Override
 ], InlineTagContext.prototype, "accept", null);
 exports.InlineTagContext = InlineTagContext;
-class InlineTagIDContext extends ParserRuleContext_1.ParserRuleContext {
+class InlineTagNameContext extends ParserRuleContext_1.ParserRuleContext {
     constructor(parent, invokingState) {
         super(parent, invokingState);
     }
     identifier() {
         return this.getRuleContext(0, IdentifierContext);
     }
-    get ruleIndex() { return TomParser.RULE_inlineTagID; }
+    get ruleIndex() { return TomParser.RULE_inlineTagName; }
     enterRule(listener) {
-        if (listener.enterInlineTagID)
-            listener.enterInlineTagID(this);
+        if (listener.enterInlineTagName)
+            listener.enterInlineTagName(this);
     }
     exitRule(listener) {
-        if (listener.exitInlineTagID)
-            listener.exitInlineTagID(this);
+        if (listener.exitInlineTagName)
+            listener.exitInlineTagName(this);
     }
     accept(visitor) {
-        if (visitor.visitInlineTagID)
-            return visitor.visitInlineTagID(this);
+        if (visitor.visitInlineTagName)
+            return visitor.visitInlineTagName(this);
         else
             return visitor.visitChildren(this);
     }
 }
 __decorate([
     Decorators_2.Override
-], InlineTagIDContext.prototype, "ruleIndex", null);
+], InlineTagNameContext.prototype, "ruleIndex", null);
 __decorate([
     Decorators_2.Override
-], InlineTagIDContext.prototype, "enterRule", null);
+], InlineTagNameContext.prototype, "enterRule", null);
 __decorate([
     Decorators_2.Override
-], InlineTagIDContext.prototype, "exitRule", null);
+], InlineTagNameContext.prototype, "exitRule", null);
 __decorate([
     Decorators_2.Override
-], InlineTagIDContext.prototype, "accept", null);
-exports.InlineTagIDContext = InlineTagIDContext;
+], InlineTagNameContext.prototype, "accept", null);
+exports.InlineTagNameContext = InlineTagNameContext;
 class InlineTagBodyContext extends ParserRuleContext_1.ParserRuleContext {
     constructor(parent, invokingState) {
         super(parent, invokingState);
@@ -4264,6 +4482,9 @@ class ExpressionContext extends ParserRuleContext_1.ParserRuleContext {
     literal() {
         return this.tryGetRuleContext(0, LiteralContext);
     }
+    parenthesizedExpression() {
+        return this.tryGetRuleContext(0, ParenthesizedExpressionContext);
+    }
     get ruleIndex() { return TomParser.RULE_expression; }
     enterRule(listener) {
         if (listener.enterExpression)
@@ -4302,7 +4523,6 @@ class UnaryExpressionContext extends ParserRuleContext_1.ParserRuleContext {
     }
     PLUS() { return this.tryGetToken(TomParser.PLUS, 0); }
     MINUS() { return this.tryGetToken(TomParser.MINUS, 0); }
-    EXCLAMATION() { return this.tryGetToken(TomParser.EXCLAMATION, 0); }
     get ruleIndex() { return TomParser.RULE_unaryExpression; }
     enterRule(listener) {
         if (listener.enterUnaryExpression)
@@ -4487,41 +4707,6 @@ __decorate([
     Decorators_2.Override
 ], ObjectPairContext.prototype, "accept", null);
 exports.ObjectPairContext = ObjectPairContext;
-class NumberContext extends ParserRuleContext_1.ParserRuleContext {
-    constructor(parent, invokingState) {
-        super(parent, invokingState);
-    }
-    IntegerLiteral() { return this.tryGetToken(TomParser.IntegerLiteral, 0); }
-    FloatingPointLiteral() { return this.tryGetToken(TomParser.FloatingPointLiteral, 0); }
-    get ruleIndex() { return TomParser.RULE_number; }
-    enterRule(listener) {
-        if (listener.enterNumber)
-            listener.enterNumber(this);
-    }
-    exitRule(listener) {
-        if (listener.exitNumber)
-            listener.exitNumber(this);
-    }
-    accept(visitor) {
-        if (visitor.visitNumber)
-            return visitor.visitNumber(this);
-        else
-            return visitor.visitChildren(this);
-    }
-}
-__decorate([
-    Decorators_2.Override
-], NumberContext.prototype, "ruleIndex", null);
-__decorate([
-    Decorators_2.Override
-], NumberContext.prototype, "enterRule", null);
-__decorate([
-    Decorators_2.Override
-], NumberContext.prototype, "exitRule", null);
-__decorate([
-    Decorators_2.Override
-], NumberContext.prototype, "accept", null);
-exports.NumberContext = NumberContext;
 class LiteralContext extends ParserRuleContext_1.ParserRuleContext {
     constructor(parent, invokingState) {
         super(parent, invokingState);
@@ -4561,6 +4746,52 @@ __decorate([
     Decorators_2.Override
 ], LiteralContext.prototype, "accept", null);
 exports.LiteralContext = LiteralContext;
+class ParenthesizedExpressionContext extends ParserRuleContext_1.ParserRuleContext {
+    constructor(parent, invokingState) {
+        super(parent, invokingState);
+    }
+    PAREN_OPEN() { return this.getToken(TomParser.PAREN_OPEN, 0); }
+    expression() {
+        return this.getRuleContext(0, ExpressionContext);
+    }
+    PAREN_CLOSE() { return this.getToken(TomParser.PAREN_CLOSE, 0); }
+    SPACE(i) {
+        if (i === undefined) {
+            return this.getTokens(TomParser.SPACE);
+        }
+        else {
+            return this.getToken(TomParser.SPACE, i);
+        }
+    }
+    get ruleIndex() { return TomParser.RULE_parenthesizedExpression; }
+    enterRule(listener) {
+        if (listener.enterParenthesizedExpression)
+            listener.enterParenthesizedExpression(this);
+    }
+    exitRule(listener) {
+        if (listener.exitParenthesizedExpression)
+            listener.exitParenthesizedExpression(this);
+    }
+    accept(visitor) {
+        if (visitor.visitParenthesizedExpression)
+            return visitor.visitParenthesizedExpression(this);
+        else
+            return visitor.visitChildren(this);
+    }
+}
+__decorate([
+    Decorators_2.Override
+], ParenthesizedExpressionContext.prototype, "ruleIndex", null);
+__decorate([
+    Decorators_2.Override
+], ParenthesizedExpressionContext.prototype, "enterRule", null);
+__decorate([
+    Decorators_2.Override
+], ParenthesizedExpressionContext.prototype, "exitRule", null);
+__decorate([
+    Decorators_2.Override
+], ParenthesizedExpressionContext.prototype, "accept", null);
+exports.ParenthesizedExpressionContext = ParenthesizedExpressionContext;
 class IdentifierContext extends ParserRuleContext_1.ParserRuleContext {
     constructor(parent, invokingState) {
         super(parent, invokingState);

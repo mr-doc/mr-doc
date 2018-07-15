@@ -15,6 +15,8 @@ import { TagBodyContext } from './TomParser';
 import { AssignmentDelimiterContext } from './TomParser';
 import { TypeDelimiterContext } from './TomParser';
 import { TypeContext } from './TomParser';
+import { PrimaryTypeContext } from './TomParser';
+import { ParenthesizedTypeContext } from './TomParser';
 import { LambdaTypeContext } from './TomParser';
 import { FormalParameterSequenceContext } from './TomParser';
 import { ParameterContext } from './TomParser';
@@ -29,7 +31,7 @@ import { DescriptionTextContext } from './TomParser';
 import { DescriptionLineElementContext } from './TomParser';
 import { DescriptionLineTextContext } from './TomParser';
 import { InlineTagContext } from './TomParser';
-import { InlineTagIDContext } from './TomParser';
+import { InlineTagNameContext } from './TomParser';
 import { InlineTagBodyContext } from './TomParser';
 import { BraceExpressionContext } from './TomParser';
 import { BraceBodyContext } from './TomParser';
@@ -39,8 +41,8 @@ import { UnaryExpressionContext } from './TomParser';
 import { ArrayExpressionContext } from './TomParser';
 import { ObjectExpressionContext } from './TomParser';
 import { ObjectPairContext } from './TomParser';
-import { NumberContext } from './TomParser';
 import { LiteralContext } from './TomParser';
+import { ParenthesizedExpressionContext } from './TomParser';
 import { IdentifierContext } from './TomParser';
 
 
@@ -180,6 +182,28 @@ export interface TomParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitType?: (ctx: TypeContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `TomParser.primaryType`.
+	 * @param ctx the parse tree
+	 */
+	enterPrimaryType?: (ctx: PrimaryTypeContext) => void;
+	/**
+	 * Exit a parse tree produced by `TomParser.primaryType`.
+	 * @param ctx the parse tree
+	 */
+	exitPrimaryType?: (ctx: PrimaryTypeContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `TomParser.parenthesizedType`.
+	 * @param ctx the parse tree
+	 */
+	enterParenthesizedType?: (ctx: ParenthesizedTypeContext) => void;
+	/**
+	 * Exit a parse tree produced by `TomParser.parenthesizedType`.
+	 * @param ctx the parse tree
+	 */
+	exitParenthesizedType?: (ctx: ParenthesizedTypeContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `TomParser.lambdaType`.
@@ -336,15 +360,15 @@ export interface TomParserListener extends ParseTreeListener {
 	exitInlineTag?: (ctx: InlineTagContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `TomParser.inlineTagID`.
+	 * Enter a parse tree produced by `TomParser.inlineTagName`.
 	 * @param ctx the parse tree
 	 */
-	enterInlineTagID?: (ctx: InlineTagIDContext) => void;
+	enterInlineTagName?: (ctx: InlineTagNameContext) => void;
 	/**
-	 * Exit a parse tree produced by `TomParser.inlineTagID`.
+	 * Exit a parse tree produced by `TomParser.inlineTagName`.
 	 * @param ctx the parse tree
 	 */
-	exitInlineTagID?: (ctx: InlineTagIDContext) => void;
+	exitInlineTagName?: (ctx: InlineTagNameContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `TomParser.inlineTagBody`.
@@ -446,17 +470,6 @@ export interface TomParserListener extends ParseTreeListener {
 	exitObjectPair?: (ctx: ObjectPairContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `TomParser.number`.
-	 * @param ctx the parse tree
-	 */
-	enterNumber?: (ctx: NumberContext) => void;
-	/**
-	 * Exit a parse tree produced by `TomParser.number`.
-	 * @param ctx the parse tree
-	 */
-	exitNumber?: (ctx: NumberContext) => void;
-
-	/**
 	 * Enter a parse tree produced by `TomParser.literal`.
 	 * @param ctx the parse tree
 	 */
@@ -466,6 +479,17 @@ export interface TomParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitLiteral?: (ctx: LiteralContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `TomParser.parenthesizedExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterParenthesizedExpression?: (ctx: ParenthesizedExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `TomParser.parenthesizedExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitParenthesizedExpression?: (ctx: ParenthesizedExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `TomParser.identifier`.

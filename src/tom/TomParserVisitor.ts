@@ -15,6 +15,8 @@ import { TagBodyContext } from './TomParser';
 import { AssignmentDelimiterContext } from './TomParser';
 import { TypeDelimiterContext } from './TomParser';
 import { TypeContext } from './TomParser';
+import { PrimaryTypeContext } from './TomParser';
+import { ParenthesizedTypeContext } from './TomParser';
 import { LambdaTypeContext } from './TomParser';
 import { FormalParameterSequenceContext } from './TomParser';
 import { ParameterContext } from './TomParser';
@@ -29,7 +31,7 @@ import { DescriptionTextContext } from './TomParser';
 import { DescriptionLineElementContext } from './TomParser';
 import { DescriptionLineTextContext } from './TomParser';
 import { InlineTagContext } from './TomParser';
-import { InlineTagIDContext } from './TomParser';
+import { InlineTagNameContext } from './TomParser';
 import { InlineTagBodyContext } from './TomParser';
 import { BraceExpressionContext } from './TomParser';
 import { BraceBodyContext } from './TomParser';
@@ -39,8 +41,8 @@ import { UnaryExpressionContext } from './TomParser';
 import { ArrayExpressionContext } from './TomParser';
 import { ObjectExpressionContext } from './TomParser';
 import { ObjectPairContext } from './TomParser';
-import { NumberContext } from './TomParser';
 import { LiteralContext } from './TomParser';
+import { ParenthesizedExpressionContext } from './TomParser';
 import { IdentifierContext } from './TomParser';
 
 
@@ -135,6 +137,20 @@ export interface TomParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitType?: (ctx: TypeContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.primaryType`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitPrimaryType?: (ctx: PrimaryTypeContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.parenthesizedType`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitParenthesizedType?: (ctx: ParenthesizedTypeContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `TomParser.lambdaType`.
@@ -235,11 +251,11 @@ export interface TomParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitInlineTag?: (ctx: InlineTagContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `TomParser.inlineTagID`.
+	 * Visit a parse tree produced by `TomParser.inlineTagName`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitInlineTagID?: (ctx: InlineTagIDContext) => Result;
+	visitInlineTagName?: (ctx: InlineTagNameContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `TomParser.inlineTagBody`.
@@ -305,18 +321,18 @@ export interface TomParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitObjectPair?: (ctx: ObjectPairContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `TomParser.number`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitNumber?: (ctx: NumberContext) => Result;
-
-	/**
 	 * Visit a parse tree produced by `TomParser.literal`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	visitLiteral?: (ctx: LiteralContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.parenthesizedExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitParenthesizedExpression?: (ctx: ParenthesizedExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `TomParser.identifier`.

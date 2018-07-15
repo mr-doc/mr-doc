@@ -52,7 +52,7 @@ optionalTagID
 
 tagBody
 	: description
-	| inlineTag
+	// | inlineTag
 	;
 
 /* Assignments */
@@ -67,16 +67,28 @@ typeDelimiter
   ;
 
 type
-  : identifier
-  | identifier (SPACE? (AMP | PIPE) SPACE? type)*
-  | PAREN_OPEN SPACE? type SPACE? PAREN_CLOSE
+  : type SPACE? (PIPE | AMP) SPACE? type
   | lambdaType
-  | arrayType
-  | objectType
+  | primaryType
   ;
+
+primaryType
+  : parenthesizedType
+  | objectType
+  | arrayType
+  | identifier
+  ;
+
+
+parenthesizedType
+  : PAREN_OPEN SPACE? type SPACE? PAREN_CLOSE
+  ;
+
+
 
 lambdaType
   : PAREN_OPEN SPACE? formalParameterSequence SPACE? PAREN_CLOSE SPACE? ARROW SPACE? type
+  | parameter SPACE? ARROW SPACE? type
   ;
 
 formalParameterSequence
@@ -89,6 +101,7 @@ parameter
 
 arrayType
   : BRACKET_OPEN SPACE? type? (COMMA SPACE? type)* SPACE? BRACKET_CLOSE
+  | identifier BRACKET_OPEN BRACKET_CLOSE
   ;
 
 objectType
@@ -105,7 +118,7 @@ descriptionDelimiter
   ;
 
 description
-	: descriptionLine (/*descriptionNewline+ */ descriptionLine)*
+	: descriptionLine /*(*//*descriptionNewline+ *//* descriptionLine)**/
 	;
 
 descriptionLine
@@ -139,10 +152,10 @@ descriptionLineText
 	;
 
 inlineTag
-	: INLINE_TAG_START inlineTagID SPACE* inlineTagBody? BRACE_CLOSE
+	: INLINE_TAG_START inlineTagName SPACE inlineTagBody? BRACE_CLOSE
 	;
 
-inlineTagID
+inlineTagName
 	: identifier
 	;
 
@@ -156,7 +169,7 @@ braceExpression
 
 braceBody
 	: braceExpression
-	| braceText (NEWLINE* braceText)*
+	| braceText (NEWLINE braceText)*
 	;
 
 braceText
@@ -177,14 +190,16 @@ expression
   | arrayExpression
   | objectExpression
   | literal
+  | parenthesizedExpression
   ;
 
 unaryExpression
-  : (PLUS | MINUS | EXCLAMATION) expression
+  : (PLUS | MINUS /*EXCLAMATION*/) expression
   ;
 
 arrayExpression
-  : BRACKET_OPEN expression? (COMMA SPACE? expression)* BRACKET_CLOSE;
+  : BRACKET_OPEN expression? (COMMA SPACE? expression)* BRACKET_CLOSE
+  ;
 
 objectExpression
   : BRACE_OPEN SPACE? objectPair? SPACE? BRACE_CLOSE;
@@ -192,10 +207,10 @@ objectExpression
 objectPair
   : literal SPACE? COLON SPACE? literal;
 
-number
-  : IntegerLiteral
-  | FloatingPointLiteral
-  ;
+//number
+//  : IntegerLiteral
+//  | FloatingPointLiteral
+//  ;
 
 literal
   : IntegerLiteral
@@ -206,6 +221,9 @@ literal
   |	NullLiteral
   ;
 
+parenthesizedExpression
+  : PAREN_OPEN SPACE? expression SPACE? PAREN_CLOSE
+  ;
 
 identifier
   : ID

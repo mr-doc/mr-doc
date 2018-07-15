@@ -36,10 +36,10 @@ class TomLexer extends Lexer_1.Lexer {
     ID_action(_localctx, actionIndex) {
         switch (actionIndex) {
             case 0:
-                if (this.text == "true" || this.text == "false")
-                    this.type = TomLexer.BooleanLiteral;
-                if (this.text == "null" || this.text == "undefined")
-                    this.type = TomLexer.NullLiteral;
+                if (getText() == "true" || getText() == "false")
+                    setType(BooleanLiteral);
+                if (getText() == "null" || getText() == "undefined")
+                    setType(NullLiteral);
                 break;
         }
     }
