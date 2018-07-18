@@ -11,10 +11,11 @@ import { TagContext } from './TomParser';
 import { TagNameContext } from './TomParser';
 import { TagIDContext } from './TomParser';
 import { OptionalTagIDContext } from './TomParser';
-import { TagBodyContext } from './TomParser';
-import { AssignmentDelimiterContext } from './TomParser';
-import { TypeDelimiterContext } from './TomParser';
+import { PropertyTagIDContext } from './TomParser';
+import { OptionalTagOrIdentifierContext } from './TomParser';
 import { TypeContext } from './TomParser';
+import { TupleTypeContext } from './TomParser';
+import { TupleTypeListContext } from './TomParser';
 import { PrimaryTypeContext } from './TomParser';
 import { ParenthesizedTypeContext } from './TomParser';
 import { LambdaTypeContext } from './TomParser';
@@ -22,8 +23,11 @@ import { FormalParameterSequenceContext } from './TomParser';
 import { ParameterContext } from './TomParser';
 import { ArrayTypeContext } from './TomParser';
 import { ObjectTypeContext } from './TomParser';
+import { ObjectPairTypeListContext } from './TomParser';
 import { ObjectPairTypeContext } from './TomParser';
-import { DescriptionDelimiterContext } from './TomParser';
+import { OptionalTypeContext } from './TomParser';
+import { PropertyTypeContext } from './TomParser';
+import { ValueContext } from './TomParser';
 import { DescriptionContext } from './TomParser';
 import { DescriptionLineContext } from './TomParser';
 import { DescriptionLineStartContext } from './TomParser';
@@ -40,6 +44,7 @@ import { ExpressionContext } from './TomParser';
 import { UnaryExpressionContext } from './TomParser';
 import { ArrayExpressionContext } from './TomParser';
 import { ObjectExpressionContext } from './TomParser';
+import { ObjectPairExpressionListContext } from './TomParser';
 import { ObjectPairContext } from './TomParser';
 import { LiteralContext } from './TomParser';
 import { ParenthesizedExpressionContext } from './TomParser';
@@ -140,37 +145,26 @@ export interface TomParserListener extends ParseTreeListener {
 	exitOptionalTagID?: (ctx: OptionalTagIDContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `TomParser.tagBody`.
+	 * Enter a parse tree produced by `TomParser.propertyTagID`.
 	 * @param ctx the parse tree
 	 */
-	enterTagBody?: (ctx: TagBodyContext) => void;
+	enterPropertyTagID?: (ctx: PropertyTagIDContext) => void;
 	/**
-	 * Exit a parse tree produced by `TomParser.tagBody`.
+	 * Exit a parse tree produced by `TomParser.propertyTagID`.
 	 * @param ctx the parse tree
 	 */
-	exitTagBody?: (ctx: TagBodyContext) => void;
+	exitPropertyTagID?: (ctx: PropertyTagIDContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `TomParser.assignmentDelimiter`.
+	 * Enter a parse tree produced by `TomParser.optionalTagOrIdentifier`.
 	 * @param ctx the parse tree
 	 */
-	enterAssignmentDelimiter?: (ctx: AssignmentDelimiterContext) => void;
+	enterOptionalTagOrIdentifier?: (ctx: OptionalTagOrIdentifierContext) => void;
 	/**
-	 * Exit a parse tree produced by `TomParser.assignmentDelimiter`.
+	 * Exit a parse tree produced by `TomParser.optionalTagOrIdentifier`.
 	 * @param ctx the parse tree
 	 */
-	exitAssignmentDelimiter?: (ctx: AssignmentDelimiterContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `TomParser.typeDelimiter`.
-	 * @param ctx the parse tree
-	 */
-	enterTypeDelimiter?: (ctx: TypeDelimiterContext) => void;
-	/**
-	 * Exit a parse tree produced by `TomParser.typeDelimiter`.
-	 * @param ctx the parse tree
-	 */
-	exitTypeDelimiter?: (ctx: TypeDelimiterContext) => void;
+	exitOptionalTagOrIdentifier?: (ctx: OptionalTagOrIdentifierContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `TomParser.type`.
@@ -182,6 +176,28 @@ export interface TomParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitType?: (ctx: TypeContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `TomParser.tupleType`.
+	 * @param ctx the parse tree
+	 */
+	enterTupleType?: (ctx: TupleTypeContext) => void;
+	/**
+	 * Exit a parse tree produced by `TomParser.tupleType`.
+	 * @param ctx the parse tree
+	 */
+	exitTupleType?: (ctx: TupleTypeContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `TomParser.tupleTypeList`.
+	 * @param ctx the parse tree
+	 */
+	enterTupleTypeList?: (ctx: TupleTypeListContext) => void;
+	/**
+	 * Exit a parse tree produced by `TomParser.tupleTypeList`.
+	 * @param ctx the parse tree
+	 */
+	exitTupleTypeList?: (ctx: TupleTypeListContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `TomParser.primaryType`.
@@ -261,6 +277,17 @@ export interface TomParserListener extends ParseTreeListener {
 	exitObjectType?: (ctx: ObjectTypeContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `TomParser.objectPairTypeList`.
+	 * @param ctx the parse tree
+	 */
+	enterObjectPairTypeList?: (ctx: ObjectPairTypeListContext) => void;
+	/**
+	 * Exit a parse tree produced by `TomParser.objectPairTypeList`.
+	 * @param ctx the parse tree
+	 */
+	exitObjectPairTypeList?: (ctx: ObjectPairTypeListContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `TomParser.objectPairType`.
 	 * @param ctx the parse tree
 	 */
@@ -272,15 +299,37 @@ export interface TomParserListener extends ParseTreeListener {
 	exitObjectPairType?: (ctx: ObjectPairTypeContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `TomParser.descriptionDelimiter`.
+	 * Enter a parse tree produced by `TomParser.optionalType`.
 	 * @param ctx the parse tree
 	 */
-	enterDescriptionDelimiter?: (ctx: DescriptionDelimiterContext) => void;
+	enterOptionalType?: (ctx: OptionalTypeContext) => void;
 	/**
-	 * Exit a parse tree produced by `TomParser.descriptionDelimiter`.
+	 * Exit a parse tree produced by `TomParser.optionalType`.
 	 * @param ctx the parse tree
 	 */
-	exitDescriptionDelimiter?: (ctx: DescriptionDelimiterContext) => void;
+	exitOptionalType?: (ctx: OptionalTypeContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `TomParser.propertyType`.
+	 * @param ctx the parse tree
+	 */
+	enterPropertyType?: (ctx: PropertyTypeContext) => void;
+	/**
+	 * Exit a parse tree produced by `TomParser.propertyType`.
+	 * @param ctx the parse tree
+	 */
+	exitPropertyType?: (ctx: PropertyTypeContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `TomParser.value`.
+	 * @param ctx the parse tree
+	 */
+	enterValue?: (ctx: ValueContext) => void;
+	/**
+	 * Exit a parse tree produced by `TomParser.value`.
+	 * @param ctx the parse tree
+	 */
+	exitValue?: (ctx: ValueContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `TomParser.description`.
@@ -457,6 +506,17 @@ export interface TomParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitObjectExpression?: (ctx: ObjectExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `TomParser.objectPairExpressionList`.
+	 * @param ctx the parse tree
+	 */
+	enterObjectPairExpressionList?: (ctx: ObjectPairExpressionListContext) => void;
+	/**
+	 * Exit a parse tree produced by `TomParser.objectPairExpressionList`.
+	 * @param ctx the parse tree
+	 */
+	exitObjectPairExpressionList?: (ctx: ObjectPairExpressionListContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `TomParser.objectPair`.

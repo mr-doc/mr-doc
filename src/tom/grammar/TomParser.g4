@@ -25,15 +25,17 @@ annotations
 
 tag
 	: tagName // i.e. @tag
+	| tagName SPACE type // i.e. @tag type (@return {...})
+	| tagName SPACE type SPACE MINUS SPACE description // i.e @tag type - description
+  | tagName SPACE MINUS SPACE description// i.e. @tag - description
 	| tagName SPACE tagID// i.e. @tag x
-	| tagName SPACE descriptionDelimiter SPACE tagBody// i.e. @tag - description
-	| tagName SPACE tagID SPACE? assignmentDelimiter SPACE? expression // i.e. @tag x = expression
-	| tagName SPACE tagID SPACE descriptionDelimiter SPACE tagBody // i.e. @tag x - description
-	| tagName SPACE tagID SPACE assignmentDelimiter SPACE? expression SPACE descriptionDelimiter SPACE tagBody // i.e. @tag x = expression - description
-	| tagName SPACE tagID SPACE? typeDelimiter SPACE? type // i.e. @tag x: type
-	| tagName SPACE tagID SPACE? typeDelimiter SPACE? type SPACE? assignmentDelimiter SPACE? expression // i.e. @tag x: type = expression
-	| tagName SPACE tagID SPACE? typeDelimiter SPACE? type SPACE descriptionDelimiter SPACE tagBody // i.e. @tag x: type - description
-	| tagName SPACE tagID SPACE? typeDelimiter SPACE? type SPACE? assignmentDelimiter SPACE? expression SPACE descriptionDelimiter SPACE tagBody // i.e. @tag x: type = expression - description
+	| tagName SPACE tagID SPACE? EQUAL SPACE? value // i.e. @tag x = expression
+	| tagName SPACE tagID SPACE MINUS SPACE description // i.e. @tag x - description
+	| tagName SPACE tagID SPACE EQUAL SPACE? value SPACE MINUS SPACE description // i.e. @tag x = value - description
+	| tagName SPACE tagID SPACE? COLON SPACE? type // i.e. @tag x: type
+	| tagName SPACE tagID SPACE? COLON SPACE? type SPACE? EQUAL SPACE? value // i.e. @tag x: type = value
+	| tagName SPACE tagID SPACE? COLON SPACE? type SPACE MINUS SPACE description // i.e. @tag x: type - description
+	| tagName SPACE tagID SPACE? COLON SPACE? type SPACE? EQUAL SPACE? value SPACE MINUS SPACE description // i.e. @tag x: type = value - description
 	;
 
 /* Tags */
@@ -42,7 +44,8 @@ tagName
 	;
 
 tagID
-  : optionalTagID
+  : propertyTagID
+  | optionalTagID
   | identifier
   ;
 
@@ -50,33 +53,42 @@ optionalTagID
   : identifier QUESTION
   ;
 
-tagBody
-	: description
-	// | inlineTag
-	;
+propertyTagID
+  : optionalTagID (PERIOD optionalTagOrIdentifier)*
+  | identifier (PERIOD optionalTagOrIdentifier)*
+  ;
 
-/* Assignments */
-assignmentDelimiter
-  : EQUAL
+optionalTagOrIdentifier
+  : optionalTagID
+  | identifier
   ;
 
 /* Types */
 
-typeDelimiter
-  : COLON
-  ;
-
 type
   : type SPACE? (PIPE | AMP) SPACE? type
   | lambdaType
+  | tupleType
   | primaryType
   ;
+
+tupleType
+  : identifier? LESSTHAN SPACE? tupleTypeList SPACE? GREATERTHAN
+  ;
+
+tupleTypeList
+  : type SPACE? (COMMA SPACE? type)+
+  ;
+
 
 primaryType
   : parenthesizedType
   | objectType
   | arrayType
-  | identifier
+  | propertyType
+  | optionalType
+  | identifier QUESTION?
+  | NullLiteral
   ;
 
 
@@ -102,20 +114,37 @@ parameter
 arrayType
   : BRACKET_OPEN SPACE? type? (COMMA SPACE? type)* SPACE? BRACKET_CLOSE
   | identifier BRACKET_OPEN BRACKET_CLOSE
+  | objectType BRACKET_OPEN BRACKET_CLOSE
+  | arrayType BRACKET_OPEN type? BRACKET_CLOSE
   ;
 
 objectType
-  : BRACE_OPEN SPACE? objectPairType? SPACE? BRACE_CLOSE
+  : BRACE_OPEN SPACE? NEWLINE? SPACE? objectPairTypeList? SPACE? NEWLINE? SPACE? BRACE_CLOSE
+  ;
+
+objectPairTypeList
+  : objectPairType SPACE? (COMMA SPACE? NEWLINE? SPACE? objectPairType)*
   ;
 
 objectPairType
-  : type SPACE? COLON SPACE? type
+  : type QUESTION? SPACE? COLON SPACE? type
+  ;
+
+optionalType
+  : identifier QUESTION
+  ;
+
+propertyType
+  : identifier (PERIOD (identifier | optionalType))*
+  | optionalType (PERIOD (optionalTagID | identifier))*
+  ;
+
+/* Value */
+value
+  : expression
   ;
 
 /* Descriptions */
-descriptionDelimiter
-  : MINUS
-  ;
 
 description
 	: descriptionLine /*(*//*descriptionNewline+ *//* descriptionLine)**/
@@ -202,15 +231,16 @@ arrayExpression
   ;
 
 objectExpression
-  : BRACE_OPEN SPACE? objectPair? SPACE? BRACE_CLOSE;
+  : BRACE_OPEN SPACE? NEWLINE? SPACE? objectPairExpressionList? SPACE? NEWLINE? SPACE? BRACE_CLOSE;
+
+objectPairExpressionList
+  : objectPair (SPACE? COMMA SPACE? NEWLINE? SPACE? objectPair)*
+  ;
 
 objectPair
-  : literal SPACE? COLON SPACE? literal;
-
-//number
-//  : IntegerLiteral
-//  | FloatingPointLiteral
-//  ;
+  : literal SPACE? COLON SPACE? objectExpression
+  | literal SPACE? COLON SPACE? literal
+  ;
 
 literal
   : IntegerLiteral

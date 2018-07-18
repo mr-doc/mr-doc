@@ -18,39 +18,174 @@ class XDoc {
 exports.XDoc = XDoc;
 exports.default = (source) => {
     // Get the input stream
-    return new XDoc(source);
+    return new XDoc(source).parse();
 };
 /*! Documentation */
+/*
+  Parses the Documentation production.
+  
+  # API
+
+  ```
+  @param node: Parser.DocumentationContext - The documentation context node.
+  @return Parser.BodyContext[] - The body context nodes.
+  ```
+
+  # Remark
+
+  Documentation is the root node.
+  A documentation node has a body as its child.
+
+ */
 function parseDocumentation(node) {
     if (node.body()) {
         return parseBody(node.body());
     }
 }
+/*
+  Parses the Body production.
+  
+  # API
+
+  ```
+  @param node: Parser.BodyContext - The body context node.
+  @return Parser.Annotations[] - The body context nodes.
+  ```
+
+  # Remark
+
+  A body node has an array of annotation nodes.
+
+ */
 function parseBody(node) {
     if (node.annotations()) {
         return parseAnnotations(node.annotations());
     }
 }
+/*
+  Parses the Annotations production.
+  
+  # API
+
+  ```
+  @param node: Parser.AnnotationsContext - The annotation context node.
+  @return Parser.TagContext[] - The body context nodes.
+  ```
+
+  # Remark
+
+  An annotation node has an array of tag nodes.
+
+ */
 function parseAnnotations(node) {
-    return node.tag().map(tag => {
-        let obj = {};
-        if (tag.tagName()) {
-            _.assign(obj, { name: tag.tagName().identifier().text });
-        }
-        if (tag.tagID()) {
-            _.assign(obj, { id: tag.tagID().text });
-        }
-        if (tag.type()) {
-            _.assign(obj, { type: parseType(tag.type()) });
-        }
-        if (tag.expression()) {
-            _.assign(obj, { value: parseExpression(tag.expression()) });
-        }
-        if (tag.tagBody()) {
-            _.assign(obj, { description: parseTagBody(tag.tagBody()) });
-        }
-        return obj;
-    });
+    return node.tag()
+        .map(parseTag)
+        .filter(x => x !== undefined);
+}
+/*
+  Parses the Tag production.
+  
+  # API
+
+  ```
+  @param node: Parser.TagContext - The annotation context node.
+  @return { name?: string, id?: {}, value?: {}, type?: {}, description?: {} } | undefined - The tagID object or undefined if no leaf exists.
+  ```
+
+  # Remark
+
+  A TagContext node has a tag name, tag id, value, type, and description.
+
+
+ */
+function parseTag(node) {
+    let tag = {};
+    if (node.tagName()) {
+        _.assign(tag, { name: node.tagName().identifier().text });
+    }
+    if (node.tagID()) {
+        _.assign(tag, { id: parseTagID(node.tagID()) });
+    }
+    if (node.value()) {
+        _.assign(tag, { value: parseValue(node.value()) });
+    }
+    if (node.type()) {
+        _.assign(tag, { type: parseType(node.type()) });
+    }
+    if (node.description()) {
+        _.assign(tag, { description: parseTagBody(node.description()) });
+    }
+    return _.isEqual(tag, {}) ? undefined : tag;
+}
+/*
+  Parses the TagID production.
+  
+  # API
+
+  ```
+  @param node: Parser.TagIDContext - The tagID context node.
+  @return { id?: {}, optional: boolean, property?: {} } - The body context nodes.
+  ```
+  # Remark
+
+  A TagId node is an object with an 'id', 'property', and 'optional'.
+
+ */
+function parseTagID(node) {
+    let tag = { id: undefined, optional: false, property: undefined };
+    if (node.identifier()) {
+        tag.id = node.identifier().ID().text;
+    }
+    if (node.optionalTagID()) {
+        tag.id = node.optionalTagID().identifier().ID().text;
+        tag.optional = true;
+    }
+    if (node.propertyTagID()) {
+        return parsePropertyTagID(node.propertyTagID());
+    }
+    return tag;
+}
+/*
+  Parses the PropertyTagID production.
+  
+  # API
+
+  ```
+  @param node: Parser.PropertyTagIDContext - The annotation context node.
+  @return Parser.TagContext[] - The body context nodes.
+  ```
+  # Remark
+
+  An annotation node has an array of tag nodes.
+
+ */
+function parsePropertyTagID(node) {
+    let tag = { id: undefined, optional: false, property: undefined };
+    if (node.identifier()) {
+        tag.id = node.identifier().ID().text;
+    }
+    if (node.optionalTagID()) {
+        tag.id = node.identifier().ID().text;
+        tag.optional = true;
+    }
+    if (node.optionalTagOrIdentifier()) {
+        tag.property = node.optionalTagOrIdentifier()
+            .map(parseOptionalOrIdentifer)
+            .unshift({ id: tag.id, optional: tag.optional });
+        tag.id = tag.optional = undefined;
+    }
+    return tag;
+}
+function parseOptionalOrIdentifer(node) {
+    let id, optional;
+    if (node.identifier()) {
+        id = node.identifier().ID().text;
+    }
+    if (node.optionalTagID()) {
+        id = node.optionalTagID().identifier().ID().text;
+        optional = true;
+    }
+    return { id, optional };
 }
 /*! Type */
 function parseType(node) {

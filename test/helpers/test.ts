@@ -32,6 +32,12 @@ export function tag(name: string, id?: string, type?: {}, value?: {}, descriptio
   });
 }
 
+function tagID(id:string, optional = false) {
+  return {
+    id
+  }
+}
+
 export function description(text: string, inlines = []) {
   return redefine({
     text,

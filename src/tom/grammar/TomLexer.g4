@@ -298,7 +298,7 @@ SPACE
 	;
 
 TEXT_CONTENT
-	: ~[>'|&0123456789".,\n\r\t +=@*{}()[\]/:?!-]+
+	: ~[<>'|&0123456789".,\n\r\t +=@*{}()[\]/:?!-]+
 	;
 
 AT
@@ -351,8 +351,8 @@ PIPE
   ;
 
 ARROW
-  : EQUAL '>'
-  | MINUS '>'
+  : EQUAL GREATERTHAN
+  | MINUS GREATERTHAN
   ;
 
 EXCLAMATION
@@ -386,6 +386,14 @@ BRACKET_OPEN
 
 BRACKET_CLOSE
   : ']'
+  ;
+
+LESSTHAN
+  : '<'
+  ;
+
+GREATERTHAN
+  : '>'
   ;
 
 fragment

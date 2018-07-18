@@ -31,6 +31,11 @@ function tag(name, id, type, value, description) {
     });
 }
 exports.tag = tag;
+function tagID(id, optional = false) {
+    return {
+        id
+    };
+}
 function description(text, inlines = []) {
     return redefine({
         text,

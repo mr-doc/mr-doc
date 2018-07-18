@@ -11,10 +11,11 @@ import { TagContext } from './TomParser';
 import { TagNameContext } from './TomParser';
 import { TagIDContext } from './TomParser';
 import { OptionalTagIDContext } from './TomParser';
-import { TagBodyContext } from './TomParser';
-import { AssignmentDelimiterContext } from './TomParser';
-import { TypeDelimiterContext } from './TomParser';
+import { PropertyTagIDContext } from './TomParser';
+import { OptionalTagOrIdentifierContext } from './TomParser';
 import { TypeContext } from './TomParser';
+import { TupleTypeContext } from './TomParser';
+import { TupleTypeListContext } from './TomParser';
 import { PrimaryTypeContext } from './TomParser';
 import { ParenthesizedTypeContext } from './TomParser';
 import { LambdaTypeContext } from './TomParser';
@@ -22,8 +23,11 @@ import { FormalParameterSequenceContext } from './TomParser';
 import { ParameterContext } from './TomParser';
 import { ArrayTypeContext } from './TomParser';
 import { ObjectTypeContext } from './TomParser';
+import { ObjectPairTypeListContext } from './TomParser';
 import { ObjectPairTypeContext } from './TomParser';
-import { DescriptionDelimiterContext } from './TomParser';
+import { OptionalTypeContext } from './TomParser';
+import { PropertyTypeContext } from './TomParser';
+import { ValueContext } from './TomParser';
 import { DescriptionContext } from './TomParser';
 import { DescriptionLineContext } from './TomParser';
 import { DescriptionLineStartContext } from './TomParser';
@@ -40,6 +44,7 @@ import { ExpressionContext } from './TomParser';
 import { UnaryExpressionContext } from './TomParser';
 import { ArrayExpressionContext } from './TomParser';
 import { ObjectExpressionContext } from './TomParser';
+import { ObjectPairExpressionListContext } from './TomParser';
 import { ObjectPairContext } from './TomParser';
 import { LiteralContext } from './TomParser';
 import { ParenthesizedExpressionContext } from './TomParser';
@@ -111,25 +116,18 @@ export interface TomParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitOptionalTagID?: (ctx: OptionalTagIDContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `TomParser.tagBody`.
+	 * Visit a parse tree produced by `TomParser.propertyTagID`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitTagBody?: (ctx: TagBodyContext) => Result;
+	visitPropertyTagID?: (ctx: PropertyTagIDContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `TomParser.assignmentDelimiter`.
+	 * Visit a parse tree produced by `TomParser.optionalTagOrIdentifier`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitAssignmentDelimiter?: (ctx: AssignmentDelimiterContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `TomParser.typeDelimiter`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitTypeDelimiter?: (ctx: TypeDelimiterContext) => Result;
+	visitOptionalTagOrIdentifier?: (ctx: OptionalTagOrIdentifierContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `TomParser.type`.
@@ -137,6 +135,20 @@ export interface TomParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitType?: (ctx: TypeContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.tupleType`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTupleType?: (ctx: TupleTypeContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.tupleTypeList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTupleTypeList?: (ctx: TupleTypeListContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `TomParser.primaryType`.
@@ -188,6 +200,13 @@ export interface TomParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitObjectType?: (ctx: ObjectTypeContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `TomParser.objectPairTypeList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitObjectPairTypeList?: (ctx: ObjectPairTypeListContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `TomParser.objectPairType`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -195,11 +214,25 @@ export interface TomParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitObjectPairType?: (ctx: ObjectPairTypeContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `TomParser.descriptionDelimiter`.
+	 * Visit a parse tree produced by `TomParser.optionalType`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitDescriptionDelimiter?: (ctx: DescriptionDelimiterContext) => Result;
+	visitOptionalType?: (ctx: OptionalTypeContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.propertyType`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitPropertyType?: (ctx: PropertyTypeContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.value`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitValue?: (ctx: ValueContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `TomParser.description`.
@@ -312,6 +345,13 @@ export interface TomParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitObjectExpression?: (ctx: ObjectExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.objectPairExpressionList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitObjectPairExpressionList?: (ctx: ObjectPairExpressionListContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `TomParser.objectPair`.
