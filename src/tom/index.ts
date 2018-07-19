@@ -303,15 +303,15 @@ function parseType(node: Parser.TypeContext) {
 /*! Lambda */
 
 function parseLambdaType(node: Parser.LambdaTypeContext) {
-  let obj = {};
+  let obj = { parameter: [] };
   if (node.formalParameterSequence()) {
-    _.assign(obj, { parameters: parseLambdaFormalParameterSequence(node.formalParameterSequence()) })
+    _.assign(obj, { parameter: parseLambdaFormalParameterSequence(node.formalParameterSequence()) })
   } else if (node.parameter()) {
-    _.assign(obj, { parameters: [parseParameter(node.parameter())] })
+    _.assign(obj, { parameter: [parseParameter(node.parameter())] })
   }
 
   if (node.type()) {
-    _.assign(obj, { 'return': { type: parseType(node.type()) } })
+    _.assign(obj, { type: parseType(node.type()) } )
   }
   return obj;
 }
@@ -567,6 +567,10 @@ function parseExpression(node: Parser.ExpressionContext) {
     return { object: parseObjectExpression(node.objectExpression()) }
   }
 
+  if (node.lambdaExpression()) {
+    return { lambda: parseLambdaExpression(node.lambdaExpression()) }
+  }
+
   if (node.literal()) {
     return { literal: parseLiteralExpression(node.literal()) }
   }
@@ -655,12 +659,28 @@ function parseObjectPairExpressionList(node: Parser.ObjectPairExpressionListCont
   });
 }
 
+function parseLambdaExpression(node: Parser.LambdaExpressionContext) {
+  let result: any = parseLambdaType(node);
+  _.assign(result.type, { optional: !!node.QUESTION() })
+  return result;
+}
 
 function parseParenthesizedExpression(node: Parser.ParenthesizedExpressionContext) {
   return parseExpression(node.expression());
 }
 
 function parseLiteralExpression(node: Parser.LiteralContext) {
+  // let removeQuotes = (str) => {
+  //   if (str.charAt(0) === '"' && str.charAt(str.length - 1) === '"') {
+  //     return str.substr(1, str.length - 2);
+  //   }
+
+  //   if (str.charAt(0) === "'" && str.charAt(str.length - 1) === "'") {
+  //     return str.substr(1, str.length - 2);
+  //   }
+
+  //   return str;
+  // };
   if (node.IntegerLiteral() || node.FloatingPointLiteral()) {
     return { number: (node.IntegerLiteral() || node.FloatingPointLiteral()).text }
   }

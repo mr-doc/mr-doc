@@ -36,6 +36,7 @@ import { ArrayExpressionContext } from './TomParser';
 import { ObjectExpressionContext } from './TomParser';
 import { ObjectPairExpressionListContext } from './TomParser';
 import { ObjectPairExpressionContext } from './TomParser';
+import { LambdaExpressionContext } from './TomParser';
 import { LiteralContext } from './TomParser';
 import { ParenthesizedExpressionContext } from './TomParser';
 import { DescriptionContext } from './TomParser';
@@ -291,6 +292,13 @@ export interface TomParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitObjectPairExpression?: (ctx: ObjectPairExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.lambdaExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitLambdaExpression?: (ctx: LambdaExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `TomParser.literal`.

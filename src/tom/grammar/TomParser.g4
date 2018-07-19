@@ -102,7 +102,7 @@ parenthesizedType
 
 
 lambdaType
-  : PAREN_OPEN SPACE? formalParameterSequence SPACE? PAREN_CLOSE SPACE? ARROW SPACE? type
+  : PAREN_OPEN SPACE? formalParameterSequence? SPACE? PAREN_CLOSE SPACE? ARROW SPACE? type
   | parameter SPACE? ARROW SPACE? type
   ;
 
@@ -115,7 +115,7 @@ parameter
   ;
 
 arrayType
-  : BRACKET_OPEN SPACE? type? (COMMA SPACE? type)* SPACE? BRACKET_CLOSE
+  : BRACKET_OPEN NEWLINE? SPACE? NEWLINE? type? (COMMA NEWLINE? SPACE? NEWLINE? type)* NEWLINE? SPACE? NEWLINE? BRACKET_CLOSE
   | identifier BRACKET_OPEN BRACKET_CLOSE
   | objectType BRACKET_OPEN BRACKET_CLOSE
   | arrayType BRACKET_OPEN type? BRACKET_CLOSE
@@ -160,6 +160,7 @@ expression
   | expression  SPACE? (PLUS | MINUS) SPACE? expression
   | arrayExpression
   | objectExpression
+  | lambdaExpression
   | literal
   | parenthesizedExpression
   ;
@@ -169,7 +170,7 @@ unaryExpression
   ;
 
 arrayExpression
-  : BRACKET_OPEN expression? (COMMA SPACE? expression)* BRACKET_CLOSE
+  : BRACKET_OPEN NEWLINE? SPACE? NEWLINE? expression? (COMMA NEWLINE? SPACE? NEWLINE? expression)* NEWLINE? SPACE? NEWLINE? BRACKET_CLOSE
   ;
 
 objectExpression
@@ -182,6 +183,11 @@ objectPairExpressionList
 objectPairExpression
   : literal SPACE? COLON SPACE? objectExpression
   | literal SPACE? COLON SPACE? literal
+  ;
+
+lambdaExpression
+  :  PAREN_OPEN SPACE? formalParameterSequence? SPACE? PAREN_CLOSE SPACE? ARROW SPACE? type
+  | parameter SPACE? ARROW SPACE? type QUESTION?
   ;
 
 literal

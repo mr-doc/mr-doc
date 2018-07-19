@@ -36,6 +36,7 @@ import { ArrayExpressionContext } from './TomParser';
 import { ObjectExpressionContext } from './TomParser';
 import { ObjectPairExpressionListContext } from './TomParser';
 import { ObjectPairExpressionContext } from './TomParser';
+import { LambdaExpressionContext } from './TomParser';
 import { LiteralContext } from './TomParser';
 import { ParenthesizedExpressionContext } from './TomParser';
 import { DescriptionContext } from './TomParser';
@@ -420,6 +421,17 @@ export interface TomParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitObjectPairExpression?: (ctx: ObjectPairExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `TomParser.lambdaExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterLambdaExpression?: (ctx: LambdaExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `TomParser.lambdaExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitLambdaExpression?: (ctx: LambdaExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `TomParser.literal`.
