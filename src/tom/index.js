@@ -27,6 +27,7 @@ exports.default = (source) => {
   # API
 
   ```
+  @function parseDocumentation
   @param node: Parser.DocumentationContext - The documentation context node.
   @return Parser.BodyContext[] - The body context nodes.
   ```
@@ -48,6 +49,7 @@ function parseDocumentation(node) {
   # API
 
   ```
+  @function parseBody
   @param node: Parser.BodyContext - The body context node.
   @return Parser.Annotations[] - The body context nodes.
   ```
@@ -68,8 +70,9 @@ function parseBody(node) {
   # API
 
   ```
+  @function parseAnnotations
   @param node: Parser.AnnotationsContext - The annotation context node.
-  @return Parser.TagContext[] - The body context nodes.
+  @return Parser.TagContext[] - The tag context nodes.
   ```
 
   # Remark
@@ -88,20 +91,32 @@ function parseAnnotations(node) {
   # API
 
   ```
+  @function parseTag
   @param node: Parser.TagContext - The annotation context node.
-  @return { name?: string, id?: {}, value?: {}, type?: {}, description?: {} } | undefined - The tagID object or undefined if no leaf exists.
+  @return {
+    name?: string,
+    id?: {},
+    value?: {},
+    type?: {},
+    description?: {}
+  } | undefined - The tag object or undefined if no leaf exists.
   ```
 
   # Remark
 
-  A TagContext node has a tag name, tag id, value, type, and description.
+  A TagContext node may have a tag name, tag id, value, type, and description.
 
 
  */
 function parseTag(node) {
     let tag = {};
     if (node.tagName()) {
-        _.assign(tag, { name: node.tagName().identifier().text });
+        _.assign(tag, {
+            name: node.tagName().identifier().ID().text
+        });
+    }
+    if (node.type()) {
+        _.assign(tag, { type: parseType(node.type()) });
     }
     if (node.tagID()) {
         _.assign(tag, { id: parseTagID(node.tagID()) });
@@ -109,11 +124,8 @@ function parseTag(node) {
     if (node.value()) {
         _.assign(tag, { value: parseValue(node.value()) });
     }
-    if (node.type()) {
-        _.assign(tag, { type: parseType(node.type()) });
-    }
     if (node.description()) {
-        _.assign(tag, { description: parseTagBody(node.description()) });
+        _.assign(tag, { description: parseDescription(node.description()) });
     }
     return _.isEqual(tag, {}) ? undefined : tag;
 }
@@ -123,12 +135,17 @@ function parseTag(node) {
   # API
 
   ```
+  @function parseTagID
   @param node: Parser.TagIDContext - The tagID context node.
-  @return { id?: {}, optional: boolean, property?: {} } - The body context nodes.
+  @return {
+    id?: {},
+    optional: boolean,
+    property?: {}
+  } - The tagID object or undefined if no leaf exists.
   ```
   # Remark
 
-  A TagId node is an object with an 'id', 'property', and 'optional'.
+  A TagId node is an object.
 
  */
 function parseTagID(node) {
@@ -151,32 +168,56 @@ function parseTagID(node) {
   # API
 
   ```
+  @function parsePropertyTagID
   @param node: Parser.PropertyTagIDContext - The annotation context node.
-  @return Parser.TagContext[] - The body context nodes.
+  @return {
+    id: any,
+    optional: any,
+    property: any
+  } - The PropertyTagId object .
   ```
   # Remark
 
-  An annotation node has an array of tag nodes.
+  A propertyTagID is an object with an 'id', 'property', and 'optional' keys.
 
  */
 function parsePropertyTagID(node) {
-    let tag = { id: undefined, optional: false, property: undefined };
+    let tag = {};
     if (node.identifier()) {
-        tag.id = node.identifier().ID().text;
+        _.assign(tag, { id: node.identifier().ID().text });
     }
     if (node.optionalTagID()) {
-        tag.id = node.identifier().ID().text;
-        tag.optional = true;
+        _.assign(tag, { id: node.identifier().ID().text, optional: true });
     }
     if (node.optionalTagOrIdentifier()) {
-        tag.property = node.optionalTagOrIdentifier()
-            .map(parseOptionalOrIdentifer)
-            .unshift({ id: tag.id, optional: tag.optional });
+        let property = node.optionalTagOrIdentifier()
+            .map(parseOptionalTagOrIdentifier);
+        property.unshift({ id: tag.id, optional: tag.optional });
+        property = property.filter(p => p.id !== undefined);
+        _.assign(tag, { property });
         tag.id = tag.optional = undefined;
     }
     return tag;
 }
-function parseOptionalOrIdentifer(node) {
+/*
+  Parses the OptionalOrIdentifier production.
+  
+  # API
+
+  ```
+  @function parseOptionalTagOrIdentifier
+  @param node: Parser.OptionalTagOrIdentifierContext - The OptionalTagOrIdentifier context node.
+  @return {
+    id?: string,
+    optional?: boolean
+  } - The OptionalTagOrIdentifierContext object.
+  ```
+  # Remark
+
+  An propertyTagID is an object with an 'id', 'property', and 'optional' keys.
+  
+ */
+function parseOptionalTagOrIdentifier(node) {
     let id, optional;
     if (node.identifier()) {
         id = node.identifier().ID().text;
@@ -188,67 +229,47 @@ function parseOptionalOrIdentifer(node) {
     return { id, optional };
 }
 /*! Type */
+/*
+  Parses the Type production.
+
+  # API
+
+  ```
+  @function parseType
+  @param node: Parse.TypeContext - The Type context node.
+  @return {
+    intersect?: {},
+    union?: {},
+    lambda?: {},
+    tuple?: {},
+    primary?: {}
+  } - The type object.
+
+  # Remark
+  A type is an object with 'intersection', 'union', 'lambda', 'tuple', or primary.
+  ```
+*/
 function parseType(node) {
-    if (node.PIPE()) {
+    if (node.PIPE()) { // Intersections
         return {
             intersect: { left: parseType(node.type(0)), right: parseType(node.type(1)) }
         };
     }
-    else if (node.AMP()) {
+    else if (node.AMP()) { // Unions
         return {
             union: { left: parseType(node.type(0)), right: parseType(node.type(1)) }
         };
     }
-    else if (node.lambdaType()) {
+    else if (node.lambdaType()) { // Lambda functions i.e. (id) => type
         return {
             lambda: parseLambdaType(node.lambdaType())
         };
     }
-    else if (node.primaryType()) {
+    else if (node.tupleType()) {
+        return { tuple: parseTuple(node.tupleType()) };
+    }
+    else if (node.primaryType()) { // Primary
         return { primary: parsePrimaryType(node.primaryType()) };
-    }
-}
-function parsePrimaryType(node) {
-    if (node.parenthesizedType()) {
-        return {
-            parenthesized: parseParenthesizedType(node.parenthesizedType())
-        };
-    }
-    if (node.objectType()) {
-        return {
-            object: parseObjectType(node.objectType())
-        };
-    }
-    if (node.arrayType()) {
-        return {
-            array: parseArrayType(node.arrayType())
-        };
-    }
-    if (node.identifier()) {
-        return { id: node.identifier().ID().text };
-    }
-}
-function parseParenthesizedType(node) {
-    if (node.type()) {
-        return parseType(node.type());
-    }
-}
-function parseObjectType(node) {
-    return {
-        key: parseType(node.objectPairType().type(0)),
-        value: parseType(node.objectPairType().type(1))
-    };
-}
-function parseArrayType(node) {
-    if (node.type()) {
-        return {
-            type: node.type().map(type => parseType(type))
-        };
-    }
-    if (node.identifier()) {
-        return {
-            identifer: node.identifier().ID().text + '[]'
-        };
     }
 }
 /*! Lambda */
@@ -283,7 +304,185 @@ function parseParameter(node) {
     }
     return { id };
 }
+function parseTuple(node) {
+    let type = {};
+    if (node.identifier()) {
+        _.assign(type, { id: node.identifier().ID().text });
+    }
+    if (node.tupleTypeList()) {
+        _.assign(type, { types: parseTupleTypeList(node.tupleTypeList()) });
+    }
+    return type;
+}
+function parseTupleTypeList(node) {
+    return node.type() ? node.type().map(type => parseType(type)) : [];
+}
+function parsePrimaryType(node) {
+    if (node.parenthesizedType()) { // (expression)
+        return {
+            parenthesized: parseParenthesizedType(node.parenthesizedType())
+        };
+    }
+    if (node.objectType()) { // { ... }
+        return {
+            object: parseObjectType(node.objectType())
+        };
+    }
+    if (node.arrayType()) { // [ ... ]
+        return {
+            array: parseArrayType(node.arrayType())
+        };
+    }
+    if (node.propertyType()) {
+        return {
+            property: parsePropertyType(node.propertyType())
+        };
+    }
+    if (node.identifierOrKeyword()) {
+        return { id: parseIdentifierOrKeyword(node.identifierOrKeyword()) };
+    }
+}
+function parseParenthesizedType(node) {
+    if (node.type()) {
+        return parseType(node.type());
+    }
+}
+function parseObjectType(node) {
+    return node.objectPairTypeList() ? parseObjectPairTypeList(node.objectPairTypeList()) : [];
+}
+function parseObjectPairTypeList(node) {
+    return node.objectPairType().map(pair => {
+        return {
+            key: parseType(pair.type(0)),
+            value: parseType(pair.type(1))
+        };
+    });
+}
+function parseArrayType(node) {
+    if (node.type()) {
+        return {
+            type: node.type().map(type => parseType(type))
+        };
+    }
+    if (node.identifier()) {
+        return {
+            identifer: node.identifier().ID().text + '[]'
+        };
+    }
+}
+/*
+  Parses the PropertyTagID production.
+  
+  # API
+
+  ```
+  @function parsePropertyTagID
+  @param node: Parser.PropertyTagIDContext - The annotation context node.
+  @return {
+    id: any,
+    optional: any,
+    property: any
+  } - The PropertyTagId object .
+  ```
+  # Remark
+
+  A propertyTagID is an object with an 'id', 'property', and 'optional' keys.
+
+ */
+function parsePropertyType(node) {
+    let tag;
+    if (node.identifier()) {
+        tag.id = node.identifier().ID().text;
+    }
+    if (node.optionalType()) {
+        tag.id = node.identifier().ID().text;
+        tag.optional = true;
+    }
+    if (node.optionalTypeOrIdentifer()) {
+        tag.property = node.optionalTypeOrIdentifer()
+            .map(parseOptionalTypeOrIdentifer)
+            .unshift({ id: tag.id, optional: tag.optional });
+        tag.property = tag.property.filter(x => x.id !== undefined);
+        tag.id = tag.optional = undefined;
+    }
+    return tag;
+}
+/*
+  Parses the parseOptionalTypeOrIdentifer production.
+  
+  # API
+
+  ```
+  @function OptionalTypeOrIdentiferContext
+  @param node: Parser.OptionalTypeOrIdentiferContext - The OptionalTypeOrIdentifer context node.
+  @return {
+    id?: string,
+    optional?: boolean
+  } - The OptionalTypeOrIdentiferContext object.
+  ```
+  # Remark
+
+  An propertyType is an object with an 'id', 'property', and 'optional' keys.
+  
+ */
+function parseOptionalTypeOrIdentifer(node) {
+    let id, optional;
+    if (node.identifier()) {
+        id = node.identifier().ID().text;
+    }
+    if (node.optionalType()) {
+        id = node.optionalType().identifier().ID().text;
+        optional = true;
+    }
+    return { id, optional };
+}
+function parseIdentifierOrKeyword(node) {
+    if (node.identifier()) {
+        return node.identifier().ID().text;
+    }
+    if (node.NullLiteral()) {
+        return node.NullLiteral().text;
+    }
+}
+/*! Value */
+/*
+  Parses the Value production.
+
+  # API
+
+  ```
+  @function parseValue
+  @param node: Parser.ValueContext
+  @return Parser.ValueContext - See {@link #parseExpression(node: Parser.ExpressionContext) }.
+  ```
+  # Remark
+
+  A value is an expression.
+*/
+function parseValue(node) {
+    if (node.expression()) {
+        return parseExpression(node.expression());
+    }
+}
 /*! Expression */
+/*
+  Parses the Expression production.
+
+  # API
+  
+  ```
+  @function parseExpression
+  @param node: Parser.ExpressionContext
+  @return {
+    unary?: {},
+    binary?: {},
+    array?: {},
+    object?: {},
+    literal?: {},
+    parenthesized?: {}
+  }
+  ```
+*/
 function parseExpression(node) {
     if (node.unaryExpression()) {
         return { unary: parseUnaryExpression(node.unaryExpression()) };
@@ -310,6 +509,9 @@ function parseExpression(node) {
     }
     return {};
 }
+/*
+  
+*/
 function parseUnaryExpression(node) {
     return {
         left: (node.PLUS() || node.MINUS()).text,
@@ -361,15 +563,19 @@ function parseArrayExpression(node) {
     return [];
 }
 function parseObjectExpression(node) {
-    if (node.objectPair()) {
-        return parseObjectPair(node.objectPair());
+    if (node.objectPairExpressionList()) {
+        return parseObjectPairExpressionList(node.objectPairExpressionList());
     }
 }
-function parseObjectPair(node) {
-    return {
-        key: parseLiteralExpression(node.literal(0)),
-        value: parseLiteralExpression(node.literal(1))
-    };
+function parseObjectPairExpressionList(node) {
+    return node.objectPairExpression().map(pair => {
+        return {
+            key: parseLiteralExpression(pair.literal(0)),
+            value: pair.objectExpression() ?
+                parseObjectExpression(pair.objectExpression()) :
+                parseLiteralExpression(pair.literal(1))
+        };
+    });
 }
 function parseParenthesizedExpression(node) {
     return parseExpression(node.expression());
@@ -392,9 +598,6 @@ function parseLiteralExpression(node) {
     }
 }
 /*! Description */
-function parseTagBody(node) {
-    return parseDescription(node.description());
-}
 function parseDescription(node) {
     return {
         text: node.text,

@@ -17,6 +17,7 @@ import { TypeContext } from './TomParser';
 import { TupleTypeContext } from './TomParser';
 import { TupleTypeListContext } from './TomParser';
 import { PrimaryTypeContext } from './TomParser';
+import { IdentifierOrKeywordContext } from './TomParser';
 import { ParenthesizedTypeContext } from './TomParser';
 import { LambdaTypeContext } from './TomParser';
 import { FormalParameterSequenceContext } from './TomParser';
@@ -27,7 +28,16 @@ import { ObjectPairTypeListContext } from './TomParser';
 import { ObjectPairTypeContext } from './TomParser';
 import { OptionalTypeContext } from './TomParser';
 import { PropertyTypeContext } from './TomParser';
+import { OptionalTypeOrIdentiferContext } from './TomParser';
 import { ValueContext } from './TomParser';
+import { ExpressionContext } from './TomParser';
+import { UnaryExpressionContext } from './TomParser';
+import { ArrayExpressionContext } from './TomParser';
+import { ObjectExpressionContext } from './TomParser';
+import { ObjectPairExpressionListContext } from './TomParser';
+import { ObjectPairExpressionContext } from './TomParser';
+import { LiteralContext } from './TomParser';
+import { ParenthesizedExpressionContext } from './TomParser';
 import { DescriptionContext } from './TomParser';
 import { DescriptionLineContext } from './TomParser';
 import { DescriptionLineStartContext } from './TomParser';
@@ -40,14 +50,6 @@ import { InlineTagBodyContext } from './TomParser';
 import { BraceExpressionContext } from './TomParser';
 import { BraceBodyContext } from './TomParser';
 import { BraceTextContext } from './TomParser';
-import { ExpressionContext } from './TomParser';
-import { UnaryExpressionContext } from './TomParser';
-import { ArrayExpressionContext } from './TomParser';
-import { ObjectExpressionContext } from './TomParser';
-import { ObjectPairExpressionListContext } from './TomParser';
-import { ObjectPairContext } from './TomParser';
-import { LiteralContext } from './TomParser';
-import { ParenthesizedExpressionContext } from './TomParser';
 import { IdentifierContext } from './TomParser';
 
 
@@ -158,6 +160,13 @@ export interface TomParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitPrimaryType?: (ctx: PrimaryTypeContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `TomParser.identifierOrKeyword`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitIdentifierOrKeyword?: (ctx: IdentifierOrKeywordContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `TomParser.parenthesizedType`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -228,11 +237,74 @@ export interface TomParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitPropertyType?: (ctx: PropertyTypeContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `TomParser.optionalTypeOrIdentifer`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitOptionalTypeOrIdentifer?: (ctx: OptionalTypeOrIdentiferContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `TomParser.value`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	visitValue?: (ctx: ValueContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.expression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitExpression?: (ctx: ExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.unaryExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitUnaryExpression?: (ctx: UnaryExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.arrayExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitArrayExpression?: (ctx: ArrayExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.objectExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitObjectExpression?: (ctx: ObjectExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.objectPairExpressionList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitObjectPairExpressionList?: (ctx: ObjectPairExpressionListContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.objectPairExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitObjectPairExpression?: (ctx: ObjectPairExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.literal`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitLiteral?: (ctx: LiteralContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `TomParser.parenthesizedExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitParenthesizedExpression?: (ctx: ParenthesizedExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `TomParser.description`.
@@ -317,62 +389,6 @@ export interface TomParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitBraceText?: (ctx: BraceTextContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `TomParser.expression`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitExpression?: (ctx: ExpressionContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `TomParser.unaryExpression`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitUnaryExpression?: (ctx: UnaryExpressionContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `TomParser.arrayExpression`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitArrayExpression?: (ctx: ArrayExpressionContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `TomParser.objectExpression`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitObjectExpression?: (ctx: ObjectExpressionContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `TomParser.objectPairExpressionList`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitObjectPairExpressionList?: (ctx: ObjectPairExpressionListContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `TomParser.objectPair`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitObjectPair?: (ctx: ObjectPairContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `TomParser.literal`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitLiteral?: (ctx: LiteralContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `TomParser.parenthesizedExpression`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitParenthesizedExpression?: (ctx: ParenthesizedExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `TomParser.identifier`.

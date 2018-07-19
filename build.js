@@ -6,8 +6,13 @@ if (!shell.which('tsc')) {
 }
 
 if (!shell.which('antlr4ts')) {
-  shell.echo('Please install antlr4-ts globally');
-  shell.exit(1);
+  shell.echo('Installing dependencies (password required)...');
+  if (!shell.exec('sudo npm i -g antlr4ts antltr4-cli')) {
+    shell.echo('An error occurred while installing dependencies.')
+    shell.exit(1);
+  }
+  shell.exec('node build.js');
+  shell.exit(0);
 }
 
 
@@ -23,6 +28,7 @@ shell.echo('[mr-doc]: Modifying the generated files...');
 shell.sed('-i', /getText\(\)/g, 'this.text', 'src/tom/TomLexer.ts');
 shell.sed('-i', /setType\(BooleanLiteral\)/g, 'this.type = TomLexer.BooleanLiteral', 'src/tom/TomLexer.ts');
 shell.sed('-i', /setType\(NullLiteral\)/g, 'this.type = TomLexer.NullLiteral', 'src/tom/TomLexer.ts');
+// shell.sed('-i', /setType\(RETURNTAG\)/g, 'this.type = TomLexer.RETURNTAG', 'src/tom/TomLexer.ts');
 
 // Modify the parser
 shell.sed('-i', /@RuleVersion\(0\)/g, '', 'src/tom/TomParser.ts');

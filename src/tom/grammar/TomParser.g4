@@ -25,8 +25,6 @@ annotations
 
 tag
 	: tagName // i.e. @tag
-	| tagName SPACE type // i.e. @tag type (@return {...})
-	| tagName SPACE type SPACE MINUS SPACE description // i.e @tag type - description
   | tagName SPACE MINUS SPACE description// i.e. @tag - description
 	| tagName SPACE tagID// i.e. @tag x
 	| tagName SPACE tagID SPACE? EQUAL SPACE? value // i.e. @tag x = expression
@@ -36,6 +34,8 @@ tag
 	| tagName SPACE tagID SPACE? COLON SPACE? type SPACE? EQUAL SPACE? value // i.e. @tag x: type = value
 	| tagName SPACE tagID SPACE? COLON SPACE? type SPACE MINUS SPACE description // i.e. @tag x: type - description
 	| tagName SPACE tagID SPACE? COLON SPACE? type SPACE? EQUAL SPACE? value SPACE MINUS SPACE description // i.e. @tag x: type = value - description
+  | tagName SPACE? COLON SPACE? type // i.e. @tag type (@return {...})
+	| tagName SPACE? COLON SPACE? type SPACE MINUS SPACE description // i.e @tag type - description
 	;
 
 /* Tags */
@@ -54,8 +54,8 @@ optionalTagID
   ;
 
 propertyTagID
-  : optionalTagID (PERIOD optionalTagOrIdentifier)*
-  | identifier (PERIOD optionalTagOrIdentifier)*
+  : optionalTagID (PERIOD optionalTagOrIdentifier)+
+  | identifier (PERIOD optionalTagOrIdentifier)+
   ;
 
 optionalTagOrIdentifier
@@ -87,15 +87,18 @@ primaryType
   | arrayType
   | propertyType
   | optionalType
-  | identifier QUESTION?
-  | NullLiteral
+  | identifierOrKeyword
   ;
 
+
+identifierOrKeyword
+  : identifier
+  | NullLiteral
+  ;
 
 parenthesizedType
   : PAREN_OPEN SPACE? type SPACE? PAREN_CLOSE
   ;
-
 
 
 lambdaType
@@ -135,13 +138,63 @@ optionalType
   ;
 
 propertyType
-  : identifier (PERIOD (identifier | optionalType))*
-  | optionalType (PERIOD (optionalTagID | identifier))*
+  : identifier (PERIOD optionalTypeOrIdentifer)+
+  | optionalType (PERIOD optionalTypeOrIdentifer)+
+  ;
+
+optionalTypeOrIdentifer
+  : identifier
+  | optionalType
   ;
 
 /* Value */
 value
   : expression
+  ;
+
+/* Expressions */
+
+expression
+  : unaryExpression
+  | expression SPACE? (STAR | FORWARD_SLASH) SPACE? expression
+  | expression  SPACE? (PLUS | MINUS) SPACE? expression
+  | arrayExpression
+  | objectExpression
+  | literal
+  | parenthesizedExpression
+  ;
+
+unaryExpression
+  : (PLUS | MINUS /*EXCLAMATION*/) expression
+  ;
+
+arrayExpression
+  : BRACKET_OPEN expression? (COMMA SPACE? expression)* BRACKET_CLOSE
+  ;
+
+objectExpression
+  : BRACE_OPEN SPACE? NEWLINE? SPACE? objectPairExpressionList? SPACE? NEWLINE? SPACE? BRACE_CLOSE;
+
+objectPairExpressionList
+  : objectPairExpression (SPACE? COMMA SPACE? NEWLINE? SPACE? objectPairExpression)*
+  ;
+
+objectPairExpression
+  : literal SPACE? COLON SPACE? objectExpression
+  | literal SPACE? COLON SPACE? literal
+  ;
+
+literal
+  : IntegerLiteral
+  |	FloatingPointLiteral
+  |	BooleanLiteral
+  |	CharacterLiteral
+  |	StringLiteral
+  |	NullLiteral
+  ;
+
+parenthesizedExpression
+  : PAREN_OPEN SPACE? expression SPACE? PAREN_CLOSE
   ;
 
 /* Descriptions */
@@ -210,50 +263,6 @@ braceText
 	| PERIOD
 	;
 
-/* Expressions */
-
-expression
-  : unaryExpression
-  | expression SPACE? (STAR | FORWARD_SLASH) SPACE? expression
-  | expression  SPACE? (PLUS | MINUS) SPACE? expression
-  | arrayExpression
-  | objectExpression
-  | literal
-  | parenthesizedExpression
-  ;
-
-unaryExpression
-  : (PLUS | MINUS /*EXCLAMATION*/) expression
-  ;
-
-arrayExpression
-  : BRACKET_OPEN expression? (COMMA SPACE? expression)* BRACKET_CLOSE
-  ;
-
-objectExpression
-  : BRACE_OPEN SPACE? NEWLINE? SPACE? objectPairExpressionList? SPACE? NEWLINE? SPACE? BRACE_CLOSE;
-
-objectPairExpressionList
-  : objectPair (SPACE? COMMA SPACE? NEWLINE? SPACE? objectPair)*
-  ;
-
-objectPair
-  : literal SPACE? COLON SPACE? objectExpression
-  | literal SPACE? COLON SPACE? literal
-  ;
-
-literal
-  : IntegerLiteral
-  |	FloatingPointLiteral
-  |	BooleanLiteral
-  |	CharacterLiteral
-  |	StringLiteral
-  |	NullLiteral
-  ;
-
-parenthesizedExpression
-  : PAREN_OPEN SPACE? expression SPACE? PAREN_CLOSE
-  ;
 
 identifier
   : ID

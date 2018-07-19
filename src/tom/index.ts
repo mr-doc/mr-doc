@@ -35,6 +35,7 @@ export default (source: string) => {
   # API
 
   ```
+  @function parseDocumentation
   @param node: Parser.DocumentationContext - The documentation context node.
   @return Parser.BodyContext[] - The body context nodes.
   ```
@@ -57,6 +58,7 @@ function parseDocumentation(node: Parser.DocumentationContext) {
   # API
 
   ```
+  @function parseBody
   @param node: Parser.BodyContext - The body context node.
   @return Parser.Annotations[] - The body context nodes.
   ```
@@ -78,8 +80,9 @@ function parseBody(node: Parser.BodyContext) {
   # API
 
   ```
+  @function parseAnnotations
   @param node: Parser.AnnotationsContext - The annotation context node.
-  @return Parser.TagContext[] - The body context nodes.
+  @return Parser.TagContext[] - The tag context nodes.
   ```
 
   # Remark
@@ -99,6 +102,7 @@ function parseAnnotations(node: Parser.AnnotationsContext) {
   # API
 
   ```
+  @function parseTag
   @param node: Parser.TagContext - The annotation context node.
   @return { 
     name?: string, 
@@ -119,7 +123,13 @@ function parseTag(node: Parser.TagContext) {
   let tag = {};
 
   if (node.tagName()) {
-    _.assign(tag, { name: node.tagName().identifier().text });
+    _.assign(tag, {
+      name: node.tagName().identifier().ID().text
+    });
+  }
+
+  if (node.type()) {
+    _.assign(tag, { type: parseType(node.type()) });
   }
 
   if (node.tagID()) {
@@ -130,12 +140,8 @@ function parseTag(node: Parser.TagContext) {
     _.assign(tag, { value: parseValue(node.value()) })
   }
 
-  if (node.type()) {
-    _.assign(tag, { type: parseType(node.type()) });
-  }
-
   if (node.description()) {
-    _.assign(tag, { description: parseTagBody(node.description()) });
+    _.assign(tag, { description: parseDescription(node.description()) });
   }
 
   return _.isEqual(tag, {}) ? undefined : tag;
@@ -147,6 +153,7 @@ function parseTag(node: Parser.TagContext) {
   # API
 
   ```
+  @function parseTagID
   @param node: Parser.TagIDContext - The tagID context node.
   @return { 
     id?: {}, 
@@ -184,6 +191,7 @@ function parseTagID(node: Parser.TagIDContext) {
   # API
 
   ```
+  @function parsePropertyTagID
   @param node: Parser.PropertyTagIDContext - The annotation context node.
   @return {
     id: any,
@@ -197,22 +205,22 @@ function parseTagID(node: Parser.TagIDContext) {
 
  */
 function parsePropertyTagID(node: Parser.PropertyTagIDContext) {
-  let tag: { id: string, optional: boolean, property: any };
+  let tag: any = {};
 
   if (node.identifier()) {
-    tag.id = node.identifier().ID().text;
+    _.assign(tag, { id: node.identifier().ID().text });
   }
 
   if (node.optionalTagID()) {
-    tag.id = node.identifier().ID().text;
-    tag.optional = true;
+    _.assign(tag, { id: node.identifier().ID().text, optional: true });
   }
 
   if (node.optionalTagOrIdentifier()) {
-    tag.property = node.optionalTagOrIdentifier()
-      .map(parseOptionalOrIdentifer)
-      .unshift({ id: tag.id, optional: tag.optional });
-    tag.property.filter(x => x.id !== undefined);
+    let property = node.optionalTagOrIdentifier()
+      .map(parseOptionalTagOrIdentifier);
+    property.unshift({ id: tag.id, optional: tag.optional });
+    property = property.filter(p => p.id !== undefined);
+    _.assign(tag, { property });
     tag.id = tag.optional = undefined;
   }
   return tag;
@@ -225,18 +233,19 @@ function parsePropertyTagID(node: Parser.PropertyTagIDContext) {
   # API
 
   ```
-  @param node: Parser.OptionalOrIdentifier - The optionalTagOrIdentifier context node.
+  @function parseOptionalTagOrIdentifier
+  @param node: Parser.OptionalTagOrIdentifierContext - The OptionalTagOrIdentifier context node.
   @return {
     id?: string,
     optional?: boolean
-  } - The optionalOrIdentifier object.
+  } - The OptionalTagOrIdentifierContext object.
   ```
   # Remark
 
   An propertyTagID is an object with an 'id', 'property', and 'optional' keys.
   
  */
-function parseOptionalOrIdentifer(node: Parser.OptionalTagOrIdentifierContext) {
+function parseOptionalTagOrIdentifier(node: Parser.OptionalTagOrIdentifierContext) {
   let id: string, optional: boolean;
   if (node.identifier()) {
     id = node.identifier().ID().text;
@@ -249,6 +258,248 @@ function parseOptionalOrIdentifer(node: Parser.OptionalTagOrIdentifierContext) {
   return { id, optional };
 }
 
+/*! Type */
+
+/*
+  Parses the Type production.
+
+  # API
+
+  ```
+  @function parseType
+  @param node: Parse.TypeContext - The Type context node.
+  @return {
+    intersect?: {},
+    union?: {},
+    lambda?: {},
+    tuple?: {},
+    primary?: {}
+  } - The type object.
+
+  # Remark
+  A type is an object with 'intersection', 'union', 'lambda', 'tuple', or primary.
+  ```
+*/
+function parseType(node: Parser.TypeContext) {
+
+  if (node.PIPE()) { // Intersections
+    return {
+      intersect: { left: parseType(node.type(0)), right: parseType(node.type(1)) }
+    };
+  } else if (node.AMP()) { // Unions
+    return {
+      union: { left: parseType(node.type(0)), right: parseType(node.type(1)) }
+    };
+  } else if (node.lambdaType()) { // Lambda functions i.e. (id) => type
+    return {
+      lambda: parseLambdaType(node.lambdaType())
+    };
+  } else if (node.tupleType()) {
+    return { tuple: parseTuple(node.tupleType()) }
+  } else if (node.primaryType()) { // Primary
+    return { primary: parsePrimaryType(node.primaryType()) };
+  }
+}
+
+/*! Lambda */
+
+function parseLambdaType(node: Parser.LambdaTypeContext) {
+  let obj = {};
+  if (node.formalParameterSequence()) {
+    _.assign(obj, { parameters: parseLambdaFormalParameterSequence(node.formalParameterSequence()) })
+  } else if (node.parameter()) {
+    _.assign(obj, { parameters: [parseParameter(node.parameter())] })
+  }
+
+  if (node.type()) {
+    _.assign(obj, { 'return': { type: parseType(node.type()) } })
+  }
+  return obj;
+}
+
+function parseLambdaFormalParameterSequence(node: Parser.FormalParameterSequenceContext) {
+  return parseParameters(node.parameter())
+}
+
+function parseParameters(nodes: Parser.ParameterContext[]) {
+  return nodes.map(node => {
+    return parseParameter(node);
+  })
+}
+
+function parseParameter(node: Parser.ParameterContext) {
+  let id = node.identifier().ID().text;
+  if (node.type()) {
+    return {
+      id,
+      type: parseType(node.type())
+    }
+  }
+  return { id };
+}
+
+function parseTuple(node: Parser.TupleTypeContext) {
+  let type = {};
+  if (node.identifier()) {
+    _.assign(type, { id: node.identifier().ID().text });
+  }
+
+  if (node.tupleTypeList()) {
+    _.assign(type, { types: parseTupleTypeList(node.tupleTypeList()) })
+  }
+
+  return type;
+}
+
+function parseTupleTypeList(node: Parser.TupleTypeListContext) {
+  return node.type() ? node.type().map(type => parseType(type)) : [];
+}
+
+function parsePrimaryType(node: Parser.PrimaryTypeContext) {
+  if (node.parenthesizedType()) { // (expression)
+    return {
+      parenthesized: parseParenthesizedType(node.parenthesizedType())
+    }
+  }
+
+  if (node.objectType()) { // { ... }
+    return {
+      object: parseObjectType(node.objectType())
+    }
+  }
+
+  if (node.arrayType()) { // [ ... ]
+    return {
+      array: parseArrayType(node.arrayType())
+    }
+  }
+
+  if (node.propertyType()) {
+    return {
+      property: parsePropertyType(node.propertyType())
+    }
+  }
+
+  if (node.identifierOrKeyword()) {
+    return { id: parseIdentifierOrKeyword(node.identifierOrKeyword()) }
+  }
+
+}
+
+function parseParenthesizedType(node: Parser.ParenthesizedTypeContext) {
+  if (node.type()) {
+    return parseType(node.type());
+  }
+}
+
+function parseObjectType(node: Parser.ObjectTypeContext) {
+  return node.objectPairTypeList() ? parseObjectPairTypeList(node.objectPairTypeList()) : []
+}
+
+function parseObjectPairTypeList(node: Parser.ObjectPairTypeListContext) {
+  return node.objectPairType().map(pair => {
+    return {
+      key: parseType(pair.type(0)),
+      value: parseType(pair.type(1))
+    }
+  });
+}
+
+function parseArrayType(node: Parser.ArrayTypeContext) {
+  if (node.type()) {
+    return {
+      type: node.type().map(type => parseType(type))
+    }
+  }
+
+  if (node.identifier()) {
+    return {
+      identifer: node.identifier().ID().text + '[]'
+    }
+  }
+}
+
+/*
+  Parses the PropertyTagID production.
+  
+  # API
+
+  ```
+  @function parsePropertyTagID
+  @param node: Parser.PropertyTagIDContext - The annotation context node.
+  @return {
+    id: any,
+    optional: any,
+    property: any
+  } - The PropertyTagId object .
+  ```
+  # Remark
+
+  A propertyTagID is an object with an 'id', 'property', and 'optional' keys.
+
+ */
+function parsePropertyType(node: Parser.PropertyTypeContext) {
+  let tag: { id: string, optional: boolean, property: any };
+
+  if (node.identifier()) {
+    tag.id = node.identifier().ID().text;
+  }
+
+  if (node.optionalType()) {
+    tag.id = node.identifier().ID().text;
+    tag.optional = true;
+  }
+
+  if (node.optionalTypeOrIdentifer()) {
+    tag.property = node.optionalTypeOrIdentifer()
+      .map(parseOptionalTypeOrIdentifer)
+      .unshift({ id: tag.id, optional: tag.optional });
+    tag.property = tag.property.filter(x => x.id !== undefined);
+    tag.id = tag.optional = undefined;
+  }
+  return tag;
+}
+
+/*
+  Parses the parseOptionalTypeOrIdentifer production.
+  
+  # API
+
+  ```
+  @function OptionalTypeOrIdentiferContext
+  @param node: Parser.OptionalTypeOrIdentiferContext - The OptionalTypeOrIdentifer context node.
+  @return {
+    id?: string,
+    optional?: boolean
+  } - The OptionalTypeOrIdentiferContext object.
+  ```
+  # Remark
+
+  An propertyType is an object with an 'id', 'property', and 'optional' keys.
+  
+ */
+function parseOptionalTypeOrIdentifer(node: Parser.OptionalTypeOrIdentiferContext) {
+  let id: string, optional: boolean;
+  if (node.identifier()) {
+    id = node.identifier().ID().text;
+  }
+
+  if (node.optionalType()) {
+    id = node.optionalType().identifier().ID().text;
+    optional = true;
+  }
+  return { id, optional };
+}
+
+function parseIdentifierOrKeyword(node: Parser.IdentifierOrKeywordContext) {
+  if (node.identifier()) {
+    return node.identifier().ID().text;
+  }
+
+  if (node.NullLiteral()) {
+    return node.NullLiteral().text;
+  }
+}
 /*! Value */
 
 /*
@@ -257,6 +508,7 @@ function parseOptionalOrIdentifer(node: Parser.OptionalTagOrIdentifierContext) {
   # API
 
   ```
+  @function parseValue
   @param node: Parser.ValueContext
   @return Parser.ValueContext - See {@link #parseExpression(node: Parser.ExpressionContext) }.
   ```
@@ -272,6 +524,24 @@ function parseValue(node: Parser.ValueContext) {
 
 /*! Expression */
 
+/*
+  Parses the Expression production.
+
+  # API
+  
+  ```
+  @function parseExpression
+  @param node: Parser.ExpressionContext
+  @return {
+    unary?: {},
+    binary?: {},
+    array?: {},
+    object?: {},
+    literal?: {},
+    parenthesized?: {}
+  }
+  ```
+*/
 function parseExpression(node: Parser.ExpressionContext) {
   if (node.unaryExpression()) {
     return { unary: parseUnaryExpression(node.unaryExpression()) }
@@ -306,6 +576,9 @@ function parseExpression(node: Parser.ExpressionContext) {
   return {}
 }
 
+/*
+  
+*/
 function parseUnaryExpression(node: Parser.UnaryExpressionContext) {
   return {
     left: (node.PLUS() || node.MINUS()).text,
@@ -363,18 +636,23 @@ function parseArrayExpression(node: Parser.ArrayExpressionContext) {
 }
 
 function parseObjectExpression(node: Parser.ObjectExpressionContext) {
-  if (node.objectPair()) {
-    return parseObjectPair(node.objectPair())
+  if (node.objectPairExpressionList()) {
+    return parseObjectPairExpressionList(node.objectPairExpressionList());
   }
 }
 
 
-function parseObjectPair(node: Parser.ObjectPairContext) {
-  return {
-    key: parseLiteralExpression(node.literal(0)),
-    value: parseLiteralExpression(node.literal(1))
-  }
+function parseObjectPairExpressionList(node: Parser.ObjectPairExpressionListContext) {
+  return node.objectPairExpression().map(pair => {
+    return {
+      key: parseLiteralExpression(pair.literal(0)),
+      value: pair.objectExpression() ?
+        parseObjectExpression(pair.objectExpression()) :
+        parseLiteralExpression(pair.literal(1))
+    }
+  });
 }
+
 
 function parseParenthesizedExpression(node: Parser.ParenthesizedExpressionContext) {
   return parseExpression(node.expression());
@@ -398,119 +676,7 @@ function parseLiteralExpression(node: Parser.LiteralContext) {
   }
 }
 
-/*! Type */
-function parseType(node: Parser.TypeContext) {
-  if (node.PIPE()) {
-    return {
-      intersect: { left: parseType(node.type(0)), right: parseType(node.type(1)) }
-    };
-  } else if (node.AMP()) {
-    return {
-      union: { left: parseType(node.type(0)), right: parseType(node.type(1)) }
-    };
-  } else if (node.lambdaType()) {
-    return {
-      lambda: parseLambdaType(node.lambdaType())
-    };
-  } else if (node.primaryType()) {
-    return { primary: parsePrimaryType(node.primaryType()) };
-  }
-}
-
-
-function parsePrimaryType(node: Parser.PrimaryTypeContext) {
-  if (node.parenthesizedType()) {
-    return {
-      parenthesized: parseParenthesizedType(node.parenthesizedType())
-    }
-  }
-
-  if (node.objectType()) {
-    return {
-      object: parseObjectType(node.objectType())
-    }
-  }
-
-  if (node.arrayType()) {
-    return {
-      array: parseArrayType(node.arrayType())
-    }
-  }
-
-  if (node.identifier()) {
-    return { id: node.identifier().ID().text }
-  }
-
-}
-
-function parseParenthesizedType(node: Parser.ParenthesizedTypeContext) {
-  if (node.type()) {
-    return parseType(node.type());
-  }
-}
-
-function parseObjectType(node: Parser.ObjectTypeContext) {
-  return {
-    key: parseType(node.objectPairType().type(0)),
-    value: parseType(node.objectPairType().type(1))
-  }
-}
-
-function parseArrayType(node: Parser.ArrayTypeContext) {
-  if (node.type()) {
-    return {
-      type: node.type().map(type => parseType(type))
-    }
-  }
-
-  if (node.identifier()) {
-    return {
-      identifer: node.identifier().ID().text + '[]'
-    }
-  }
-}
-
-/*! Lambda */
-
-function parseLambdaType(node: Parser.LambdaTypeContext) {
-  let obj = {};
-  if (node.formalParameterSequence()) {
-    _.assign(obj, { parameters: parseLambdaFormalParameterSequence(node.formalParameterSequence()) })
-  } else if (node.parameter()) {
-    _.assign(obj, { parameters: [parseParameter(node.parameter())] })
-  }
-
-  if (node.type()) {
-    _.assign(obj, { 'return': { type: parseType(node.type()) } })
-  }
-  return obj;
-}
-
-function parseLambdaFormalParameterSequence(node: Parser.FormalParameterSequenceContext) {
-  return parseParameters(node.parameter())
-}
-
-function parseParameters(nodes: Parser.ParameterContext[]) {
-  return nodes.map(node => {
-    return parseParameter(node);
-  })
-}
-
-function parseParameter(node: Parser.ParameterContext) {
-  let id = node.identifier().ID().text;
-  if (node.type()) {
-    return {
-      id,
-      type: parseType(node.type())
-    }
-  }
-  return { id };
-}
-
 /*! Description */
-function parseTagBody(node: Parser.TagBodyContext) {
-  return parseDescription(node.description());
-}
 
 function parseDescription(node: Parser.DescriptionContext) {
   return {
