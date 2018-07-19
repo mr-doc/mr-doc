@@ -26,15 +26,28 @@ describe('Tom parser', () => {
   /* Parse tags with identifiers */
   it('should parse @tag id', () => equal(parse('@tag id'), [
     {
-      
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      }
     }
   ]));
   // with description
-  it('should parse @tag id - description', () => equal(parse('@tag id - description'), [
+  it('should parse @tag id - description', () => equal(
+    parse('@tag id - description'), [
     {
-      ...name(),
-      ...id(),
-      ...description('description')
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      description: {
+        inlines: [],
+        text: 'description'
+      }
     }
   ]));
 });

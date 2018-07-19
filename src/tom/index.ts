@@ -133,7 +133,7 @@ function parseTag(node: Parser.TagContext) {
   }
 
   if (node.tagID()) {
-    _.assign(tag, { id: parseTagID(node.tagID()) })
+    _.assign(tag, { identifier: parseTagID(node.tagID()) })
   }
 
   if (node.value()) {
@@ -167,7 +167,7 @@ function parseTag(node: Parser.TagContext) {
 
  */
 function parseTagID(node: Parser.TagIDContext) {
-  let tag = { id: undefined, optional: false, property: undefined };
+  let tag = { id: undefined, optional: false, property: [] };
 
   if (node.identifier()) {
     tag.id = node.identifier().ID().text;
@@ -219,9 +219,8 @@ function parsePropertyTagID(node: Parser.PropertyTagIDContext) {
     let property = node.optionalTagOrIdentifier()
       .map(parseOptionalTagOrIdentifier);
     property.unshift({ id: tag.id, optional: tag.optional });
-    property = property.filter(p => p.id !== undefined);
+    property = property.filter(p => p.id !== undefined && p !== undefined);
     _.assign(tag, { property });
-    tag.id = tag.optional = undefined;
   }
   return tag;
 }
@@ -246,7 +245,7 @@ function parsePropertyTagID(node: Parser.PropertyTagIDContext) {
   
  */
 function parseOptionalTagOrIdentifier(node: Parser.OptionalTagOrIdentifierContext) {
-  let id: string, optional: boolean;
+  let id, optional = false;
   if (node.identifier()) {
     id = node.identifier().ID().text;
   }
@@ -439,22 +438,25 @@ function parseArrayType(node: Parser.ArrayTypeContext) {
 
  */
 function parsePropertyType(node: Parser.PropertyTypeContext) {
-  let tag: { id: string, optional: boolean, property: any };
+  let tag: any = {};
 
   if (node.identifier()) {
-    tag.id = node.identifier().ID().text;
+    _.assign(tag, { id: node.identifier().ID().text });
   }
 
   if (node.optionalType()) {
-    tag.id = node.identifier().ID().text;
-    tag.optional = true;
+    _.assign(tag, { id: node.identifier().ID().text });
+    _.assign(tag, { optional: true });
   }
 
   if (node.optionalTypeOrIdentifer()) {
-    tag.property = node.optionalTypeOrIdentifer()
-      .map(parseOptionalTypeOrIdentifer)
-      .unshift({ id: tag.id, optional: tag.optional });
-    tag.property = tag.property.filter(x => x.id !== undefined);
+    _.assign(tag, {
+      property: node.optionalTypeOrIdentifer()
+        .map(parseOptionalTypeOrIdentifer)
+    });
+
+    tag.property.unshift({ id: tag.id, optional: tag.optional });
+    tag.property = tag.property.filter(x => x.id !== undefined && x !== undefined);
     tag.id = tag.optional = undefined;
   }
   return tag;
