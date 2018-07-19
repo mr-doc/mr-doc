@@ -5,16 +5,14 @@ import { assert } from 'chai';
 const equal = assert.deepEqual;
 const parse = (source: string) => XDoc.toJSON(xdoc(source));
 
-describe('Tom parser', () => {
-  
-  // Parse a tag
+describe('XDoc Parser (Tom)', () => {
+
   it('should parse @tag', () => equal(parse('@tag'), [
     {
       name: 'tag'
     }
   ]));
-  
-  // Parse a tag with a description
+
   it('should parse @tag - description', () => equal(parse('@tag - description'), [
     {
       name: 'tag',
@@ -25,7 +23,7 @@ describe('Tom parser', () => {
     }
   ]));
 
-  // Parse a tag with an id
+  /* Parse tags with identifiers */
   it('should parse @tag id', () => equal(parse('@tag id'), [
     {
       name: 'tag',
@@ -37,7 +35,6 @@ describe('Tom parser', () => {
     }
   ]));
 
-  // Parse a tag with and id and description
   it('should parse @tag id - description', () => equal(parse('@tag id - description'), [
     {
       name: 'tag',
@@ -53,7 +50,33 @@ describe('Tom parser', () => {
     }
   ]));
 
-  // Parse a tag, id, and value
+  it('should parse @tag id?', () => equal(parse('@tag id?'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: true,
+        property: []
+      }
+    }
+  ]));
+
+  it('should parse @tag id? - description', () => equal(parse('@tag id? - description'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: true,
+        property: []
+      },
+      description: {
+        inlines: [],
+        text: 'description'
+      }
+    }
+  ]));
+
+  /* Parse tags with initializers */
   it('should parse @tag id = 1', () => equal(parse('@tag id = 1'), [
     {
       name: 'tag',
@@ -70,7 +93,6 @@ describe('Tom parser', () => {
     }
   ]));
 
-  // Parse a tag, id, value, and description
   it('should parse @tag id = 1 - description', () => equal(parse('@tag id = 1 - description'), [
     {
       name: 'tag',
@@ -91,7 +113,152 @@ describe('Tom parser', () => {
     }
   ]));
 
-  // Parse a string value
+  it('should parse @tag id = -1', () => equal(parse('@tag id = -1'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      value: {
+        unary: {
+          left: "-",
+          right: {
+            literal: {
+              number: "1"
+            }
+          }
+        }
+      }
+    }
+  ]));
+
+  it('should parse @tag id = -1 - description', () => equal(parse('@tag id = -1 - description'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      value: {
+        unary: {
+          left: "-",
+          right: {
+            literal: {
+              number: "1"
+            }
+          }
+        }
+      },
+      description: {
+        inlines: [],
+        text: 'description'
+      }
+    }
+  ]));
+
+  it('should parse @tag id = 3.14', () => equal(parse('@tag id = 3.14'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      value: {
+        literal: {
+          number: "3.14"
+        }
+      }
+    }
+  ]));
+
+  it('should parse @tag id = 3.14 - description', () => equal(parse('@tag id = 3.14 - description'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      value: {
+        literal: {
+          number: '3.14'
+        }
+      },
+      description: {
+        inlines: [],
+        text: 'description'
+      }
+    }
+  ]));
+
+  it('should parse @tag id = []', () => equal(parse('@tag id = []'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      value: {
+        array: []
+      }
+    }
+  ]));
+
+  it('should parse @tag id = [] - description', () => equal(parse('@tag id = [] - description'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      value: {
+        array: []
+      },
+      description: {
+        inlines: [],
+        text: 'description'
+      }
+    }
+  ]));
+
+  it('should parse @tag id = {}', () => equal(parse('@tag id = {}'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      value: {
+        object: []
+      }
+    }
+  ]));
+
+  it('should parse @tag id = {} - description', () => equal(parse('@tag id = {} - description'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      value: {
+        object: []
+      },
+      description: {
+        inlines: [],
+        text: 'description'
+      }
+    }
+  ]));
+
   it('should parse @tag id = \'hello\'', () => equal(parse('@tag id = \'hello\''), [
     {
       name: 'tag',
@@ -128,7 +295,92 @@ describe('Tom parser', () => {
     }
   ]));
 
-  // Parse a lambda value
+  it('should parse @tag id: type', () => equal(parse('@tag id: type'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      type: {
+        primary: {
+          id: 'type',
+          optional: false
+        }
+      },
+    }
+  ]));
+
+  it('should parse @tag id: type - description', () => equal(parse('@tag id: type - description'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      type: {
+        primary: {
+          id: 'type',
+          optional: false
+        }
+      },
+      description: {
+        inlines: [],
+        text: 'description'
+      }
+    }
+  ]));
+
+  it('should parse @tag id: &type', () => equal(parse('@tag id: &type'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      type: {
+        unary: {
+          left: "&",
+          right: {
+            primary: {
+              id: 'type',
+              optional: false
+            }
+          }
+        }
+      },
+    }
+  ]));
+
+  it('should parse @tag id: &type - description', () => equal(parse('@tag id: &type - description'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      type: {
+        unary: {
+          left: "&",
+          right: {
+            primary: {
+              id: 'type',
+              optional: false
+            }
+          }
+        }
+      },
+      description: {
+        inlines: [],
+        text: 'description'
+      }
+    }
+  ]));
+
   it('should parse @tag id = () => type', () => equal(parse('@tag id = () => type'), [
     {
       name: 'tag',
@@ -142,7 +394,8 @@ describe('Tom parser', () => {
           parameter: [],
           type: {
             primary: {
-              id: 'type'
+              id: 'type',
+              optional: false
             },
             optional: false
           }
@@ -151,7 +404,6 @@ describe('Tom parser', () => {
     }
   ]));
 
-  // Parse a lambda value
   it('should parse @tag id = () => type - description', () => equal(parse('@tag id = () => type - description'), [
     {
       name: 'tag',
@@ -165,7 +417,8 @@ describe('Tom parser', () => {
           parameter: [],
           type: {
             primary: {
-              id: 'type'
+              id: 'type',
+              optional: false
             },
             optional: false
           }
@@ -178,7 +431,284 @@ describe('Tom parser', () => {
     }
   ]));
 
-  // Parse a lambda value
+  it('should parse @tag id: type', () => equal(parse('@tag id: type'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      type: {
+        primary: {
+          id: 'type',
+          optional: false
+        }
+      }
+    }
+  ]));
+
+  it('should parse @tag id: type - description', () => equal(parse('@tag id: type - description'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      type: {
+        primary: {
+          id: 'type',
+          optional: false
+        }
+      },
+      description: {
+        inlines: [],
+        text: 'description'
+      }
+    }
+  ]));
+
+  it('should parse @tag id: (type)', () => equal(parse('@tag id: (type)'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      type: {
+        parenthesized: {
+          primary: {
+            id: 'type',
+            optional: false
+          }
+        }
+      }
+    }
+  ]));
+
+  it('should parse @tag id: (type) - description', () => equal(parse('@tag id: (type) - description'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      type: {
+        parenthesized: {
+          primary: {
+            id: 'type',
+            optional: false
+          }
+        }
+      },
+      description: {
+        inlines: [],
+        text: 'description'
+      }
+    }
+  ]));
+
+  it('should parse @tag id: type & type', () => equal(parse('@tag id: type & type'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      type: {
+        union: {
+          left: {
+            primary: {
+              id: 'type',
+              optional: false
+            }
+          },
+          right: {
+            primary: {
+              id: 'type',
+              optional: false
+            }
+          }
+        }
+      }
+    }
+  ]));
+
+  it('should parse @tag id: type & type - description', () => equal(parse('@tag id: type & type - description'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      type: {
+        union: {
+          left: {
+            primary: {
+              id: 'type',
+              optional: false
+            }
+          },
+          right: {
+            primary: {
+              id: 'type',
+              optional: false
+            }
+          }
+        }
+      },
+      description: {
+        inlines: [],
+        text: 'description'
+      }
+    }
+  ]));
+
+  it('should parse @tag id: type | type', () => equal(parse('@tag id: type | type'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      type: {
+        intersect: {
+          left: {
+            primary: {
+              id: 'type',
+              optional: false
+            }
+          },
+          right: {
+            primary: {
+              id: 'type',
+              optional: false
+            }
+          }
+        }
+      }
+    }
+  ]));
+
+  it('should parse @tag id: type | type - description', () => equal(parse('@tag id: type | type - description'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      type: {
+        intersect: {
+          left: {
+            primary: {
+              id: 'type',
+              optional: false
+            }
+          },
+          right: {
+            primary: {
+              id: 'type',
+              optional: false
+            }
+          }
+        }
+      },
+      description: {
+        inlines: [],
+        text: 'description'
+      }
+    }
+  ]));
+
+  it('should parse @tag id: (type | type) & type', () => equal(parse('@tag id: (type | type) & type'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      type: {
+        union: {
+          left: {
+            parenthesized: {
+              intersect: {
+                left: {
+                  primary: {
+                    id: 'type',
+                    optional: false
+                  }
+                },
+                right: {
+                  primary: {
+                    id: 'type',
+                    optional: false
+                  }
+                }
+              }
+            }
+          },
+          right: {
+            primary: {
+              id: 'type',
+              optional: false
+            }
+          }
+        }
+      }
+    }
+  ]));
+
+  it('should parse @tag id: (type | type) & type - description', () => equal(parse('@tag id: (type | type) & type - description'), [
+    {
+      name: 'tag',
+      identifier: {
+        id: 'id',
+        optional: false,
+        property: []
+      },
+      type: {
+        union: {
+          left: {
+            parenthesized: {
+              intersect: {
+                left: {
+                  primary: {
+                    id: 'type',
+                    optional: false
+                  }
+                },
+                right: {
+                  primary: {
+                    id: 'type',
+                    optional: false
+                  }
+                }
+              }
+            }
+          },
+          right: {
+            primary: {
+              id: 'type',
+              optional: false
+            }
+          }
+        }
+      },
+      description: {
+        inlines: [],
+        text: 'description'
+      }
+    }
+  ]));
+
   it('should parse @tag id: type = () => type', () => equal(parse('@tag id: type = () => type'), [
     {
       name: 'tag',
@@ -192,7 +722,8 @@ describe('Tom parser', () => {
           parameter: [],
           type: {
             primary: {
-              id: 'type'
+              id: 'type',
+              optional: false
             },
             optional: false
           }
@@ -200,13 +731,13 @@ describe('Tom parser', () => {
       },
       type: {
         primary: {
-          id: 'type'
+          id: 'type',
+          optional: false
         }
       }
     }
   ]));
 
-  // Parse a lambda value
   it('should parse @tag id: type = () => type - description', () => equal(parse('@tag id: type = () => type - description'), [
     {
       name: 'tag',
@@ -220,7 +751,8 @@ describe('Tom parser', () => {
           parameter: [],
           type: {
             primary: {
-              id: 'type'
+              id: 'type',
+              optional: false
             },
             optional: false
           }
@@ -228,7 +760,8 @@ describe('Tom parser', () => {
       },
       type: {
         primary: {
-          id: 'type'
+          id: 'type',
+          optional: false
         }
       },
       description: {

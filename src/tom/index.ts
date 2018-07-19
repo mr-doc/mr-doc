@@ -104,7 +104,7 @@ function parseAnnotations(node: Parser.AnnotationsContext) {
   ```
   @function parseTag
   @param node: Parser.TagContext - The annotation context node.
-  @return { 
+  @return: { 
     name?: string, 
     id?: {}, 
     value?: {}, 
@@ -155,7 +155,7 @@ function parseTag(node: Parser.TagContext) {
   ```
   @function parseTagID
   @param node: Parser.TagIDContext - The tagID context node.
-  @return { 
+  @return: { 
     id?: {}, 
     optional: boolean, 
     property?: {} 
@@ -193,7 +193,7 @@ function parseTagID(node: Parser.TagIDContext) {
   ```
   @function parsePropertyTagID
   @param node: Parser.PropertyTagIDContext - The annotation context node.
-  @return {
+  @return: {
     id: any,
     optional: any,
     property: any
@@ -201,7 +201,7 @@ function parseTagID(node: Parser.TagIDContext) {
   ```
   # Remark
 
-  A propertyTagID is an object with an 'id', 'property', and 'optional' keys.
+  A propertyTagID is an object with an 'id', 'property', and 'optional' key.
 
  */
 function parsePropertyTagID(node: Parser.PropertyTagIDContext) {
@@ -234,14 +234,14 @@ function parsePropertyTagID(node: Parser.PropertyTagIDContext) {
   ```
   @function parseOptionalTagOrIdentifier
   @param node: Parser.OptionalTagOrIdentifierContext - The OptionalTagOrIdentifier context node.
-  @return {
+  @return: {
     id?: string,
     optional?: boolean
   } - The OptionalTagOrIdentifierContext object.
   ```
   # Remark
 
-  An propertyTagID is an object with an 'id', 'property', and 'optional' keys.
+  An OptionalTagOrIdentifer is an object with an 'id' and 'optional' key.
   
  */
 function parseOptionalTagOrIdentifier(node: Parser.OptionalTagOrIdentifierContext) {
@@ -267,7 +267,7 @@ function parseOptionalTagOrIdentifier(node: Parser.OptionalTagOrIdentifierContex
   ```
   @function parseType
   @param node: Parse.TypeContext - The Type context node.
-  @return {
+  @return: {
     intersect?: {},
     union?: {},
     lambda?: {},
@@ -285,18 +285,56 @@ function parseType(node: Parser.TypeContext) {
     return {
       intersect: { left: parseType(node.type(0)), right: parseType(node.type(1)) }
     };
-  } else if (node.AMP()) { // Unions
+  } 
+  
+  if (node.AMP()) { // Unions
     return {
       union: { left: parseType(node.type(0)), right: parseType(node.type(1)) }
     };
-  } else if (node.lambdaType()) { // Lambda functions i.e. (id) => type
+  }
+  
+  if (node.lambdaType()) { // Lambda functions i.e. (id) => type
     return {
       lambda: parseLambdaType(node.lambdaType())
     };
-  } else if (node.tupleType()) {
+  } 
+  
+  if (node.tupleType()) { // id<type, type>
     return { tuple: parseTuple(node.tupleType()) }
-  } else if (node.primaryType()) { // Primary
+  } 
+  
+  if (node.primaryType()) { // Primary
     return { primary: parsePrimaryType(node.primaryType()) };
+  } 
+  
+  if (node.parenthesizedType()) { // (expression)
+    return {
+      parenthesized: parseParenthesizedType(node.parenthesizedType())
+    }
+  }
+
+  if (node.unaryType()) {
+    return {
+      unary: parseUnaryType(node.unaryType())
+    }
+  }
+
+  if (node.objectType()) { // { ... }
+    return {
+      object: parseObjectType(node.objectType())
+    }
+  }
+
+  if (node.arrayType()) { // [ ... ]
+    return {
+      array: parseArrayType(node.arrayType())
+    }
+  }
+
+  if (node.propertyType()) {
+    return {
+      property: parsePropertyType(node.propertyType())
+    }
   }
 }
 
@@ -311,7 +349,7 @@ function parseLambdaType(node: Parser.LambdaTypeContext) {
   }
 
   if (node.type()) {
-    _.assign(obj, { type: parseType(node.type()) } )
+    _.assign(obj, { type: parseType(node.type()) })
   }
   return obj;
 }
@@ -355,32 +393,13 @@ function parseTupleTypeList(node: Parser.TupleTypeListContext) {
 }
 
 function parsePrimaryType(node: Parser.PrimaryTypeContext) {
-  if (node.parenthesizedType()) { // (expression)
-    return {
-      parenthesized: parseParenthesizedType(node.parenthesizedType())
-    }
-  }
 
-  if (node.objectType()) { // { ... }
-    return {
-      object: parseObjectType(node.objectType())
-    }
-  }
-
-  if (node.arrayType()) { // [ ... ]
-    return {
-      array: parseArrayType(node.arrayType())
-    }
-  }
-
-  if (node.propertyType()) {
-    return {
-      property: parsePropertyType(node.propertyType())
-    }
+  if (node.optionalType()) {
+    return { id: node.optionalType().identifier().ID().text, optional: true }
   }
 
   if (node.identifierOrKeyword()) {
-    return { id: parseIdentifierOrKeyword(node.identifierOrKeyword()) }
+    return { id: parseIdentifierOrKeyword(node.identifierOrKeyword()), optional: false }
   }
 
 }
@@ -396,7 +415,7 @@ function parseObjectType(node: Parser.ObjectTypeContext) {
 }
 
 function parseObjectPairTypeList(node: Parser.ObjectPairTypeListContext) {
-  return node.objectPairType().map(pair => {
+  return (node.objectPairType() || []).map(pair => {
     return {
       key: parseType(pair.type(0)),
       value: parseType(pair.type(1))
@@ -481,7 +500,7 @@ function parsePropertyType(node: Parser.PropertyTypeContext) {
   
  */
 function parseOptionalTypeOrIdentifer(node: Parser.OptionalTypeOrIdentiferContext) {
-  let id: string, optional: boolean;
+  let id: string, optional: boolean = false;
   if (node.identifier()) {
     id = node.identifier().ID().text;
   }
@@ -502,6 +521,14 @@ function parseIdentifierOrKeyword(node: Parser.IdentifierOrKeywordContext) {
     return node.NullLiteral().text;
   }
 }
+
+function parseUnaryType(node: Parser.UnaryTypeContext) {
+  return {
+    left: (node.AMP() || node.STAR()).text,
+    right: { primary: parsePrimaryType(node.primaryType())}
+  }
+}
+
 /*! Value */
 
 /*
@@ -642,9 +669,7 @@ function parseArrayExpression(node: Parser.ArrayExpressionContext) {
 }
 
 function parseObjectExpression(node: Parser.ObjectExpressionContext) {
-  if (node.objectPairExpressionList()) {
-    return parseObjectPairExpressionList(node.objectPairExpressionList());
-  }
+  return node.objectPairExpressionList() ? parseObjectPairExpressionList(node.objectPairExpressionList()) : [];
 }
 
 
@@ -670,17 +695,6 @@ function parseParenthesizedExpression(node: Parser.ParenthesizedExpressionContex
 }
 
 function parseLiteralExpression(node: Parser.LiteralContext) {
-  // let removeQuotes = (str) => {
-  //   if (str.charAt(0) === '"' && str.charAt(str.length - 1) === '"') {
-  //     return str.substr(1, str.length - 2);
-  //   }
-
-  //   if (str.charAt(0) === "'" && str.charAt(str.length - 1) === "'") {
-  //     return str.substr(1, str.length - 2);
-  //   }
-
-  //   return str;
-  // };
   if (node.IntegerLiteral() || node.FloatingPointLiteral()) {
     return { number: (node.IntegerLiteral() || node.FloatingPointLiteral()).text }
   }

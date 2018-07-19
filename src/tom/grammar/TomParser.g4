@@ -70,8 +70,17 @@ type
   | lambdaType
   | tupleType
   | primaryType
+  | parenthesizedType
+  | unaryType
+  | objectType
+  | arrayType
+  | propertyType
   ;
 
+
+unaryType
+  : (AMP | STAR) primaryType
+  ;
 tupleType
   : identifier? LESSTHAN SPACE? tupleTypeList SPACE? GREATERTHAN
   ;
@@ -81,12 +90,8 @@ tupleTypeList
   ;
 
 
-primaryType
-  : parenthesizedType
-  | objectType
-  | arrayType
-  | propertyType
-  | optionalType
+primaryType 
+  : optionalType
   | identifierOrKeyword
   ;
 
@@ -166,7 +171,7 @@ expression
   ;
 
 unaryExpression
-  : (PLUS | MINUS /*EXCLAMATION*/) expression
+  : (PLUS | MINUS) expression
   ;
 
 arrayExpression

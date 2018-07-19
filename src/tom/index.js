@@ -93,7 +93,7 @@ function parseAnnotations(node) {
   ```
   @function parseTag
   @param node: Parser.TagContext - The annotation context node.
-  @return {
+  @return: {
     name?: string,
     id?: {},
     value?: {},
@@ -137,7 +137,7 @@ function parseTag(node) {
   ```
   @function parseTagID
   @param node: Parser.TagIDContext - The tagID context node.
-  @return {
+  @return: {
     id?: {},
     optional: boolean,
     property?: {}
@@ -170,7 +170,7 @@ function parseTagID(node) {
   ```
   @function parsePropertyTagID
   @param node: Parser.PropertyTagIDContext - The annotation context node.
-  @return {
+  @return: {
     id: any,
     optional: any,
     property: any
@@ -178,7 +178,7 @@ function parseTagID(node) {
   ```
   # Remark
 
-  A propertyTagID is an object with an 'id', 'property', and 'optional' keys.
+  A propertyTagID is an object with an 'id', 'property', and 'optional' key.
 
  */
 function parsePropertyTagID(node) {
@@ -206,14 +206,14 @@ function parsePropertyTagID(node) {
   ```
   @function parseOptionalTagOrIdentifier
   @param node: Parser.OptionalTagOrIdentifierContext - The OptionalTagOrIdentifier context node.
-  @return {
+  @return: {
     id?: string,
     optional?: boolean
   } - The OptionalTagOrIdentifierContext object.
   ```
   # Remark
 
-  An propertyTagID is an object with an 'id', 'property', and 'optional' keys.
+  An OptionalTagOrIdentifer is an object with an 'id' and 'optional' key.
   
  */
 function parseOptionalTagOrIdentifier(node) {
@@ -236,7 +236,7 @@ function parseOptionalTagOrIdentifier(node) {
   ```
   @function parseType
   @param node: Parse.TypeContext - The Type context node.
-  @return {
+  @return: {
     intersect?: {},
     union?: {},
     lambda?: {},
@@ -254,21 +254,46 @@ function parseType(node) {
             intersect: { left: parseType(node.type(0)), right: parseType(node.type(1)) }
         };
     }
-    else if (node.AMP()) { // Unions
+    if (node.AMP()) { // Unions
         return {
             union: { left: parseType(node.type(0)), right: parseType(node.type(1)) }
         };
     }
-    else if (node.lambdaType()) { // Lambda functions i.e. (id) => type
+    if (node.lambdaType()) { // Lambda functions i.e. (id) => type
         return {
             lambda: parseLambdaType(node.lambdaType())
         };
     }
-    else if (node.tupleType()) {
+    if (node.tupleType()) { // id<type, type>
         return { tuple: parseTuple(node.tupleType()) };
     }
-    else if (node.primaryType()) { // Primary
+    if (node.primaryType()) { // Primary
         return { primary: parsePrimaryType(node.primaryType()) };
+    }
+    if (node.parenthesizedType()) { // (expression)
+        return {
+            parenthesized: parseParenthesizedType(node.parenthesizedType())
+        };
+    }
+    if (node.unaryType()) {
+        return {
+            unary: parseUnaryType(node.unaryType())
+        };
+    }
+    if (node.objectType()) { // { ... }
+        return {
+            object: parseObjectType(node.objectType())
+        };
+    }
+    if (node.arrayType()) { // [ ... ]
+        return {
+            array: parseArrayType(node.arrayType())
+        };
+    }
+    if (node.propertyType()) {
+        return {
+            property: parsePropertyType(node.propertyType())
+        };
     }
 }
 /*! Lambda */
@@ -317,28 +342,11 @@ function parseTupleTypeList(node) {
     return node.type() ? node.type().map(type => parseType(type)) : [];
 }
 function parsePrimaryType(node) {
-    if (node.parenthesizedType()) { // (expression)
-        return {
-            parenthesized: parseParenthesizedType(node.parenthesizedType())
-        };
-    }
-    if (node.objectType()) { // { ... }
-        return {
-            object: parseObjectType(node.objectType())
-        };
-    }
-    if (node.arrayType()) { // [ ... ]
-        return {
-            array: parseArrayType(node.arrayType())
-        };
-    }
-    if (node.propertyType()) {
-        return {
-            property: parsePropertyType(node.propertyType())
-        };
+    if (node.optionalType()) {
+        return { id: node.optionalType().identifier().ID().text, optional: true };
     }
     if (node.identifierOrKeyword()) {
-        return { id: parseIdentifierOrKeyword(node.identifierOrKeyword()) };
+        return { id: parseIdentifierOrKeyword(node.identifierOrKeyword()), optional: false };
     }
 }
 function parseParenthesizedType(node) {
@@ -350,7 +358,7 @@ function parseObjectType(node) {
     return node.objectPairTypeList() ? parseObjectPairTypeList(node.objectPairTypeList()) : [];
 }
 function parseObjectPairTypeList(node) {
-    return node.objectPairType().map(pair => {
+    return (node.objectPairType() || []).map(pair => {
         return {
             key: parseType(pair.type(0)),
             value: parseType(pair.type(1))
@@ -427,7 +435,7 @@ function parsePropertyType(node) {
   
  */
 function parseOptionalTypeOrIdentifer(node) {
-    let id, optional;
+    let id, optional = false;
     if (node.identifier()) {
         id = node.identifier().ID().text;
     }
@@ -444,6 +452,12 @@ function parseIdentifierOrKeyword(node) {
     if (node.NullLiteral()) {
         return node.NullLiteral().text;
     }
+}
+function parseUnaryType(node) {
+    return {
+        left: (node.AMP() || node.STAR()).text,
+        right: { primary: parsePrimaryType(node.primaryType()) }
+    };
 }
 /*! Value */
 /*
@@ -567,9 +581,7 @@ function parseArrayExpression(node) {
     return [];
 }
 function parseObjectExpression(node) {
-    if (node.objectPairExpressionList()) {
-        return parseObjectPairExpressionList(node.objectPairExpressionList());
-    }
+    return node.objectPairExpressionList() ? parseObjectPairExpressionList(node.objectPairExpressionList()) : [];
 }
 function parseObjectPairExpressionList(node) {
     return node.objectPairExpression().map(pair => {
@@ -590,15 +602,6 @@ function parseParenthesizedExpression(node) {
     return parseExpression(node.expression());
 }
 function parseLiteralExpression(node) {
-    // let removeQuotes = (str) => {
-    //   if (str.charAt(0) === '"' && str.charAt(str.length - 1) === '"') {
-    //     return str.substr(1, str.length - 2);
-    //   }
-    //   if (str.charAt(0) === "'" && str.charAt(str.length - 1) === "'") {
-    //     return str.substr(1, str.length - 2);
-    //   }
-    //   return str;
-    // };
     if (node.IntegerLiteral() || node.FloatingPointLiteral()) {
         return { number: (node.IntegerLiteral() || node.FloatingPointLiteral()).text };
     }

@@ -14,6 +14,7 @@ import { OptionalTagIDContext } from './TomParser';
 import { PropertyTagIDContext } from './TomParser';
 import { OptionalTagOrIdentifierContext } from './TomParser';
 import { TypeContext } from './TomParser';
+import { UnaryTypeContext } from './TomParser';
 import { TupleTypeContext } from './TomParser';
 import { TupleTypeListContext } from './TomParser';
 import { PrimaryTypeContext } from './TomParser';
@@ -179,6 +180,17 @@ export interface TomParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitType?: (ctx: TypeContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `TomParser.unaryType`.
+	 * @param ctx the parse tree
+	 */
+	enterUnaryType?: (ctx: UnaryTypeContext) => void;
+	/**
+	 * Exit a parse tree produced by `TomParser.unaryType`.
+	 * @param ctx the parse tree
+	 */
+	exitUnaryType?: (ctx: UnaryTypeContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `TomParser.tupleType`.
