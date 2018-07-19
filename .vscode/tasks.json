@@ -4,12 +4,6 @@
   "version": "0.1.0",
   "tasks": [
     {
-      "taskName": "Gulp",
-      "command": "gulp",
-      "isTestCommand": true,
-      "isShellCommand": true
-    },
-    {
       "taskName": "Typescript",
       "command": "tsc",
       "problemMatcher": "$tsc",
@@ -26,7 +20,12 @@
         "src/**/*.map",
         "-f"
       ]
-
+    },
+    {
+      "taskName": "Mocha",
+      "command": "mocha",
+      "isTestCommand": true,
+      "showOutput": "always",
     }
   ]
 }

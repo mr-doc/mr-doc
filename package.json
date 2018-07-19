@@ -23,36 +23,52 @@
     "mrdoc": "./bin/mrdoc"
   },
   "scripts": {
-    "test": "gulp",
-    "build": "tsc"
+    "test": "mocha",
+    "build": "node build.js"
   },
   "engines": {
     "node": ">= 5.0.0"
   },
   "dependencies": {
+    "antlr4ts": "^0.4.1-alpha.0",
     "bluebird": "^3.5.1",
-    "gulp-if": "^2.0.0",
+    "dependency-tree": "^6.1.0",
+    "globby": "^8.0.1",
     "liftoff": "^2.5.0",
-    "lodash": "^4.6.1",
-    "mr-doc-compiler": "1.0.0",
-    "mr-doc-parser": "1.0.0",
-    "mr-doc-utils": "^2.2.2",
-    "rc": "^1.2.2",
-    "v8flags": "^3.0.1",
-    "vinyl-fs": "^3.0.0",
-    "yargs": "^10.0.3"
+    "lodash": "^4.17.10",
+    "mr-doc-compiler": "^1.0.0",
+    "mr-doc-parser": "git+https://github.com/mr-doc/mr-doc-parser.git",
+    "mr-doc-utils": "git+https://github.com/mr-doc/mr-doc-utils.git",
+    "rc": "^1.2.8",
+    "remark": "^9.0.0",
+    "remark-parse": "^5.0.0",
+    "through2": "^2.0.3",
+    "unified": "^7.0.0",
+    "v8flags": "^3.1.1",
+    "vinyl": "^2.2.0",
+    "vinyl-fs": "^3.0.3",
+    "yargs": "^12.0.1"
   },
   "devDependencies": {
-    "@types/chai": "^4.0.10",
-    "@types/lodash": "^4.14.91",
-    "@types/mocha": "^2.2.44",
-    "@types/node": "^8.5.2",
+    "@types/bluebird": "^3.5.21",
+    "@types/chai": "^4.1.4",
+    "@types/globby": "^8.0.0",
+    "@types/lodash": "^4.14.110",
+    "@types/mocha": "^5.2.4",
+    "@types/node": "^10.5.1",
+    "@types/rc": "0.0.1",
+    "@types/through2": "^2.0.33",
+    "@types/vinyl-fs": "^2.4.8",
+    "antlr4ts-cli": "^0.4.0-alpha.4",
     "chai": "^4.1.2",
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-plugin-react": "^7.5.1",
-    "gulp": "^3.9.1",
-    "gulp-eslint": "^4.0.0",
-    "gulp-mocha": "^4.3.1"
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.1.0",
+    "eslint-plugin-react": "^7.10.0",
+    "gulp": "^4.0.0",
+    "gulp-eslint": "^4.0.2",
+    "gulp-mocha": "^6.0.0",
+    "shelljs": "^0.8.2"
   },
   "keywords": [
     "dox",

@@ -1,0 +1,35 @@
+{
+  "parser": {
+      "language": "javascript"
+    },
+    "compiler": {
+      "file": {
+        "name": "docs",
+        "format": "html"
+      }
+    },
+    "log": {
+      "level": "info, warn",
+      "silent": false
+    },
+    "project": {
+      "name": "#",
+      "url": {
+        "home": "#",
+        "repo": "#"
+      }
+    },
+    "mrdoc": {
+      "source": "src/",
+      "output": "doc/",
+      "cwd": "",
+      "watch": false,
+      "include": [
+        "./index.js"
+      ],
+      "exclude": [
+        "*/**/*.ts",
+        "*/**/*.map"
+      ]
+    }
+}

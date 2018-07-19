@@ -7,16 +7,13 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Scanner",
-      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "name": "Launch mr-doc",
+      "program": "${workspaceRoot}/bin/mrdoc.js",
       "args": [
-        "${workspaceRoot}/test/scanner.js"
+        "-s", "src/",
+        "-l", "debug"
       ],
-      "sourceMaps": true,
-      "outFiles": [
-        "${workspaceRoot}/src/**/*.js",
-        "${workspaceRoot}/test/**/*.js"
-      ]
+      "sourceMaps": true
     },
     {
       "type": "node",
@@ -44,5 +41,14 @@
         "${workspaceRoot}/src/**/*.js"
       ]
     },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Berman",
+      "program": "${workspaceFolder}/src/berman/index.ts",
+      "outFiles": [
+        "${workspaceRoot}/src/**/*.js",
+      ]
+    }
   ]
 }

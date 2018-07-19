@@ -9,5 +9,12 @@
     "**/*.js": {
       "when": "$(basename).ts"
     }
+  },
+
+  "antlr4.generation": {
+    "mode": "internal",
+    "language": "TypeScript",
+    "listeners": true,
+    "visitors": false
   }
 }
