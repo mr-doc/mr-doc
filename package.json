@@ -35,7 +35,7 @@
     "dependency-tree": "^6.1.0",
     "globby": "^8.0.1",
     "liftoff": "^2.5.0",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.15",
     "mr-doc-compiler": "^1.0.0",
     "mr-doc-parser": "git+https://github.com/mr-doc/mr-doc-parser.git",
     "mr-doc-utils": "git+https://github.com/mr-doc/mr-doc-utils.git",
