@@ -68,7 +68,7 @@
     "gulp": "^4.0.0",
     "gulp-eslint": "^4.0.2",
     "gulp-mocha": "^6.0.0",
-    "shelljs": "^0.8.2"
+    "shelljs": "^0.8.5"
   },
   "keywords": [
     "dox",
